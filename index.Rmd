@@ -1,0 +1,10 @@
+---
+title: Introduction to Biostatistics for the Basic Sciences (Data Wrangling, Analysis,
+  & Communication)
+---
+
+This is the class site for CONJ 620 at Oregon Health & Science University.
+
+- Lab 00: Introduce Yourself
+    
+

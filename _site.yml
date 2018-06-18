@@ -1,0 +1,26 @@
+name: CONJ 620
+output_dir: '.'
+navbar:
+  title: CONJ 620
+  type: inverse
+  left:
+  - text: Slides
+    href: slides.html
+  - text: DataCamp  
+    href: https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication
+    icon: fa-user-ninja
+  - text: Sakai
+    icon: fa-comments
+    href: https://sakai.ohsu.edu/portal/site/CS-631-1-32176-Sp18
+  right:
+  - text: About
+    href: about.html
+    icon: fa-cogs
+output:
+  html_document:
+    theme: flatly
+    includes:
+      after_body: footer.html
+    lib_dir: site_libs
+    self_contained: no
+
