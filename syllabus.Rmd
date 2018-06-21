@@ -1,0 +1,106 @@
+---
+title: "Syllabus"
+subtitle: "Introduction to Biostatistics for the Basic Sciences"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+## Course Description
+
+The goal of this course is to teach students how to gain and communicate insights from biomedical data. We will learn concepts such as data wrangling, exploratory data analysis, statistical inference, and linear and mixed modelling techniques. Students will learn to use the statistical programming language R (free and open source) throughout the complete research pipeline: importing, wrangling, visualizing, analyzing, interpreting, communicating, and collaborating. We will also learn to create and maintain efficient workflows for reproducible research. We will use modern teaching materials including DataCamp.com to introduce and reinforce R skills in an interactive self-guided environment, and the free online textbooks “Modern Dive” (Ismay & Kim, 2018) and “Data Analysis for Life Sciences” (Izarry & Love, 2015). 
+
+The course is organized into 5 blocks: working with data (3 weeks), linear models (3 weeks), inference (3 weeks), mixed models (1.5 weeks), and communication (1.5. weeks). Each class will be a mixture of didactic lectures (≈20 minutes), followed by hands-on labs to apply knowledge to real-world data. Pre-work will involve relevant readings and sometimes coding assignments to prepare for labs. For students who already have facility with R, more advanced stretch exercises will be provided. Each block will wrap up with an in-depth lab to allow students to integrate and iterate on knowledge gained, and review and relate back to previously learnt concepts. Final projects will be described in the first week of class.
+
+## Learning Outcomes
+
+-	Develop and clearly describe a statistical analysis plan, from start to finish.
+-	Work independently with data, including wrangling, tidying, visualizing, and basic analyses.
+-	Accurately interpret results from basic inferential statistical analyses.
+-	Understand assumptions and limitations to statistical procedures.
+-	Know about the types/scope of questions one can ask about data.
+-	Identify statistical questions/problems that require advanced methods out of skill set.
+-	Proficient use of tools and vocabulary to facilitate effective collaboration with advisors, biostatisticians, and other team members.
+
+## Grading
+
+Select lab sessions will require a finished submitted in-class and/or accompanying homework assignment (due via electronic submission prior to the next meeting time). Each participant must also present during the final two weeks of class. A portion of the grade will reflect attendance. Final grading rubric will be made available at the start of class.
+
+## Equipment
+
+Laptops will be used during the hands-on, in-class labs. If you do not have access to a laptop, please consult with the course director to make arrangements to borrow a laptop with the necessary software installed.
+
+## Expectations
+
+Attendance and class participation are expected of all students. Requests for time off must be submitted to the course director in a timely manner.
+
+## Student Resources 
+
+- [Registrar’s Office](http://www.ohsu.edu/xd/education/student-services/registrar/)
+    - Mackenzie Hall, Rm. 1120
+    - 503-494-7800; regohsu@ohsu.edu
+
+- OHSU ITG Help Desk 
+    - Sakai Course Management System, please contact the TLC Help Desk at 877-972-5249 or email 503-494-2222; sakai@ohsu.edu
+
+- [Office of Student Financial Aid](http://www.ohsu.edu/xd/education/student-services/financial-aid/contact.cfm)
+    - Mackenzie Hall, Rm. 1120
+    - 503-494-7800 or 800-775-5460 – Option 2; finaid@ohsu.edu
+
+- [Cashiers Office](http://www.ohsu.edu/xd/education/student-services/bursar/services/cashier-office.cfm)
+    - Marquam Plaza; 2525 SW Third Ave
+    - 503-494-8243; cashiers@ohsu.edu
+
+- [Office of Public Safety](http://www.ohsu.edu/xd/about/services/public-safety/)
+    - Emergency on Campus: 503-494-4444
+    - Non-emergency: 503-494-7744; pubsafe@ohsu.edu
+
+- [Joseph B. Trainer Health & Wellness Center](http://www.ohsu.edu/xd/education/student-services/joseph-trainer-health-wellness-center/form-policies-resources.cfm)
+    - Baird Hall, Rm. 18 (Primary Care) and Rm. 6 (Behavioral Health)
+    - 503-494-8665; For urgent care after hours, 503-494-8311 and ask for the Nurse on call. 
+    - askjbthealth@ohsu.edu
+
+- Ombudsman Office
+    - Gaines Hall, Rm. 117
+    - 707 SW Gaines Street, Portland, OR 97239
+    - 503-494-5397; graybill@ohsu.edu
+
+- [Library](http://www.ohsu.edu/xd/education/library/)
+    - Biomedical Information Communication Center
+    - http://www.ohsu.edu/xd/education/library/contact.cfm
+
+- Fitness/Wellness
+    - [March Wellness & Fitness Center](http://www.ohsu.edu/xd/about/services/march-wellness/membership/student-membership.cfm) 
+    - 3303 SW Bond Avenue, Portland, OR 97239
+    -503-418-6272
+
+## Statement Regarding Students with Disabilities
+
+OHSU is committed to inclusive and accessible learning environments in compliance with federal and state law. If you have a disability or think you may have a disability (mental health, attention-related, learning, vision, hearing, physical or health impacts) contact the Office for Student Access at (503) 494-0082 or studentaccess@ohsu.edu to have a confidential conversation about academic accommodations. Information is also available at www.ohsu.edu/student-access. Because accommodations may take time to implement and cannot be applied retroactively, it is important to have this discussion as soon as possible.
+
+## Student Evaluation of Teaching
+
+Course evaluation results are extremely important and used to help improve courses and the learning experience of future students. Responses will always remain anonymous and will only be available to instructors after grades have been posted. The results of scaled questions and comments go to both the instructor and their unit head/supervisor. Refer to Student Evaluation of Teaching, Policy No. 02-50-035.
+
+## Copyright Information
+
+Copyright laws and fair use policies protect the rights of those who have produced the material. The copy in this course has been provided for private study, scholarship, or research.  Other uses may require permission from the copyright holder.  The user of this work is responsible for adhering to copyright law of the U.S. (Title 17, U.S. Code).  To help you familiarize yourself with copyright and fair use policies, the University encourages you to visit its Copyright Web Page (http://www.ohsu.edu/xd/education/library/services/copyright/ohsu.cfm). 
+
+Sakai course web sites contain material protected by copyrights held by the instructor, other individuals or institutions. Such material is used for educational purposes in accord with copyright law and/or with permission given by the owners of the original material.  You may download one copy of the materials on any single computer for non-commercial, personal, or educational purposes only, provided that you (1) do not modify it, (2) use it only for the duration of this course, and (3) include both this notice and any copyright notice originally included with the material.   Beyond this use, no material from the course web site may be copied, reproduced, re-published, uploaded, posted, transmitted, or distributed in any way without the permission of the original copyright holder.  The instructor assumes no responsibility for individuals who improperly use copyrighted material placed on the web site.
+
+## Syllabi Changes and Retention
+
+Syllabi are not to be considered a contract. Information contained in syllabi, other than the course grade and absence policies, may be subject to change as deemed appropriate by the instructor. 
+
+## Professional Conduct Expectations 
+
+OHSU faculty, staff, and students are expected to conduct themselves in accord with the high ethical standards expected of health professionals as noted in the OHSU Code of Conduct.  In addition to the [OHSU Code of Conduct](http://www.ohsu.edu/xd/about/services/integrity/policies/coc.cfm), refer to your program’s handbook for additional details.
+
+## Commitment to Diversity & Inclusion
+
+OHSU is committed to creating and fostering a learning and working environment based on open communication and mutual respect. If you encounter sexual harassment, sexual misconduct, sexual assault, or discrimination based on race, color, religion, age, national origin, veteran’s status, ancestry, sex, marital status, pregnancy or parenting status, sexual orientation, gender identity, disability or any other protected status please contact the Affirmative Action and Equal Opportunity Department at 503-494-5148 or aaeo@ohsu.edu. Inquiries about Title IX compliance or sex/gender discrimination and harassment may be directed to the OHSU Title IX Coordinator at 503-494-0258 or titleix@ohsu.edu.
+
+## Modified Operations, Policy 01-40-010 
+Students should review the Student Portal, [O2](https://o2.ohsu.edu/), or call OHSU’s weather alert line at 503-494-9021 for the most up-to-date information on OHSU-wide modified operations which include but are not limited to delays or closures for inclement weather.
+

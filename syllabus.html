@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Syllabus</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CONJ 620</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="cm.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Class Meetings
+  </a>
+</li>
+<li>
+  <a href="due.html">
+    <span class="fa fa-calendar-check"></span>
+     
+    Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
+    <span class="fa fa-user-ninja"></span>
+     
+    DataCamp
+  </a>
+</li>
+<li>
+  <a href="https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18">
+    <span class="fa fa-comments"></span>
+     
+    Sakai
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">
+    <span class="fa fa-cogs"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Syllabus</h1>
+<h3 class="subtitle"><em>Introduction to Biostatistics for the Basic Sciences</em></h3>
+
+</div>
+
+
+<div id="course-description" class="section level2">
+<h2>Course Description</h2>
+<p>The goal of this course is to teach students how to gain and communicate insights from biomedical data. We will learn concepts such as data wrangling, exploratory data analysis, statistical inference, and linear and mixed modelling techniques. Students will learn to use the statistical programming language R (free and open source) throughout the complete research pipeline: importing, wrangling, visualizing, analyzing, interpreting, communicating, and collaborating. We will also learn to create and maintain efficient workflows for reproducible research. We will use modern teaching materials including DataCamp.com to introduce and reinforce R skills in an interactive self-guided environment, and the free online textbooks “Modern Dive” (Ismay &amp; Kim, 2018) and “Data Analysis for Life Sciences” (Izarry &amp; Love, 2015).</p>
+<p>The course is organized into 5 blocks: working with data (3 weeks), linear models (3 weeks), inference (3 weeks), mixed models (1.5 weeks), and communication (1.5. weeks). Each class will be a mixture of didactic lectures (≈20 minutes), followed by hands-on labs to apply knowledge to real-world data. Pre-work will involve relevant readings and sometimes coding assignments to prepare for labs. For students who already have facility with R, more advanced stretch exercises will be provided. Each block will wrap up with an in-depth lab to allow students to integrate and iterate on knowledge gained, and review and relate back to previously learnt concepts. Final projects will be described in the first week of class.</p>
+</div>
+<div id="learning-outcomes" class="section level2">
+<h2>Learning Outcomes</h2>
+<ul>
+<li>Develop and clearly describe a statistical analysis plan, from start to finish.</li>
+<li>Work independently with data, including wrangling, tidying, visualizing, and basic analyses.</li>
+<li>Accurately interpret results from basic inferential statistical analyses.</li>
+<li>Understand assumptions and limitations to statistical procedures.</li>
+<li>Know about the types/scope of questions one can ask about data.</li>
+<li>Identify statistical questions/problems that require advanced methods out of skill set.</li>
+<li>Proficient use of tools and vocabulary to facilitate effective collaboration with advisors, biostatisticians, and other team members.</li>
+</ul>
+</div>
+<div id="grading" class="section level2">
+<h2>Grading</h2>
+<p>Select lab sessions will require a finished submitted in-class and/or accompanying homework assignment (due via electronic submission prior to the next meeting time). Each participant must also present during the final two weeks of class. A portion of the grade will reflect attendance. Final grading rubric will be made available at the start of class.</p>
+</div>
+<div id="equipment" class="section level2">
+<h2>Equipment</h2>
+<p>Laptops will be used during the hands-on, in-class labs. If you do not have access to a laptop, please consult with the course director to make arrangements to borrow a laptop with the necessary software installed.</p>
+</div>
+<div id="expectations" class="section level2">
+<h2>Expectations</h2>
+<p>Attendance and class participation are expected of all students. Requests for time off must be submitted to the course director in a timely manner.</p>
+</div>
+<div id="student-resources" class="section level2">
+<h2>Student Resources</h2>
+<ul>
+<li><a href="http://www.ohsu.edu/xd/education/student-services/registrar/">Registrar’s Office</a>
+<ul>
+<li>Mackenzie Hall, Rm. 1120</li>
+<li>503-494-7800; <a href="mailto:regohsu@ohsu.edu">regohsu@ohsu.edu</a></li>
+</ul></li>
+<li>OHSU ITG Help Desk
+<ul>
+<li>Sakai Course Management System, please contact the TLC Help Desk at 877-972-5249 or email 503-494-2222; <a href="mailto:sakai@ohsu.edu">sakai@ohsu.edu</a></li>
+</ul></li>
+<li><a href="http://www.ohsu.edu/xd/education/student-services/financial-aid/contact.cfm">Office of Student Financial Aid</a>
+<ul>
+<li>Mackenzie Hall, Rm. 1120</li>
+<li>503-494-7800 or 800-775-5460 – Option 2; <a href="mailto:finaid@ohsu.edu">finaid@ohsu.edu</a></li>
+</ul></li>
+<li><a href="http://www.ohsu.edu/xd/education/student-services/bursar/services/cashier-office.cfm">Cashiers Office</a>
+<ul>
+<li>Marquam Plaza; 2525 SW Third Ave</li>
+<li>503-494-8243; <a href="mailto:cashiers@ohsu.edu">cashiers@ohsu.edu</a></li>
+</ul></li>
+<li><a href="http://www.ohsu.edu/xd/about/services/public-safety/">Office of Public Safety</a>
+<ul>
+<li>Emergency on Campus: 503-494-4444</li>
+<li>Non-emergency: 503-494-7744; <a href="mailto:pubsafe@ohsu.edu">pubsafe@ohsu.edu</a></li>
+</ul></li>
+<li><a href="http://www.ohsu.edu/xd/education/student-services/joseph-trainer-health-wellness-center/form-policies-resources.cfm">Joseph B. Trainer Health &amp; Wellness Center</a>
+<ul>
+<li>Baird Hall, Rm. 18 (Primary Care) and Rm. 6 (Behavioral Health)</li>
+<li>503-494-8665; For urgent care after hours, 503-494-8311 and ask for the Nurse on call.</li>
+<li><a href="mailto:askjbthealth@ohsu.edu">askjbthealth@ohsu.edu</a></li>
+</ul></li>
+<li>Ombudsman Office
+<ul>
+<li>Gaines Hall, Rm. 117</li>
+<li>707 SW Gaines Street, Portland, OR 97239</li>
+<li>503-494-5397; <a href="mailto:graybill@ohsu.edu">graybill@ohsu.edu</a></li>
+</ul></li>
+<li><a href="http://www.ohsu.edu/xd/education/library/">Library</a>
+<ul>
+<li>Biomedical Information Communication Center</li>
+<li><a href="http://www.ohsu.edu/xd/education/library/contact.cfm" class="uri">http://www.ohsu.edu/xd/education/library/contact.cfm</a></li>
+</ul></li>
+<li>Fitness/Wellness
+<ul>
+<li><a href="http://www.ohsu.edu/xd/about/services/march-wellness/membership/student-membership.cfm">March Wellness &amp; Fitness Center</a></li>
+<li>3303 SW Bond Avenue, Portland, OR 97239 -503-418-6272</li>
+</ul></li>
+</ul>
+</div>
+<div id="statement-regarding-students-with-disabilities" class="section level2">
+<h2>Statement Regarding Students with Disabilities</h2>
+<p>OHSU is committed to inclusive and accessible learning environments in compliance with federal and state law. If you have a disability or think you may have a disability (mental health, attention-related, learning, vision, hearing, physical or health impacts) contact the Office for Student Access at (503) 494-0082 or <a href="mailto:studentaccess@ohsu.edu">studentaccess@ohsu.edu</a> to have a confidential conversation about academic accommodations. Information is also available at www.ohsu.edu/student-access. Because accommodations may take time to implement and cannot be applied retroactively, it is important to have this discussion as soon as possible.</p>
+</div>
+<div id="student-evaluation-of-teaching" class="section level2">
+<h2>Student Evaluation of Teaching</h2>
+<p>Course evaluation results are extremely important and used to help improve courses and the learning experience of future students. Responses will always remain anonymous and will only be available to instructors after grades have been posted. The results of scaled questions and comments go to both the instructor and their unit head/supervisor. Refer to Student Evaluation of Teaching, Policy No. 02-50-035.</p>
+</div>
+<div id="copyright-information" class="section level2">
+<h2>Copyright Information</h2>
+<p>Copyright laws and fair use policies protect the rights of those who have produced the material. The copy in this course has been provided for private study, scholarship, or research. Other uses may require permission from the copyright holder. The user of this work is responsible for adhering to copyright law of the U.S. (Title 17, U.S. Code). To help you familiarize yourself with copyright and fair use policies, the University encourages you to visit its Copyright Web Page (<a href="http://www.ohsu.edu/xd/education/library/services/copyright/ohsu.cfm" class="uri">http://www.ohsu.edu/xd/education/library/services/copyright/ohsu.cfm</a>).</p>
+<p>Sakai course web sites contain material protected by copyrights held by the instructor, other individuals or institutions. Such material is used for educational purposes in accord with copyright law and/or with permission given by the owners of the original material. You may download one copy of the materials on any single computer for non-commercial, personal, or educational purposes only, provided that you (1) do not modify it, (2) use it only for the duration of this course, and (3) include both this notice and any copyright notice originally included with the material. Beyond this use, no material from the course web site may be copied, reproduced, re-published, uploaded, posted, transmitted, or distributed in any way without the permission of the original copyright holder. The instructor assumes no responsibility for individuals who improperly use copyrighted material placed on the web site.</p>
+</div>
+<div id="syllabi-changes-and-retention" class="section level2">
+<h2>Syllabi Changes and Retention</h2>
+<p>Syllabi are not to be considered a contract. Information contained in syllabi, other than the course grade and absence policies, may be subject to change as deemed appropriate by the instructor.</p>
+</div>
+<div id="professional-conduct-expectations" class="section level2">
+<h2>Professional Conduct Expectations</h2>
+<p>OHSU faculty, staff, and students are expected to conduct themselves in accord with the high ethical standards expected of health professionals as noted in the OHSU Code of Conduct. In addition to the <a href="http://www.ohsu.edu/xd/about/services/integrity/policies/coc.cfm">OHSU Code of Conduct</a>, refer to your program’s handbook for additional details.</p>
+</div>
+<div id="commitment-to-diversity-inclusion" class="section level2">
+<h2>Commitment to Diversity &amp; Inclusion</h2>
+<p>OHSU is committed to creating and fostering a learning and working environment based on open communication and mutual respect. If you encounter sexual harassment, sexual misconduct, sexual assault, or discrimination based on race, color, religion, age, national origin, veteran’s status, ancestry, sex, marital status, pregnancy or parenting status, sexual orientation, gender identity, disability or any other protected status please contact the Affirmative Action and Equal Opportunity Department at 503-494-5148 or <a href="mailto:aaeo@ohsu.edu">aaeo@ohsu.edu</a>. Inquiries about Title IX compliance or sex/gender discrimination and harassment may be directed to the OHSU Title IX Coordinator at 503-494-0258 or <a href="mailto:titleix@ohsu.edu">titleix@ohsu.edu</a>.</p>
+</div>
+<div id="modified-operations-policy-01-40-010" class="section level2">
+<h2>Modified Operations, Policy 01-40-010</h2>
+<p>Students should review the Student Portal, <a href="https://o2.ohsu.edu/">O2</a>, or call OHSU’s weather alert line at 503-494-9021 for the most up-to-date information on OHSU-wide modified operations which include but are not limited to delays or closures for inclement weather.</p>
+</div>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="by-nc.png" height="400" width="65"/></a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
