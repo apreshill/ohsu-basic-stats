@@ -1,0 +1,32 @@
+---
+title: "Class Meetings"
+author: "Alison Hill"
+subtitle: Summer 2018
+---
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(tidyverse)
+library(knitr)
+library(DT)
+cm <- read_csv("cm.csv") %>%
+  mutate(Date = paste(Month, Day)) %>%
+  mutate(`In-class Lab` = if_else(lab_link == "-",
+                                  lab_link,
+                                  paste0("<a href='", lab_link, "'>", paste(Lab, `Lab Topic`), "</a>"))) %>% 
+  select(Weekday, Date, `CM / Block`, Topics, `In-class Lab`)
+```
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+if(knitr:::is_html_output()){
+  cm %>% datatable(rownames = FALSE,
+                         class = 'cell-border stripe',
+                         filter = list(position = 'top'),
+                         options = list(pageLength = nrow(cm), 
+                                        autoWidth = TRUE,
+                                        bInfo = FALSE,
+                                        paging = FALSE),
+                         escape = FALSE)
+} else {
+  knitr::kable(cm, booktabs = TRUE, longtable = TRUE)
+}
+```

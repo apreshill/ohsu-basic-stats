@@ -1,10 +1,20 @@
 ---
-title: Introduction to Biostatistics for the Basic Sciences (Data Wrangling, Analysis,
-  & Communication)
+title: "Introduction to Data Wrangling, Analysis, & Communication"
 ---
 
-This is the class site for CONJ 620 at Oregon Health & Science University.
+This is the class site for CONJ 620 at Oregon Health & Science University. The official course title is *"Introduction to Biostatistics for the Basic Sciences."*
 
-- Lab 00: Introduce Yourself
-    
+# Logistics
+
+- First date of class: Tuesday, June 26
+- Last date of class: Thursday, September 13
+- Class Meetings: Tu/Th; 2:30 – 4:00 PM
+- Location: [CDRC 3200 (building 26 on map)](http://www.ohsu.edu/xd/health/ohsu-near-you/portland/marquam-hill/upload/OHSU-facilities-map.pdf)
+    - For 3 class meetings (June 28, September 6, September 13) the location will be [MAC 2201 (building 3 on map)](http://www.ohsu.edu/xd/health/ohsu-near-you/portland/marquam-hill/upload/OHSU-facilities-map.pdf)
+
+# Policies
+
+- All course materials will be available on this site. All announcements will be made on [Sakai](https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18). 
+- All assignments will be submitted on [Sakai](https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18). Please no email submissions.
+- Please refer to the syllabus for all other policies.
 

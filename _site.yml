@@ -4,14 +4,18 @@ navbar:
   title: CONJ 620
   type: inverse
   left:
-  - text: Slides
-    href: slides.html
+  - text: Class Meetings
+    href: cm.html
+    icon: fa-chalkboard-teacher
+  - text: Due Dates
+    href: due.html
+    icon: fa-calendar-check
   - text: DataCamp  
     href: https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication
     icon: fa-user-ninja
   - text: Sakai
     icon: fa-comments
-    href: https://sakai.ohsu.edu/portal/site/CS-631-1-32176-Sp18
+    href: https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18
   right:
   - text: About
     href: about.html
