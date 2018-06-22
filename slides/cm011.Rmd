@@ -1,0 +1,103 @@
+---
+title: "CM 1.1: CONJ620"
+subtitle: "Introduction to Data Wrangling, Analysis, & Communication"
+author: "Alison Hill"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300,
+  fig.align = "center", out.width = "80%", cache = FALSE)
+library(tidyverse)
+library(babynames)
+```
+
+## Hi & welcome!
+
+---
+## Where are we going?
+
+![](http://moderndive.netlify.com/images/flowcharts/flowchart/flowchart.002.png)
+
+---
+## How will we get there?
+
+
+---
+
+Find someone to discuss your article with
+Use this link to add terms here:
+http://bit.ly/conj620-cm011
+
+
+---
+class: inverse, middle, center
+
+
+## I know...
+
+![](https://media.giphy.com/media/uEhLWy2eu87Ly/source.gif)
+
+---
+class: inverse, middle, center
+
+
+## I promise, it gets better.
+
+![](https://media.giphy.com/media/l0MYRzcWP7cjfNQ2I/giphy.gif)
+
+---
+class: inverse, middle, center
+
+
+# 🏃🏽
+
+## Resources for Working in R:
+
+http://r4ds.had.co.nz/workflow-basics.html
+
+http://moderndive.com/2-getting-started.html
+
+https://bookdown.org/chesterismay/rbasics/3-rstudiobasics.html
+
+https://github.com/rstudio/cheatsheets/blob/master/rstudio-ide.pdf
+
+---
+
+## Install & load multiple R packages
+
+
+This can get to be a long list if we want to use a lot of new packages in our work session. We can make a function to load a *list* of packages, and install them if not already installed (more on functions later).
+
+```{r package-list-to-load}
+pkgs <- c("readr", "dplyr", "tidyr") # list packages needed
+```
+
+--
+
+```{r}
+ipak <- function(pkg){
+    new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+    if (length(new.pkg)) 
+        install.packages(new.pkg, dependencies = TRUE)
+    sapply(pkg, require, character.only = TRUE)
+}
+```
+
+--
+
+```{r run-pkg-function, eval = FALSE}
+ipak(pkgs) # take function, and give it that list
+```
+
+Function from: https://gist.github.com/stevenworthington/3178163
+

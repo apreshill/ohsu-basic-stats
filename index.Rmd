@@ -18,3 +18,6 @@ This is the class site for CONJ 620 at Oregon Health & Science University. The o
 - All assignments will be submitted on [Sakai](https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18). Please no email submissions.
 - Please refer to the [syllabus](syllabus.html) for all other policies.
 
+# Overview of our 12 weeks together
+
+![](http://moderndive.netlify.com/images/flowcharts/flowchart/flowchart.002.png)
