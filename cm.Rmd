@@ -10,9 +10,10 @@ library(knitr)
 library(DT)
 cm <- read_csv("cm.csv") %>%
   mutate(Date = paste(Month, Day)) %>%
-  mutate(`In-class Lab` = if_else(lab_link == "-",
-                                  lab_link,
-                                  paste0("<a href='", lab_link, "'>", paste(Lab, `Lab Topic`), "</a>"))) %>% 
+  mutate(`In-class Lab` = ifelse(`Lab Topic` == "-" | is.na(lab_link) |
+                                      is.na(lab_link),
+                                    `Lab Topic`,
+                                    paste0("<a href='", lab_link, "'>", `Lab Topic`, "</a>"))) %>% 
   select(Weekday, Date, `CM / Block`, Topics, `In-class Lab`)
 ```
 
