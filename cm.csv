@@ -1,23 +1,23 @@
 Weekday,Month,Day,CM / Block,Topics,Lab,Lab Topic,lab_link
-Tues,June,26,1: Working with data in R,Welcome & Syllabus,,Mona Chalabi video,https://www.youtube.com/watch?v=Zwwanld4T1w
-Thurs,June,28,1.2,Intro to R & tidyverse,1,Introduce yourself,
-Tues,July,3,1.3,Data viz / Exploratory Data Analysis,2,Data viz,
-Thurs,July,5,1.4,Data wrangling / more EDA,3,Data taming & wrangling,
-Tues,July,10,1.5,Data tables / Tidy data,4,Data tidying,
-Thurs,July,12,1.6,Concept integration,5,EDA: integrate + iterate,
-Tues,July,17,2: Linear models,Simple Regression (one continuous predictor),,,-
+Tues,June,26,1.1: Working with data in R,Welcome & Syllabus (<a href='http://bit.ly/conj620-cm011'>notepad</a>),1,Mona Chalabi video,https://www.youtube.com/watch?v=Zwwanld4T1w
+Thurs,June,28,1.2,Intro to R & tidyverse,2,Introduce yourself,
+Tues,July,3,1.3,Data viz / Exploratory Data Analysis,3,Data viz,
+Thurs,July,5,1.4,Data wrangling / more EDA,4,Data taming & wrangling,
+Tues,July,10,1.5,Data tables / Tidy data,5,Data tidying,
+Thurs,July,12,1.6,Concept integration,6,EDA: integrate + iterate,
+Tues,July,17,2.1: Linear models,Simple Regression (one continuous predictor),,,-
 Thurs,July,19,2.2,Residuals / Diagnostics / Outliers,,,-
 Tues,July,24,2.3,Simple Regression (one categorical predictor),,,-
 Thurs,July,26,2.4,Multiple Regression (2 continuous predictors),,,-
 Tues,July,31,2.5,Multiple Regression (continuous + categorical),,,-
 Thurs,August,2,2.6,Concept integration,,Regression: integrate + iterate,
-Tues,August,7,3: Inference,Sampling,,,-
+Tues,August,7,3.1: Inference,Sampling,,,-
 Thurs,August,9,3.2,Confidence Intervals (classical),,,-
 Tues,August,14,3.3,Confidence Intervals (bootstrapping),,,-
 Thurs,August,16,3.4,Hypothesis Testing ,,,-
 Tues,August,21,3.5,Hypothesis Testing,,,-
 Thurs,August,23,3.6,Concept integration,,Inference: integrate + iterate,
-Tues,August,28,4: Mixed models,,,,-
+Tues,August,28,4.1: Mixed models,,,,-
 Thurs,August,30,4.2,,,,-
 Tues,September,4,4.3,,,,-
 Thurs,September,6,5.1: Wrap-up,Concept integration,,Integrate + iterate,

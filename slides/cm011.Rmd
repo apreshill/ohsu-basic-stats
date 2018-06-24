@@ -1,5 +1,5 @@
 ---
-title: "CM 1.1: CONJ620"
+title: "CONJ620: CM 1.1"
 subtitle: "Introduction to Data Wrangling, Analysis, & Communication"
 author: "Alison Hill"
 output:
@@ -16,7 +16,7 @@ output:
 options(htmltools.dir.version = FALSE)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
   comment = NA, dpi = 300,
-  fig.align = "center", out.width = "80%", cache = FALSE)
+  fig.align = "center", out.width = "65%", cache = FALSE)
 library(tidyverse)
 library(babynames)
 ```
@@ -31,6 +31,20 @@ library(babynames)
 ---
 ## How will we get there?
 
+- ModernDive
+- R4DS
+- Blogs, YouTube, etc.
+- DataCamp.com
+
+
+---
+class: inverse, middle, center
+## Safe-stats
+
+> *"Statisticians have a tendency to advocate statistical abstinence: you should only practice statistics if you’re in a long-term relationship with a statistician (Wickham 2015). But abstinence-based education rarely works. People see their friends using statistics and having a great time, and there simply aren’t enough statisticians to go around. As a field, we need to teach safe-stats, not just statistical abstinence."* - Jenny Bryan & Hadley Wickham
+
+https://arxiv.org/pdf/1712.07349.pdf
+https://nhorton.people.amherst.edu/mererenovation/17_Wickham.PDF
 
 ---
 
@@ -38,6 +52,86 @@ Find someone to discuss your article with
 Use this link to add terms here:
 http://bit.ly/conj620-cm011
 
+---
+```{r echo = TRUE, results = 'hide'}
+library(tidyverse)
+library(janitor)
+library(here)
+
+hi <- read_csv(here("data", "conj620-hi-20180623.csv")) %>%
+  clean_names() %>% 
+  rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
+         "age_guess" = 5, "program" = 6, "link" = 22, 
+         "goals" = 23, "excited" = 24, "stats" = 25) %>% 
+  select(year:program, 
+         familiar_ = other:none_of_these, 
+         used_ = excel:other_1, 
+         goals:stats) %>% 
+  mutate(program = word(program, start = -1),
+         program = str_remove(program, "\\("),
+         program = str_remove(program, "\\)"),
+         id = row_number(),
+         familiar_5 = if_else(!is.na(familiar_5), 
+                              "Git", 
+                              familiar_5))
+```
+
+---
+
+```{r}
+ggplot(hi, aes(x = year)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6)
+```
+
+---
+```{r}
+ggplot(hi, aes(x = fct_infreq(program))) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6) + 
+  coord_flip() + 
+  labs(x = "program")
+```
+
+
+---
+
+```{r}
+ggplot(hi, aes(x = excited)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6)
+```
+
+---
+
+```{r}
+familiar <- hi %>% 
+  select(id, starts_with("familiar")) %>% 
+  gather(option, familiar, starts_with("familiar"), na.rm = TRUE) 
+```
+
+---
+
+```{r}
+ggplot(familiar, aes(x = fct_relevel(familiar, "None of these"))) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6) +
+  coord_flip() +
+  labs(x = "familiar")
+```
+
+---
+
+```{r}
+used <- hi %>% 
+  select(id, starts_with("used")) %>% 
+  gather(option, used, starts_with("used"), na.rm = TRUE) 
+```
+
+---
+
+```{r}
+ggplot(used, aes(x = used)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6) +
+  coord_flip() +
+  labs(x = "used")
+```
 
 ---
 class: inverse, middle, center

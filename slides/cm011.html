@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CONJ620: CM 1.1</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alison Hill" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
+    <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# CONJ620: CM 1.1
+## Introduction to Data Wrangling, Analysis, &amp; Communication
+### Alison Hill
+
+---
+
+
+
+
+## Hi &amp; welcome!
+
+---
+## Where are we going?
+
+![](http://moderndive.netlify.com/images/flowcharts/flowchart/flowchart.002.png)
+
+---
+## How will we get there?
+
+- ModernDive
+- R4DS
+- Blogs, YouTube, etc.
+- DataCamp.com
+
+
+---
+class: inverse, middle, center
+## Safe-stats
+
+&gt; *"Statisticians have a tendency to advocate statistical abstinence: you should only practice statistics if you’re in a long-term relationship with a statistician (Wickham 2015). But abstinence-based education rarely works. People see their friends using statistics and having a great time, and there simply aren’t enough statisticians to go around. As a field, we need to teach safe-stats, not just statistical abstinence."* - Jenny Bryan &amp; Hadley Wickham
+
+https://arxiv.org/pdf/1712.07349.pdf
+https://nhorton.people.amherst.edu/mererenovation/17_Wickham.PDF
+
+---
+
+Find someone to discuss your article with
+Use this link to add terms here:
+http://bit.ly/conj620-cm011
+
+---
+
+```r
+library(tidyverse)
+library(janitor)
+library(here)
+
+hi &lt;- read_csv(here("data", "conj620-hi-20180623.csv")) %&gt;%
+  clean_names() %&gt;% 
+  rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
+         "age_guess" = 5, "program" = 6, "link" = 22, 
+         "goals" = 23, "excited" = 24, "stats" = 25) %&gt;% 
+  select(year:program, 
+         familiar_ = other:none_of_these, 
+         used_ = excel:other_1, 
+         goals:stats) %&gt;% 
+  mutate(program = word(program, start = -1),
+         program = str_remove(program, "\\("),
+         program = str_remove(program, "\\)"),
+         id = row_number(),
+         familiar_5 = if_else(!is.na(familiar_5), 
+                              "Git", 
+                              familiar_5))
+```
+
+---
+
+
+```r
+ggplot(hi, aes(x = year)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6)
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-2-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+```r
+ggplot(hi, aes(x = fct_infreq(program))) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6) + 
+  coord_flip() + 
+  labs(x = "program")
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-3-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+```r
+ggplot(hi, aes(x = excited)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6)
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-4-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+familiar &lt;- hi %&gt;% 
+  select(id, starts_with("familiar")) %&gt;% 
+  gather(option, familiar, starts_with("familiar"), na.rm = TRUE) 
+```
+
+---
+
+
+```r
+ggplot(familiar, aes(x = fct_relevel(familiar, "None of these"))) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6) +
+  coord_flip() +
+  labs(x = "familiar")
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-6-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+used &lt;- hi %&gt;% 
+  select(id, starts_with("used")) %&gt;% 
+  gather(option, used, starts_with("used"), na.rm = TRUE) 
+```
+
+---
+
+
+```r
+ggplot(used, aes(x = used)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6) +
+  coord_flip() +
+  labs(x = "used")
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-8-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse, middle, center
+
+
+## I know...
+
+![](https://media.giphy.com/media/uEhLWy2eu87Ly/source.gif)
+
+---
+class: inverse, middle, center
+
+
+## I promise, it gets better.
+
+![](https://media.giphy.com/media/l0MYRzcWP7cjfNQ2I/giphy.gif)
+
+---
+class: inverse, middle, center
+
+
+# 🏃🏽
+
+## Resources for Working in R:
+
+http://r4ds.had.co.nz/workflow-basics.html
+
+http://moderndive.com/2-getting-started.html
+
+https://bookdown.org/chesterismay/rbasics/3-rstudiobasics.html
+
+https://github.com/rstudio/cheatsheets/blob/master/rstudio-ide.pdf
+
+---
+
+## Install &amp; load multiple R packages
+
+
+This can get to be a long list if we want to use a lot of new packages in our work session. We can make a function to load a *list* of packages, and install them if not already installed (more on functions later).
+
+
+```r
+pkgs &lt;- c("readr", "dplyr", "tidyr") # list packages needed
+```
+
+--
+
+
+```r
+ipak &lt;- function(pkg){
+    new.pkg &lt;- pkg[!(pkg %in% installed.packages()[, "Package"])]
+    if (length(new.pkg)) 
+        install.packages(new.pkg, dependencies = TRUE)
+    sapply(pkg, require, character.only = TRUE)
+}
+```
+
+--
+
+
+```r
+ipak(pkgs) # take function, and give it that list
+```
+
+Function from: https://gist.github.com/stevenworthington/3178163
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

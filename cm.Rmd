@@ -4,6 +4,8 @@ author: "Alison Hill"
 subtitle: Summer 2018
 ---
 
+Links to all slide decks and in-class lab materials will be posted here.
+
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
 library(knitr)
@@ -13,7 +15,7 @@ cm <- read_csv("cm.csv") %>%
   mutate(`In-class Lab` = ifelse(`Lab Topic` == "-" | is.na(lab_link) |
                                       is.na(lab_link),
                                     `Lab Topic`,
-                                    paste0("<a href='", lab_link, "'>", `Lab Topic`, "</a>"))) %>% 
+                                    paste0("<a href='", lab_link, "'>", "Lab ", Lab, ": ", `Lab Topic`, "</a>"))) %>% 
   select(Weekday, Date, `CM / Block`, Topics, `In-class Lab`)
 ```
 
