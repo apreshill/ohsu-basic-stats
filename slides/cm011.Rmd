@@ -14,6 +14,7 @@ output:
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
+options(knitr.table.format = "html") 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
   comment = NA, dpi = 300,
   fig.align = "center", out.width = "65%", cache = FALSE)
@@ -41,16 +42,27 @@ library(babynames)
 class: inverse, middle, center
 ## Safe-stats
 
-> *"Statisticians have a tendency to advocate statistical abstinence: you should only practice statistics if you’re in a long-term relationship with a statistician (Wickham 2015). But abstinence-based education rarely works. People see their friends using statistics and having a great time, and there simply aren’t enough statisticians to go around. As a field, we need to teach safe-stats, not just statistical abstinence."* - Jenny Bryan & Hadley Wickham
+
+> *"Statisticians have a tendency to advocate statistical abstinence: you should only practice statistics if you’re in a long-term relationship with a statistician (Wickham 2015). But abstinence-based education rarely works. People see their friends using statistics and having a great time, and there simply aren’t enough statisticians to go around. As a field, we need to teach safe-stats, not just statistical abstinence."* 
+
+--
+
+Jenny Bryan & Hadley Wickham
 
 https://arxiv.org/pdf/1712.07349.pdf
+
 https://nhorton.people.amherst.edu/mererenovation/17_Wickham.PDF
 
 ---
+## Your articles
 
-Find someone to discuss your article with
-Use this link to add terms here:
-http://bit.ly/conj620-cm011
+- Find a partner
+- Share with each other terms from each of your articles that:
+    - you didn’t know,
+    - you have heard before but can’t define or explain to other people, or
+    - you can’t actually do (i.e., if you had their data, could you replicate?)
+- Use this link to add terms
+    - http://bit.ly/conj620-cm011
 
 ---
 ```{r echo = TRUE, results = 'hide'}
@@ -64,17 +76,78 @@ hi <- read_csv(here("data", "conj620-hi-20180623.csv")) %>%
          "age_guess" = 5, "program" = 6, "link" = 22, 
          "goals" = 23, "excited" = 24, "stats" = 25) %>% 
   select(year:program, 
-         familiar_ = other:none_of_these, 
+         heard_of_ = other:none_of_these, 
          used_ = excel:other_1, 
-         goals:stats) %>% 
+         goals:stats, submit_date_utc) %>% 
   mutate(program = word(program, start = -1),
          program = str_remove(program, "\\("),
          program = str_remove(program, "\\)"),
          id = row_number(),
-         familiar_5 = if_else(!is.na(familiar_5), 
+         age_guess = parse_number(age_guess),
+         heard_of_5 = if_else(!is.na(heard_of_5), 
                               "Git", 
-                              familiar_5))
+                              heard_of_5)) %>% 
+  mutate(early = case_when(
+    submit_date_utc < "2018-06-24" ~ "early",
+    TRUE ~ "later"
+  ))
 ```
+
+---
+
+```{r}
+hi
+```
+
+---
+
+```{r}
+glimpse(hi)
+```
+
+---
+## But I did all that on Saturday, when...
+
+![](images/conj620-hi-saturday.png)
+
+---
+## Now...
+
+
+---
+
+```{r echo = TRUE, results = 'hide', eval = FALSE}
+library(tidyverse)
+library(janitor)
+library(here)
+
+hi <- read_csv(here("data", "conj620-hi-20180626.csv")) %>% #<<
+  clean_names() %>% 
+  rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
+         "age_guess" = 5, "program" = 6, "link" = 22, 
+         "goals" = 23, "excited" = 24, "stats" = 25) %>% 
+  select(year:program, 
+         heard_of_ = other:none_of_these, 
+         used_ = excel:other_1, 
+         goals:stats, submit_date_utc) %>% 
+  mutate(program = word(program, start = -1),
+         program = str_remove(program, "\\("),
+         program = str_remove(program, "\\)"),
+         id = row_number(),
+         age_guess = parse_number(age_guess),
+         heard_of_5 = if_else(!is.na(heard_of_5), 
+                              "Git", 
+                              heard_of_5)) %>% 
+  mutate(early = case_when(
+    submit_date_utc < "2018-06-24" ~ "early",
+    TRUE ~ "later"
+  ))
+```
+
+---
+class:inverse, middle, center
+
+## Who are you?
 
 ---
 
@@ -92,28 +165,66 @@ ggplot(hi, aes(x = fct_infreq(program))) +
 ```
 
 
+
+---
+class:middle, inverse, center
+
+## Where are you starting from?
+
 ---
 
 ```{r}
-ggplot(hi, aes(x = excited)) + 
-  geom_bar(fill = "mediumseagreen", alpha = .6)
+heard_of <- hi %>% 
+  select(id, starts_with("heard_of")) %>% 
+  gather(option, heard_of, starts_with("heard_of"), na.rm = TRUE) 
+
+heard_of
 ```
 
 ---
+## Counting what you have heard of 
 
 ```{r}
-familiar <- hi %>% 
-  select(id, starts_with("familiar")) %>% 
-  gather(option, familiar, starts_with("familiar"), na.rm = TRUE) 
+heard_of %>% 
+  count(heard_of, sort = TRUE) %>% 
+  knitr::kable()
 ```
+
+---
+## Counting what you have heard of 
+
+```{r}
+heard_of %>% 
+  count(id, heard_of) %>% 
+  filter(!heard_of == "None of these") %>% 
+  count(id, sort = TRUE) %>% 
+  rename("num_heard_of" = nn) %>% 
+  knitr::kable()
+```
+
+---
+## Counting what you have heard of 
+
+```{r}
+heard_of %>% 
+  filter(!heard_of == "None of these") %>%  
+  count(id, heard_of) %>% 
+  count(id) %>%
+  complete(id = full_seq(id, period = 1), fill = list(nn = 0)) %>% 
+  count(nn) %>% 
+  rename("people" = nn, "heard_of" = n) %>% 
+  arrange(people) %>% 
+  knitr::kable()
+```
+
 
 ---
 
 ```{r}
-ggplot(familiar, aes(x = fct_relevel(familiar, "None of these"))) + 
+ggplot(heard_of, aes(x = fct_relevel(heard_of, "None of these"))) + 
   geom_bar(fill = "mediumseagreen", alpha = .6) +
   coord_flip() +
-  labs(x = "familiar")
+  labs(x = "heard_of")
 ```
 
 ---
@@ -122,6 +233,8 @@ ggplot(familiar, aes(x = fct_relevel(familiar, "None of these"))) +
 used <- hi %>% 
   select(id, starts_with("used")) %>% 
   gather(option, used, starts_with("used"), na.rm = TRUE) 
+
+used
 ```
 
 ---
@@ -134,64 +247,143 @@ ggplot(used, aes(x = used)) +
 ```
 
 ---
-class: inverse, middle, center
+class:middle, inverse, center
 
+## Watch Mona Chalabi video
 
-## I know...
-
-![](https://media.giphy.com/media/uEhLWy2eu87Ly/source.gif)
-
----
-class: inverse, middle, center
-
-
-## I promise, it gets better.
-
-![](https://media.giphy.com/media/l0MYRzcWP7cjfNQ2I/giphy.gif)
-
----
-class: inverse, middle, center
-
-
-# 🏃🏽
-
-## Resources for Working in R:
-
-http://r4ds.had.co.nz/workflow-basics.html
-
-http://moderndive.com/2-getting-started.html
-
-https://bookdown.org/chesterismay/rbasics/3-rstudiobasics.html
-
-https://github.com/rstudio/cheatsheets/blob/master/rstudio-ide.pdf
-
----
-
-## Install & load multiple R packages
-
-
-This can get to be a long list if we want to use a lot of new packages in our work session. We can make a function to load a *list* of packages, and install them if not already installed (more on functions later).
-
-```{r package-list-to-load}
-pkgs <- c("readr", "dplyr", "tidyr") # list packages needed
+```{r echo = FALSE, out.width='100%'}
+knitr::include_url("https://www.youtube.com/embed/Zwwanld4T1w")
 ```
 
---
+---
+class:middle, inverse, center
+
+## How excited are you??
+
+![](https://media.giphy.com/media/FwpecpDvcu7vO/giphy.gif)
+
+---
 
 ```{r}
-ipak <- function(pkg){
-    new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
-    if (length(new.pkg)) 
-        install.packages(new.pkg, dependencies = TRUE)
-    sapply(pkg, require, character.only = TRUE)
-}
+ggplot(hi, aes(x = excited)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6)
 ```
 
---
+---
 
-```{r run-pkg-function, eval = FALSE}
-ipak(pkgs) # take function, and give it that list
+```{r}
+ggplot(hi, aes(x = early, y = excited)) + 
+  geom_jitter(color = "mediumseagreen") +
+  geom_hline(aes(yintercept = mean(excited)))
 ```
 
-Function from: https://gist.github.com/stevenworthington/3178163
+---
+class:middle, inverse, center
 
+## Is there a difference in mean excitement levels based on when you responded to my survey?
+
+`early` ~ Responded on 1st day of survey (Saturday)
+
+`later` ~ Responded after Saturday
+
+---
+class:middle, inverse, center
+## Guessing my age
+
+![](https://media.giphy.com/media/bEVKYB487Lqxy/giphy.gif)
+
+---
+
+```{r}
+ggplot(hi, aes(x = age_guess)) +
+  geom_histogram(fill = "mediumseagreen", color = "white",
+                 alpha = .6, binwidth = 2)
+```
+
+---
+```{r}
+ggplot(hi, aes(x = age_guess)) +
+  geom_density(fill = "mediumseagreen", alpha = .6, color = NA)
+```
+
+---
+
+```{r echo = FALSE, out.width='50%'}
+ggplot(hi, aes(x = age_guess)) +
+  geom_density(fill = "mediumseagreen", alpha = .6, color = NA) +
+  geom_vline(aes(xintercept = mean(age_guess)), 
+             color = "dodgerblue", lty = 3) +
+  geom_vline(aes(xintercept = median(age_guess)), 
+             color = "firebrick1", lty = 5) +
+  geom_vline(xintercept = 37, 
+             color = "black") +
+  annotate("text", label = "mean", x = mean(hi$age_guess) - 1.2, 
+           y = .1, color = "dodgerblue") +
+  annotate("text", label = "median", x = median(hi$age_guess) - 1, 
+           y = .1, color = "firebrick1") +
+  annotate("text", label = "truth!", x = 37 + 1, 
+           y = .07, color = "black")
+```
+
+```{r}
+hi %>% 
+  select(age_guess) %>% 
+  summarize_all(funs(min, max, median, mean, sd), na.rm = TRUE) %>% 
+  knitr::kable()
+```
+
+---
+```{r echo = FALSE}
+ggplot(hi, aes(x = age_guess)) +
+  geom_rect(aes(xmin = min(age_guess), xmax = 32, ymin = 0, ymax = .1), 
+            fill = "lightcoral", alpha = .01) +
+  annotate("text", label = "A+", x = 28, 
+           y = .06, color = "lightcoral") +
+  geom_rect(aes(xmin = 38, xmax = max(age_guess), ymin = 0, ymax = .1), 
+            fill = "black", alpha = .05) +
+  geom_density(fill = "mediumseagreen", alpha = .8, color = NA) 
+```
+
+---
+```{r}
+ggplot(hi, aes(x = early, y = age_guess, fill = early)) +
+  geom_boxplot(alpha = .6) +
+  scale_fill_manual(values = c("mediumseagreen", "dodgerblue"), 
+                    guide = FALSE) +
+  theme_minimal() +
+  labs(x = "")
+```
+
+---
+```{r}
+ggplot(hi, aes(x = age_guess, y = excited)) +
+  geom_point()
+```
+
+---
+```{r}
+ggplot(hi, aes(x = age_guess, y = excited)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+---
+class:middle, inverse, center
+## Discuss with your partner
+
+.pull-left[
+```{r echo = FALSE}
+ggplot(hi, aes(x = age_guess, y = excited)) +
+  geom_point()
+```
+]
+
+.pull-right[
+```{r echo = FALSE}
+ggplot(hi, aes(x = age_guess, y = excited)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+]
+
+## What's wrong on the right?

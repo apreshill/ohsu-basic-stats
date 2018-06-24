@@ -12,7 +12,7 @@ Updated: 2018-03-22
 @import url(https://fonts.googleapis.com/css?family=Lato);
 @import url(https://fonts.googleapis.com/css?family=Inconsolata:400,700);
 @import url('https://fonts.googleapis.com/css?family=Lora');
-@import url(https://fonts.googleapis.com/css?family=Sofia);
+@import url(https://fonts.googleapis.com/css?family=Raleway:300);
 
 
 @font-face{
@@ -84,7 +84,7 @@ h1, h2, h3 {
 
 
 .title-slide h2 {
-  font-family: 'Sofia';
+  font-family: 'Raleway';
 }
 
 
