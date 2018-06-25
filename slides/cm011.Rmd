@@ -272,9 +272,19 @@ ggplot(hi, aes(x = excited)) +
 ---
 
 ```{r}
-ggplot(hi, aes(x = early, y = excited)) + 
-  geom_jitter(color = "mediumseagreen") +
+ggplot(hi, aes(x = id, y = excited)) + 
+  geom_point(color = "mediumseagreen") +
   geom_hline(aes(yintercept = mean(excited)))
+```
+
+---
+
+```{r}
+ggplot(hi, aes(x = id, y = excited)) + 
+  geom_segment(aes(xend = id, yend = mean(excited)),
+               color = "mediumseagreen") +
+  geom_point(color = "mediumseagreen") + 
+  geom_hline(aes(yintercept = mean(excited))) 
 ```
 
 ---
@@ -282,9 +292,9 @@ class:middle, inverse, center
 
 ## Is there a difference in mean excitement levels based on when you responded to my survey?
 
-`early` ~ Responded on 1st day of survey (Saturday)
+`early` ~ Responded on Saturday
 
-`later` ~ Responded after Saturday
+`later` ~ Responded Sunday or later
 
 ---
 class:middle, inverse, center
@@ -304,6 +314,14 @@ ggplot(hi, aes(x = age_guess)) +
 ```{r}
 ggplot(hi, aes(x = age_guess)) +
   geom_density(fill = "mediumseagreen", alpha = .6, color = NA)
+```
+
+---
+
+```{r}
+ggplot(hi, aes(x = age_guess)) +
+  geom_dotplot(fill = "mediumseagreen", alpha = .6, 
+               method = 'histodot', binwidth = 2)
 ```
 
 ---
@@ -335,7 +353,7 @@ hi %>%
 ---
 ```{r echo = FALSE}
 ggplot(hi, aes(x = age_guess)) +
-  geom_rect(aes(xmin = min(age_guess), xmax = 32, ymin = 0, ymax = .1), 
+  geom_rect(aes(xmin = min(age_guess), xmax = 33, ymin = 0, ymax = .1), 
             fill = "lightcoral", alpha = .01) +
   annotate("text", label = "A+", x = 28, 
            y = .06, color = "lightcoral") +
@@ -387,3 +405,5 @@ ggplot(hi, aes(x = age_guess, y = excited)) +
 ]
 
 ## What's wrong on the right?
+
+(the data is the *exact* same)

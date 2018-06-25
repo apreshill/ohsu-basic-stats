@@ -4,17 +4,17 @@ Thurs,June,28,1.2,Intro to R & tidyverse,2,Introduce yourself,
 Tues,July,3,1.3,Data viz / Exploratory Data Analysis,3,Data viz,
 Thurs,July,5,1.4,Data wrangling / more EDA,4,Data taming & wrangling,
 Tues,July,10,1.5,Data tables / Tidy data,5,Data tidying,
-Thurs,July,12,1.6,Concept integration,6,EDA: integrate + iterate,
+Thurs,July,12,1.6,Concept integration<br><a href='https://andrewbtran.github.io/NICAR/2018/workflow/docs/01-workflow_intro.html'>- File organization best practices</a>,6,EDA: integrate + iterate,
 Tues,July,17,2.1: Linear models,Simple Regression (one continuous predictor),,,-
-Thurs,July,19,2.2,Residuals / Diagnostics / Outliers,,,-
-Tues,July,24,2.3,Simple Regression (one categorical predictor),,,-
-Thurs,July,26,2.4,Multiple Regression (2 continuous predictors),,,-
-Tues,July,31,2.5,Multiple Regression (continuous + categorical),,,-
+Thurs,July,19,2.2,Simple Regression (one categorical predictor),,,-
+Tues,July,24,2.3,Multiple Regression (2 continuous predictors),,,-
+Thurs,July,26,2.4,Multiple Regression (continuous + categorical),,,-
+Tues,July,31,2.5,Residuals / Diagnostics / Outliers,,,-
 Thurs,August,2,2.6,Concept integration,,Regression: integrate + iterate,
 Tues,August,7,3.1: Inference,Sampling,,,-
-Thurs,August,9,3.2,Confidence Intervals (classical),,,-
-Tues,August,14,3.3,Confidence Intervals (bootstrapping),,,-
-Thurs,August,16,3.4,Hypothesis Testing ,,,-
+Thurs,August,9,3.2,Confidence Intervals,,,-
+Tues,August,14,3.3,Hypothesis Testing<br><a href='https://github.com/Lakens/perfect-t-test/blob/master/perfect_independent_t-test.Rmd'>- Perfect 2-sample t-test</a>,,,-
+Thurs,August,16,3.4,Hypothesis Testing<br><a href='https://github.com/Lakens/perfect-t-test/blob/master/Perfect_dependent_t-test.Rmd'>- Perfect paired t-test</a>,,,-
 Tues,August,21,3.5,Hypothesis Testing,,,-
 Thurs,August,23,3.6,Concept integration,,Inference: integrate + iterate,
 Tues,August,28,4.1: Mixed models,,,,-

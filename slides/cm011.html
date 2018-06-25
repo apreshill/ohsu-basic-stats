@@ -494,21 +494,34 @@ ggplot(hi, aes(x = excited)) +
 
 
 ```r
-ggplot(hi, aes(x = early, y = excited)) + 
-  geom_jitter(color = "mediumseagreen") +
+ggplot(hi, aes(x = id, y = excited)) + 
+  geom_point(color = "mediumseagreen") +
   geom_hline(aes(yintercept = mean(excited)))
 ```
 
 &lt;img src="cm011_files/figure-html/unnamed-chunk-16-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
+
+
+```r
+ggplot(hi, aes(x = id, y = excited)) + 
+  geom_segment(aes(xend = id, yend = mean(excited)),
+               color = "mediumseagreen") +
+  geom_point(color = "mediumseagreen") + 
+  geom_hline(aes(yintercept = mean(excited))) 
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-17-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
 class:middle, inverse, center
 
 ## Is there a difference in mean excitement levels based on when you responded to my survey?
 
-`early` ~ Responded on 1st day of survey (Saturday)
+`early` ~ Responded on Saturday
 
-`later` ~ Responded after Saturday
+`later` ~ Responded Sunday or later
 
 ---
 class:middle, inverse, center
@@ -525,7 +538,7 @@ ggplot(hi, aes(x = age_guess)) +
                  alpha = .6, binwidth = 2)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-17-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -534,11 +547,22 @@ ggplot(hi, aes(x = age_guess)) +
   geom_density(fill = "mediumseagreen", alpha = .6, color = NA)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-19-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-19-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+```r
+ggplot(hi, aes(x = age_guess)) +
+  geom_dotplot(fill = "mediumseagreen", alpha = .6, 
+               method = 'histodot', binwidth = 2)
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-20-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-21-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 ```r
@@ -570,7 +594,7 @@ hi %&gt;%
 &lt;/table&gt;
 
 ---
-&lt;img src="cm011_files/figure-html/unnamed-chunk-21-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -583,7 +607,7 @@ ggplot(hi, aes(x = early, y = age_guess, fill = early)) +
   labs(x = "")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-22-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-24-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -592,7 +616,7 @@ ggplot(hi, aes(x = age_guess, y = excited)) +
   geom_point()
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-25-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -602,21 +626,23 @@ ggplot(hi, aes(x = age_guess, y = excited)) +
   geom_smooth(method = "lm")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-24-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-26-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 class:middle, inverse, center
 ## Discuss with your partner
 
 .pull-left[
-&lt;img src="cm011_files/figure-html/unnamed-chunk-25-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-27-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="cm011_files/figure-html/unnamed-chunk-26-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-28-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 ]
 
 ## What's wrong on the right?
+
+(the data is the *exact* same)
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({

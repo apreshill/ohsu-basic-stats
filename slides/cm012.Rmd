@@ -1,0 +1,65 @@
+---
+title: "CONJ620: CM 1.2"
+subtitle: "Introduction to Data Wrangling, Analysis, & Communication"
+author: "Alison Hill"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300,
+  fig.align = "center", out.width = "65%", cache = FALSE)
+library(tidyverse)
+library(babynames)
+```
+
+## I'm assuming...
+
+You have working versions of 
+
+- R and 
+
+- RStudio 
+
+installed on your computer.
+
+---
+# Data wrangling so far
+
+From DataCamp.com's "Introduction to the Tidyverse" (Chapters 1 & 2), I'm also assuming you know: 
+
+.pull-left[
+
+- how to print a tibble
+
+- how to install a package (`install.packages("dplyr")`, 1x per machine)
+
+- how to load an installed package (`library(dplyr)`, 1x per work session))
+
+- `dplyr::filter`
+
+- `dplyr::arrange`
+
+- `dplyr::mutate`
+]
+
+.pull-right[
+
+- `<-` (variable assignment)
+- `%>%` (then...)
+- `dplyr`, `ggplot2` (packages)
+
+  - `library(dplyr)` (1x per work session)
+]
+
+
+
