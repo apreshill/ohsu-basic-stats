@@ -248,18 +248,6 @@ heard_of %>%
 
 ```{r}
 heard_of %>% 
-  count(id, heard_of) %>% 
-  filter(!heard_of == "None of these") %>% 
-  count(id, sort = TRUE) %>% 
-  rename("num_heard_of" = nn) %>% 
-  knitr::kable()
-```
-
----
-## Counting what you have heard of 
-
-```{r}
-heard_of %>% 
   filter(!heard_of == "None of these") %>%  
   count(id, heard_of) %>% 
   count(id) %>%
@@ -451,17 +439,32 @@ ggplot(hi, aes(x = excited, fill = early)) +
   labs(x = "")
 ```
 
-
 ---
-```{r}
-ggplot(hi, aes(x = age_guess, y = excited)) +
-  geom_point()
+
+
+```{r out.width='50%'}
+# use continuous instead
+library(lubridate)
+sent <- ymd_hms("2018-06-23 19:00:00")
+hi <- hi %>% 
+  mutate(hours_delay = (as.period(submit_date_utc - sent))/hours(1))
+ggplot(hi, aes(x = hours_delay, y = excited)) +
+  geom_point(alpha = .6) +
+  geom_smooth(method = "lm")
 ```
 
 ---
 ```{r}
+set.seed(0)
 ggplot(hi, aes(x = age_guess, y = excited)) +
-  geom_point() +
+  geom_jitter(alpha = .6, height = .1)
+```
+
+---
+```{r}
+set.seed(0)
+ggplot(hi, aes(x = age_guess, y = excited)) +
+  geom_jitter(alpha = .6, height = .1) +
   geom_smooth(method = "lm")
 ```
 
@@ -471,15 +474,17 @@ class:middle, inverse, center
 
 .pull-left[
 ```{r echo = FALSE}
+set.seed(0)
 ggplot(hi, aes(x = age_guess, y = excited)) +
-  geom_point()
+  geom_jitter(alpha = .6, height = .1)
 ```
 ]
 
 .pull-right[
 ```{r echo = FALSE}
+set.seed(0)
 ggplot(hi, aes(x = age_guess, y = excited)) +
-  geom_point() +
+  geom_jitter(alpha = .6, height = .1) +
   geom_smooth(method = "lm")
 ```
 ]
@@ -487,3 +492,5 @@ ggplot(hi, aes(x = age_guess, y = excited)) +
 ## What's wrong on the right?
 
 (the data is the *exact* same)
+
+

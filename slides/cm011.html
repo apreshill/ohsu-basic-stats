@@ -362,106 +362,6 @@ heard_of %&gt;%
 
 ```r
 heard_of %&gt;% 
-  count(id, heard_of) %&gt;% 
-  filter(!heard_of == "None of these") %&gt;% 
-  count(id, sort = TRUE) %&gt;% 
-  rename("num_heard_of" = nn) %&gt;% 
-  knitr::kable()
-```
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; id &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; num_heard_of &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 22 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 24 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 25 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 17 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 23 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 21 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
----
-## Counting what you have heard of 
-
-
-```r
-heard_of %&gt;% 
   filter(!heard_of == "None of these") %&gt;%  
   count(id, heard_of) %&gt;% 
   count(id) %&gt;%
@@ -518,7 +418,7 @@ ggplot(heard_of, aes(x = fct_relevel(heard_of, "None of these"))) +
   labs(x = "heard_of")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-11-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-10-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -558,7 +458,7 @@ ggplot(used, aes(x = fct_infreq(used_for_stats))) +
   labs(x = "used_for_stats")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-13-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-12-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 class:middle, inverse, center
@@ -585,7 +485,7 @@ ggplot(hi, aes(x = age_guess)) +
                  alpha = .6, binwidth = 2)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-15-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-14-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -594,7 +494,7 @@ ggplot(hi, aes(x = age_guess)) +
   geom_density(fill = "mediumseagreen", alpha = .6, color = NA)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-16-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-15-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -605,11 +505,11 @@ ggplot(hi, aes(x = age_guess)) +
                method = 'histodot', binwidth = 2)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-17-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-16-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-18-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-17-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 ```r
@@ -641,7 +541,7 @@ hi %&gt;%
 &lt;/table&gt;
 
 ---
-&lt;img src="cm011_files/figure-html/unnamed-chunk-20-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-19-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 class:middle, inverse, center
@@ -658,7 +558,7 @@ ggplot(hi, aes(x = excited)) +
   geom_bar(fill = "mediumseagreen", alpha = .6)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-21-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-20-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -670,7 +570,7 @@ ggplot(hi, aes(x = submit_date_utc, y = excited)) +
   scale_x_datetime(date_labels = "%A", date_breaks = "1 day")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-22-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-21-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -684,7 +584,7 @@ ggplot(hi, aes(x = submit_date_utc, y = excited)) +
   scale_x_datetime(date_labels = "%A", date_breaks = "1 day")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-23-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-22-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 ---
 class:middle, inverse, center
@@ -706,7 +606,7 @@ ggplot(hi, aes(x = early, y = excited, fill = early)) +
   labs(x = "")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-24-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-23-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -720,7 +620,7 @@ ggplot(hi, aes(x = early, y = excited, fill = early)) +
   labs(x = "")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-25-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-24-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -733,14 +633,31 @@ ggplot(hi, aes(x = excited, fill = early)) +
   labs(x = "")
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-26-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-25-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
+---
+
+
+
+```r
+# use continuous instead
+library(lubridate)
+sent &lt;- ymd_hms("2018-06-23 19:00:00")
+hi &lt;- hi %&gt;% 
+  mutate(hours_delay = (as.period(submit_date_utc - sent))/hours(1))
+ggplot(hi, aes(x = hours_delay, y = excited)) +
+  geom_point(alpha = .6) +
+  geom_smooth(method = "lm")
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-26-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ---
 
 ```r
+set.seed(0)
 ggplot(hi, aes(x = age_guess, y = excited)) +
-  geom_point()
+  geom_jitter(alpha = .6, height = .1)
 ```
 
 &lt;img src="cm011_files/figure-html/unnamed-chunk-27-1.png" width="65%" style="display: block; margin: auto;" /&gt;
@@ -748,8 +665,9 @@ ggplot(hi, aes(x = age_guess, y = excited)) +
 ---
 
 ```r
+set.seed(0)
 ggplot(hi, aes(x = age_guess, y = excited)) +
-  geom_point() +
+  geom_jitter(alpha = .6, height = .1) +
   geom_smooth(method = "lm")
 ```
 
