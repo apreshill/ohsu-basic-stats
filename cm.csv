@@ -1,10 +1,10 @@
 Weekday,Month,Day,CM / Block,Topics,Lab,Lab Topic,lab_link
 Tues,June,26,1.1: Working with data in R,Welcome & Syllabus (<a href='http://bit.ly/conj620-cm011'>notepad</a>),1,Mona Chalabi video,https://www.youtube.com/watch?v=Zwwanld4T1w
-Thurs,June,28,1.2,Intro to R & tidyverse,2,Introduce yourself,
+Thurs,June,28,1.2,Intro to R & tidyverse (<a href='http://bit.ly/conj620-cm012'>notepad</a>),2,Introduce yourself,
 Tues,July,3,1.3,Data viz / Exploratory Data Analysis,3,Data viz,
 Thurs,July,5,1.4,Data wrangling / more EDA,4,Data taming & wrangling,
 Tues,July,10,1.5,Data tables / Tidy data,5,Data tidying,
-Thurs,July,12,1.6,Concept integration<br><a href='https://andrewbtran.github.io/NICAR/2018/workflow/docs/01-workflow_intro.html'>- File organization best practices</a>,6,EDA: integrate + iterate,
+Thurs,July,12,1.6,Concept integration<br><a href='https://andrewbtran.github.io/NICAR/2018/workflow/docs/01-workflow_intro.html'>- File organization best practices</a><br><a href='https://www.tidyverse.org/articles/2017/12/workflow-vs-script/'>- Project-oriented workflow</a>,6,EDA: integrate + iterate,
 Tues,July,17,2.1: Linear models,Simple Regression (one continuous predictor),,,-
 Thurs,July,19,2.2,Simple Regression (one categorical predictor),,,-
 Tues,July,24,2.3,Multiple Regression (2 continuous predictors),,,-

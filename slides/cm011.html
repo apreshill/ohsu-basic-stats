@@ -75,9 +75,10 @@ hi &lt;- read_csv(here("data", "conj620-hi-20180623.csv")) %&gt;%
   rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
          "age_guess" = 5, "program" = 6, "link" = 22, 
          "goals" = 23, "excited" = 24, "stats" = 25) %&gt;% 
+  filter(!name == "Jackie") %&gt;% 
   select(year:program, 
          heard_of_ = other:none_of_these, 
-         used_ = excel:other_1, 
+         used_for_stats = excel:other_1, 
          goals:stats, submit_date_utc) %&gt;% 
   mutate(program = word(program, start = -1),
          program = str_remove(program, "\\("),
@@ -101,22 +102,22 @@ hi
 ```
 
 ```
-# A tibble: 10 x 24
-   year      age_guess program heard_of_1 heard_of_2 heard_of_3 heard_of_4
-   &lt;chr&gt;         &lt;dbl&gt; &lt;chr&gt;   &lt;lgl&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     
- 1 2               39. MMI     NA         R          &lt;NA&gt;       &lt;NA&gt;      
- 2 1               38. BEHN    NA         &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      
- 3 2               35. HNUT    NA         &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      
- 4 5               31. PHPH    NA         R          &lt;NA&gt;       &lt;NA&gt;      
- 5 3               37. PHPH    NA         R          &lt;NA&gt;       &lt;NA&gt;      
- 6 1               34. PMCB    NA         R          RStudio    &lt;NA&gt;      
- 7 1               37. BME     NA         R          &lt;NA&gt;       &lt;NA&gt;      
- 8 1               23. PMCB    NA         R          &lt;NA&gt;       &lt;NA&gt;      
- 9 1               37. BME     NA         R          RStudio    Tidyverse 
-10 don't as…       29. MCB     NA         R          RStudio    Tidyverse 
+# A tibble: 9 x 24
+  year  age_guess program heard_of_1 heard_of_2 heard_of_3 heard_of_4
+  &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;lgl&gt;      &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;     
+1 2           39. MMI     NA         R          &lt;NA&gt;       &lt;NA&gt;      
+2 1           38. BEHN    NA         &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      
+3 2           35. HNUT    NA         &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      
+4 5           31. PHPH    NA         R          &lt;NA&gt;       &lt;NA&gt;      
+5 3           37. PHPH    NA         R          &lt;NA&gt;       &lt;NA&gt;      
+6 1           34. PMCB    NA         R          RStudio    &lt;NA&gt;      
+7 1           37. BME     NA         R          &lt;NA&gt;       &lt;NA&gt;      
+8 1           23. PMCB    NA         R          &lt;NA&gt;       &lt;NA&gt;      
+9 1           37. BME     NA         R          RStudio    Tidyverse 
 # ... with 17 more variables: heard_of_5 &lt;chr&gt;, heard_of_6 &lt;chr&gt;,
-#   heard_of_7 &lt;chr&gt;, used_1 &lt;chr&gt;, used_2 &lt;chr&gt;, used_3 &lt;lgl&gt;,
-#   used_4 &lt;chr&gt;, used_5 &lt;lgl&gt;, used_6 &lt;chr&gt;, used_7 &lt;chr&gt;, used_8 &lt;lgl&gt;,
+#   heard_of_7 &lt;chr&gt;, used_for_stats1 &lt;chr&gt;, used_for_stats2 &lt;chr&gt;,
+#   used_for_stats3 &lt;lgl&gt;, used_for_stats4 &lt;chr&gt;, used_for_stats5 &lt;lgl&gt;,
+#   used_for_stats6 &lt;chr&gt;, used_for_stats7 &lt;chr&gt;, used_for_stats8 &lt;lgl&gt;,
 #   goals &lt;chr&gt;, excited &lt;dbl&gt;, stats &lt;chr&gt;, submit_date_utc &lt;dttm&gt;,
 #   id &lt;int&gt;, early &lt;chr&gt;
 ```
@@ -129,31 +130,31 @@ glimpse(hi)
 ```
 
 ```
-Observations: 10
+Observations: 9
 Variables: 24
-$ year            &lt;chr&gt; "2", "1", "2", "5", "3", "1", "1", "1", "1", "...
-$ age_guess       &lt;dbl&gt; 39, 38, 35, 31, 37, 34, 37, 23, 37, 29
+$ year            &lt;chr&gt; "2", "1", "2", "5", "3", "1", "1", "1", "1"
+$ age_guess       &lt;dbl&gt; 39, 38, 35, 31, 37, 34, 37, 23, 37
 $ program         &lt;chr&gt; "MMI", "BEHN", "HNUT", "PHPH", "PHPH", "PMCB",...
-$ heard_of_1      &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
-$ heard_of_2      &lt;chr&gt; "R", NA, NA, "R", "R", "R", "R", "R", "R", "R"
-$ heard_of_3      &lt;chr&gt; NA, NA, NA, NA, NA, "RStudio", NA, NA, "RStudi...
-$ heard_of_4      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "Tidyverse", "...
-$ heard_of_5      &lt;chr&gt; "Git", NA, NA, "Git", NA, "Git", NA, "Git", NA...
+$ heard_of_1      &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA
+$ heard_of_2      &lt;chr&gt; "R", NA, NA, "R", "R", "R", "R", "R", "R"
+$ heard_of_3      &lt;chr&gt; NA, NA, NA, NA, NA, "RStudio", NA, NA, "RStudio"
+$ heard_of_4      &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, "Tidyverse"
+$ heard_of_5      &lt;chr&gt; "Git", NA, NA, "Git", NA, "Git", NA, "Git", NA
 $ heard_of_6      &lt;chr&gt; NA, NA, NA, NA, NA, NA, "DataCamp.com", "DataC...
 $ heard_of_7      &lt;chr&gt; NA, "None of these", "None of these", NA, NA, ...
-$ used_1          &lt;chr&gt; "Excel", "Excel", "Excel", "Excel", "Excel", "...
-$ used_2          &lt;chr&gt; "GraphPad Prism", "GraphPad Prism", NA, "Graph...
-$ used_3          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
-$ used_4          &lt;chr&gt; NA, "SPSS", NA, "SPSS", NA, NA, NA, NA, NA, NA
-$ used_5          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
-$ used_6          &lt;chr&gt; NA, NA, NA, NA, NA, "Python", NA, NA, NA, NA
-$ used_7          &lt;chr&gt; NA, "MATLAB", NA, NA, NA, NA, NA, NA, NA, NA
-$ used_8          &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA
+$ used_for_stats1 &lt;chr&gt; "Excel", "Excel", "Excel", "Excel", "Excel", "...
+$ used_for_stats2 &lt;chr&gt; "GraphPad Prism", "GraphPad Prism", NA, "Graph...
+$ used_for_stats3 &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA
+$ used_for_stats4 &lt;chr&gt; NA, "SPSS", NA, "SPSS", NA, NA, NA, NA, NA
+$ used_for_stats5 &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA
+$ used_for_stats6 &lt;chr&gt; NA, NA, NA, NA, NA, "Python", NA, NA, NA
+$ used_for_stats7 &lt;chr&gt; NA, "MATLAB", NA, NA, NA, NA, NA, NA, NA
+$ used_for_stats8 &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA
 $ goals           &lt;chr&gt; "Learn when to apply the correct statistical t...
-$ excited         &lt;dbl&gt; 2, 4, 4, 5, 4, 4, 3, 5, 5, 5
+$ excited         &lt;dbl&gt; 2, 4, 4, 5, 4, 4, 3, 5, 5
 $ stats           &lt;chr&gt; "Students T test?", "A useful tool", "P-values...
 $ submit_date_utc &lt;dttm&gt; 2018-06-24 01:58:07, 2018-06-24 00:24:28, 201...
-$ id              &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+$ id              &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9
 $ early           &lt;chr&gt; "early", "early", "early", "early", "early", "...
 ```
 
@@ -179,9 +180,10 @@ library(here)
   rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
          "age_guess" = 5, "program" = 6, "link" = 22, 
          "goals" = 23, "excited" = 24, "stats" = 25) %&gt;% 
+  filter(!name == "Jackie") %&gt;% 
   select(year:program, 
          heard_of_ = other:none_of_these, 
-         used_ = excel:other_1, 
+         used_for_stats_for_stats = excel:other_1, 
          goals:stats, submit_date_utc) %&gt;% 
   mutate(program = word(program, start = -1),
          program = str_remove(program, "\\("),
@@ -242,20 +244,20 @@ heard_of
 ```
 
 ```
-# A tibble: 23 x 3
+# A tibble: 55 x 3
       id option     heard_of
  * &lt;int&gt; &lt;chr&gt;      &lt;chr&gt;   
  1     1 heard_of_2 R       
- 2     4 heard_of_2 R       
- 3     5 heard_of_2 R       
- 4     6 heard_of_2 R       
- 5     7 heard_of_2 R       
- 6     8 heard_of_2 R       
- 7     9 heard_of_2 R       
- 8    10 heard_of_2 R       
- 9     6 heard_of_3 RStudio 
-10     9 heard_of_3 RStudio 
-# ... with 13 more rows
+ 2     3 heard_of_2 R       
+ 3     4 heard_of_2 R       
+ 4     5 heard_of_2 R       
+ 5     8 heard_of_2 R       
+ 6    10 heard_of_2 R       
+ 7    11 heard_of_2 R       
+ 8    12 heard_of_2 R       
+ 9    14 heard_of_2 R       
+10    16 heard_of_2 R       
+# ... with 45 more rows
 ```
 
 ---
@@ -278,27 +280,27 @@ heard_of %&gt;%
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; R &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Git &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; DataCamp.com &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; RStudio &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; DataCamp.com &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; None of these &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Tidyverse &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -325,35 +327,79 @@ heard_of %&gt;%
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 11 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 22 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 24 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 25 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 23 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 21 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -370,8 +416,8 @@ heard_of %&gt;%
   count(id) %&gt;%
   complete(id = full_seq(id, period = 1), fill = list(nn = 0)) %&gt;% 
   count(nn) %&gt;% 
-  rename("people" = nn, "heard_of" = n) %&gt;% 
-  arrange(people) %&gt;% 
+  select("people" = n, "heard_of" = nn) %&gt;% 
+  arrange(desc(heard_of)) %&gt;% 
   knitr::kable()
 ```
 
@@ -384,24 +430,28 @@ heard_of %&gt;%
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -424,44 +474,37 @@ ggplot(heard_of, aes(x = fct_relevel(heard_of, "None of these"))) +
 
 ```r
 used &lt;- hi %&gt;% 
-  select(id, starts_with("used")) %&gt;% 
-  gather(option, used, starts_with("used"), na.rm = TRUE) 
+  select(id, starts_with("used_for_stats")) %&gt;% 
+  gather(option, used_for_stats, starts_with("used_for_stats"), na.rm = TRUE) 
 
 used
 ```
 
 ```
-# A tibble: 18 x 3
-      id option used          
- * &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;         
- 1     1 used_1 Excel         
- 2     2 used_1 Excel         
- 3     3 used_1 Excel         
- 4     4 used_1 Excel         
- 5     5 used_1 Excel         
- 6     6 used_1 Excel         
- 7     7 used_1 Excel         
- 8     8 used_1 Excel         
- 9     1 used_2 GraphPad Prism
-10     2 used_2 GraphPad Prism
-11     4 used_2 GraphPad Prism
-12     5 used_2 GraphPad Prism
-13     6 used_2 GraphPad Prism
-14     8 used_2 GraphPad Prism
-15     2 used_4 SPSS          
-16     4 used_4 SPSS          
-17     6 used_6 Python        
-18     2 used_7 MATLAB        
+# A tibble: 62 x 3
+      id option                    used_for_stats
+ * &lt;int&gt; &lt;chr&gt;                     &lt;chr&gt;         
+ 1     1 used_for_stats_for_stats1 Excel         
+ 2     2 used_for_stats_for_stats1 Excel         
+ 3     3 used_for_stats_for_stats1 Excel         
+ 4     4 used_for_stats_for_stats1 Excel         
+ 5     5 used_for_stats_for_stats1 Excel         
+ 6     6 used_for_stats_for_stats1 Excel         
+ 7     7 used_for_stats_for_stats1 Excel         
+ 8     8 used_for_stats_for_stats1 Excel         
+ 9     9 used_for_stats_for_stats1 Excel         
+10    10 used_for_stats_for_stats1 Excel         
+# ... with 52 more rows
 ```
 
 ---
 
 
 ```r
-ggplot(used, aes(x = used)) + 
+ggplot(used, aes(x = fct_infreq(used_for_stats))) + 
   geom_bar(fill = "mediumseagreen", alpha = .6) +
   coord_flip() +
-  labs(x = "used")
+  labs(x = "used_for_stats")
 ```
 
 &lt;img src="cm011_files/figure-html/unnamed-chunk-13-1.png" width="65%" style="display: block; margin: auto;" /&gt;
@@ -473,55 +516,8 @@ class:middle, inverse, center
 
 &lt;iframe src="https://www.youtube.com/embed/Zwwanld4T1w" width="100%" height="400px"&gt;&lt;/iframe&gt;
 
----
-class:middle, inverse, center
-
-## How excited are you??
-
-![](https://media.giphy.com/media/FwpecpDvcu7vO/giphy.gif)
-
----
 
 
-```r
-ggplot(hi, aes(x = excited)) + 
-  geom_bar(fill = "mediumseagreen", alpha = .6)
-```
-
-&lt;img src="cm011_files/figure-html/unnamed-chunk-15-1.png" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-
-```r
-ggplot(hi, aes(x = id, y = excited)) + 
-  geom_point(color = "mediumseagreen") +
-  geom_hline(aes(yintercept = mean(excited)))
-```
-
-&lt;img src="cm011_files/figure-html/unnamed-chunk-16-1.png" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-
-
-```r
-ggplot(hi, aes(x = id, y = excited)) + 
-  geom_segment(aes(xend = id, yend = mean(excited)),
-               color = "mediumseagreen") +
-  geom_point(color = "mediumseagreen") + 
-  geom_hline(aes(yintercept = mean(excited))) 
-```
-
-&lt;img src="cm011_files/figure-html/unnamed-chunk-17-1.png" width="65%" style="display: block; margin: auto;" /&gt;
-
----
-class:middle, inverse, center
-
-## Is there a difference in mean excitement levels based on when you responded to my survey?
-
-`early` ~ Responded on Saturday
-
-`later` ~ Responded Sunday or later
 
 ---
 class:middle, inverse, center
@@ -538,7 +534,7 @@ ggplot(hi, aes(x = age_guess)) +
                  alpha = .6, binwidth = 2)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-18-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-15-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -547,7 +543,7 @@ ggplot(hi, aes(x = age_guess)) +
   geom_density(fill = "mediumseagreen", alpha = .6, color = NA)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-19-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-16-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
@@ -558,11 +554,11 @@ ggplot(hi, aes(x = age_guess)) +
                method = 'histodot', binwidth = 2)
 ```
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-20-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-17-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 
-&lt;img src="cm011_files/figure-html/unnamed-chunk-21-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-18-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 ```r
@@ -585,16 +581,68 @@ hi %&gt;%
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 23 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 41 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 36 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 34 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.988876 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 35.16 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.259108 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
 ---
-&lt;img src="cm011_files/figure-html/unnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="cm011_files/figure-html/unnamed-chunk-20-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+class:middle, inverse, center
+
+## How excited are you??
+
+![](https://media.giphy.com/media/FwpecpDvcu7vO/giphy.gif)
+
+---
+
+
+```r
+ggplot(hi, aes(x = excited)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6)
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-21-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+ggplot(hi, aes(x = submit_date_utc, y = excited)) + 
+  geom_point(color = "mediumseagreen") + 
+  geom_hline(aes(yintercept = mean(excited))) + 
+  scale_x_datetime(date_labels = "%A", expand=c(0,0))
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-22-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+ggplot(hi, aes(x = submit_date_utc, y = excited)) + 
+  geom_segment(aes(xend = submit_date_utc, yend = mean(excited)),
+               color = "mediumseagreen") +
+  geom_point(color = "mediumseagreen") + 
+  geom_hline(aes(yintercept = mean(excited))) + 
+  scale_x_datetime(date_labels = "%A", expand=c(0,0))
+```
+
+&lt;img src="cm011_files/figure-html/unnamed-chunk-23-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+class:middle, inverse, center
+
+## Is there a difference in mean excitement levels based on when you responded to my survey?
+
+`early` ~ Responded on Saturday
+
+`later` ~ Responded Sunday or later
 
 ---
 

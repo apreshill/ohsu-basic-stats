@@ -75,9 +75,10 @@ hi <- read_csv(here("data", "conj620-hi-20180623.csv")) %>%
   rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
          "age_guess" = 5, "program" = 6, "link" = 22, 
          "goals" = 23, "excited" = 24, "stats" = 25) %>% 
+  filter(!name == "Jackie") %>% 
   select(year:program, 
          heard_of_ = other:none_of_these, 
-         used_ = excel:other_1, 
+         used_for_stats = excel:other_1, 
          goals:stats, submit_date_utc) %>% 
   mutate(program = word(program, start = -1),
          program = str_remove(program, "\\("),
@@ -116,7 +117,7 @@ glimpse(hi)
 
 ---
 
-```{r echo = TRUE, results = 'hide', eval = FALSE}
+```{r echo = TRUE, results = 'hide'}
 library(tidyverse)
 library(janitor)
 library(here)
@@ -126,9 +127,10 @@ hi <- read_csv(here("data", "conj620-hi-20180626.csv")) %>% #<<
   rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
          "age_guess" = 5, "program" = 6, "link" = 22, 
          "goals" = 23, "excited" = 24, "stats" = 25) %>% 
+  filter(!name == "Jackie") %>% 
   select(year:program, 
          heard_of_ = other:none_of_these, 
-         used_ = excel:other_1, 
+         used_for_stats_for_stats = excel:other_1, 
          goals:stats, submit_date_utc) %>% 
   mutate(program = word(program, start = -1),
          program = str_remove(program, "\\("),
@@ -212,8 +214,8 @@ heard_of %>%
   count(id) %>%
   complete(id = full_seq(id, period = 1), fill = list(nn = 0)) %>% 
   count(nn) %>% 
-  rename("people" = nn, "heard_of" = n) %>% 
-  arrange(people) %>% 
+  select("people" = n, "heard_of" = nn) %>% 
+  arrange(desc(heard_of)) %>% 
   knitr::kable()
 ```
 
@@ -231,8 +233,8 @@ ggplot(heard_of, aes(x = fct_relevel(heard_of, "None of these"))) +
 
 ```{r}
 used <- hi %>% 
-  select(id, starts_with("used")) %>% 
-  gather(option, used, starts_with("used"), na.rm = TRUE) 
+  select(id, starts_with("used_for_stats")) %>% 
+  gather(option, used_for_stats, starts_with("used_for_stats"), na.rm = TRUE) 
 
 used
 ```
@@ -240,10 +242,10 @@ used
 ---
 
 ```{r}
-ggplot(used, aes(x = used)) + 
+ggplot(used, aes(x = fct_infreq(used_for_stats))) + 
   geom_bar(fill = "mediumseagreen", alpha = .6) +
   coord_flip() +
-  labs(x = "used")
+  labs(x = "used_for_stats")
 ```
 
 ---
@@ -255,46 +257,8 @@ class:middle, inverse, center
 knitr::include_url("https://www.youtube.com/embed/Zwwanld4T1w")
 ```
 
----
-class:middle, inverse, center
 
-## How excited are you??
 
-![](https://media.giphy.com/media/FwpecpDvcu7vO/giphy.gif)
-
----
-
-```{r}
-ggplot(hi, aes(x = excited)) + 
-  geom_bar(fill = "mediumseagreen", alpha = .6)
-```
-
----
-
-```{r}
-ggplot(hi, aes(x = id, y = excited)) + 
-  geom_point(color = "mediumseagreen") +
-  geom_hline(aes(yintercept = mean(excited)))
-```
-
----
-
-```{r}
-ggplot(hi, aes(x = id, y = excited)) + 
-  geom_segment(aes(xend = id, yend = mean(excited)),
-               color = "mediumseagreen") +
-  geom_point(color = "mediumseagreen") + 
-  geom_hline(aes(yintercept = mean(excited))) 
-```
-
----
-class:middle, inverse, center
-
-## Is there a difference in mean excitement levels based on when you responded to my survey?
-
-`early` ~ Responded on Saturday
-
-`later` ~ Responded Sunday or later
 
 ---
 class:middle, inverse, center
@@ -338,7 +302,7 @@ ggplot(hi, aes(x = age_guess)) +
   annotate("text", label = "mean", x = mean(hi$age_guess) - 1.2, 
            y = .1, color = "dodgerblue") +
   annotate("text", label = "median", x = median(hi$age_guess) - 1, 
-           y = .1, color = "firebrick1") +
+           y = .08, color = "firebrick1") +
   annotate("text", label = "truth!", x = 37 + 1, 
            y = .07, color = "black")
 ```
@@ -353,14 +317,57 @@ hi %>%
 ---
 ```{r echo = FALSE}
 ggplot(hi, aes(x = age_guess)) +
-  geom_rect(aes(xmin = min(age_guess), xmax = 33, ymin = 0, ymax = .1), 
+  geom_rect(aes(xmin = min(age_guess), xmax = 35, ymin = 0, ymax = .125), 
             fill = "lightcoral", alpha = .01) +
   annotate("text", label = "A+", x = 28, 
            y = .06, color = "lightcoral") +
-  geom_rect(aes(xmin = 38, xmax = max(age_guess), ymin = 0, ymax = .1), 
-            fill = "black", alpha = .05) +
+  geom_rect(aes(xmin = 38, xmax = max(age_guess), ymin = 0, ymax = .125), 
+            fill = "black", alpha = .01) +
   geom_density(fill = "mediumseagreen", alpha = .8, color = NA) 
 ```
+
+---
+class:middle, inverse, center
+
+## How excited are you??
+
+![](https://media.giphy.com/media/FwpecpDvcu7vO/giphy.gif)
+
+---
+
+```{r}
+ggplot(hi, aes(x = excited)) + 
+  geom_bar(fill = "mediumseagreen", alpha = .6)
+```
+
+---
+
+```{r}
+ggplot(hi, aes(x = submit_date_utc, y = excited)) + 
+  geom_point(color = "mediumseagreen") + 
+  geom_hline(aes(yintercept = mean(excited))) + 
+  scale_x_datetime(date_labels = "%A", expand=c(0,0))
+```
+
+---
+
+```{r out.width = '60%'}
+ggplot(hi, aes(x = submit_date_utc, y = excited)) + 
+  geom_segment(aes(xend = submit_date_utc, yend = mean(excited)),
+               color = "mediumseagreen") +
+  geom_point(color = "mediumseagreen") + 
+  geom_hline(aes(yintercept = mean(excited))) + 
+  scale_x_datetime(date_labels = "%A", expand=c(0,0))
+```
+
+---
+class:middle, inverse, center
+
+## Is there a difference in mean excitement levels based on when you responded to my survey?
+
+`early` ~ Responded on Saturday
+
+`later` ~ Responded Sunday or later
 
 ---
 ```{r}

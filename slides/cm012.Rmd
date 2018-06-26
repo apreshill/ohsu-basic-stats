@@ -61,5 +61,5 @@ From DataCamp.com's "Introduction to the Tidyverse" (Chapters 1 & 2), I'm also a
   - `library(dplyr)` (1x per work session)
 ]
 
-
+http://bit.ly/conj620-cm012
 
