@@ -1,5 +1,5 @@
 Weekday,Month,Day,CM / Block,Topics,Lab,Lab Topic,lab_link
-Tues,June,26,1.1: Working with data in R,Welcome & Syllabus (<a href='http://bit.ly/conj620-cm011'>notepad</a>),1,Mona Chalabi video,https://www.youtube.com/watch?v=Zwwanld4T1w
+Tues,June,26,1.1: Working with data in R,<a href='slides/cm011.html'>Welcome & Introductions</a><br>(<a href='syllabus.html'>syllabus</a>),1,Paper Discussion,http://bit.ly/conj620-cm011
 Thurs,June,28,1.2,Intro to R & tidyverse (<a href='http://bit.ly/conj620-cm012'>notepad</a>),2,Introduce yourself,
 Tues,July,3,1.3,Data viz / Exploratory Data Analysis,3,Data viz,
 Thurs,July,5,1.4,Data wrangling / more EDA,4,Data taming & wrangling,

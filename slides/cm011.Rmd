@@ -24,18 +24,49 @@ library(babynames)
 
 ## Hi & welcome!
 
+
 ---
 ## Where are we going?
 
 ![](http://moderndive.netlify.com/images/flowcharts/flowchart/flowchart.002.png)
 
 ---
+## Learning outcomes
+
+-	Develop and clearly describe a statistical analysis plan, from start to finish.
+
+--
+
+-	Work independently with data, including wrangling, tidying, visualizing, and basic analyses.
+
+--
+
+-	Accurately interpret results from basic inferential statistical analyses.
+
+--
+
+-	Understand assumptions and limitations to statistical procedures.
+
+--
+
+-	Know about the types/scope of questions one can ask about data.
+
+--
+
+-	Identify statistical questions/problems that require advanced methods out of skill set.
+
+--
+
+-	Proficient use of tools and vocabulary to facilitate effective collaboration with advisors, biostatisticians, and other team members.
+
+---
 ## How will we get there?
 
 - ModernDive
 - R4DS
-- Blogs, YouTube, etc.
 - DataCamp.com
+- Blogs, YouTube, PEERJ, Nature, etc.
+
 
 
 ---
@@ -54,6 +85,12 @@ https://arxiv.org/pdf/1712.07349.pdf
 https://nhorton.people.amherst.edu/mererenovation/17_Wickham.PDF
 
 ---
+class:inverse, middle, center
+## My 30-minute rule
+
+![](https://media.giphy.com/media/GiabMxIHNpZf2/giphy.gif)
+
+---
 ## Your articles
 
 - Find a partner
@@ -65,12 +102,23 @@ https://nhorton.people.amherst.edu/mererenovation/17_Wickham.PDF
     - http://bit.ly/conj620-cm011
 
 ---
+class:inverse, middle, center
+## On seriousness
+
+![](https://media.giphy.com/media/67UaEFCYRKOMU/giphy.gif)
+
+---
+class:inverse, middle, center
+
+## Our get-to-know-you survey results are in...
+
+---
 ```{r echo = TRUE, results = 'hide'}
 library(tidyverse)
 library(janitor)
 library(here)
 
-hi <- read_csv(here("data", "conj620-hi-20180623.csv")) %>%
+hi <- read_csv(here::here("data", "conj620-hi-20180623.csv")) %>%
   clean_names() %>% 
   rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
          "age_guess" = 5, "program" = 6, "link" = 22, 
@@ -114,6 +162,10 @@ glimpse(hi)
 ---
 ## Now...
 
+--
+
+![](images/conj620-hi-tuesday.png)
+
 
 ---
 
@@ -122,7 +174,7 @@ library(tidyverse)
 library(janitor)
 library(here)
 
-hi <- read_csv(here("data", "conj620-hi-20180626.csv")) %>% #<<
+hi <- read_csv(here::here("data", "conj620-hi-20180626.csv")) %>% #<<
   clean_names() %>% 
   rename("id" = 1, "name" = 2, "email" = 3, "year" = 4, 
          "age_guess" = 5, "program" = 6, "link" = 22, 
@@ -130,15 +182,14 @@ hi <- read_csv(here("data", "conj620-hi-20180626.csv")) %>% #<<
   filter(!name == "Jackie") %>% 
   select(year:program, 
          heard_of_ = other:none_of_these, 
-         used_for_stats_for_stats = excel:other_1, 
+         used_for_stats = excel:other_1, 
          goals:stats, submit_date_utc) %>% 
   mutate(program = word(program, start = -1),
          program = str_remove(program, "\\("),
          program = str_remove(program, "\\)"),
          id = row_number(),
          age_guess = parse_number(age_guess),
-         heard_of_5 = if_else(!is.na(heard_of_5), 
-                              "Git", 
+         heard_of_5 = if_else(!is.na(heard_of_5), "Git", 
                               heard_of_5)) %>% 
   mutate(early = case_when(
     submit_date_utc < "2018-06-24" ~ "early",
@@ -331,7 +382,7 @@ class:middle, inverse, center
 
 ## How excited are you??
 
-![](https://media.giphy.com/media/FwpecpDvcu7vO/giphy.gif)
+![](https://media.giphy.com/media/bTUfYM93qHT44/giphy.gif)
 
 ---
 
@@ -346,7 +397,7 @@ ggplot(hi, aes(x = excited)) +
 ggplot(hi, aes(x = submit_date_utc, y = excited)) + 
   geom_point(color = "mediumseagreen") + 
   geom_hline(aes(yintercept = mean(excited))) + 
-  scale_x_datetime(date_labels = "%A", expand=c(0,0))
+  scale_x_datetime(date_labels = "%A", date_breaks = "1 day")
 ```
 
 ---
@@ -357,7 +408,7 @@ ggplot(hi, aes(x = submit_date_utc, y = excited)) +
                color = "mediumseagreen") +
   geom_point(color = "mediumseagreen") + 
   geom_hline(aes(yintercept = mean(excited))) + 
-  scale_x_datetime(date_labels = "%A", expand=c(0,0))
+  scale_x_datetime(date_labels = "%A", date_breaks = "1 day")
 ```
 
 ---
@@ -370,14 +421,36 @@ class:middle, inverse, center
 `later` ~ Responded Sunday or later
 
 ---
-```{r}
-ggplot(hi, aes(x = early, y = age_guess, fill = early)) +
+```{r out.width='50%'}
+ggplot(hi, aes(x = early, y = excited, fill = early)) +
   geom_boxplot(alpha = .6) +
   scale_fill_manual(values = c("mediumseagreen", "dodgerblue"), 
                     guide = FALSE) +
   theme_minimal() +
   labs(x = "")
 ```
+
+---
+```{r out.width='50%'}
+ggplot(hi, aes(x = early, y = excited, fill = early)) +
+  geom_boxplot(alpha = .6, outlier.color = NA, colour = "gray50") +
+  geom_jitter(width = .2, alpha = .5, height = .05) +
+  scale_fill_manual(values = c("mediumseagreen", "dodgerblue"), 
+                    guide = FALSE) +
+  theme_minimal() +
+  labs(x = "")
+```
+
+---
+```{r out.width='60%'}
+ggplot(hi, aes(x = excited, fill = early)) +
+  geom_density(alpha = .6) +
+  scale_fill_manual(values = c("mediumseagreen", "dodgerblue"),
+                    name = "") +
+  theme_minimal() +
+  labs(x = "")
+```
+
 
 ---
 ```{r}

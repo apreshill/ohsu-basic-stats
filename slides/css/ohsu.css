@@ -108,6 +108,7 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
 .inverse h2 {
   line-height: 1.1;
   font-family: 'Raleway';
+  font-weight: 700;
 }
 
 .inverse .remark-inline-code { 
