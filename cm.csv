@@ -1,6 +1,6 @@
 Weekday,Month,Day,CM / Block,Topics,Lab,Lab Topic,lab_link
 Tues,June,26,1.1: Working with data in R,<a href='slides/cm011.html'>Welcome & Introductions</a><br>(<a href='syllabus.html'>syllabus</a>),1,Paper Discussion,http://bit.ly/conj620-cm011
-Thurs,June,28,1.2,<a href='slides/cm012.html'>Intro to Tidyverse</a><br> (<a href='http://bit.ly/conj620-cm012'>notepad</a>),2,Tidyverse Basics,labs/cm012-worksheet.html
+Thurs,June,28,1.2,<a href='slides/cm012.html'>Intro to Tidyverse</a><br> (<a href='http://bit.ly/conj620-cm012'>notepad</a>)<br> (<a href='https://apreshill.github.io/ohsu-basic-stats/labs/cm012-worksheet.Rmd'>Worksheet</a>),2,Tidyverse Basics,labs/cm012-worksheet.html
 Tues,July,3,1.3,Data viz / Exploratory Data Analysis,3,Data viz,
 Thurs,July,5,1.4,Data wrangling / more EDA,4,Data taming & wrangling,
 Tues,July,10,1.5,Data tables / Tidy data,5,Data tidying,

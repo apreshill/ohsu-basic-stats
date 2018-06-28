@@ -13,6 +13,10 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
   comment = NA, dpi = 300)
 ```
 
+## Download this worksheet
+
+<a href="https://apreshill.github.io/ohsu-basic-stats/labs/cm012-worksheet.Rmd">Worksheet</a>
+
 ## Notepad
 
 http://bit.ly/conj620-cm012
@@ -105,7 +109,8 @@ From the [data dictionary](http://faculty.washington.edu/kenrice/heartgraphs/):
 
 ## 6. Knit to html
 
-* very important*: delete the text below in order to be able to knit (you won't have the image file in your directory)
+*very important*: delete the text below in order to be able to knit (you won't have the image file in your directory)
+
 ![](../slides/images/knit-to-html.png)
 
 
