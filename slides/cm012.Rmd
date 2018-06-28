@@ -1,6 +1,6 @@
 ---
 title: "CONJ620: CM 1.2"
-subtitle: "Introduction to Data Wrangling, Analysis, & Communication"
+subtitle: "Introduction to the Tidyverse"
 author: "Alison Hill"
 output:
   xaringan::moon_reader:
@@ -17,14 +17,13 @@ options(htmltools.dir.version = FALSE)
 options(knitr.table.format = "html") 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
   comment = NA, dpi = 300,
-  fig.align = "center", out.width = "65%", cache = FALSE)
-library(tidyverse)
-library(babynames)
+  fig.align = "center", out.width = "65%", cache = FALSE,
+  error = FALSE)
 ```
 
 ## I'm assuming...
 
-You have working versions of 
+You have working versions of:
 
 - R and 
 
@@ -33,33 +32,596 @@ You have working versions of
 installed on your computer.
 
 ---
-# Data wrangling so far
+## Today's in-class lab
 
-From DataCamp.com's "Introduction to the Tidyverse" (Chapters 1 & 2), I'm also assuming you know: 
+- Our notepad: http://bit.ly/conj620-cm012
+
+--
+
+- [Graphics and statistics for cardiology: comparing categorical and continuous variables](http://heart.bmj.com/content/early/2016/01/27/heartjnl-2015-308104.full) 
+    - [Full text](http://faculty.washington.edu/kenrice/heartgraphs/effectivegraphs.pdf)
+    - doi:10.1136/heartjnl-2015-308104  
+    - Site: http://faculty.washington.edu/kenrice/heartgraphs/
+
+--
+
+- The data is from [NHANES](https://www.cdc.gov/nchs/nhanes/index.htm): the CDC's National Health and Nutrition Examination Survey
+
+---
+## Set-up
+
+I provide this code in your [lab worksheet](../labs/cm012-worksheet.html)
+
+```{r}
+library(tidyverse)
+heart <- read_csv("http://faculty.washington.edu/kenrice/heartgraphs/nhanesmedium.csv", 
+                  na = ".") 
+```
+
+Some notes:
+
+- I'm going to ask that you trust me with this worksheet! You haven't learned about this kind of document yet, called an R Markdown (`.Rmd`) file- please just go with it! I promise we'll actually explain it in a later lab 😇
+
+- Don't forget the notepad!: http://bit.ly/conj620-cm012
+
+---
+## Data Dictionary
+
+From the [data dictionary](http://faculty.washington.edu/kenrice/heartgraphs/):
+
+* `BPXSAR`: systolic blood pressure (mmHg)
+* `BPXDAR`: diastolic blood pressure (mmHg)
+* `BPXDI1`, `BPXDI2`: two diastolic blood pressure readings
+* `race_ethc`: race/ethnicity, coded as:
+    - Hispanic, 
+    - White non-Hispanic, 
+    - Black non-Hispanic and 
+    - Other
+* `gender`: sex, coded as Male/Female
+* `DR1TFOLA`: folate intake (μg/day)
+* `RIAGENDR`: sex, coded as 1/2
+* `BMXBMI`: body mass index (kg/m2)
+* `RIDAGEY`: age (years)
+
+---
+## Chapter 1: Data Wrangling
+
 
 .pull-left[
 
-- how to print a tibble
+- print a tibble
+  - `heart`
 
-- how to install a package (`install.packages("dplyr")`, 1x per machine)
+- install a package 
+  - `install.packages("dplyr")`
+  - do 1x per machine
 
-- how to load an installed package (`library(dplyr)`, 1x per work session))
+- load an installed package
+  - `library(dplyr)`
+  - do 1x per work session
+
+- assign a variable a name (`<-`) 
+]
+
+--
+
+.pull-right[
 
 - `dplyr::filter`
 
 - `dplyr::arrange`
 
 - `dplyr::mutate`
+
 ]
 
-.pull-right[
 
-- `<-` (variable assignment)
-- `%>%` (then...)
-- `dplyr`, `ggplot2` (packages)
 
-  - `library(dplyr)` (1x per work session)
+
+---
+class: middle, center, inverse
+
+![](images/rladylego-pipe.jpg)
+
+## Plus: `%>%`
+
+*image courtesy [@LegoRLady](https://twitter.com/LEGO_RLady/status/986661916855754752)*
+
+---
+class: center, middle, inverse
+
+# `%>%`
+
+## The pipe
+
+*"dataframe first, dataframe once"*
+
+--
+
+```{r eval = FALSE}
+library(dplyr)
+```
+
+
+--
+
+RStudio Keyboard Shortcuts:
+
+OSX: `CMD` + `SHIFT` + `M`
+
+Else: `CTRL` + `SHIFT` + `M`
+
+---
+class: middle
+
+*Nesting* a dataframe inside a function is hard to read.
+
+```{r}
+slice(heart, 1)
+```
+
+--
+
+Here, the "sentence" starts with a <font color="#ED1941">verb</font>.
+
+--
+
+<hr>
+
+*Piping* a dataframe into a function lets you read L to R
+
+```{r}
+heart %>% slice(1)
+```
+
+--
+
+Now, the "sentence" starts with a <font color="#ED1941">noun</font>.
+
+
+
+---
+class: middle
+
+Sequences of functions make you read *inside out*
+
+```{r}
+slice(filter(heart, gender == "Male"), 1)
+```
+
+--
+
+<hr>
+
+Chaining functions together lets you read *L to R*
+
+```{r}
+heart %>% filter(gender == "Male") %>% slice(1)
+```
+
+
+---
+class: inverse, middle, center
+
+```{r out.width = '50%', echo = FALSE}
+knitr::include_graphics("https://www.rstudio.com/wp-content/uploads/2014/04/magrittr.png")
+```
+
+## "dataframe first, dataframe once" 
+
+---
+class: middle
+
+```{r}
+heart %>% filter(gender == "Male") %>% slice(1)
+```
+
+--
+
+<hr>
+
+This does the same thing: 
+
+```{r eval = FALSE}
+heart %>% filter(.data = ., gender == "Male") %>% slice(.data = ., 1)
+```
+
+--
+
+<hr>
+
+So does this:
+
+```{r eval = FALSE}
+heart %>% filter(., gender == "Male") %>% slice(., 1)
+```
+
+---
+class: middle, center, inverse
+
+![](https://media.giphy.com/media/PD0V8W0JWcYPm/giphy.gif)
+
+`attach()`
+
+`heart$gender` or other variants
+
+
+---
+class: middle, center, inverse
+
+# ⌛️
+
+## Let's review some helpful functions for `filter`
+
+---
+class: inverse, bottom, center
+background-image: url("images/peapod.png")
+background-size: 25%
+
+
+## Base R + Tidyverse
+
+---
+class: middle, center, inverse
+
+#💡
+
+## First: 
+
+## Logical Operators
+
+
+
+---
+
+
+```{r}
+?base::Logic
+```
+
+
+```{r include = FALSE}
+logic_table <- tibble::tribble(
+  ~Operator, ~Description, ~Usage,
+  "&", "and", "x & y",
+  "|", "or", "x | y",
+  "xor", "exactly x or y", "xor(x, y)",
+  "!", "not", "!x"
+)
+```
+
+
+```{r echo = FALSE, results = 'asis'}
+knitr::kable(logic_table, format = "html")
+```
+
+---
+
+Logical or (`|`) is inclusive, so `x | y` really means: 
+
+* x or 
+* y or 
+* both x & y
+
+Exclusive or (`xor`) is exclusive, so `xor(x, y)` really means: 
+
+* x or
+* y...
+* but not both x & y
+
+```{r}
+x <- c(0, 1, 0, 1)
+y <- c(0, 0, 1, 1)
+boolean_or <- x | y
+exclusive_or <- xor(x, y)
+cbind(x, y, boolean_or, exclusive_or)
+```
+
+---
+class: middle, center, inverse
+
+#💡
+
+## Second: 
+
+## Comparisons
+
+---
+```{r}
+?Comparison
+```
+
+```{r include = FALSE}
+comp_table <- tibble::tribble(
+  ~Operator, ~Description, ~Usage,
+  "<", "less than", "x < y",
+  "<=", "less than or equal to", "x <= y",
+  ">", "greater than", "x > y",
+  ">=", "greater than or equal to", "x >= y",
+  "==", "exactly equal to", "x == y",
+  "!=", "not equal to", "x != y",
+  "%in%", "group membership*", "x %in% y",
+  "is.na", "is missing", "is.na(x)",
+  "!is.na", "is not missing", "!is.na(x)"
+)
+```
+
+
+```{r echo = FALSE, results = 'asis'}
+knitr::kable(comp_table, format = "html")
+```
+
+*(shortcut to using `|` repeatedly with `==`)
+
+---
+class: middle, center, inverse
+
+# ⌛️
+
+## Let's review `mutate`
+
+---
+# 3 ways to `mutate` 
+
+1. <font color="#ED1941">Create a new variable with a specific value</font>  
+
+1. Create a new variable based on other variables 
+
+1. Change an existing variable
+
+--
+
+```{r}
+heart_bp <- heart %>% 
+  select(BPXDI1, BPXDI2)
+
+heart_bp %>% 
+  mutate(year = 2015)
+```
+
+---
+# 3 ways to `mutate`
+
+
+1. Create a new variable with a specific value
+
+1. <font color="#ED1941">Create a new variable based on other variables</font> 
+
+1. Change an existing variable
+
+--
+
+```{r}
+heart_bp %>% 
+  mutate(bp_ratio = BPXDI1 / BPXDI2)
+```
+
+---
+# 3 ways to `mutate`
+
+1. Create a new variable with a specific value
+
+1. Create a new variable based on other variables
+
+1. <font color="#ED1941">Change an existing variable</font> 
+
+--
+
+```{r include = FALSE}
+heart_bp <- heart_bp %>% 
+  mutate(bp_ratio = BPXDI1 / BPXDI2)
+```
+
+```{r}
+heart_bp %>% 
+  mutate(bp_ratio = bp_ratio * 100)
+```
+
+
+---
+class: middle, inverse
+
+## To make your `mutate` "stick"
+
+```{r}
+heart_bp <- heart_bp %>% 
+  mutate(bp_ratio = BPXDI1 / BPXDI2)
+```
+
+---
+class: middle, center, inverse
+
+# ⌛️
+
+## Let's review some helpful functions for `mutate`
+
+---
+class: inverse, bottom, center
+background-image: url("images/peapod.png")
+background-size: 25%
+
+
+## Remember:
+
+## Base R + Tidyverse
+
+
+---
+class: middle, center, inverse
+
+#💡
+
+## First: 
+
+## Arithmetic
+
+*especially useful for* `mutate`
+
+See:
+
+http://r4ds.had.co.nz/transform.html#mutate-funs
+
+---
+
+```{r}
+?Arithmetic
+```
+
+```{r include = FALSE}
+math_table <- tibble::tribble(
+  ~Operator, ~Description, ~Usage,
+  "+", "addition", "x + y",
+  "-", "subtraction", "x - y",
+  "*", "multiplication", "x * y",
+  "/", "division", "x / y",
+  "^", "raised to the power of", "x ^ y",
+  "abs", "absolute value", "abs(x)",
+  "%/%", "integer division", "x %/% y",
+  "%%", "remainder after division", "x %% y"
+)
+```
+
+
+```{r echo = FALSE, results = 'asis'}
+knitr::kable(math_table, format = "html")
+```
+
+```{r}
+5 %/% 2 # 2 goes into 5 two times with...
+5 %% 2 # 1 left over
+```
+
+
+---
+## Chapter 2: Data Visualization
+
+all `ggplot2`
+
+- `aes(x = , y = )` (aesthetics)
+- `aes(x = , y = , color = )` (add color)
+- `aes(x = , y = , size = )` (add size)
+- `+ facet_wrap(~ )` (facetting)
+
+---
+## Old School <sup>1</sup>
+
+- Sketch the graphics below on paper, where the `x`-axis is variable `age_yrs` and the `y`-axis is variable `systolic_bp`
+
+```{r echo=FALSE}
+nhanes <-
+  data_frame(
+    age_yrs = c(8, 9, 10, 11),
+    systolic_bp = c(80, 90, 100, 110),
+    bmi_z = c(1, 2, 3, 4),
+    gender = c("male", "male", "female", "female")
+  )
+nhanes
+```
+
+<!-- Copy to chalkboard/whiteboard -->
+
+1. A scatter plot
+1. A scatter plot where the `color` of the points corresponds to `gender`
+1. A scatter plot where the `size` of the points corresponds to `bmi_z`
+1. A scatter plot facetted by `gender`
+
+.footnote[
+[1] Shamelessly borrowed with much appreciation to [Chester Ismay](https://ismayc.github.io/talks/ness-infer/slide_deck.html)
 ]
 
-http://bit.ly/conj620-cm012
+---
+
+## 1. A scatterplot
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(nhanes, aes(age_yrs, systolic_bp)) + 
+  geom_point()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.4}
+ggplot(nhanes, aes(age_yrs, systolic_bp)) + 
+  geom_point()
+```
+
+
+---
+
+
+## 2. `color` points by `gender`
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(nhanes, aes(age_yrs, systolic_bp, color = gender)) + 
+  geom_point()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.4}
+ggplot(nhanes, aes(age_yrs, systolic_bp, color = gender)) + 
+  geom_point()
+```
+
+
+---
+
+## 3. `size` points by `bmi_z`
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(nhanes, aes(age_yrs, systolic_bp, size = bmi_z)) +  
+  geom_point()
+```
+--
+
+```{r, echo=FALSE, fig.height=4.4}
+ggplot(nhanes, aes(age_yrs, systolic_bp, size = bmi_z)) +  
+  geom_point()
+```
+
+---
+
+## 4. `facet_wrap` by `gender`
+
+```{r, eval=FALSE}
+library(ggplot2)
+ggplot(nhanes, aes(age_yrs, systolic_bp)) +  
+  geom_point() +
+  facet_wrap(~gender)
+```
+--
+
+```{r, echo=FALSE, fig.height=4.4}
+ggplot(nhanes, aes(age_yrs, systolic_bp)) +  
+  geom_point() +
+  facet_wrap(~gender)
+```
+
+---
+class: middle, inverse, center
+
+## Work your way through the lab worksheet now
+
+View it [here](../labs/cm012-worksheet.html)
+
+Download the file on Sakai to work on locally
+
+---
+class: middle, inverse
+
+# 🔨
+
+## More Resources
+
+- [RStudio `ggplot2` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf)
+
+- [RStudio `dplyr` Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/data-transformation.pdf)
+
+- [RStudio Base R Cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf)
+
+- [Alison's OHSU Data Jamboree using `ggplot2`](https://alison.rbind.io/talk/code-your-graph/)
+
+
+
 

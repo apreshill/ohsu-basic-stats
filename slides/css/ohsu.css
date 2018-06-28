@@ -150,5 +150,8 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
   display: none;
 }
 
-
+/* mouse over link */
+a:hover {
+    color: #EC008C;
+}
 

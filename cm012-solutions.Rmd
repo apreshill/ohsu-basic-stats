@@ -1,0 +1,194 @@
+---
+title: "Class Meeting 1.2 (cm012)"
+subtitle: "Solutions"
+author: "Alison Hill"
+date: "6/28/2018"
+output:
+  html_document:
+    code_folding: hide
+    theme: flatly
+    highlight: pygments
+    toc: true
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300)
+```
+
+## Set-up
+
+- Load the `tidyverse` package (must be installed first! *Do not* install packages within your scripts)
+- Using `readr` package, we import our csv with `read_csv` function
+- The first argument in the `read_csv()` parentheses is the url to the dataset
+- The second argument, `na = "."`, specifies that missing data in this dataset is denoted by a period
+- Finally, we assign the data to an R object using `<-` and call that object `heart`
+
+```{r}
+library(tidyverse)
+heart <- read_csv("http://faculty.washington.edu/kenrice/heartgraphs/nhanesmedium.csv", 
+                  na = ".") 
+```
+
+## Data Dictionary
+
+From the [data dictionary](http://faculty.washington.edu/kenrice/heartgraphs/):
+
+* `BPXSAR`: systolic blood pressure (mmHg)
+* `BPXDAR`: diastolic blood pressure (mmHg)
+* `BPXDI1`, `BPXDI2`: two diastolic blood pressure readings
+* `race_ethc`: race/ethnicity, coded as:
+    - Hispanic, 
+    - White non-Hispanic, 
+    - Black non-Hispanic and 
+    - Other
+* `gender`: sex, coded as Male/Female
+* `DR1TFOLA`: folate intake (μg/day)
+* `RIAGENDR`: sex, coded as 1/2
+* `BMXBMI`: body mass index (kg/m2)
+* `RIDAGEY`: age (years)
+
+## 1. How many rows and columns are in the `heart` data?
+
+```{r}
+# 200 rows, 10 cols
+heart
+```
+
+
+## 2. Use `dplyr` to answer these questions:
+  - What is the minimum age in years?
+  - What is the maximum age in years?
+
+```{r}
+# way one with arrange
+# min is 8 y
+heart %>% 
+  arrange(RIDAGEYR)
+
+# max is 84 y
+heart %>% 
+  arrange(desc(RIDAGEYR))
+```
+
+*If this is easy for you: there are actually (at least) 4 ways to do this with `dplyr` functions. Try to figure out four ways to do this!*
+
+```{r}
+# way two with top_n!
+heart %>% 
+  top_n(1, RIDAGEYR)
+
+# way two with top_n
+heart %>% 
+  top_n(-1, RIDAGEYR)
+```
+
+```{r}
+# way three with filter!
+heart %>% 
+  filter(RIDAGEYR == min(RIDAGEYR) | RIDAGEYR == max(RIDAGEYR)) %>% 
+  arrange(RIDAGEYR)
+```
+
+```{r}
+# way four with filter!
+heart %>% 
+  filter(RIDAGEYR %in% c(min(RIDAGEYR), max(RIDAGEYR))) %>% 
+  arrange(RIDAGEYR)
+```
+
+## 3. Use `dplyr` to do the following:
+  - Make a new variable in `heart` called `RIDAGEMOS` that converts `RIDAGEYR` to months.
+  - For individuals 960 months or older, what is the range of BMI values?
+  - For individuals exactly 96 months of age, what is the range of BMI values?
+    
+```{r}
+heart <- heart %>% 
+  mutate(RIDAGEMOS = RIDAGEYR*12)
+
+# range: 19.7-33.3
+heart %>% 
+  filter(RIDAGEMOS >= 960) %>% 
+  arrange(BMXBMI)
+
+# range: 13.0-28.9
+heart %>% 
+  filter(RIDAGEMOS == 96) %>% 
+  arrange(BMXBMI)
+```
+
+## 4. Use `ggplot2` to make a scatterplot with age in years on the x-axis and systolic blood pressure on the y-axis.
+
+
+```{r}
+ggplot(heart, aes(x = RIDAGEYR, y = BPXSAR)) +
+  geom_point() +
+  labs(x = "Age (years)", y = "Systolic BP (mmHg)")
+```
+
+
+*If this was easy: import the larger dataset (http://faculty.washington.edu/kenrice/heartgraphs/nhaneslarge.csv) and make a hexagonal heatmap of 2d bin counts. Apply a custom continuous color palette to the hexbins, and reverse the colors such that lighter colors are for lower counts and darker colors are for higher counts.*
+
+```{r}
+big_heart <- read_csv("http://faculty.washington.edu/kenrice/heartgraphs/nhaneslarge.csv", 
+                  na = ".") 
+ggplot(big_heart, aes(x = RIDAGEYR, y = BPXSAR)) +
+  geom_hex() +
+  labs(x = "Age (years)", y = "Systolic BP (mmHg)")
+```
+
+```{r}
+library(viridis)
+ggplot(big_heart, aes(x = RIDAGEYR, y = BPXSAR)) +
+  geom_hex() +
+  labs(x = "Age (years)", y = "Systolic BP (mmHg)") +
+  scale_fill_gradientn(colours = viridis(256, begin = 1, end = 0))
+```
+
+## 5. Use `dplyr` and `ggplot2` to do the following:
+  - Type `?case_when` to read the help documents for this `dplyr` function. Look carefully at the examples (*hint:* you might find the `star_wars` example most helpful- you can run that code in your console!). Use this function to make a new variable called `age_cat` with 3 values:
+      - `between(<name_of_age_var>, 0, 30)` is `age_cat == "Under 30"`
+      - `between(<name_of_age_var>, 31, 55)` is `age_cat == "31-55"`
+      - all other ages are `age_cat == "56+"`
+  - Create a scatter plot with bmi on the x-axis and blood pressure on the y-axis, facetting by your new `age_cat` variable. Color the points by `gender`.
+  - Look up `?facet_grid`, and recreate the same plot now using `gender ~ age_cat`.
+
+
+```{r}
+heart <- heart %>% 
+  mutate(age_cat = case_when(
+    between(RIDAGEYR, 0, 30) ~ "Under 30",
+    between(RIDAGEYR, 31, 55) ~ "31-55",
+    TRUE ~ "56+"))
+```
+
+```{r}
+ggplot(heart, aes(x = BMXBMI, y = BPXSAR, color = gender)) +
+  geom_point() +
+  facet_wrap(~age_cat) +
+  labs(x = "Body Mass Index"~(kg/m^2), y = "Systolic BP (mmHg)")
+```
+
+*If this was easy, add linear regression lines to all six facetted grids (keep the standard error ribbons). Apply a custom color palette and remove the color legend guide. Play with `alpha` levels for the points. Use something other than the default `theme_gray()`. Maybe throw in a different font, too.*
+
+```{r}
+ggplot(heart, aes(x = BMXBMI, y = BPXSAR, color = gender)) +
+  geom_point() +
+  facet_grid(gender ~ age_cat) +
+  labs(x = "Body Mass Index"~(kg/m^2), y = "Systolic BP (mmHg)")
+```
+
+```{r}
+library(extrafont)
+ggplot(heart, aes(x = BMXBMI, y = BPXSAR, colour = gender)) +
+  geom_point(alpha = .5) +
+  stat_smooth(method = "lm") +
+  facet_grid(gender ~ age_cat) +
+  theme_minimal() +
+  labs(x = "Body Mass Index"~(kg/m^2), y = "Systolic BP (mmHg)") +
+  scale_color_manual(values = c("#B47CC7", "#D65F5F"), guide = FALSE) +
+  theme(text = element_text(family = "Lato"))
+```
+
