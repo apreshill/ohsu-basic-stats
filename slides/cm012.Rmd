@@ -428,6 +428,9 @@ heart_bp <- heart_bp %>%
   mutate(bp_ratio = BPXDI1 / BPXDI2)
 ```
 
+https://apreshill.github.io/ohsu-basic-stats/slides/cm012.html#39
+
+
 ---
 class: middle, center, inverse
 

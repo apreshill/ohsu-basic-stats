@@ -14,8 +14,11 @@ navbar:
     href: https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication
     icon: fa-user-ninja
   - text: Sakai
-    icon: fa-comments
+    icon: fa-university
     href: https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18
+  - text: Gitter Chat
+    icon: fa-comments
+    href: https://gitter.im/conj620/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link
   right:
   - text: About
     href: about.html

@@ -1,0 +1,145 @@
+---
+title: "Class Meeting 1.3 (cm013)"
+subtitle: "`babynames` wrangling drills"
+author: "Alison Hill"
+date: "6/28/2018"
+output:
+  html_document:
+    code_folding: hide
+    theme: flatly
+    highlight: pygments
+    toc: true
+    toc_float: true
+---
+
+
+```{r setup, include = FALSE, cache = FALSE}
+knitr::opts_chunk$set(error = TRUE, comment = NA, warnings = FALSE, messages = FALSE, tidy = FALSE, cache = TRUE)
+```
+
+```{r load_packages, include = F}
+suppressWarnings(suppressMessages(library(dplyr)))
+suppressWarnings(suppressMessages(library(ggplot2)))
+suppressWarnings(suppressMessages(library(babynames)))
+suppressWarnings(suppressMessages(library(psych)))
+suppressWarnings(suppressMessages(library(tidyr)))
+```
+
+
+1. Create a new dataframe that only includes years since 2000.
+```{r}
+newest <- babynames %>%
+  filter(year >= 2000)
+```
+
+2. What name has been used for the most number of years (when used for a single gender)? 
+
+_Hint 1:_ find the total number of years each name/sex combination has been used.
+_Hint 2:_ what is the maximum total number of years any name has been used?
+
+```{r}
+years <- babynames %>%
+  group_by(name, sex) %>%
+  summarise(use_years = n()) %>% 
+  arrange(desc(use_years))
+```
+It is a 934 way tie
+
+3. How many names have only been used one year? 
+```{r}
+years %>%
+  ungroup %>%
+  group_by(sex) %>%
+  filter(use_years == 1)
+```
+There are 20,472 of them.
+
+4. Create a new column that displays the number of genders the name was used for each year. Note: not recommended for slower computers.
+
+```{r}
+boygirl <- babynames %>%
+  group_by(year, name) %>%
+  mutate(both = n())
+```
+
+5. Make a data set of names that have been both boy and girl names. 
+
+_Hint:_ use `distinct()`
+
+```{r}
+new <- boygirl %>%
+  filter(both == 2) %>%
+  distinct(name)
+```
+
+6. For each year, display the total number of names that were used. Treat boy and girl versions of the same name as two separate names.
+
+```{r}
+new <- babynames %>%
+  group_by(year, sex) %>%
+  summarise(num_names = n())
+```
+about 2000 names were recorded for each year
+
+7. Which name received the largest percentage of any name for any year (consider boy and girl names as distinct) 
+
+```{r}
+babynames %>%
+  filter(prop == max(prop))
+```
+John in 1880
+
+8. Which girl's name received the largest percentage of any girl's name for any year? 
+
+```{r}
+babynames %>%
+  filter(sex == "F") %>%
+  filter(prop == max(prop))
+```
+Mary in 1880
+
+9. Display the average percentage each name received during all the years it was used. Treat girl and boy versions of the same name as different names. 
+
+```{r}
+prop <- babynames %>%
+  group_by(name, sex) %>%
+  summarise(avg_prop = mean(prop))
+```
+
+10. Which name recorded in the data set has been out of use for the longest time? 
+
+```{r}
+last <- babynames %>%
+  group_by(name) %>%
+  summarise(last_use = max(year)) 
+
+last %>%
+  filter(last_use == min(last_use))
+```
+2 names have been out of use since 1881
+
+11. In a new column, display the total number of years a name has been used (as either a boys name or a girls name). 
+
+```{r}
+new <- babynames %>%
+  group_by(name) %>%
+  mutate(num_years = length(year))
+```
+
+12. In general, are names that have been used for both boys and girls more popular for boys or girls? 
+
+```{r eval = F}
+bg_names <- prop %>%
+  filter(name %in% both) %>%
+  group_by(name) %>%
+  summarise(diff = avg_prop[sex=="M"] - avg_prop[sex =="F"])
+mean(bg_names$diff >= 0)
+```
+More popular for girls (new$diff $gt; 0 is TRUE (i.e, 1) when the boys version is more popular. This occurred less than half the time (i.e. mean(new$diff $gt; 0) < 0.5)
+
+13. What name has earned the most percentage points in a year for any name since 2000? 
+```{r}
+newest %>%
+  filter(prop == max(prop))
+```
+Jacob in 2000
