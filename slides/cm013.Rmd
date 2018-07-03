@@ -393,7 +393,7 @@ write_csv(for_class, here::here("data", "cm013", "data.csv"))
 
 ```{r eval = FALSE}
 library(tidyverse)
-bakers_dozen <- read_csv("url here")
+bakers_dozen <- read_csv("http://bit.ly/conj620-bakers-dozen")
 ```
 
 
