@@ -20,7 +20,7 @@ These books will be supplemented by blog posts, YouTube videos, and several open
 
 ## DataCamp
 
-Be sure to check the **DataCamp** link above for more details on the DataCamp (DC) assignments.  More details on the Problem Sets (PS) are available in the link above for Problem Sets.
+Be sure to check the **DataCamp** link above for more details on the DataCamp (DC) assignments.  
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 library(tidyverse)
@@ -31,10 +31,10 @@ due <- read_csv("due.csv") %>%
   mutate(`DataCamp Due` = ifelse(material == "-" | grepl("Quiz", material) | is.na(material_link),
     material,
     paste0("<a href='", material_link, "'>", material, "</a>"))) %>% 
-  mutate(`Problem Set Due` = ifelse(ps == "-" | is.na(ps) | is.na(ps_link),
+  mutate(`Lab Due` = ifelse(ps == "-" | is.na(ps) | is.na(ps_link),
     ps,
     paste0("<a href='", ps_link, "'>", ps, "</a>"))) %>% 
-  select(Weekday, Date, `CM / Block`, `Readings Due` = Reading, `DataCamp Due`, `Problem Set Due`)
+  select(Weekday, Date, `CM / Block`, `Readings Due` = Reading, `DataCamp Due`, `Lab Due`)
 ```
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
