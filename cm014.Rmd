@@ -73,7 +73,10 @@ Feel free to use summary stats, tables, figures. We’re NOT expecting high prod
 
 ## Explore various plot types
 
-See the [`ggplot2` tutorial](https://apreshill.github.io/data-vis-labs-2018/04-distributions.html) for ideas.
+See the [`ggplot2` tutorial](https://apreshill.github.io/data-vis-labs-2018/04-distributions.html) for ideas. Also you might check out:
+
+- https://www.gapminder.org/topics/babies-per-woman/
+- https://ourworldindata.org/maternal-mortality
 
 Make a few plots, probably of the same variable you chose to characterize numerically. Try to explore more than one plot type. Just as an example of what we mean:
 
