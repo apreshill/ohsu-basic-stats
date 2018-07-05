@@ -11,9 +11,8 @@
 
 <meta name="author" content="Alison Hill" />
 
-<meta name="date" content="2018-07-05" />
 
-<title>CONJ620: CM 1.4</title>
+<title>CONJ620: CM 1.5</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,9 +20,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -173,101 +169,6 @@ $(document).ready(function () {
 
 
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
 
 
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
@@ -335,77 +236,68 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">CONJ620: CM 1.4</h1>
-<h3 class="subtitle"><em>Manipulate and explore data</em></h3>
+<h1 class="title toc-ignore">CONJ620: CM 1.5</h1>
+<h3 class="subtitle"><em>Manipulate, summarize, and explore data</em></h3>
 <h4 class="author"><em>Alison Hill</em></h4>
-<h4 class="date"><em>2018-07-05</em></h4>
+<h4 class="date"><em>6/30/2018</em></h4>
 
 </div>
 
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>A complete knitted <code>html</code> file is due on Sakai by beginning of class Tuesday July 10th (2:30pm).</p>
+<p>Due by beginning of class Thursday July 12th (2:30pm).</p>
 <p>The goal is to explore a new-to-you dataset. In particular, to begin to establish a workflow for data frames or “tibbles”. You will use <code>dplyr</code> and <code>ggplot2</code> to do some description and visualization.</p>
 <p>Your homework should serve as your own personal cheatsheet in the future for things to do with a new dataset. Give yourself the cheatsheet you deserve! You’ll submit your work as an html file knit from your <code>.Rmd</code> file. Remember:</p>
 <ul>
 <li><code>dplyr</code> should be your data manipulation tool</li>
 <li><code>ggplot2</code> should be your visualization tool</li>
 </ul>
-<div id="relax-about" class="section level3">
-<h3>Relax about…</h3>
+<p>You will explore the <code>reprohealth</code> dataset, which is distributed as an R package from <a href="https://cran.r-project.org/web/packages/gapminder/index.html">my personal GitHub</a>.</p>
+<p>Install it, and remember to use this code only in your R console, not in a script or .Rmd file:</p>
+<pre class="r"><code>install.packages(&quot;remotes&quot;) # install the remotes package
+library(remotes) # load remotes package so you can install from github
+install_github(&quot;apreshill/reprohealth&quot;) # install the package</code></pre>
+<p>Then at the top of your lab, copy and paste this code:</p>
+<pre class="r"><code>library(reprohealth) # load the package
+wb_reprohealth # call the data</code></pre>
+</div>
+<div id="logistics" class="section level2">
+<h2>Logistics</h2>
+<p>If you want to do something comparable but different, i.e. swap one quantitative variable for another, be my guest! If you are feeling inspired and curious, then we’re doing this right. Go for it.</p>
+<p>Relax about the following things:</p>
 <ul>
 <li>Tidying/reshaping is NOT your assignment. Many of your tables will be awkwardly shaped in the report. That’s OK.</li>
 <li>Table beauty is not a big deal. Simply printing to “screen” is fine.</li>
 <li>For all things, graphical and tabular, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).</li>
 </ul>
 </div>
-</div>
-<div id="explore-the-data" class="section level2">
-<h2>Explore the data</h2>
-<p>You will explore the <code>reprohealth</code> dataset, which is distributed as an R package from <a href="https://github.com/apreshill/reprohealth">my personal GitHub</a>.</p>
-<p>Install it, and remember to use this code only in your R console, not in a script or .Rmd file:</p>
-<pre class="r"><code>install.packages(&quot;remotes&quot;) # install the remotes package
-library(remotes) # load remotes package so you can install from github
-install_github(&quot;apreshill/reprohealth&quot;) # install the package</code></pre>
-<p>Then at the top of your lab, copy and paste this code:</p>
-<pre class="r"><code>library(tidyverse) # you&#39;ll need this too
-library(reprohealth) # load the package</code></pre>
-<p>Using R Markdown, do the following in R code chunks:</p>
-<ul>
-<li>Print the first 10 rows of the <code>wb_reprohealth</code> data (hint: just name it!).</li>
-<li>Do a <code>dplyr::glimpse</code> of the <code>wb_reprohealth</code> data.</li>
-<li>Plot life expectancy versus GDP per capita.</li>
-</ul>
-<p>In the text portion, answer the following questions based on the output above:</p>
+<div id="exploring-the-data" class="section level2">
+<h2>Exploring the data</h2>
+<p>You should answer the following questions by using R:</p>
 <ul>
 <li>How many variables/columns?</li>
 <li>How many rows/observations?</li>
-<li>Which variables are numbers?</li>
-<li>Which are factors?</li>
-<li>What do you see in the scatterplot?</li>
+<li>Complete this sentence: “There is one row per…”</li>
+</ul>
+<div id="task-menu" class="section level3">
+<h3>Task menu</h3>
+<ul>
+<li><p>Get the maximum and minimum of children per woman for all continents.</p></li>
+<li><p>Look at the spread of children per woman across countries within the continents.</p></li>
+<li><p>Compute a trimmed mean of maternal mortality for different years. Or a weighted mean, weighting by population. Just try something other than the plain vanilla mean.</p></li>
+<li><p>How does maternal mortality vary across different continents?</p></li>
+<li><p>Report the absolute and/or relative abundance of countries with low maternal mortality over time by continent: Compute some measure of worldwide maternal mortality - you decide - a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a maternal mortality rate less than this benchmark, for each year.</p></li>
+<li><p>Find countries with interesting stories. Open-ended and, therefore, hard. Promising but unsuccessful attempts are encouraged. This will generate interesting questions to follow up on in class.</p></li>
+<li><p>Make up your own! Between the dplyr coverage in class and the list above, I think you get the idea.</p></li>
 </ul>
 </div>
-<div id="explore-individual-variables" class="section level2">
-<h2>Explore individual variables</h2>
-<p>Pick <strong>at least</strong> one categorical variable and at least one quantitative variable to explore individually (i.e., one-at-a-time).</p>
-<ul>
-<li>What are possible values (or range, whichever is appropriate) of each variable?</li>
-<li>What values are typical? What’s the spread? What’s the distribution? Etc., tailored to the variable at hand.</li>
-</ul>
-<p>Feel free to use summary stats, tables, figures. We’re NOT expecting high production value (yet).</p>
+<div id="companion-graphs" class="section level3">
+<h3>Companion graphs</h3>
+<p>For each table, make sure to include a relevant figure. One tip for starting is to draw out on paper what you want your x- and y-axis to be first and what your <code>geom</code> is; that is, start by drawing the plot you want <code>ggplot</code> to give you.</p>
+<p>Your figure does not have to depict every last number from the data aggregation result. Use your judgement. It just needs to complement the table, add context, and allow for some sanity checking both ways.</p>
+<p>Notice which figures are easy/hard to make, which data formats make better inputs for plotting functions vs. for human-friendly tables.</p>
 </div>
-<div id="explore-various-plot-types" class="section level2">
-<h2>Explore various plot types</h2>
-<p>See the <a href="https://apreshill.github.io/data-vis-labs-2018/04-distributions.html"><code>ggplot2</code> tutorial</a> for ideas.</p>
-<p>Make a few plots, probably of the same variable you chose to characterize numerically. Try to explore more than one plot type. Just as an example of what we mean:</p>
-<ul>
-<li>A scatterplot of two quantitative variables.</li>
-<li>A plot of one quantitative variable. Maybe a histogram or densityplot or frequency polygon.</li>
-<li>A plot of one quantitative variable and one categorical. Maybe boxplots for several continents or countries.</li>
-</ul>
-<p>You don’t have to use all the data in every plot! It’s fine to filter down to one country or small handful of countries.</p>
-<p>Super-extra-bonus-points for playing with <code>knitr</code> chunk options to improve the display of your plots in the knitted html file, try this <a href="https://www.zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/">blog post</a> for tips.</p>
 </div>
 <div id="report-your-process" class="section level2">
 <h2>Report your process</h2>
@@ -414,10 +306,12 @@ library(reprohealth) # load the package</code></pre>
 <div id="grading" class="section level2">
 <h2>Grading</h2>
 <p><strong>Our general grading guidelines</strong></p>
-<p><em>Check minus:</em> There are some mistakes or omissions, such as the number of rows or variables in the data frame. Or maybe it is only in the output but not in the text. There are no plots or there’s just one type of plot (and its probably a scatterplot). It’s hard to figure out where to look for what in this doc.</p>
-<p><em>Check:</em> Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.</p>
-<p><em>Check plus:</em> Some “above and beyond”, creativity, etc. You learned something new from reviewing their work and you’re eager to incorporate it into your work now. The <code>ggplot2</code> figures are quite diverse. The knitted html is very organized and well formatted.</p>
-<p>This lab was adapted from <a href="http://stat545.com/hw02_explore-gapminder-dplyr.html">Jenny Bryan’s STAT545 class</a>.</p>
+<p><em>Check minus:</em> Didn’t tackle at least 3 tasks. Or didn’t make companion graphs. Or didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix. It’s hard to find the analyst or the narrative in all this R output.</p>
+<p><em>Check:</em> Hits all the elements in all four sections. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.</p>
+<p><em>Check plus:</em> Exceeded the requirements in more than one section. Or developed novel ways to do things or ways of looking at a task that were indeed interesting and “worked”. Impressive use and clear understanding of both what went into R in terms of code and what R spit back out. Impeccable organization and presentation in the report.</p>
+<div class="jumbotron">
+<p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. Gapminder EDA ideas from <a href="https://cran.r-project.org/web/packages/gapminder/index.html">Jenny Bryan</a>, author and creator of the Gapminder package.</p>
+</div>
 </div>
 
 <p>
@@ -426,8 +320,6 @@ library(reprohealth) # load the package</code></pre>
 </p>
 
 
-</div>
-</div>
 
 </div>
 

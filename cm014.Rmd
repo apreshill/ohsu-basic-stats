@@ -1,107 +1,102 @@
 ---
 title: "CONJ620: CM 1.4"
-subtitle: "In-class Lab: Summarizing & Visualizing Data"
+subtitle: "Manipulate and explore data"
 author: "Alison Hill"
-date: "6/30/2018"
-output: html_document
+date: "2018-07-05"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 ## Overview
 
-Due by beginning of class Tuesday July 10th (2:30pm).
+A complete knitted `html` file is due on Sakai by beginning of class Tuesday July 10th (2:30pm).
 
-The goal is to thoroughly, carefully, and thoughtfully explore a freshly read dataset in R. There are four sections below to complete. You'll submit your work as a PDF file knit from your `.Rmd` file. Please set `echo = TRUE` and `include = TRUE` as a global option for all of your R code chunks.
+The goal is to explore a new-to-you dataset. In particular, to begin to establish a workflow for data frames or “tibbles”. You will use `dplyr` and `ggplot2` to do some description and visualization.
 
-You will explore the `gapminder` dataset, which is distributed as an R package from [CRAN](https://cran.r-project.org/web/packages/gapminder/index.html). 
+Your homework should serve as your own personal cheatsheet in the future for things to do with a new dataset. Give yourself the cheatsheet you deserve! You'll submit your work as an html file knit from your `.Rmd` file. Remember:
 
-Install it and remember to load it. 
+- `dplyr` should be your data manipulation tool
+- `ggplot2` should be your visualization tool
+
+### Relax about...
+
+- Tidying/reshaping is NOT your assignment. Many of your tables will be awkwardly shaped in the report. That’s OK.
+- Table beauty is not a big deal. Simply printing to “screen” is fine. 
+- For all things, graphical and tabular, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).
+
+
+
+## Explore the data
+
+You will explore the `reprohealth` dataset, which is distributed as an R package from [my personal GitHub](https://github.com/apreshill/reprohealth). 
+
+Install it, and remember to use this code only in your R console, not in a script or .Rmd file:
 
 ``` r
-install.packages("gapminder")
-library(gapminder)
-?gapminder
+install.packages("remotes") # install the remotes package
+library(remotes) # load remotes package so you can install from github
+install_github("apreshill/reprohealth") # install the package
 ```
 
-## HLO Gapminder
+Then at the top of your lab, copy and paste this code:
 
-Conduct a high-level overview (HLO) of the Gapminder dataset ([see here for example command menu using `babynames` dataset](http://cslu.ohsu.edu/~presmane/courses/MATH630/Math_530-630_Class_0.html)).
+``` r
+library(tidyverse) # you'll need this too
+library(reprohealth) # load the package
+```
 
-  * Is it a data.frame, a matrix, a vector, a list?
-  * What is the unit of analysis in the dataset?
-  * How many variables/columns?
-  * How many rows/observations?
-  * Which variables are continuous?
-  * Which variables are discrete?
-  * Which variables are categorical? How many levels do they have?
-  * What about missing data for any variables?
+Using R Markdown, do the following in R code chunks:
 
-## Numerical and counting detective work
+- Print the first 10 rows of the `wb_reprohealth` data (hint: just name it!).
+- Do a `dplyr::glimpse` of the `wb_reprohealth` data.
+- Plot life expectancy versus GDP per capita.
 
-1. Pick one quantitative variable to explore using descriptive statistics as discussed in class.
-    * Characterize the range of possible values, max vs. min, etc.- does it make sense?
-    * What's the center? What's the spread? What's the shape? 
-    * Feel free to use summary statistics or tables. You don't need to re-summarise summarised data for us. It is one thing to be able to get R to give you what you ask for. It is another to interpret what R gives you. We are more interested in the latter here, but also that you can do the former without errors.
-    * Comment on representativeness of measures of central tendency, given the spread and shape.
+In the text portion, answer the following questions based on the output above:
 
-2. Pick one categorical variable and generate the n's (in whatever the appropriate "unit of analysis" is) and proportions of the sample that contribute to each level of that variable.
-    * Which level contains the smallest number of observations? The largest?
+- How many variables/columns?
+- How many rows/observations?
+- Which variables are numbers?
+- Which are factors?
+- What do you see in the scatterplot?
 
-3. Generate your descriptive statistics again, now stratified by the different levels of your categorical variable.
-    * How did any of your initial observations of the quantitative variable change? 
-    * _Foreshadowing:_ look for differences in both center __and__ spread across categories. Think about what this means in terms of possible comparisons between means across different levels of that factor.
 
-## Graphical detective work
+## Explore individual variables
 
-1. Graphically explore your one quantitative variable using histograms and boxplots. See the [exploratory data analysis link](http://cslu.ohsu.edu/~presmane/courses/MATH630/Math_530-630_Class_2_EDA_four_dists.html) for example R code.
-    * What are you looking for in each plot?
-    * Do you notice anything interesting/puzzling/surprising?
-    * Look back at your descriptive statistics for your variable. Comment on the descriptive value of the numbers in light of your visualizations. Do a quick sanity check- does everything look consistent across numerical and graphical depictions of your data?
+Pick **at least** one categorical variable and at least one quantitative variable to explore individually (i.e., one-at-a-time).
 
-2. Add your one categorical variable to the mix and graphically explore your quantitative variable using any of the combination plots discussed in class. Your new plot must account for the categorical variable, either by facetting by levels of that variable, setting an aesthetic (color, shape, etc.) to differ across levels, or stratifying the x-axis by the different levels of your categorical variable. See the [exploratory data analysis link](http://cslu.ohsu.edu/~presmane/courses/MATH630/Math_530-630_Class_2_EDA_four_dists.html) for ideas. We want to see you exploring multiple types of plots, and each plot should include at least 2 "layers" of information. Sampling 100 random rows from the dataset is a valid strategy here (reference last slide from Class 2 EDA class) if you want to compare big n/small n types of plots.
+- What are possible values (or range, whichever is appropriate) of each variable?
+- What values are typical? What’s the spread? What’s the distribution? Etc., tailored to the variable at hand.
 
-## In-depth detective work
+Feel free to use summary stats, tables, figures. We’re NOT expecting high production value (yet).
 
-Manipulate and further explore the `gapminder` dataset with the `dplyr` package, complemented by visualizations made with `ggplot2`. Pick at least __two__ of the tasks below from the task menu and approach each with a table and figure. 
 
-  * `dplyr` should be your main data manipulation tool
-  * `ggplot2` should be your main visualization tool
-  
-Make observations about what your tables/figures show and about the process. If you want to do something comparable but different, i.e. swap one quantitative variable for another- go for it!
+## Explore various plot types
 
-You do not have to use `tidyr` or otherwise worry about reshaping your tables. Many of your tables may not be formatted perfectly in the report. Simply printing `dplyr` tabular output is fine. For all things, graphical and tabular, if you're dissatisfied with a result, discuss the problem, what you tried to do to fix it, and move on.
+See the [`ggplot2` tutorial](https://apreshill.github.io/data-vis-labs-2018/04-distributions.html) for ideas.
 
-### Task menu
+Make a few plots, probably of the same variable you chose to characterize numerically. Try to explore more than one plot type. Just as an example of what we mean:
 
-* Get the maximum and minimum of GDP per capita for all continents.
+- A scatterplot of two quantitative variables.
+- A plot of one quantitative variable. Maybe a histogram or densityplot or frequency polygon.
+- A plot of one quantitative variable and one categorical. Maybe boxplots for several continents or countries.
 
-* Look at the spread of GDP per capita across countries within the continents.
+You don’t have to use all the data in every plot! It’s fine to filter down to one country or small handful of countries.
 
-* How does life expectancy vary across different continents?
-
-* Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy - you decide - a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.
-
-* Make up your own! Look back at our Class 2 slides for `dplyr` example ideas with the `diamonds` dataset, and the [package vignettes](https://cran.rstudio.com/web/packages/dplyr/vignettes/introduction.html) for other ideas.
-
-### Companion graphs
-
-For each table, make sure to include a relevant figure. One tip for starting is to draw out on paper what you want your x- and y-axis to be first and what your `geom` is; that is, start by drawing the plot you want `ggplot` to give you. Your figure does not have to depict every single number present in the table. Use your judgement. It just needs to complement the table, add context, and allow for some sanity checking.
-
-Notice which figures are easy/hard to make, and whether the visualization adds clarity, detracts from, or is completely redundant (and therefore probably unnecessary) with respect to the tabular display. 
-
+Super-extra-bonus-points for playing with `knitr` chunk options to improve the display of your plots in the knitted html file, try this [blog post](https://www.zevross.com/blog/2017/06/19/tips-and-tricks-for-working-with-images-and-figures-in-r-markdown-documents/) for tips.
 
 ## Report your process
 
-You're encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc.
+You’re encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it’s a blog post, a fellow student, an online tutorial, etc.
 
 ## Grading
 
 __Our general grading guidelines__
 
-_Check minus:_ Didn't tackle all four sections. Or didn't interpret anything but left it all to the "reader"; that is, thorough but not careful or thoughtful. Or more than one technical problem that is relatively easy to fix. It's hard to find the analyst in all this output.
+_Check minus:_ There are some mistakes or omissions, such as the number of rows or variables in the data frame. Or maybe it is only in the output but not in the text. There are no plots or there’s just one type of plot (and its probably a scatterplot). It’s hard to figure out where to look for what in this doc.
 
-_Check:_ Hits all the elements in all four sections. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.
+_Check:_ Hits all the elements. No obvious mistakes. Pleasant to read. No heroic detective work required. Solid.
 
-_Check plus:_ Exceeded the requirements in more than one section. Or developed novel ways to do things or ways of looking at a task that were indeed interesting and "worked". Impressive use and clear understanding of both what went into R in terms of code and what R spit back out. Impeccable organization and presentation in the report.
+_Check plus:_ Some “above and beyond”, creativity, etc. You learned something new from reviewing their work and you’re eager to incorporate it into your work now. The `ggplot2` figures are quite diverse. The knitted html is very organized and well formatted.
 
-<div class="jumbotron">
-  <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. Gapminder EDA ideas from [Jenny Bryan](https://cran.r-project.org/web/packages/gapminder/index.html), author and creator of the Gapminder package.  
-</div>
+This lab was adapted from [Jenny Bryan's STAT545 class](http://stat545.com/hw02_explore-gapminder-dplyr.html).

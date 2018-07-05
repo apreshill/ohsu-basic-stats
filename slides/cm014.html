@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CONJ620: CM 1.4</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alison Hill" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
+    <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# CONJ620: CM 1.4
+## Literate Programming &amp; RMarkdown
+### Alison Hill
+
+---
+
+
+
+
+class: center, middle, inverse
+
+## Are you new(er) here?
+![](http://2.bp.blogspot.com/-RH0G9-aU9bo/Uga2ddv8oJI/AAAAAAAAKHg/XxJiGaBbsG4/s640/ADTWO13.png)
+
+http://bit.ly/conj620-hi
+
+---
+class:middle, inverse, center
+## Let's start with hygiene
+
+![](https://media.giphy.com/media/tis8aekJB9s0E/giphy.gif)
+---
+class: center, middle, inverse
+## Everyone do this right now...
+
+![](https://media.giphy.com/media/zZRxy466qETsY/giphy.gif)
+
+&gt; *"Daily work habit: Restart R very often and re-run your under-development script from the top." -[Jenny Bryan](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/)*
+
+Upper right pane: click on environment tab, then click on the broom
+
+Lower left pane: in console tab, click on the broom too 
+
+---
+class: middle, inverse, center
+
+&gt; *"You are always working with at least one collaborator: Future you." -Hadley Wickham*
+
+(the following slides adapted from the lovely [Jennifer Thompson](https://jenniferthompson.github.io/RepResearchRMarkdown/rmarkdownworkshop.html))
+
+---
+
+## Literate Programming
+
+Literate programming is a technique for mixing written text and chunks of code together.
+
+This can allow for easier documentation of code, **and/or** the production of a full written report that incorporates the code and results used to create it.
+
+--
+
+&gt; Let us change our traditional attitude to the construction of programs: Instead of imagining that our main task is to instruct a computer what to do, let us concentrate rather on explaining to humans what we want the computer to do.
+&gt;
+&gt; — Donald E. Knuth, Literate Programming, 1984
+
+---
+
+## How are these related?
+
+[RMarkdown](http://rmarkdown.rstudio.com/)!
+
+- A powerful package for literate programming, reproducible analysis, and document generation, which can (often working with `knitr`):
+    - Combine R code and **Markdown** syntax
+    - Produce documents in not only PDF format, but Microsoft Word and various types of HTML documents *(like these slides!)*
+    - In HTML format, incorporate "extras" like interactive graphics
+    
+---
+
+## What is Markdown?
+
+[Markdown](https://en.wikipedia.org/wiki/Markdown) is a lightweight markup language that allows you to quickly write and format text, which is then converted to different types of output.
+
+--
+.pull-left[
+### Advantages
+
+- Lightweight syntax: Less to learn/type than LaTeX or HTML
+- Can do the vast majority of what you need with less effort
+- Syntax resembles the finished product
+]
+
+--
+.pull-right[
+### Disadvantages
+
+- Less control, fewer options than LaTeX or HTML
+
+   *(...BUT you can also incorporate actual LaTeX or HTML if you need more control!)*
+]
+
+--
+
+[Here's a tutorial!](https://www.markdowntutorial.com/)
+
+---
+
+## Markdown Syntax
+
+We want to write a paragraph where we **bold** some words, put some in *italics* and some in `verbatim`, include a
+
+## Main Header
+### And a Subheader
+
+- bulleted
+- list
+    - with a
+    - sublist,
+    
+and an
+
+1. enumerated list
+1. with a random number inserted, like 0.87
+
+&gt; and a quote, like this
+
+---
+
+# Markdown Version
+
+``` 
+We want to write a paragraph where we **bold** some words, put some in *italics*
+and some in `verbatim`, include a
+
+## Main Header
+### And a Subheader
+
+- bulleted
+- list
+    - with a
+    - sublist,
+
+and an
+
+1. enumerated list
+1. with a random number inserted, like `r round(runif(n = 1), 2)`
+
+&gt; and a quote, like this
+
+```
+
+---
+
+## Your Turn! (5 min)
+
+1. Open RStudio
+1. Run `library(rmarkdown)` in your R console
+    - This package comes pre-installed with RStudio
+1. Click `File` ➡️ `New File` ➡️ `Text File`
+1. Read/watch one of these resources, and write some text in your text file summarizing it (2-3 sentences max). Format it however you like using Markdown syntax:
+    - https://www.gapminder.org/topics/babies-per-woman/
+    - https://ourworldindata.org/maternal-mortality
+1. Save your file with the extension `.md` (for Markdown)
+1. In your console, use RMarkdown's `render()` function to create an HTML file:
+
+`rmarkdown::render("myfile.md")`
+
+For more help with syntax, also see:
+
+`https://bookdown.org/yihui/rmarkdown/markdown-syntax.html`
+
+---
+
+## R + Markdown = RMarkdown
+
+
+RMarkdown files combine **R code chunks** with **text formatted in Markdown**, and are always saved with the `.Rmd` extension (eg, `lab04_hill.Rmd`).
+
+You can also include "inline" R code that is not in a specific chunk.
+
+````
+For example, here is text before an R code chunk where I generate a
+random sample from a normal distribution.
+
+
+```r
+my_sample &lt;- rnorm(n = 100)
+```
+
+Then later, I want to refer to the mean, which is `r
+mean(my_sample)`.
+
+````
+And it will look like I typed the mean is 0.0245981, but instead I calculated it using R!
+
+---
+
+## RMarkdown Output
+
+Some options:
+
+- PDF
+- Microsoft Word
+- [Beamer presentations](https://rmarkdown.rstudio.com/beamer_presentation_format.html)
+
+--
+- **HTML documents**
+    - Standalone documents, in [notebook mode](https://rmarkdown.rstudio.com/r_notebooks.html) or not *(today's focus!)*
+    - [`flexdashboards`](https://rmarkdown.rstudio.com/flexdashboard/)
+    - [`xaringan`](https://github.com/yihui/xaringan) slides like this!
+    - [`bookdown` books](https://bookdown.org/yihui/bookdown/) like [ModernDive](http://moderndive.netlify.com) and [R4DS](http://r4ds.had.co.nz)!
+    - [Websites](https://rmarkdown.rstudio.com/rmarkdown_websites.htm) like [our course website](https://apreshill.github.io/ohsu-basic-stats/)
+    - [Blogs](https://bookdown.org/yihui/blogdown/) like [mine](https://alison.rbind.io)
+    - [Tons more "in the wild" examples](https://bookdown.org/yihui/rmarkdown/basics-examples.html)
+
+--
+
+You can create multiple types of output with the same `.Rmd` file:
+
+`rmarkdown::render(input = "lab04_hill.Rmd", output = "pdf_document")`
+
+`rmarkdown::render(input = "lab04_hill.Rmd", output = "html_document")`
+
+---
+
+## Anatomy of an RMarkdown Document
+
+1. YAML
+
+--
+
+1. Markdown text
+1. R code
+
+--
+
+1. Repeat 2 &amp; 3 as needed
+
+
+---
+
+## YAML 
+
+- YAML = YAML Ain't No Markup Language (not helpful)
+
+- aka "R Markdown front-matter"
+
+- You can only have one YAML front-matter for each .Rmd file 
+
+- YAML is the "metadata" - the data about your document - that goes at the top of your file and tells RMarkdown things like titles and document options. 
+
+
+
+```r
+---
+title: "Lab 04: reprohealth"
+author: "Alison Hill"
+date: "2018-07-05"
+*output: html_document
+---
+```
+
+--
+
+This is the *minimum* YAML most RMarkdown documents will have, but you can specify many other options depending on the output format you use. Examples to come!
+
+???
+
+The output line sets the **default** output format for this document.
+
+If we specify a format here, we don't have to specify it in the render() function.
+
+Or, we can specify the default format here, but use `render()` to create output of a different format - maybe we usually want to create a PDF, but at the end we also create a Word document to make writing a manuscript easier.
+
+---
+
+## Your Turn!
+
+1. Open the test Markdown (`.md`) file you just created, and add some YAML to the top of the document.
+    - Specify `html_document` as the output format.
+1. Render it again, using `rmarkdown::render("myfile.md")`.
+1. Check to make sure you got the file output you requested.
+
+🚨 **NOTE** 🚨: *Even though we are not using LaTeX for formatting, you will need to have a TeX installation on your computer if you want to create a PDF.*
+
+--
+
+1. BONUS: Leave the file YAML the same, but use `rmarkdown::render()`'s `output_format` option to specify a *different* output format than the one in your YAML.
+
+--
+
+`rmarkdown::render("myfile.md", output_format = "word_document")`
+
+---
+
+## Putting the R in RMarkdown
+
+RMarkdown documents are Markdown-formatted text, with "chunks" of R code placed where you need them. You designate an R code chunk using ``backticks ` `` and `braces { }`:
+
+` ```{r chunk_name, [options]}` 
+
+`    ## R code here`
+    
+`    ``` `
+
+--
+
+`options` include various things that you want to control for that particular chunk, including things like
+
+- Figure height and width
+- Whether to `echo` (show) or `evaluate` (run) that code chunk in the final document (*debugging tip! If you have a problem code chunk, set `eval = FALSE` so you can still knit, but leave yourself a note to fix it later!*)
+- Whether to show warnings and messages
+
+These are passed to `knitr`; you can see a full list of knitr options at [yihui.name/knitr/options/](https://yihui.name/knitr/options/).
+
+---
+
+## Your Turn!
+
+1. Add chunk(s) of R code to your Markdown file to do the following:
+    - Load the `tidyverse` and `gapminder` packages (if either needs to be installed, do that in your console, not your file).
+    - Print the first 10 rows of the `gapminder` data (hint: just name it in your file).
+    - Do a `dplyr::glimpse` of the `gapminder` data.
+    - Plot life expectancy versus GDP per capita.
+1. In the text portion, answer the following questions:
+    - How many variables/columns?
+    - How many rows/observations?
+    - Which variables are numbers?
+    - Which are factors?
+    - Describe what you see in the plot.
+1. Re-save the file with the `.Rmd` extension (because now it includes R *and* Markdown code).
+1. Render the file.
+1. BONUS: Change some options: Change the figure height and width using `fig.height` and `fig.width` *(remember that these are in inches)*.
+
+Remember, you can find other options at `yihui.name/knitr/options`.
+
+
+---
+
+## The Power of HTML
+
+- Interactive graphics
+- Ability to include HTML, written by me (rare) or others (often)
+- Floating table of contents
+- Include code, without taking up visual space
+- Include details, without taking up visual space
+- Tabsets
+- Make it look pretty easily
+
+---
+
+## Case Study with `reprohealth`
+
+For the rest of today we'll be using the `wb_reprohealth` dataset.
+
+
+```r
+head(wb_reprohealth)
+```
+
+```
+# A tibble: 6 x 9
+  year  country    continent region    edu_gen_parity gdp_per_cap life_exp
+  &lt;chr&gt; &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;              &lt;dbl&gt;       &lt;dbl&gt;    &lt;dbl&gt;
+1 2000  Afghanist… Asia      Southern…         NA             NA      56.7
+2 2001  Afghanist… Asia      Southern…          0.           117.     57.2
+3 2002  Afghanist… Asia      Southern…         NA            188.     57.8
+4 2003  Afghanist… Asia      Southern…          0.544        199.     58.5
+5 2004  Afghanist… Asia      Southern…          0.406        219.     59.1
+6 2005  Afghanist… Asia      Southern…          0.549        250.     59.7
+# ... with 2 more variables: mat_mortality &lt;dbl&gt;, tot_fertility &lt;dbl&gt;
+```
+
+---
+
+## Your Turn!
+
+1. `File -&gt; New File -&gt; R Markdown`
+1. Leave `Document`, `HTML` checked
+1. Add your title, save as `lab04_reprohealth.Rmd`
+
+![](images/newrmd.png)
+
+---
+
+## Controlling Appearance with YAML
+
+Our HTML document has some great features, but it's pretty plain. We can use RMarkdown's built-in **themes** to make it pretty.
+
+.pull-left[
+![RMarkdown themes &amp; highlighting](images/rmarkdown_themehighlight.png)
+
+*From the [RMarkdown HTML document documentation](https://rmarkdown.rstudio.com/html_document_format.html)*
+]
+
+.pull-right[
+
+```r
+---
+title: "Lab 04: reprohealth"
+author: "Alison Hill"
+date: "2018-06-05"
+output:
+  html_document:
+*   theme: flatly
+*   highlight: zenburn
+---
+```
+]
+
+--
+
+Themes are based on CSS. If you know CSS, you can customize even more!
+
+(If you don't, you can benefit from the hard work of others who do 😁)
+
+---
+
+## Controlling Appearance with YAML
+
+.pull-left[
+- Table of Contents:
+    - `toc`: include TOC, only at top by default
+    - `toc_float`: make the TOC "float" on the side
+    - `toc_depth`: how many section levels should your TOC show?
+
+]
+
+.pull-right[
+![TOC](images/toc.png)
+]
+
+---
+
+# Your Turn!
+
+Experiment with the YAML in your `lab04_reprohealth.Rmd` file!
+
+- Change the `theme` and see what happens. Your options are:
+
+    `cerulean`; `journal`; `flatly`; `readable`; `spacelab`; `united`; `cosmo`; `lumen`; `paper`; `sandstone`; `simplex`; `yeti`
+    
+- Change the code `highlight` and see what happens. Your options are:
+
+    `tango`; `pygments`; `kate`; `monochrome`; `espresso`; `zenburn`; `haddock`; `textmate`
+    
+- Format your Table of Contents using `toc`, `toc_float`, and `toc_depth`.
+---
+
+## Your first and second code chunks
+
+In my first R code chunk, I typically include any `knitr` options I want to set throughout the document.
+
+````
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.path='Figs/')
+
+```
+````
+
+In my second chunk, I load all the packages I need.
+
+````
+```{r load-packages}
+library(knitr)
+library(tidyverse)
+library(reprohealth)
+
+```
+````
+
+---
+
+## Your Turn!
+
+Take this opportunity to add a setup chunk at the top of your `lab04_reprohealth.Rmd` file!
+
+````
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.path='Figs/')
+
+```
+````
+
+---
+
+## To-Do List:
+
+Here is the [lab assignment](../cm014.html)
+
+Here is a "nutshell" version:
+
+1. Read in and explore the `wb_reprohealth` data. 
+1. Explore individual variables: pick **at least** one categorical variable and at least one quantitative variable to explore.
+1. Explore various plot types: make a few plots, probably of the same variable you chose to characterize numerically. Try to explore more than one plot type. 
+1. Bonus: try using inline R code to reference the number of rows and columns in the data.
+
+
+
+---
+
+# Additional RMarkdown/knitr Resources
+
+*Please see earlier sections for links to resources on project-oriented workflows, tables, and options for interactive graphics.*
+
+- [RMarkdown Web Site](https://rmarkdown.rstudio.com/)
+- [RMarkdown "cheat sheet"](https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf)
+- [`knitr` chunk options](https://yihui.name/knitr/options/)
+    
+---
+
+# Markdown Syntax Quick Reference
+
+*For more details, see [daringfireball.net/projects/markdown/syntax](https://daringfireball.net/projects/markdown/syntax)*
+
+.pull-left[
+`**bold**`
+
+`*italic*`
+
+`# Header 1`
+
+`## Header 2` *(etc)*
+
+`[Text to link](URL)`
+
+`![Image caption](image path)`
+
+`&gt; quote`
+]
+
+.pull-right[
+```
+- bulleted
+- list
+    - sublist
+    - using 4 spaces
+1. enumerated
+1. list
+    1. again
+    1. with the spaces
+```
+
+Use `` `backticks` `` for fixed width text
+
+    Indent with 4 spaces for a code block
+
+`---` = horizontal rule
+]
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
