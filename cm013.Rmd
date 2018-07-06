@@ -1,8 +1,11 @@
 ---
 title: "Class Meeting 1.3 (cm013)"
-subtitle: "In-class Lab + Homework"
+subtitle: "Lab: Data Visualization"
 author: "Alison Hill"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 ```{r setup, include=FALSE}
 # leave this chunk alone
@@ -13,7 +16,9 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
 
 ## Overview
 
-Due by beginning of class Thursday July 5th (2:30pm); submit on Sakai.
+A complete knitted `html` file is due on Sakai by beginning of class Thursday July 5th (2:30pm).
+
+The goal is to explore a new-to-you dataset. In particular, to begin to establish a workflow for data frames or “tibbles”. You will use `dplyr` and `ggplot2` to do some description and visualization.
 
 ```{r}
 # copy and paste to start

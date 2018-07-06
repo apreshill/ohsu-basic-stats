@@ -1,6 +1,6 @@
 ---
 title: "Class Meeting 1.2 (cm012)"
-subtitle: "Solutions"
+subtitle: "Lab: Tidyverse Basics (Solutions)"
 author: "Alison Hill"
 date: "6/28/2018"
 output:
@@ -17,6 +17,10 @@ options(knitr.table.format = "html")
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
   comment = NA, dpi = 300)
 ```
+
+## Overview
+
+A complete knitted `html` file is due on Sakai by beginning of class Tuesday July 3rd (2:30pm).
 
 ## Set-up
 

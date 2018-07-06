@@ -1,6 +1,6 @@
 ---
-title: "CONJ620: CM 1.4"
-subtitle: "Manipulate and explore data"
+title: "Class Meeting 1.4 (cm014)"
+subtitle: "Lab: Manipulate and explore data"
 author: "Alison Hill"
 date: "2018-07-05"
 output: 
