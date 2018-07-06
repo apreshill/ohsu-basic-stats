@@ -370,11 +370,12 @@ library(remotes) # load remotes package so you can install from github
 install_github(&quot;apreshill/reprohealth&quot;) # install the package</code></pre>
 <p>Then at the top of your lab, copy and paste this code:</p>
 <pre class="r"><code>library(tidyverse) # you&#39;ll need this too
-library(reprohealth) # load the package</code></pre>
+library(reprohealth) # load the package
+wb_stats &lt;- wb_reprohealth # save the data to your local environment</code></pre>
 <p>Using R Markdown, do the following in R code chunks:</p>
 <ul>
-<li>Print the first 10 rows of the <code>wb_reprohealth</code> data (hint: just name it!).</li>
-<li>Do a <code>dplyr::glimpse</code> of the <code>wb_reprohealth</code> data.</li>
+<li>Print the first 10 rows of the <code>wb_stats</code> data (hint: just name it!).</li>
+<li>Do a <code>dplyr::glimpse</code> of the <code>wb_stats</code> data.</li>
 <li>Plot life expectancy versus GDP per capita.</li>
 </ul>
 <p>In the text portion, answer the following questions based on the output above:</p>
@@ -382,7 +383,7 @@ library(reprohealth) # load the package</code></pre>
 <li>How many variables/columns?</li>
 <li>How many rows/observations?</li>
 <li>Which variables are numbers?</li>
-<li>Which are factors?</li>
+<li>Which are categorical variables (numeric or character variables with variables that have a fixed and known set of possible values; aka <a href="https://stats.idre.ucla.edu/r/modules/factor-variables/">factors</a>: variables)?</li>
 <li>What do you see in the scatterplot?</li>
 </ul>
 </div>

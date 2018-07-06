@@ -44,12 +44,13 @@ Then at the top of your lab, copy and paste this code:
 ``` r
 library(tidyverse) # you'll need this too
 library(reprohealth) # load the package
+wb_stats <- wb_reprohealth # save the data to your local environment
 ```
 
 Using R Markdown, do the following in R code chunks:
 
-- Print the first 10 rows of the `wb_reprohealth` data (hint: just name it!).
-- Do a `dplyr::glimpse` of the `wb_reprohealth` data.
+- Print the first 10 rows of the `wb_stats` data (hint: just name it!).
+- Do a `dplyr::glimpse` of the `wb_stats` data.
 - Plot life expectancy versus GDP per capita.
 
 In the text portion, answer the following questions based on the output above:
@@ -57,7 +58,7 @@ In the text portion, answer the following questions based on the output above:
 - How many variables/columns?
 - How many rows/observations?
 - Which variables are numbers?
-- Which are factors?
+- Which are categorical variables (numeric or character variables with variables that have a fixed and known set of possible values; aka [factors](https://stats.idre.ucla.edu/r/modules/factor-variables/): variables)?
 - What do you see in the scatterplot?
 
 
