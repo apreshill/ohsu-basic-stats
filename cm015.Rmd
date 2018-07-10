@@ -17,16 +17,16 @@ A complete knitted `html` file is due on Sakai by beginning of class Thursday Ju
 
 Make a tibble with one row per year and columns for maternal mortality for two or more countries.
 
-- Use `knitr::kable(format = 'html')` to make this table look pretty in your rendered homework.
+- Use `knitr::kable()` to make this table look pretty in your rendered homework.
 - Take advantage of this new data shape to scatterplot maternal mortality for one country against that of another.
-
+- Try adding another geometric layer using `geom_text()`, adding `label = year` to your aesthetics call.
 
 
 ## Part 2
 
 Compute some measure of maternal mortality (`mean`? `median`? `min`? `max`?) for all possible combinations of continent and year. Reshape that to have one row per year and one variable for each continent. Or the other way around: one row per continent and one variable per year.
 
-- Use `knitr::kable(format = 'html')` to make these tables look pretty in your rendered homework.
+- Use `knitr::kable()` to make these tables look pretty in your rendered homework.
 - Is there a plot that is easier to make with the data in this shape versus the usual form? If so (or you think so), try it! Reflect.
 
 ## If this was all easy for you (optional)

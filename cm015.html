@@ -254,15 +254,16 @@ $(document).ready(function () {
 <h2>Part 1</h2>
 <p>Make a tibble with one row per year and columns for maternal mortality for two or more countries.</p>
 <ul>
-<li>Use <code>knitr::kable(format = 'html')</code> to make this table look pretty in your rendered homework.</li>
+<li>Use <code>knitr::kable()</code> to make this table look pretty in your rendered homework.</li>
 <li>Take advantage of this new data shape to scatterplot maternal mortality for one country against that of another.</li>
+<li>Try adding another geometric layer using <code>geom_text()</code>, adding <code>label = year</code> to your aesthetics call.</li>
 </ul>
 </div>
 <div id="part-2" class="section level2">
 <h2>Part 2</h2>
 <p>Compute some measure of maternal mortality (<code>mean</code>? <code>median</code>? <code>min</code>? <code>max</code>?) for all possible combinations of continent and year. Reshape that to have one row per year and one variable for each continent. Or the other way around: one row per continent and one variable per year.</p>
 <ul>
-<li>Use <code>knitr::kable(format = 'html')</code> to make these tables look pretty in your rendered homework.</li>
+<li>Use <code>knitr::kable()</code> to make these tables look pretty in your rendered homework.</li>
 <li>Is there a plot that is easier to make with the data in this shape versus the usual form? If so (or you think so), try it! Reflect.</li>
 </ul>
 </div>
