@@ -18,7 +18,7 @@ A complete knitted `html` file is due on Sakai by beginning of class Thursday Ju
 Make a tibble with one row per year and columns for maternal mortality for two or more countries.
 
 - Use `knitr::kable(format = 'html')` to make this table look pretty in your rendered homework.
-- Take advantage of this new data shape to scatterplot life expectancy for one country against that of another.
+- Take advantage of this new data shape to scatterplot maternal mortality for one country against that of another.
 
 
 
