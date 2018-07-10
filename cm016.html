@@ -12,7 +12,7 @@
 <meta name="author" content="Alison Hill" />
 
 
-<title>CONJ620: CM 1.5</title>
+<title>CONJ620: CM 1.6</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -236,43 +236,68 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">CONJ620: CM 1.5</h1>
-<h3 class="subtitle"><em>Data Tables &amp; Tidy Data</em></h3>
+<h1 class="title toc-ignore">CONJ620: CM 1.6</h1>
+<h3 class="subtitle"><em>Integrative Lab</em></h3>
 <h4 class="author"><em>Alison Hill</em></h4>
-<h4 class="date"><em>7/10/2018</em></h4>
+<h4 class="date"><em>6/30/2018</em></h4>
 
 </div>
 
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>A complete knitted <code>html</code> file is due on Sakai by beginning of class Thursday July 12th (2:30pm).</p>
-<p><em>Problem:</em> You have data in one “shape” but you wish it were in another. Usually this is because the alternative shape is superior for presenting a table, making a figure, or doing aggregation and statistical analysis.</p>
-<p><em>Solution:</em> Reshape your data. For simple reshaping, <code>gather()</code> and <code>spread()</code> from <code>tidyr</code> will suffice, as covered in <a href="http://moderndive.netlify.com/4-tidy.html">ModernDive Chapter 4</a>. Do the thing that it possible / easier now that your data has a new shape.</p>
-</div>
-<div id="part-1" class="section level2">
-<h2>Part 1</h2>
-<p>Make a tibble with one row per year and columns for maternal mortality for two or more countries.</p>
+<p>Due by beginning of class Tuesday July 17th (2:30pm).</p>
+<p>The goal is to explore a new-to-you dataset. In particular, to begin to establish a workflow for data frames or “tibbles”. You will use <code>dplyr</code> and <code>ggplot2</code> to do some description and visualization. You may also wish to use the <code>janitor</code> package to make <code>tabyl</code>s, and some of the accompanying <code>adorn</code> functions.</p>
+<p>Your homework should serve as your own personal cheatsheet in the future for things to do with a new dataset. Give yourself the cheatsheet you deserve! You’ll submit your work as an html file knit from your <code>.Rmd</code> file. Remember:</p>
 <ul>
-<li>Use <code>knitr::kable(format = 'html')</code> to make this table look pretty in your rendered homework.</li>
-<li>Take advantage of this new data shape to scatterplot life expectancy for one country against that of another.</li>
+<li><code>dplyr</code> should be your data manipulation tool</li>
+<li><code>ggplot2</code> should be your visualization tool</li>
+</ul>
+<p>You will explore the <code>reprohealth</code> dataset, which is distributed as an R package from <a href="https://cran.r-project.org/web/packages/gapminder/index.html">my personal GitHub</a>.</p>
+<p>Install it, and remember to use this code only in your R console, not in a script or .Rmd file:</p>
+<pre class="r"><code>install.packages(&quot;remotes&quot;) # install the remotes package
+library(remotes) # load remotes package so you can install from github
+install_github(&quot;apreshill/reprohealth&quot;) # install the package</code></pre>
+<p>Then at the top of your lab, copy and paste this code:</p>
+<pre class="r"><code>library(reprohealth) # load the package
+wb_reprohealth # call the data</code></pre>
+</div>
+<div id="logistics" class="section level2">
+<h2>Logistics</h2>
+<p>If you want to do something comparable but different, i.e. swap one quantitative variable for another, be my guest! If you are feeling inspired and curious, then we’re doing this right. Go for it.</p>
+<p>Relax about the following things:</p>
+<ul>
+<li>Tidying/reshaping is NOT your assignment. Many of your tables will be awkwardly shaped in the report. That’s OK.</li>
+<li>Table beauty is not a big deal. Simply printing to “screen” is fine.</li>
+<li>For all things, graphical and tabular, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).</li>
 </ul>
 </div>
-<div id="part-2" class="section level2">
-<h2>Part 2</h2>
-<p>Compute some measure of maternal mortality (<code>mean</code>? <code>median</code>? <code>min</code>? <code>max</code>?) for all possible combinations of continent and year. Reshape that to have one row per year and one variable for each continent. Or the other way around: one row per continent and one variable per year.</p>
+<div id="exploring-the-data" class="section level2">
+<h2>Exploring the data</h2>
+<p>You should answer the following questions by using R:</p>
 <ul>
-<li>Use <code>knitr::kable(format = 'html')</code> to make these tables look pretty in your rendered homework.</li>
-<li>Is there a plot that is easier to make with the data in this shape versus the usual form? If so (or you think so), try it! Reflect.</li>
+<li>How many variables/columns?</li>
+<li>How many rows/observations?</li>
+<li>Complete this sentence: “There is one row per…”</li>
+</ul>
+<div id="task-menu" class="section level3">
+<h3>Task menu</h3>
+<ul>
+<li><p>Get the maximum and minimum of children per woman for all continents.</p></li>
+<li><p>Look at the spread of children per woman across countries within the continents.</p></li>
+<li><p>Compute a trimmed mean of maternal mortality for different years. Or a weighted mean, weighting by population. Just try something other than the plain vanilla mean.</p></li>
+<li><p>How does maternal mortality vary across different continents?</p></li>
+<li><p>Report the absolute and/or relative abundance of countries with low maternal mortality over time by continent: Compute some measure of worldwide maternal mortality - you decide - a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a maternal mortality rate less than this benchmark, for each year.</p></li>
+<li><p>Find countries with interesting stories. Open-ended and, therefore, hard. Promising but unsuccessful attempts are encouraged. This will generate interesting questions to follow up on in class.</p></li>
+<li><p>Make up your own! Between the <code>dplyr</code> coverage in class and the list above, you get the idea.</p></li>
 </ul>
 </div>
-<div id="if-this-was-all-easy-for-you-optional" class="section level2">
-<h2>If this was all easy for you (optional)</h2>
-<p>Join the <code>reprohealth</code> data with the <code>gapminder</code> data using a dplyr join function and make some observations about the process and result. Explore the different types of joins. You could also create a second data frame to read in locally, then join with <code>reprohealth</code>. Examples of a second data frame you could build:</p>
-<ul>
-<li>One row per country, a country variable and one or more variables with extra info, such as language spoken, NATO membership, national animal, <a href="https://www.kaggle.com/unsdsn/world-happiness">happiness ratings</a>, <a href="https://www.kaggle.com/the-guardian/olympic-games">Olympic medals</a>, <a href="http://hdr.undp.org/en/data">human development index</a>, or <a href="http://www.oecd.org/gender/data/length-of-maternity-leave-parental-leave-and-paid-father-specific-leave.htm">maternity leave policies</a>.</li>
-<li>One row per continent, a continent variable and one or more variables with extra info, such as northern versus southern hemisphere.</li>
-</ul>
+<div id="companion-graphs" class="section level3">
+<h3>Companion graphs</h3>
+<p>For each table, make sure to include a relevant figure. One tip for starting is to draw out on paper what you want your x- and y-axis to be first and what your <code>geom</code> is; that is, start by drawing the plot you want <code>ggplot</code> to give you.</p>
+<p>Your figure does not have to depict every last number from the data aggregation result. Use your judgement. It just needs to complement the table, add context, and allow for some sanity checking both ways.</p>
+<p>Notice which figures are easy/hard to make, which data formats make better inputs for plotting functions vs. for human-friendly tables.</p>
+</div>
 </div>
 <div id="report-your-process" class="section level2">
 <h2>Report your process</h2>
@@ -281,10 +306,12 @@ $(document).ready(function () {
 <div id="grading" class="section level2">
 <h2>Grading</h2>
 <p><strong>Our general grading guidelines</strong></p>
-<p><em>Check minus:</em> Didn’t tackle both parts. Or only did tables not plots, or vice versa. Or didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix. It’s hard to find the analyst or the narrative in all this R output.</p>
-<p><em>Check:</em> Hits all the elements in both sections. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.</p>
+<p><em>Check minus:</em> Didn’t tackle at least 3 tasks. Or didn’t make companion graphs. Or didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix. It’s hard to find the analyst or the narrative in all this R output.</p>
+<p><em>Check:</em> Hits all the elements in all four sections. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.</p>
 <p><em>Check plus:</em> Exceeded the requirements in more than one section. Or developed novel ways to do things or ways of looking at a task that were indeed interesting and “worked”. Impressive use and clear understanding of both what went into R in terms of code and what R spit back out. Impeccable organization and presentation in the report.</p>
-<p>This lab was adapted from <a href="http://stat545.com/hw04_tidy-data-joins.html">Jenny Bryan’s STAT545 class</a>.</p>
+<div class="jumbotron">
+<p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. Gapminder EDA ideas from <a href="https://cran.r-project.org/web/packages/gapminder/index.html">Jenny Bryan</a>, author and creator of the Gapminder package.</p>
+</div>
 </div>
 
 <p>

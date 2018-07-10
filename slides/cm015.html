@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CONJ620: CM 1.5</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alison Hill" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
+    <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# CONJ620: CM 1.5
+## Data Tables &amp; Tidy Data
+### Alison Hill
+
+---
+
+
+
+
+
+![](http://r4ds.had.co.nz/screenshots/rstudio-workspace.png)
+
+---
+class: center, middle, inverse
+## Everyone do this right now...
+
+![](https://media.giphy.com/media/zZRxy466qETsY/giphy.gif)
+
+&gt; *"Daily work habit: Restart R very often and re-run your under-development script from the top." -[Jenny Bryan](https://www.tidyverse.org/articles/2017/12/workflow-vs-script/)*
+
+Upper right pane: click on environment tab, then click on the broom
+
+Lower left pane: in console tab, click on the broom too 
+
+
+---
+## Back to the `wb_reprohealth` data
+
+
+```r
+library(tidyverse) # you'll need this too
+library(janitor) # you'll need this too
+library(reprohealth) # load the package
+data(wb_reprohealth) # load the data
+wb_stats &lt;- wb_reprohealth # save the data to your local environment
+```
+
+
+---
+class: inverse, middle, center
+
+&lt;img src="images/r-data-types.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+
+## RStudio Base R Cheatsheet
+
+https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf
+
+
+---
+
+## Know your data types
+
+
+* Numeric (2 subtypes)
+    - Integers (`1, 50`)
+    - Double (`1.5, 50.25`, `?double`)
+* Character (`"hello"`)
+* Factor (`grade = "A" | grade = "B"`)
+* Logical (`TRUE | FALSE`)
+
+--
+
+
+```r
+typeof(wb_stats$tot_fertility)
+```
+
+```
+[1] "double"
+```
+
+```r
+typeof(wb_stats$continent)
+```
+
+```
+[1] "character"
+```
+
+```r
+typeof(wb_stats$continent == "Oceania")
+```
+
+```
+[1] "logical"
+```
+
+---
+# Even better: `glimpse`
+
+
+```r
+glimpse(wb_stats)
+```
+
+```
+Observations: 3,296
+Variables: 9
+$ year           &lt;chr&gt; "2000", "2001", "2002", "2003", "2004", "2005",...
+$ country        &lt;chr&gt; "Afghanistan", "Afghanistan", "Afghanistan", "A...
+$ continent      &lt;chr&gt; "Asia", "Asia", "Asia", "Asia", "Asia", "Asia",...
+$ region         &lt;chr&gt; "Southern Asia", "Southern Asia", "Southern Asi...
+$ edu_gen_parity &lt;dbl&gt; NA, 0.00000, NA, 0.54356, 0.40590, 0.54876, 0.5...
+$ gdp_per_cap    &lt;dbl&gt; NA, 117.4097, 187.8451, 198.7285, 219.1414, 250...
+$ life_exp       &lt;dbl&gt; 56.678, 57.249, 57.849, 58.468, 59.100, 59.730,...
+$ mat_mortality  &lt;dbl&gt; 1100, 1050, 996, 941, 881, 821, 776, 724, 676, ...
+$ tot_fertility  &lt;dbl&gt; 7.494, 7.392, 7.271, 7.136, 6.988, 6.827, 6.651...
+```
+
+
+---
+# `wb_stats`
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; region &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; edu_gen_parity &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdp_per_cap &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; life_exp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mat_mortality &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; tot_fertility &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2000 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Southern Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 56.678 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1100 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.494 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2001 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Southern Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.00000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 117.4097 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 57.249 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1050 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.392 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Southern Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 187.8451 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 57.849 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 996 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.271 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Southern Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.54356 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 198.7285 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 58.468 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 941 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.136 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2004 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Southern Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.40590 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 219.1414 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 59.100 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 881 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.988 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 2005 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Southern Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.54876 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 250.2941 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 59.730 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 821 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.827 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+
+---
+# Data types
+
+&lt;img src="http://r4ds.had.co.nz/diagrams/data-structures-overview.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+
+
+---
+## Introduction to Data
+
+You learned about using `table` the $ sign way...
+
+
+
+```r
+table(wb_stats$continent)
+```
+
+```
+
+  Africa Americas     Asia   Europe  Oceania 
+     864      656      800      704      272 
+```
+
+--
+
+But the base R function for counting, `table()`, leaves much to be desired:
+
+- It doesn’t accept data.frame inputs (and thus doesn’t play nicely with the `%&gt;%` pipe)
+- It doesn’t output data.frames
+- Its results are hard to format. Compare the look and formatting choices of an R table to a Microsoft Excel PivotTable or even the table formatting provided by SPSS.
+
+https://github.com/sfirke/janitor/blob/master/vignettes/tabyls.md
+
+--
+
+There is a better (tidy) way!
+
+
+---
+## Count
+
+.pull-left[
+
+```r
+wb_stats %&gt;% 
+  count(continent) 
+```
+
+```
+# A tibble: 5 x 2
+  continent     n
+  &lt;chr&gt;     &lt;int&gt;
+1 Africa      864
+2 Americas    656
+3 Asia        800
+4 Europe      704
+5 Oceania     272
+```
+]
+
+--
+
+.pull-right[
+
+
+```r
+wb_stats %&gt;% 
+  filter(year == 2015) %&gt;% 
+  count(continent) 
+```
+
+```
+# A tibble: 5 x 2
+  continent     n
+  &lt;chr&gt;     &lt;int&gt;
+1 Africa       54
+2 Americas     41
+3 Asia         50
+4 Europe       44
+5 Oceania      17
+```
+
+]
+
+---
+## Doing more with `count`
+
+
+```r
+wb_stats %&gt;% 
+  filter(year == 2015) %&gt;% 
+  count(continent) %&gt;% 
+  add_tally() %&gt;% # adds total countries
+  mutate(perc_countries = n/sum(n) * 100) 
+```
+
+```
+# A tibble: 5 x 4
+  continent     n    nn perc_countries
+  &lt;chr&gt;     &lt;int&gt; &lt;int&gt;          &lt;dbl&gt;
+1 Africa       54   206          26.2 
+2 Americas     41   206          19.9 
+3 Asia         50   206          24.3 
+4 Europe       44   206          21.4 
+5 Oceania      17   206           8.25
+```
+
+---
+## Count by 2
+
+
+```r
+wb_stats %&gt;% 
+  count(continent, country) 
+```
+
+```
+# A tibble: 206 x 3
+   continent country                      n
+   &lt;chr&gt;     &lt;chr&gt;                    &lt;int&gt;
+ 1 Africa    Algeria                     16
+ 2 Africa    Angola                      16
+ 3 Africa    Benin                       16
+ 4 Africa    Botswana                    16
+ 5 Africa    Burkina Faso                16
+ 6 Africa    Burundi                     16
+ 7 Africa    Cameroon                    16
+ 8 Africa    Cape Verde                  16
+ 9 Africa    Central African Republic    16
+10 Africa    Chad                        16
+# ... with 196 more rows
+```
+
+--
+
+What is the `n` column counting?
+
+--
+
+💡 years of data per country/continent
+
+---
+## Double count
+
+
+
+```r
+wb_stats %&gt;% 
+  count(continent, country) %&gt;% 
+  count(continent)
+```
+
+```
+# A tibble: 5 x 2
+  continent    nn
+  &lt;chr&gt;     &lt;int&gt;
+1 Africa       54
+2 Americas     41
+3 Asia         50
+4 Europe       44
+5 Oceania      17
+```
+
+--
+
+What is the the `nn` column counting?
+
+--
+
+💡 Number of countries per continent (regardless of year- I didn't have to `filter` first!)
+
+---
+## 2-way frequency tables
+
+Using the `janitor` package
+
+.pull-left[
+
+
+```r
+wb_tab &lt;- wb_stats %&gt;% 
+  filter(year == 2015) %&gt;% 
+  tabyl(continent)
+wb_tab
+```
+
+```
+ continent  n    percent
+    Africa 54 0.26213592
+  Americas 41 0.19902913
+      Asia 50 0.24271845
+    Europe 44 0.21359223
+   Oceania 17 0.08252427
+```
+]
+
+--
+
+.pull-right[
+
+
+```r
+wb_tab %&gt;% 
+  adorn_totals("row") %&gt;%
+  adorn_pct_formatting(digits = 1)
+```
+
+```
+ continent   n percent
+    Africa  54   26.2%
+  Americas  41   19.9%
+      Asia  50   24.3%
+    Europe  44   21.4%
+   Oceania  17    8.3%
+     Total 206  100.0%
+```
+
+]
+
+---
+## Formatting frequency tables
+
+Even better: use `knitr::kable()`
+
+
+```r
+wb_tab %&gt;% 
+  adorn_totals("row") %&gt;%
+  adorn_pct_formatting(digits = 1) %&gt;% 
+  knitr::kable(format = 'html')
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; n &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; percent &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Africa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 54 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 26.2% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 41 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 19.9% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 24.3% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Europe &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 44 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 21.4% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Oceania &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.3% &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Total &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 206 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 100.0% &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+## Discretize a variable
+
+In the course, they made a new variable: below vs at or above average.
+
+--
+
+Quiz! How was this done in the DataCamp slides?
+
+
+
+---
+## Below vs. at/above average
+
+![](images/discretize-var-datacamp.png)
+---
+## Below vs. at/above average
+
+Answer- `mutate` with `ifelse` in slides. She also saved the mean as an external variable to do this- we don't have to do this extra step though!
+
+--
+
+Let's do this with `tot_fertility`
+
+
+```r
+wb_stats &lt;- wb_stats %&gt;% 
+  mutate(fert_cat = ifelse(tot_fertility &lt; mean(tot_fertility, 
+                                                na.rm = TRUE),
+                           "below average", "at or above average"))
+```
+
+--
+
+Now how do we see this new discrete variable?
+
+---
+## Count our new discrete variable
+
+--
+
+
+```r
+wb_stats %&gt;% 
+  count(fert_cat)
+```
+
+```
+# A tibble: 3 x 2
+  fert_cat                n
+  &lt;chr&gt;               &lt;int&gt;
+1 at or above average  1147
+2 below average        2023
+3 &lt;NA&gt;                  126
+```
+
+
+---
+## How would you calculate this by year?
+
+--
+
+Hint: do a `group_by(year)` first, then use the exact same code
+
+--
+
+
+```r
+wb_stats &lt;- wb_stats %&gt;% 
+  group_by(year) %&gt;% 
+  mutate(fertbyyear_cat = ifelse(tot_fertility &lt; mean(tot_fertility, 
+                                                      na.rm = TRUE),
+                           "below average", "at or above average"))
+```
+
+---
+## Below vs. at/above average for each year
+
+A little hard to read...
+
+
+```r
+wb_stats %&gt;% 
+  count(fertbyyear_cat)
+```
+
+```
+# A tibble: 48 x 3
+# Groups:   year [16]
+   year  fertbyyear_cat          n
+   &lt;chr&gt; &lt;chr&gt;               &lt;int&gt;
+ 1 2000  at or above average    76
+ 2 2000  below average         122
+ 3 2000  &lt;NA&gt;                    8
+ 4 2001  at or above average    76
+ 5 2001  below average         121
+ 6 2001  &lt;NA&gt;                    9
+ 7 2002  at or above average    76
+ 8 2002  below average         124
+ 9 2002  &lt;NA&gt;                    6
+10 2003  at or above average    74
+# ... with 38 more rows
+```
+
+---
+## Below vs. at/above average for each year
+
+`tidyr::spread` can help! 
+
+
+```r
+wb_stats %&gt;% 
+  count(fertbyyear_cat) %&gt;% 
+  spread(fertbyyear_cat, n)
+```
+
+```
+# A tibble: 16 x 4
+# Groups:   year [16]
+   year  `at or above average` `below average` `&lt;NA&gt;`
+   &lt;chr&gt;                 &lt;int&gt;           &lt;int&gt;  &lt;int&gt;
+ 1 2000                     76             122      8
+ 2 2001                     76             121      9
+ 3 2002                     76             124      6
+ 4 2003                     74             124      8
+ 5 2004                     72             125      9
+ 6 2005                     72             127      7
+ 7 2006                     71             128      7
+ 8 2007                     71             128      7
+ 9 2008                     69             129      8
+10 2009                     70             128      8
+11 2010                     69             129      8
+12 2011                     72             126      8
+13 2012                     72             127      7
+14 2013                     72             125      9
+15 2014                     73             124      9
+16 2015                     71             127      8
+```
+
+---
+## Visualize counts
+
+
+```r
+ggplot(wb_stats, aes(x = year, fill = fertbyyear_cat)) +
+  geom_bar(position = "dodge") 
+```
+
+&lt;img src="cm015_files/figure-html/unnamed-chunk-21-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+## Visualize proportions
+
+
+```r
+ggplot(wb_stats, aes(x = year, fill = fertbyyear_cat)) +
+  geom_bar(position = "fill") 
+```
+
+&lt;img src="cm015_files/figure-html/unnamed-chunk-22-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+## Visualize proportions with facetting
+
+
+```r
+ggplot(wb_stats, aes(x = year, fill = fertbyyear_cat)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~continent)
+```
+
+&lt;img src="cm015_files/figure-html/unnamed-chunk-23-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+---
+## Workflows
+
+In the last class, we:
+
+- Used R Markdown
+- Learned how to use `knitr::render` (and that you can `render` the same .Rmd to multiple output formats)
+- Learned to knit to html as an output format (the main one we focused on)
+- Learned about `knitr` chunk options
+  - Also having a `setup` chunk (setting a `fig.path`!)
+- Learned about markdown formatting for plain text
+- Learned how to customize the html output with
+  - `toc` (`toc_float`, `toc_depth`)
+  - `theme`
+  - `highlight`
+  
+  
+---
+class: middle, inverse, center
+## R Projects
+
+Now...and for eternity (at least until the last day of this class)
+
+![](https://media.giphy.com/media/zsPiDn1Sav4WY/giphy.gif)
+
+
+---
+## R Projects: how?
+
+![](images/rprojects.png)
+---
+## R Projects: to do list
+
+--
+
+* Create an RStudio project for each data analysis project.
+
+--
+
+* Keep data files there, in a folder for example called `data`
+
+--
+
+* Keep scripts there; edit them, run them in bits or as a whole.
+
+--
+
+* Save your outputs (plots and cleaned data) there.
+
+--
+
+* Only ever use relative paths, not absolute paths.
+
+
+---
+class:middle, inverse, center
+## Relative file paths
+
+Now...and for eternity (at least until the last day of this class)
+
+![](https://media.giphy.com/media/zsPiDn1Sav4WY/giphy.gif)
+
+Use the `here` package when reading in a local data file, with the `here` function: `here::here`
+
+https://github.com/jennybc/here_here
+
+---
+## Updated No-No List
+
+.pull-left[
+
+![](https://media.giphy.com/media/l0MYSSCIrv8aUaBsQ/giphy.gif)
+
+]
+
+.pull-right[
+
+- `attach` (NEVER)
+
+- `setwd` (NEVER)
+
+- dollar sign notation `wb_stats$year` (for now, some stats stuff will require it)
+
+]
+
+---
+## Updated "Do Do" list
+
+
+![](https://media.giphy.com/media/7p6jNJNiv11n2/giphy.gif)
+
+
+* `.Rproj` (http://r4ds.had.co.nz/workflow-projects.html)
+
+* `here::here` for file paths (https://github.com/jennybc/here_here)
+
+* Use R Markdown to combine code and text for reproducible analysis documents.
+  - For text, use [Markdown formatting](https://www.markdowntutorial.com)
+  - For code, use `knitr` [code chunk options](https://yihui.name/knitr/options/#chunk-options).
+
+
+
+---
+## To-Do List:
+
+Here is the [lab assignment](../cm015.html)
+
+We are expecting that the quality/aesthetics of your knitted html documents will be looking pretty professional at this point. This means:
+- All packages needed loaded at the top of your document
+- No package installations called/executed in your Rmd
+- No warnings/messages printed when you load packages
+- All chunks should be `echo = TRUE, eval = TRUE` (the default- so don't override these!)
+- Use of markdown formatting to make your doc easier to follow (and thus to grade!)
+- Relative file paths only using the `here` package (i.e., no `attach` or `setwd` in your scripts)
+- No chunks with errors!
+- *NEVER EVER* printing out an entire dataset to screen (&gt; 10 rows). This kills trees and is never necessary.
+- **We are looking for a high text-to-code ratio!!**
+- Logistics: submitted a knitted html as requested, on time
+  
+  
+---
+## Grading
+
+- DataCamp: 40% of your final grade
+  - There are 42 chapters total
+  - Completing 34 on time is a B- (32 pts)
+  - Completing 38 on time is an A- (36 pts)
+  - Completing all 42 on time is an A+ (40 pts)
+- Labs: 30% of your final grade
+  - Started in-class, turned in on Sakai by next class time
+  - There will be about 18 labs total
+  - You can drop your lowest 3 labs (= 1.5 weeks of class)
+  - The 15 graded labs will each be graded check minus, check, check plus
+  - If you get checks on all 15, that is roughly a B (25 pts)
+    - Check plus on 1-2 labs --&gt; A- (27 pts)
+    - Check plus on 3-4 --&gt; A (28 pts)
+    - Check plus on 5+ --&gt; A+ (30 pts)
+    - Each check minus will be offset by a check plus (and vice versa)
+- Integrative Labs: 20% of your final grade
+  - There will be 4: July 12, August 2, August 23, September 6
+  - Each will be worth 5% of your final grade
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
