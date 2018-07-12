@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CONJ620: CM 1.6</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alison Hill" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
+    <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# CONJ620: CM 1.6
+## Bring it all together
+### Alison Hill
+
+---
+
+
+
+
+
+
+
+
+## You have:
+
+- a working version of R,
+
+- a working version of RStudio,
+
+- completed DataCamp's "Introduction to the Tidyverse" (all 4 chapters)
+
+- completed DataCamp's "Introduction to Data" (all 4 chapters)
+
+- read chapters 1-5 in ModernDive
+
+- read chapters 4, 6, 7, 8, &amp; 11 in R4DS
+
+---
+## Use R to:
+
+
+.pull-left[
+
+- print the first 10 rows of a tibble
+
+- install a package 
+  - `install.packages("dplyr")`
+  - do 1x per machine
+
+- load an installed package
+  - `library(dplyr)`
+  - do 1x per work session
+
+- assign a variable a name (`&lt;-`, think "gets") 
+
+- `%&gt;%` (think "then")
+]
+
+--
+
+.pull-right[
+
+- `dplyr::filter`
+
+- `dplyr::arrange`
+
+- `dplyr::mutate`
+
+- `dplyr::group_by`
+
+- `dplyr::summarize`
+
+- `dplyr::select` (see [MD Ch 5](http://moderndive.netlify.com/5-wrangling.html#other-verbs))
+
+- `tidyr::gather` (see [MD Ch 4](http://moderndive.netlify.com/4-tidy.html))
+
+]
+
+---
+## Use R (via `ggplot2`) to make:
+
+
+- scatterplots (`geom_point()`)
+- linegraphs (`geom_line()`)
+- histograms (`geom_histogram()`)
+- boxplots (`geom_boxplot()`)
+- barplots (`geom_bar()` or `geom_col()`)
+- stripcharts (`geom_jitter()`)
+- dotplots (`geom_dotplot()`)
+- beeswarm plots (`library(ggbeeswarm)`)
+- density plots (`geom_density()`)
+- violin plots (`geom_violin()`)
+- how to facet (`+ facet_wrap(~ )`)
+
+
+See: https://apreshill.github.io/data-vis-labs-2018/04-distributions.html
+
+---
+class:center, middle, inverse
+
+
+
+## Muddiest points
+
+
+![](https://media.giphy.com/media/l44Q7lmy0QVQVbIm4/giphy.gif)
+
+Go here:
+
+https://bit.ly/conj620-cm016
+
+
+
+---
+class:middle, inverse, center
+
+## To the lab!
+
+![](https://media.giphy.com/media/8Ep2aFnTfs6TC/giphy.gif)
+
+[Lab 06](../cm016.html)
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

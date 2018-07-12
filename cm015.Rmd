@@ -50,4 +50,6 @@ _Check:_ Hits all the elements in both sections. No obvious mistakes. Pleasant t
 
 _Check plus:_ Exceeded the requirements in more than one section. Or developed novel ways to do things or ways of looking at a task that were indeed interesting and "worked". Impressive use and clear understanding of both what went into R in terms of code and what R spit back out. Impeccable organization and presentation in the report.
 
+
+
 This lab was adapted from [Jenny Bryan's STAT545 class](http://stat545.com/hw04_tidy-data-joins.html).

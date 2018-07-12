@@ -20,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -169,6 +172,101 @@ $(document).ready(function () {
 
 
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
 
 
 <div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
@@ -239,57 +337,117 @@ $(document).ready(function () {
 <h1 class="title toc-ignore">CONJ620: CM 1.6</h1>
 <h3 class="subtitle"><em>Integrative Lab</em></h3>
 <h4 class="author"><em>Alison Hill</em></h4>
-<h4 class="date"><em>6/30/2018</em></h4>
 
 </div>
 
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>Due by beginning of class Tuesday July 17th (2:30pm).</p>
-<p>The goal is to explore a new-to-you dataset. In particular, to begin to establish a workflow for data frames or “tibbles”. You will use <code>dplyr</code> and <code>ggplot2</code> to do some description and visualization. You may also wish to use the <code>janitor</code> package to make <code>tabyl</code>s, and some of the accompanying <code>adorn</code> functions.</p>
-<p>Your homework should serve as your own personal cheatsheet in the future for things to do with a new dataset. Give yourself the cheatsheet you deserve! You’ll submit your work as an html file knit from your <code>.Rmd</code> file. Remember:</p>
+<p>A complete knitted <code>html</code> file is due on Sakai by beginning of class Tuesday July 17th (2:30pm). In class on that Tuesday, you’ll pair up with another student and review each others’ reports. Your final lab is due on Sakai by beginning of class Thursday July 19th (2:30pm).</p>
+<p>The goal is to carefully, thoroughly, and thoughtfully conduct an exploratory data analysis (EDA). You are also asked to communicate clearly about the steps in your EDA process with others, by sharing your R code, output, and narrative. As such, your code cannot “stand alone”- it is meant to complement / enhance / support your narrative.</p>
+</div>
+<div id="tools" class="section level2">
+<h2>Tools</h2>
+<p>You will use R Markdown to construct your EDA. You’ll submit your work as an html file knit from your <code>.Rmd</code> file (please leave the default code chunk options for <code>eval = TRUE</code> and <code>echo = TRUE</code>). In that document, you’ll use <code>dplyr</code>, <code>tidyr</code>, and <code>ggplot2</code> to do description and visualization. You may also wish to use the <code>janitor</code> package to make <code>tabyl</code>s, and some of the accompanying <code>adorn</code> functions.</p>
+<p>Your lab should serve as your own personal cheatsheet in the future for things to do with a new dataset. Give yourself the cheatsheet you deserve! Remember:</p>
 <ul>
-<li><code>dplyr</code> should be your data manipulation tool</li>
-<li><code>ggplot2</code> should be your visualization tool</li>
+<li><code>rmarkdown</code> should be your EDA <em>documentation</em> tool</li>
+<li>your own words with <code>markdown</code> formatting are your ONLY <em>narrative</em> tool</li>
+<li><code>dplyr</code> should be your <em>data manipulation</em> tool</li>
+<li><code>tidyr</code> should be your <em>data reshaping</em> tool</li>
+<li><code>janitor::tabyl</code> should be your <em>data table-making</em> tool</li>
+<li>you may wish to combine with <code>knitr::kable()</code> for formatting tables</li>
+<li><code>ggplot2</code> should be your <em>data visualization</em> tool</li>
 </ul>
-<p>You will explore the <code>reprohealth</code> dataset, which is distributed as an R package from <a href="https://cran.r-project.org/web/packages/gapminder/index.html">my personal GitHub</a>.</p>
+<p>For all things, graphical and tabular, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule). You’ll need this loaded at the top:</p>
+<pre class="r"><code>library(tidyverse) # all the good stuff
+library(readxl) # for reading in xlsx files
+library(here) # for here!
+library(janitor) # for clean_names &amp; tabyl
+library(knitr) # for kable</code></pre>
+<p>The <code>tidyverse</code> meta-package includes <code>dplyr</code>, <code>ggplot2</code>, and <code>tidyr</code>.</p>
+</div>
+<div id="data" class="section level2">
+<h2>Data</h2>
+<p>You will start with the <code>reprohealth</code> dataset, which is distributed as an R package from <a href="https://cran.r-project.org/web/packages/gapminder/index.html">my personal GitHub</a>.</p>
 <p>Install it, and remember to use this code only in your R console, not in a script or .Rmd file:</p>
 <pre class="r"><code>install.packages(&quot;remotes&quot;) # install the remotes package
 library(remotes) # load remotes package so you can install from github
 install_github(&quot;apreshill/reprohealth&quot;) # install the package</code></pre>
 <p>Then at the top of your lab, copy and paste this code:</p>
 <pre class="r"><code>library(reprohealth) # load the package
-wb_reprohealth # call the data</code></pre>
+wb_reprohealth # call the data
+wb_stats &lt;- wb_reprohealth # save the data to your local environment</code></pre>
+<p>You can name <code>wb_stats</code> anything else you want, this is just an example.</p>
 </div>
-<div id="logistics" class="section level2">
-<h2>Logistics</h2>
-<p>If you want to do something comparable but different, i.e. swap one quantitative variable for another, be my guest! If you are feeling inspired and curious, then we’re doing this right. Go for it.</p>
-<p>Relax about the following things:</p>
-<ul>
-<li>Tidying/reshaping is NOT your assignment. Many of your tables will be awkwardly shaped in the report. That’s OK.</li>
-<li>Table beauty is not a big deal. Simply printing to “screen” is fine.</li>
-<li>For all things, graphical and tabular, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).</li>
-</ul>
-</div>
-<div id="exploring-the-data" class="section level2">
-<h2>Exploring the data</h2>
-<p>You should answer the following questions by using R:</p>
+<div id="explore-the-wb_reprohealth-data" class="section level2">
+<h2>Explore the <code>wb_reprohealth</code> data</h2>
+<p>Yes, this was <a href="cm014.html">Lab 04</a>. You should already have the code and narrative to answer these questions. Use this opportunity to <strong>clean that up</strong>. This section should be clear, concise, and well-organized, since you already have the code and words in another .Rmd document that you can just copy/paste into this lab (right?). Can you make it better? Do a self-assessment here: what could be clearer about your code or your process that you can improve upon now?</p>
 <ul>
 <li>How many variables/columns?</li>
 <li>How many rows/observations?</li>
+<li>Which variables are numbers?</li>
+<li>Which are categorical variables (numeric or character variables with variables that have a fixed and known set of possible values; aka <a href="https://stats.idre.ucla.edu/r/modules/factor-variables/">factor</a> variables)?</li>
 <li>Complete this sentence: “There is one row per…”</li>
 </ul>
+</div>
+<div id="explore-a-new-dataset" class="section level2">
+<h2>Explore a new dataset</h2>
+<p>Go to the <a href="https://www.gapminder.org/data/">gapminder</a> site and find a new indicator that interests you.</p>
+<ul>
+<li><p>Download the data file to a folder in your <code>.Rproj</code> directory, and open the <code>.xlsx</code> file to see where the data is (i.e., which sheet).</p></li>
+<li><p>Read the data file into your EDA .Rmd document using the <a href="https://readxl.tidyverse.org"><code>readxl</code> package</a> (remember, it must be installed first). Use the <code>here</code> package, with the <code>here</code> function, to build up the relative file path (<a href="https://github.com/jennybc/here_here">example code-through</a>). Here is an example code chunk:</p></li>
+</ul>
+<pre class="r"><code>internet &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;Internet user per 100.xlsx&quot;),
+                      sheet = 1) %&gt;% 
+  clean_names() # highly recommended
+
+internet</code></pre>
+<pre><code>## # A tibble: 275 x 23
+##    internet_users_per_… x1990 x1991 x1992 x1993    x1994    x1995    x1996
+##    &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 Abkhazia               NA     NA    NA    NA NA       NA       NA      
+##  2 Afghanistan             0.    NA    NA    NA NA       NA       NA      
+##  3 Akrotiri and Dhekel…   NA     NA    NA    NA NA       NA       NA      
+##  4 Albania                 0.    NA    NA    NA NA        0.0112   3.22e-2
+##  5 Algeria                 0.    NA    NA    NA  3.61e-4  0.00177  1.74e-3
+##  6 American Samoa          0.    NA    NA    NA NA       NA       NA      
+##  7 Andorra                 0.    NA    NA    NA NA       NA        1.53e+0
+##  8 Angola                  0.    NA    NA    NA NA       NA        7.76e-4
+##  9 Anguilla               NA     NA    NA    NA NA       NA       NA      
+## 10 Antigua and Barbuda     0.    NA    NA    NA NA        2.20     2.86e+0
+## # ... with 265 more rows, and 15 more variables: x1997 &lt;dbl&gt;, x1998 &lt;dbl&gt;,
+## #   x1999 &lt;dbl&gt;, x2000 &lt;dbl&gt;, x2001 &lt;dbl&gt;, x2002 &lt;dbl&gt;, x2003 &lt;dbl&gt;,
+## #   x2004 &lt;dbl&gt;, x2005 &lt;dbl&gt;, x2006 &lt;dbl&gt;, x2007 &lt;dbl&gt;, x2008 &lt;dbl&gt;,
+## #   x2009 &lt;dbl&gt;, x2010 &lt;dbl&gt;, x2011 &lt;dbl&gt;</code></pre>
+<ul>
+<li>Join this new data using <code>dplyr</code> with the <code>reprohealth</code> data you have been working with, and make some observations about the process and result. You may need:
+<ul>
+<li><a href="http://moderndive.netlify.com/5-wrangling.html#joins">ModernDive section you read on joins</a></li>
+<li>This <a href="http://stat545.com/bit001_dplyr-cheatsheet.html">tutorial by Jenny Bryan</a></li>
+<li>This <a href="http://r4ds.had.co.nz/relational-data.html">chapter in R4DS</a></li>
+<li><strong>Hint!:</strong> you’ll probably need to use <code>tidyr::gather</code> on your new dataset first, before the join. Tread carefully here!</li>
+<li>Remember, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).</li>
+</ul></li>
+</ul>
+</div>
+<div id="explore-questions" class="section level2">
+<h2>Explore questions</h2>
+<p>In the <a href="http://r4ds.had.co.nz/exploratory-data-analysis.html">R4DS Exploratory Data Analysis chapter</a>, the authors say:</p>
+<blockquote>
+<p>“Your goal during EDA is to develop an understanding of your data. The easiest way to do this is to use questions as tools to guide your investigation…EDA is fundamentally a creative process. And like most creative processes, the key to asking quality questions is to generate a large quantity of questions.”</p>
+</blockquote>
+<p>Your mission in this last section is to pick at least three of the tasks below and attack each with a <strong>table and figure</strong>. In your narrative, reword each “task” into a logical research question(s). Make observations about what your tables/figures show and about the process. If you want to do something comparable but different, i.e. swap one quantitative variable for another, be our guest! If you are feeling inspired and curious, then we’re doing this right. Go for it.</p>
 <div id="task-menu" class="section level3">
 <h3>Task menu</h3>
 <ul>
-<li><p>Get the maximum and minimum of children per woman for all continents.</p></li>
-<li><p>Look at the spread of children per woman across countries within the continents.</p></li>
-<li><p>Compute a trimmed mean of maternal mortality for different years. Or a weighted mean, weighting by population. Just try something other than the plain vanilla mean.</p></li>
-<li><p>How does maternal mortality vary across different continents?</p></li>
-<li><p>Report the absolute and/or relative abundance of countries with low maternal mortality over time by continent: Compute some measure of worldwide maternal mortality - you decide - a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a maternal mortality rate less than this benchmark, for each year.</p></li>
+<li><p>Get the maximum and minimum of children per woman (<code>tot_fertility</code>) for all continents.</p></li>
+<li><p>Look at the spread of children per woman (<code>tot_fertility</code>) across countries within the continents.</p></li>
+<li><p>Compute a trimmed mean of maternal mortality (<code>mat_mortality</code>) for different years. Or a weighted mean, weighting by population. Just try something other than the plain vanilla mean.</p></li>
+<li><p>How does maternal mortality (<code>mat_mortality</code>) vary across different continents?</p></li>
+<li><p>Report the absolute and/or relative abundance of countries with low maternal mortality (<code>mat_mortality</code>) over time by continent: Compute some measure of worldwide maternal mortality - you decide - a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a maternal mortality rate less than this benchmark, for each year.</p></li>
 <li><p>Find countries with interesting stories. Open-ended and, therefore, hard. Promising but unsuccessful attempts are encouraged. This will generate interesting questions to follow up on in class.</p></li>
-<li><p>Make up your own! Between the <code>dplyr</code> coverage in class and the list above, you get the idea.</p></li>
+<li><p>Make up your own! Between the coverage in class, readings, and DataCamp plus the list above, you get the idea.</p></li>
 </ul>
 </div>
 <div id="companion-graphs" class="section level3">
@@ -305,13 +463,20 @@ wb_reprohealth # call the data</code></pre>
 </div>
 <div id="grading" class="section level2">
 <h2>Grading</h2>
-<p><strong>Our general grading guidelines</strong></p>
-<p><em>Check minus:</em> Didn’t tackle at least 3 tasks. Or didn’t make companion graphs. Or didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix. It’s hard to find the analyst or the narrative in all this R output.</p>
-<p><em>Check:</em> Hits all the elements in all four sections. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.</p>
-<p><em>Check plus:</em> Exceeded the requirements in more than one section. Or developed novel ways to do things or ways of looking at a task that were indeed interesting and “worked”. Impressive use and clear understanding of both what went into R in terms of code and what R spit back out. Impeccable organization and presentation in the report.</p>
-<div class="jumbotron">
-<p><a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. Gapminder EDA ideas from <a href="https://cran.r-project.org/web/packages/gapminder/index.html">Jenny Bryan</a>, author and creator of the Gapminder package.</p>
-</div>
+<p>This lab is worth 5 points total, scored as follows:</p>
+<p>2 points for your initial EDA:</p>
+<ul>
+<li><p>2 (Strong attempt): EDA reflects strong independent problem solving, with clearly thought out attempts to approach questions and problems, and a diligent and honest effort to answer questions and find the solutions.</p></li>
+<li><p>1 (Adequate attempt): EDA reflects some attempt to approach the posed tasks, but approach appears to be superficial and lacks depth of analysis. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.</p></li>
+<li><p>0 (No attempt or incomplete): Didn’t tackle all sections. Or didn’t make companion graphs. Or didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix.</p></li>
+</ul>
+<p>3 points for the quality of the final EDA:</p>
+<ul>
+<li><p>3 (Exceptional): EDA is thorough, concise, and clearly demonstrates ability to competently and thoughtfully work with data as well as how to report on that process as a complement to code. Impeccable organization and presentation in the report.</p></li>
+<li><p>2 (Adequate): Hits all the elements in all sections. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.</p></li>
+<li><p>1 (Inadequate): EDA attempts to address question with substantial inaccuracies in analysis and/or interpretation. Didn’t tackle all sections. Or didn’t make companion graphs. Or didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix.</p></li>
+<li><p>0 (Insufficient): Nothing to grade, assignment was late.</p></li>
+</ul>
 </div>
 
 <p>
@@ -320,6 +485,8 @@ wb_reprohealth # call the data</code></pre>
 </p>
 
 
+</div>
+</div>
 
 </div>
 
