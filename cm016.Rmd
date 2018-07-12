@@ -90,6 +90,14 @@ internet
 ```
 
 - Answer the same 5 questions as you did above for the `reprohealth` data.
+- Gather the data (most data from gapminder has columns in years).
+```{r}
+internet_tidy <- internet %>% 
+  gather(years, users_per_100, -internet_users_per_100_people) %>% 
+  mutate(years = readr::parse_number(years))
+```
+
+
 - Join this new data using `dplyr` with the `reprohealth` data you have been working with, and make some observations about the process and result. You may need:
     - [ModernDive section you read on joins](http://moderndive.netlify.com/5-wrangling.html#joins)
     - This [tutorial by Jenny Bryan](http://stat545.com/bit001_dplyr-cheatsheet.html)

@@ -422,6 +422,12 @@ internet</code></pre>
 ## #   x2009 &lt;dbl&gt;, x2010 &lt;dbl&gt;, x2011 &lt;dbl&gt;</code></pre>
 <ul>
 <li>Answer the same 5 questions as you did above for the <code>reprohealth</code> data.</li>
+<li>Gather the data (most data from gapminder has columns in years).</li>
+</ul>
+<pre class="r"><code>internet_tidy &lt;- internet %&gt;% 
+  gather(years, users_per_100, -internet_users_per_100_people) %&gt;% 
+  mutate(years = readr::parse_number(years))</code></pre>
+<ul>
 <li>Join this new data using <code>dplyr</code> with the <code>reprohealth</code> data you have been working with, and make some observations about the process and result. You may need:
 <ul>
 <li><a href="http://moderndive.netlify.com/5-wrangling.html#joins">ModernDive section you read on joins</a></li>
