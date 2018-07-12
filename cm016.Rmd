@@ -89,6 +89,7 @@ internet <- read_xlsx(here::here("data", "Internet user per 100.xlsx"),
 internet
 ```
 
+- Answer the same 5 questions as you did above for the `reprohealth` data.
 - Join this new data using `dplyr` with the `reprohealth` data you have been working with, and make some observations about the process and result. You may need:
     - [ModernDive section you read on joins](http://moderndive.netlify.com/5-wrangling.html#joins)
     - This [tutorial by Jenny Bryan](http://stat545.com/bit001_dplyr-cheatsheet.html)
