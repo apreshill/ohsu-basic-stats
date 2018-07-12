@@ -437,6 +437,70 @@ internet</code></pre>
 <li>Remember, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).</li>
 </ul></li>
 </ul>
+<pre class="r"><code># another example dataset
+age_marriage &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator age of marriage.xlsx&quot;),
+                      sheet = 1) </code></pre>
+<pre><code>## New names:
+##  -&gt; ..1</code></pre>
+<pre class="r"><code>age_marriage</code></pre>
+<pre><code>## # A tibble: 185 x 117
+##    ..1      `1616.0` `1666.0` `1685.0` `1710.0` `1716.0` `1735.0` `1760.0`
+##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 Afghani…       NA       NA       NA       NA       NA       NA       NA
+##  2 Albania        NA       NA       NA       NA       NA       NA       NA
+##  3 Algeria        NA       NA       NA       NA       NA       NA       NA
+##  4 Angola         NA       NA       NA       NA       NA       NA       NA
+##  5 Argenti…       NA       NA       NA       NA       NA       NA       NA
+##  6 Armenia        NA       NA       NA       NA       NA       NA       NA
+##  7 Austral…       NA       NA       NA       NA       NA       NA       NA
+##  8 Austria        NA       NA       NA       NA       NA       NA       NA
+##  9 Azerbai…       NA       NA       NA       NA       NA       NA       NA
+## 10 Bahamas        NA       NA       NA       NA       NA       NA       NA
+## # ... with 175 more rows, and 109 more variables: `1766.0` &lt;dbl&gt;,
+## #   `1775.0` &lt;dbl&gt;, `1780.0` &lt;dbl&gt;, `1785.0` &lt;dbl&gt;, `1791.0` &lt;dbl&gt;,
+## #   `1800.0` &lt;dbl&gt;, `1810.0` &lt;dbl&gt;, `1815.0` &lt;dbl&gt;, `1825.0` &lt;dbl&gt;,
+## #   `1835.0` &lt;dbl&gt;, `1840.0` &lt;dbl&gt;, `1845.0` &lt;dbl&gt;, `1855.0` &lt;dbl&gt;,
+## #   `1860.0` &lt;dbl&gt;, `1865.0` &lt;dbl&gt;, `1866.0` &lt;dbl&gt;, `1870.0` &lt;dbl&gt;,
+## #   `1875.0` &lt;dbl&gt;, `1879.0` &lt;dbl&gt;, `1880.0` &lt;dbl&gt;, `1885.0` &lt;dbl&gt;,
+## #   `1887.0` &lt;dbl&gt;, `1890.0` &lt;dbl&gt;, `1895.0` &lt;dbl&gt;, `1897.0` &lt;dbl&gt;,
+## #   `1900.0` &lt;dbl&gt;, `1901.0` &lt;dbl&gt;, `1903.0` &lt;dbl&gt;, `1905.0` &lt;dbl&gt;,
+## #   `1906.0` &lt;dbl&gt;, `1907.0` &lt;dbl&gt;, `1910.0` &lt;dbl&gt;, `1911.0` &lt;dbl&gt;,
+## #   `1915.0` &lt;dbl&gt;, `1920.0` &lt;dbl&gt;, `1921.0` &lt;dbl&gt;, `1925.0` &lt;dbl&gt;,
+## #   `1928.0` &lt;dbl&gt;, `1930.0` &lt;dbl&gt;, `1931.0` &lt;dbl&gt;, `1935.0` &lt;dbl&gt;,
+## #   `1937.0` &lt;dbl&gt;, `1939.0` &lt;dbl&gt;, `1940.0` &lt;dbl&gt;, `1941.0` &lt;dbl&gt;,
+## #   `1942.0` &lt;dbl&gt;, `1943.0` &lt;dbl&gt;, `1944.0` &lt;dbl&gt;, `1945.0` &lt;dbl&gt;,
+## #   `1946.0` &lt;dbl&gt;, `1947.0` &lt;dbl&gt;, `1948.0` &lt;dbl&gt;, `1949.0` &lt;dbl&gt;,
+## #   `1950.0` &lt;dbl&gt;, `1951.0` &lt;dbl&gt;, `1952.0` &lt;dbl&gt;, `1953.0` &lt;dbl&gt;,
+## #   `1954.0` &lt;dbl&gt;, `1955.0` &lt;dbl&gt;, `1956.0` &lt;dbl&gt;, `1957.0` &lt;dbl&gt;,
+## #   `1958.0` &lt;dbl&gt;, `1959.0` &lt;dbl&gt;, `1960.0` &lt;dbl&gt;, `1961.0` &lt;dbl&gt;,
+## #   `1962.0` &lt;dbl&gt;, `1963.0` &lt;dbl&gt;, `1964.0` &lt;dbl&gt;, `1965.0` &lt;dbl&gt;,
+## #   `1966.0` &lt;dbl&gt;, `1967.0` &lt;dbl&gt;, `1968.0` &lt;dbl&gt;, `1969.0` &lt;dbl&gt;,
+## #   `1970.0` &lt;dbl&gt;, `1971.0` &lt;dbl&gt;, `1972.0` &lt;dbl&gt;, `1973.0` &lt;dbl&gt;,
+## #   `1974.0` &lt;dbl&gt;, `1975.0` &lt;dbl&gt;, `1976.0` &lt;dbl&gt;, `1977.0` &lt;dbl&gt;,
+## #   `1978.0` &lt;dbl&gt;, `1979.0` &lt;dbl&gt;, `1980.0` &lt;dbl&gt;, `1981.0` &lt;dbl&gt;,
+## #   `1982.0` &lt;dbl&gt;, `1983.0` &lt;dbl&gt;, `1984.0` &lt;dbl&gt;, `1985.0` &lt;dbl&gt;,
+## #   `1986.0` &lt;dbl&gt;, `1987.0` &lt;dbl&gt;, `1988.0` &lt;dbl&gt;, `1989.0` &lt;dbl&gt;,
+## #   `1990.0` &lt;dbl&gt;, `1991.0` &lt;dbl&gt;, `1992.0` &lt;dbl&gt;, `1993.0` &lt;dbl&gt;,
+## #   `1994.0` &lt;dbl&gt;, `1995.0` &lt;dbl&gt;, `1996.0` &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>marriage_tidy &lt;- age_marriage %&gt;% 
+  rename(country = 1) %&gt;% 
+  gather(years, age_first_marriage, -country) %&gt;% 
+  mutate(years = readr::parse_number(years))
+marriage_tidy</code></pre>
+<pre><code>## # A tibble: 21,460 x 3
+##    country     years age_first_marriage
+##    &lt;chr&gt;       &lt;dbl&gt;              &lt;dbl&gt;
+##  1 Afghanistan 1616.                 NA
+##  2 Albania     1616.                 NA
+##  3 Algeria     1616.                 NA
+##  4 Angola      1616.                 NA
+##  5 Argentina   1616.                 NA
+##  6 Armenia     1616.                 NA
+##  7 Australia   1616.                 NA
+##  8 Austria     1616.                 NA
+##  9 Azerbaijan  1616.                 NA
+## 10 Bahamas     1616.                 NA
+## # ... with 21,450 more rows</code></pre>
 </div>
 <div id="explore-questions" class="section level2">
 <h2>Explore questions</h2>

@@ -106,6 +106,21 @@ internet_tidy <- internet %>%
     - Remember, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).
 
 
+```{r}
+# another example dataset
+age_marriage <- read_xlsx(here::here("data", "indicator age of marriage.xlsx"),
+                      sheet = 1) 
+
+age_marriage
+
+marriage_tidy <- age_marriage %>% 
+  rename(country = 1) %>% 
+  gather(years, age_first_marriage, -country) %>% 
+  mutate(years = readr::parse_number(years))
+marriage_tidy
+```
+
+
 ## Explore questions
 
 In the [R4DS Exploratory Data Analysis chapter](http://r4ds.had.co.nz/exploratory-data-analysis.html), the authors
