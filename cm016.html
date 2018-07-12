@@ -501,6 +501,50 @@ marriage_tidy</code></pre>
 ##  9 Azerbaijan  1616.                 NA
 ## 10 Bahamas     1616.                 NA
 ## # ... with 21,450 more rows</code></pre>
+<p>Pathological in the same way as the previous…</p>
+<pre class="r"><code># yet another example dataset
+alcohol &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator alcohol consumption  20100830.xlsx&quot;),
+                      sheet = 1) </code></pre>
+<pre><code>## New names:
+##  -&gt; ..1</code></pre>
+<pre class="r"><code>alcohol</code></pre>
+<pre><code>## # A tibble: 189 x 25
+##    ..1      `1985.0` `1986.0` `1987.0` `1988.0` `1989.0` `1990.0` `1991.0`
+##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 Afghani…       NA       NA       NA       NA       NA       NA       NA
+##  2 Albania        NA       NA       NA       NA       NA       NA       NA
+##  3 Algeria        NA       NA       NA       NA       NA       NA       NA
+##  4 Andorra        NA       NA       NA       NA       NA       NA       NA
+##  5 Angola         NA       NA       NA       NA       NA       NA       NA
+##  6 Antigua…       NA       NA       NA       NA       NA       NA       NA
+##  7 Argenti…       NA       NA       NA       NA       NA       NA       NA
+##  8 Armenia        NA       NA       NA       NA       NA       NA       NA
+##  9 Austral…       NA       NA       NA       NA       NA       NA       NA
+## 10 Austria        NA       NA       NA       NA       NA       NA       NA
+## # ... with 179 more rows, and 17 more variables: `1992.0` &lt;dbl&gt;,
+## #   `1993.0` &lt;dbl&gt;, `1994.0` &lt;dbl&gt;, `1995.0` &lt;dbl&gt;, `1996.0` &lt;dbl&gt;,
+## #   `1997.0` &lt;lgl&gt;, `1998.0` &lt;dbl&gt;, `1999.0` &lt;lgl&gt;, `2000.0` &lt;dbl&gt;,
+## #   `2001.0` &lt;dbl&gt;, `2002.0` &lt;dbl&gt;, `2003.0` &lt;dbl&gt;, `2004.0` &lt;dbl&gt;,
+## #   `2005.0` &lt;dbl&gt;, `2006.0` &lt;dbl&gt;, `2007.0` &lt;dbl&gt;, `2008.0` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>alc_tidy &lt;- alcohol %&gt;% 
+  rename(country = 1) %&gt;% 
+  gather(years, alc_per_adult, -country) %&gt;% 
+  mutate(years = readr::parse_number(years))
+alc_tidy</code></pre>
+<pre><code>## # A tibble: 4,536 x 3
+##    country             years alc_per_adult
+##    &lt;chr&gt;               &lt;dbl&gt;         &lt;dbl&gt;
+##  1 Afghanistan         1985.            NA
+##  2 Albania             1985.            NA
+##  3 Algeria             1985.            NA
+##  4 Andorra             1985.            NA
+##  5 Angola              1985.            NA
+##  6 Antigua and Barbuda 1985.            NA
+##  7 Argentina           1985.            NA
+##  8 Armenia             1985.            NA
+##  9 Australia           1985.            NA
+## 10 Austria             1985.            NA
+## # ... with 4,526 more rows</code></pre>
 </div>
 <div id="explore-questions" class="section level2">
 <h2>Explore questions</h2>

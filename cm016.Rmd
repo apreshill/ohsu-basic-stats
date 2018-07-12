@@ -120,6 +120,22 @@ marriage_tidy <- age_marriage %>%
 marriage_tidy
 ```
 
+Pathological in the same way as the previous...
+
+```{r}
+# yet another example dataset
+alcohol <- read_xlsx(here::here("data", "indicator alcohol consumption  20100830.xlsx"),
+                      sheet = 1) 
+
+alcohol
+
+alc_tidy <- alcohol %>% 
+  rename(country = 1) %>% 
+  gather(years, alc_per_adult, -country) %>% 
+  mutate(years = readr::parse_number(years))
+alc_tidy
+```
+
 
 ## Explore questions
 
