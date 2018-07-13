@@ -377,7 +377,8 @@ install_github(&quot;apreshill/reprohealth&quot;) # install the package</code></
 <p>Then at the top of your lab, copy and paste this code:</p>
 <pre class="r"><code>library(reprohealth) # load the package
 wb_reprohealth # call the data
-wb_stats &lt;- wb_reprohealth # save the data to your local environment</code></pre>
+wb_stats &lt;- wb_reprohealth %&gt;% # save the data to your local environment
+  mutate(year = parse_number(year)) # fix year</code></pre>
 <p>You can name <code>wb_stats</code> anything else you want, this is just an example.</p>
 </div>
 <div id="explore-the-wb_reprohealth-data" class="section level2">
@@ -403,30 +404,137 @@ wb_stats &lt;- wb_reprohealth # save the data to your local environment</code></
   clean_names() # highly recommended
 
 internet</code></pre>
-<pre><code>## # A tibble: 275 x 23
-##    internet_users_per_… x1990 x1991 x1992 x1993    x1994    x1995    x1996
-##    &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-##  1 Abkhazia               NA     NA    NA    NA NA       NA       NA      
-##  2 Afghanistan             0.    NA    NA    NA NA       NA       NA      
-##  3 Akrotiri and Dhekel…   NA     NA    NA    NA NA       NA       NA      
-##  4 Albania                 0.    NA    NA    NA NA        0.0112   3.22e-2
-##  5 Algeria                 0.    NA    NA    NA  3.61e-4  0.00177  1.74e-3
-##  6 American Samoa          0.    NA    NA    NA NA       NA       NA      
-##  7 Andorra                 0.    NA    NA    NA NA       NA        1.53e+0
-##  8 Angola                  0.    NA    NA    NA NA       NA        7.76e-4
-##  9 Anguilla               NA     NA    NA    NA NA       NA       NA      
-## 10 Antigua and Barbuda     0.    NA    NA    NA NA        2.20     2.86e+0
-## # ... with 265 more rows, and 15 more variables: x1997 &lt;dbl&gt;, x1998 &lt;dbl&gt;,
-## #   x1999 &lt;dbl&gt;, x2000 &lt;dbl&gt;, x2001 &lt;dbl&gt;, x2002 &lt;dbl&gt;, x2003 &lt;dbl&gt;,
-## #   x2004 &lt;dbl&gt;, x2005 &lt;dbl&gt;, x2006 &lt;dbl&gt;, x2007 &lt;dbl&gt;, x2008 &lt;dbl&gt;,
-## #   x2009 &lt;dbl&gt;, x2010 &lt;dbl&gt;, x2011 &lt;dbl&gt;</code></pre>
+<pre><code># A tibble: 275 x 23
+   internet_users_per_… x1990 x1991 x1992 x1993    x1994    x1995    x1996
+   &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Abkhazia               NA     NA    NA    NA NA       NA       NA      
+ 2 Afghanistan             0.    NA    NA    NA NA       NA       NA      
+ 3 Akrotiri and Dhekel…   NA     NA    NA    NA NA       NA       NA      
+ 4 Albania                 0.    NA    NA    NA NA        0.0112   3.22e-2
+ 5 Algeria                 0.    NA    NA    NA  3.61e-4  0.00177  1.74e-3
+ 6 American Samoa          0.    NA    NA    NA NA       NA       NA      
+ 7 Andorra                 0.    NA    NA    NA NA       NA        1.53e+0
+ 8 Angola                  0.    NA    NA    NA NA       NA        7.76e-4
+ 9 Anguilla               NA     NA    NA    NA NA       NA       NA      
+10 Antigua and Barbuda     0.    NA    NA    NA NA        2.20     2.86e+0
+# ... with 265 more rows, and 15 more variables: x1997 &lt;dbl&gt;, x1998 &lt;dbl&gt;,
+#   x1999 &lt;dbl&gt;, x2000 &lt;dbl&gt;, x2001 &lt;dbl&gt;, x2002 &lt;dbl&gt;, x2003 &lt;dbl&gt;,
+#   x2004 &lt;dbl&gt;, x2005 &lt;dbl&gt;, x2006 &lt;dbl&gt;, x2007 &lt;dbl&gt;, x2008 &lt;dbl&gt;,
+#   x2009 &lt;dbl&gt;, x2010 &lt;dbl&gt;, x2011 &lt;dbl&gt;</code></pre>
 <ul>
 <li>Answer the same 5 questions as you did above for the <code>reprohealth</code> data.</li>
 <li>Gather the data (most data from gapminder has columns in years).</li>
 </ul>
-<pre class="r"><code>internet_tidy &lt;- internet %&gt;% 
-  gather(years, users_per_100, -internet_users_per_100_people) %&gt;% 
-  mutate(years = readr::parse_number(years))</code></pre>
+<pre class="r"><code>internet_tidy &lt;- internet %&gt;%
+  rename(country = 1) %&gt;% 
+  gather(year, users_per_100, -country) %&gt;% 
+  mutate(year = readr::parse_number(year)) </code></pre>
+<pre class="r"><code># another example dataset
+age_marriage &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator age of marriage.xlsx&quot;),
+                      sheet = 1) 
+
+age_marriage</code></pre>
+<pre><code># A tibble: 185 x 117
+   ..1      `1616.0` `1666.0` `1685.0` `1710.0` `1716.0` `1735.0` `1760.0`
+   &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Afghani…       NA       NA       NA       NA       NA       NA       NA
+ 2 Albania        NA       NA       NA       NA       NA       NA       NA
+ 3 Algeria        NA       NA       NA       NA       NA       NA       NA
+ 4 Angola         NA       NA       NA       NA       NA       NA       NA
+ 5 Argenti…       NA       NA       NA       NA       NA       NA       NA
+ 6 Armenia        NA       NA       NA       NA       NA       NA       NA
+ 7 Austral…       NA       NA       NA       NA       NA       NA       NA
+ 8 Austria        NA       NA       NA       NA       NA       NA       NA
+ 9 Azerbai…       NA       NA       NA       NA       NA       NA       NA
+10 Bahamas        NA       NA       NA       NA       NA       NA       NA
+# ... with 175 more rows, and 109 more variables: `1766.0` &lt;dbl&gt;,
+#   `1775.0` &lt;dbl&gt;, `1780.0` &lt;dbl&gt;, `1785.0` &lt;dbl&gt;, `1791.0` &lt;dbl&gt;,
+#   `1800.0` &lt;dbl&gt;, `1810.0` &lt;dbl&gt;, `1815.0` &lt;dbl&gt;, `1825.0` &lt;dbl&gt;,
+#   `1835.0` &lt;dbl&gt;, `1840.0` &lt;dbl&gt;, `1845.0` &lt;dbl&gt;, `1855.0` &lt;dbl&gt;,
+#   `1860.0` &lt;dbl&gt;, `1865.0` &lt;dbl&gt;, `1866.0` &lt;dbl&gt;, `1870.0` &lt;dbl&gt;,
+#   `1875.0` &lt;dbl&gt;, `1879.0` &lt;dbl&gt;, `1880.0` &lt;dbl&gt;, `1885.0` &lt;dbl&gt;,
+#   `1887.0` &lt;dbl&gt;, `1890.0` &lt;dbl&gt;, `1895.0` &lt;dbl&gt;, `1897.0` &lt;dbl&gt;,
+#   `1900.0` &lt;dbl&gt;, `1901.0` &lt;dbl&gt;, `1903.0` &lt;dbl&gt;, `1905.0` &lt;dbl&gt;,
+#   `1906.0` &lt;dbl&gt;, `1907.0` &lt;dbl&gt;, `1910.0` &lt;dbl&gt;, `1911.0` &lt;dbl&gt;,
+#   `1915.0` &lt;dbl&gt;, `1920.0` &lt;dbl&gt;, `1921.0` &lt;dbl&gt;, `1925.0` &lt;dbl&gt;,
+#   `1928.0` &lt;dbl&gt;, `1930.0` &lt;dbl&gt;, `1931.0` &lt;dbl&gt;, `1935.0` &lt;dbl&gt;,
+#   `1937.0` &lt;dbl&gt;, `1939.0` &lt;dbl&gt;, `1940.0` &lt;dbl&gt;, `1941.0` &lt;dbl&gt;,
+#   `1942.0` &lt;dbl&gt;, `1943.0` &lt;dbl&gt;, `1944.0` &lt;dbl&gt;, `1945.0` &lt;dbl&gt;,
+#   `1946.0` &lt;dbl&gt;, `1947.0` &lt;dbl&gt;, `1948.0` &lt;dbl&gt;, `1949.0` &lt;dbl&gt;,
+#   `1950.0` &lt;dbl&gt;, `1951.0` &lt;dbl&gt;, `1952.0` &lt;dbl&gt;, `1953.0` &lt;dbl&gt;,
+#   `1954.0` &lt;dbl&gt;, `1955.0` &lt;dbl&gt;, `1956.0` &lt;dbl&gt;, `1957.0` &lt;dbl&gt;,
+#   `1958.0` &lt;dbl&gt;, `1959.0` &lt;dbl&gt;, `1960.0` &lt;dbl&gt;, `1961.0` &lt;dbl&gt;,
+#   `1962.0` &lt;dbl&gt;, `1963.0` &lt;dbl&gt;, `1964.0` &lt;dbl&gt;, `1965.0` &lt;dbl&gt;,
+#   `1966.0` &lt;dbl&gt;, `1967.0` &lt;dbl&gt;, `1968.0` &lt;dbl&gt;, `1969.0` &lt;dbl&gt;,
+#   `1970.0` &lt;dbl&gt;, `1971.0` &lt;dbl&gt;, `1972.0` &lt;dbl&gt;, `1973.0` &lt;dbl&gt;,
+#   `1974.0` &lt;dbl&gt;, `1975.0` &lt;dbl&gt;, `1976.0` &lt;dbl&gt;, `1977.0` &lt;dbl&gt;,
+#   `1978.0` &lt;dbl&gt;, `1979.0` &lt;dbl&gt;, `1980.0` &lt;dbl&gt;, `1981.0` &lt;dbl&gt;,
+#   `1982.0` &lt;dbl&gt;, `1983.0` &lt;dbl&gt;, `1984.0` &lt;dbl&gt;, `1985.0` &lt;dbl&gt;,
+#   `1986.0` &lt;dbl&gt;, `1987.0` &lt;dbl&gt;, `1988.0` &lt;dbl&gt;, `1989.0` &lt;dbl&gt;,
+#   `1990.0` &lt;dbl&gt;, `1991.0` &lt;dbl&gt;, `1992.0` &lt;dbl&gt;, `1993.0` &lt;dbl&gt;,
+#   `1994.0` &lt;dbl&gt;, `1995.0` &lt;dbl&gt;, `1996.0` &lt;dbl&gt;, …</code></pre>
+<pre class="r"><code>marriage_tidy &lt;- age_marriage %&gt;% 
+  rename(country = 1) %&gt;% 
+  gather(year, age_first_marriage, -country) %&gt;% 
+  mutate(year = readr::parse_number(year))
+marriage_tidy</code></pre>
+<pre><code># A tibble: 21,460 x 3
+   country      year age_first_marriage
+   &lt;chr&gt;       &lt;dbl&gt;              &lt;dbl&gt;
+ 1 Afghanistan 1616.                 NA
+ 2 Albania     1616.                 NA
+ 3 Algeria     1616.                 NA
+ 4 Angola      1616.                 NA
+ 5 Argentina   1616.                 NA
+ 6 Armenia     1616.                 NA
+ 7 Australia   1616.                 NA
+ 8 Austria     1616.                 NA
+ 9 Azerbaijan  1616.                 NA
+10 Bahamas     1616.                 NA
+# ... with 21,450 more rows</code></pre>
+<p>Pathological in the same way as the previous…</p>
+<pre class="r"><code># yet another example dataset
+alcohol &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator alcohol consumption  20100830.xlsx&quot;),
+                      sheet = 1) 
+
+alcohol</code></pre>
+<pre><code># A tibble: 189 x 25
+   ..1      `1985.0` `1986.0` `1987.0` `1988.0` `1989.0` `1990.0` `1991.0`
+   &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Afghani…       NA       NA       NA       NA       NA       NA       NA
+ 2 Albania        NA       NA       NA       NA       NA       NA       NA
+ 3 Algeria        NA       NA       NA       NA       NA       NA       NA
+ 4 Andorra        NA       NA       NA       NA       NA       NA       NA
+ 5 Angola         NA       NA       NA       NA       NA       NA       NA
+ 6 Antigua…       NA       NA       NA       NA       NA       NA       NA
+ 7 Argenti…       NA       NA       NA       NA       NA       NA       NA
+ 8 Armenia        NA       NA       NA       NA       NA       NA       NA
+ 9 Austral…       NA       NA       NA       NA       NA       NA       NA
+10 Austria        NA       NA       NA       NA       NA       NA       NA
+# ... with 179 more rows, and 17 more variables: `1992.0` &lt;dbl&gt;,
+#   `1993.0` &lt;dbl&gt;, `1994.0` &lt;dbl&gt;, `1995.0` &lt;dbl&gt;, `1996.0` &lt;dbl&gt;,
+#   `1997.0` &lt;lgl&gt;, `1998.0` &lt;dbl&gt;, `1999.0` &lt;lgl&gt;, `2000.0` &lt;dbl&gt;,
+#   `2001.0` &lt;dbl&gt;, `2002.0` &lt;dbl&gt;, `2003.0` &lt;dbl&gt;, `2004.0` &lt;dbl&gt;,
+#   `2005.0` &lt;dbl&gt;, `2006.0` &lt;dbl&gt;, `2007.0` &lt;dbl&gt;, `2008.0` &lt;dbl&gt;</code></pre>
+<pre class="r"><code>alc_tidy &lt;- alcohol %&gt;% 
+  rename(country = 1) %&gt;% 
+  gather(year, alc_per_adult, -country) %&gt;% 
+  mutate(year = readr::parse_number(year))
+alc_tidy</code></pre>
+<pre><code># A tibble: 4,536 x 3
+   country              year alc_per_adult
+   &lt;chr&gt;               &lt;dbl&gt;         &lt;dbl&gt;
+ 1 Afghanistan         1985.            NA
+ 2 Albania             1985.            NA
+ 3 Algeria             1985.            NA
+ 4 Andorra             1985.            NA
+ 5 Angola              1985.            NA
+ 6 Antigua and Barbuda 1985.            NA
+ 7 Argentina           1985.            NA
+ 8 Armenia             1985.            NA
+ 9 Australia           1985.            NA
+10 Austria             1985.            NA
+# ... with 4,526 more rows</code></pre>
 <ul>
 <li>Join this new data using <code>dplyr</code> with the <code>reprohealth</code> data you have been working with, and make some observations about the process and result. You may need:
 <ul>
@@ -437,114 +545,13 @@ internet</code></pre>
 <li>Remember, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).</li>
 </ul></li>
 </ul>
-<pre class="r"><code># another example dataset
-age_marriage &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator age of marriage.xlsx&quot;),
-                      sheet = 1) </code></pre>
-<pre><code>## New names:
-##  -&gt; ..1</code></pre>
-<pre class="r"><code>age_marriage</code></pre>
-<pre><code>## # A tibble: 185 x 117
-##    ..1      `1616.0` `1666.0` `1685.0` `1710.0` `1716.0` `1735.0` `1760.0`
-##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-##  1 Afghani…       NA       NA       NA       NA       NA       NA       NA
-##  2 Albania        NA       NA       NA       NA       NA       NA       NA
-##  3 Algeria        NA       NA       NA       NA       NA       NA       NA
-##  4 Angola         NA       NA       NA       NA       NA       NA       NA
-##  5 Argenti…       NA       NA       NA       NA       NA       NA       NA
-##  6 Armenia        NA       NA       NA       NA       NA       NA       NA
-##  7 Austral…       NA       NA       NA       NA       NA       NA       NA
-##  8 Austria        NA       NA       NA       NA       NA       NA       NA
-##  9 Azerbai…       NA       NA       NA       NA       NA       NA       NA
-## 10 Bahamas        NA       NA       NA       NA       NA       NA       NA
-## # ... with 175 more rows, and 109 more variables: `1766.0` &lt;dbl&gt;,
-## #   `1775.0` &lt;dbl&gt;, `1780.0` &lt;dbl&gt;, `1785.0` &lt;dbl&gt;, `1791.0` &lt;dbl&gt;,
-## #   `1800.0` &lt;dbl&gt;, `1810.0` &lt;dbl&gt;, `1815.0` &lt;dbl&gt;, `1825.0` &lt;dbl&gt;,
-## #   `1835.0` &lt;dbl&gt;, `1840.0` &lt;dbl&gt;, `1845.0` &lt;dbl&gt;, `1855.0` &lt;dbl&gt;,
-## #   `1860.0` &lt;dbl&gt;, `1865.0` &lt;dbl&gt;, `1866.0` &lt;dbl&gt;, `1870.0` &lt;dbl&gt;,
-## #   `1875.0` &lt;dbl&gt;, `1879.0` &lt;dbl&gt;, `1880.0` &lt;dbl&gt;, `1885.0` &lt;dbl&gt;,
-## #   `1887.0` &lt;dbl&gt;, `1890.0` &lt;dbl&gt;, `1895.0` &lt;dbl&gt;, `1897.0` &lt;dbl&gt;,
-## #   `1900.0` &lt;dbl&gt;, `1901.0` &lt;dbl&gt;, `1903.0` &lt;dbl&gt;, `1905.0` &lt;dbl&gt;,
-## #   `1906.0` &lt;dbl&gt;, `1907.0` &lt;dbl&gt;, `1910.0` &lt;dbl&gt;, `1911.0` &lt;dbl&gt;,
-## #   `1915.0` &lt;dbl&gt;, `1920.0` &lt;dbl&gt;, `1921.0` &lt;dbl&gt;, `1925.0` &lt;dbl&gt;,
-## #   `1928.0` &lt;dbl&gt;, `1930.0` &lt;dbl&gt;, `1931.0` &lt;dbl&gt;, `1935.0` &lt;dbl&gt;,
-## #   `1937.0` &lt;dbl&gt;, `1939.0` &lt;dbl&gt;, `1940.0` &lt;dbl&gt;, `1941.0` &lt;dbl&gt;,
-## #   `1942.0` &lt;dbl&gt;, `1943.0` &lt;dbl&gt;, `1944.0` &lt;dbl&gt;, `1945.0` &lt;dbl&gt;,
-## #   `1946.0` &lt;dbl&gt;, `1947.0` &lt;dbl&gt;, `1948.0` &lt;dbl&gt;, `1949.0` &lt;dbl&gt;,
-## #   `1950.0` &lt;dbl&gt;, `1951.0` &lt;dbl&gt;, `1952.0` &lt;dbl&gt;, `1953.0` &lt;dbl&gt;,
-## #   `1954.0` &lt;dbl&gt;, `1955.0` &lt;dbl&gt;, `1956.0` &lt;dbl&gt;, `1957.0` &lt;dbl&gt;,
-## #   `1958.0` &lt;dbl&gt;, `1959.0` &lt;dbl&gt;, `1960.0` &lt;dbl&gt;, `1961.0` &lt;dbl&gt;,
-## #   `1962.0` &lt;dbl&gt;, `1963.0` &lt;dbl&gt;, `1964.0` &lt;dbl&gt;, `1965.0` &lt;dbl&gt;,
-## #   `1966.0` &lt;dbl&gt;, `1967.0` &lt;dbl&gt;, `1968.0` &lt;dbl&gt;, `1969.0` &lt;dbl&gt;,
-## #   `1970.0` &lt;dbl&gt;, `1971.0` &lt;dbl&gt;, `1972.0` &lt;dbl&gt;, `1973.0` &lt;dbl&gt;,
-## #   `1974.0` &lt;dbl&gt;, `1975.0` &lt;dbl&gt;, `1976.0` &lt;dbl&gt;, `1977.0` &lt;dbl&gt;,
-## #   `1978.0` &lt;dbl&gt;, `1979.0` &lt;dbl&gt;, `1980.0` &lt;dbl&gt;, `1981.0` &lt;dbl&gt;,
-## #   `1982.0` &lt;dbl&gt;, `1983.0` &lt;dbl&gt;, `1984.0` &lt;dbl&gt;, `1985.0` &lt;dbl&gt;,
-## #   `1986.0` &lt;dbl&gt;, `1987.0` &lt;dbl&gt;, `1988.0` &lt;dbl&gt;, `1989.0` &lt;dbl&gt;,
-## #   `1990.0` &lt;dbl&gt;, `1991.0` &lt;dbl&gt;, `1992.0` &lt;dbl&gt;, `1993.0` &lt;dbl&gt;,
-## #   `1994.0` &lt;dbl&gt;, `1995.0` &lt;dbl&gt;, `1996.0` &lt;dbl&gt;, …</code></pre>
-<pre class="r"><code>marriage_tidy &lt;- age_marriage %&gt;% 
-  rename(country = 1) %&gt;% 
-  gather(years, age_first_marriage, -country) %&gt;% 
-  mutate(years = readr::parse_number(years))
-marriage_tidy</code></pre>
-<pre><code>## # A tibble: 21,460 x 3
-##    country     years age_first_marriage
-##    &lt;chr&gt;       &lt;dbl&gt;              &lt;dbl&gt;
-##  1 Afghanistan 1616.                 NA
-##  2 Albania     1616.                 NA
-##  3 Algeria     1616.                 NA
-##  4 Angola      1616.                 NA
-##  5 Argentina   1616.                 NA
-##  6 Armenia     1616.                 NA
-##  7 Australia   1616.                 NA
-##  8 Austria     1616.                 NA
-##  9 Azerbaijan  1616.                 NA
-## 10 Bahamas     1616.                 NA
-## # ... with 21,450 more rows</code></pre>
-<p>Pathological in the same way as the previous…</p>
-<pre class="r"><code># yet another example dataset
-alcohol &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator alcohol consumption  20100830.xlsx&quot;),
-                      sheet = 1) </code></pre>
-<pre><code>## New names:
-##  -&gt; ..1</code></pre>
-<pre class="r"><code>alcohol</code></pre>
-<pre><code>## # A tibble: 189 x 25
-##    ..1      `1985.0` `1986.0` `1987.0` `1988.0` `1989.0` `1990.0` `1991.0`
-##    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-##  1 Afghani…       NA       NA       NA       NA       NA       NA       NA
-##  2 Albania        NA       NA       NA       NA       NA       NA       NA
-##  3 Algeria        NA       NA       NA       NA       NA       NA       NA
-##  4 Andorra        NA       NA       NA       NA       NA       NA       NA
-##  5 Angola         NA       NA       NA       NA       NA       NA       NA
-##  6 Antigua…       NA       NA       NA       NA       NA       NA       NA
-##  7 Argenti…       NA       NA       NA       NA       NA       NA       NA
-##  8 Armenia        NA       NA       NA       NA       NA       NA       NA
-##  9 Austral…       NA       NA       NA       NA       NA       NA       NA
-## 10 Austria        NA       NA       NA       NA       NA       NA       NA
-## # ... with 179 more rows, and 17 more variables: `1992.0` &lt;dbl&gt;,
-## #   `1993.0` &lt;dbl&gt;, `1994.0` &lt;dbl&gt;, `1995.0` &lt;dbl&gt;, `1996.0` &lt;dbl&gt;,
-## #   `1997.0` &lt;lgl&gt;, `1998.0` &lt;dbl&gt;, `1999.0` &lt;lgl&gt;, `2000.0` &lt;dbl&gt;,
-## #   `2001.0` &lt;dbl&gt;, `2002.0` &lt;dbl&gt;, `2003.0` &lt;dbl&gt;, `2004.0` &lt;dbl&gt;,
-## #   `2005.0` &lt;dbl&gt;, `2006.0` &lt;dbl&gt;, `2007.0` &lt;dbl&gt;, `2008.0` &lt;dbl&gt;</code></pre>
-<pre class="r"><code>alc_tidy &lt;- alcohol %&gt;% 
-  rename(country = 1) %&gt;% 
-  gather(years, alc_per_adult, -country) %&gt;% 
-  mutate(years = readr::parse_number(years))
-alc_tidy</code></pre>
-<pre><code>## # A tibble: 4,536 x 3
-##    country             years alc_per_adult
-##    &lt;chr&gt;               &lt;dbl&gt;         &lt;dbl&gt;
-##  1 Afghanistan         1985.            NA
-##  2 Albania             1985.            NA
-##  3 Algeria             1985.            NA
-##  4 Andorra             1985.            NA
-##  5 Angola              1985.            NA
-##  6 Antigua and Barbuda 1985.            NA
-##  7 Argentina           1985.            NA
-##  8 Armenia             1985.            NA
-##  9 Australia           1985.            NA
-## 10 Austria             1985.            NA
-## # ... with 4,526 more rows</code></pre>
+<pre class="r"><code># let&#39;s do this
+int_repro &lt;- wb_stats %&gt;% 
+  left_join(internet_tidy)
+agem_repro &lt;- wb_stats %&gt;% 
+  left_join(marriage_tidy)
+alc_repro &lt;- wb_stats %&gt;% 
+  left_join(alc_tidy)</code></pre>
 </div>
 <div id="explore-questions" class="section level2">
 <h2>Explore questions</h2>

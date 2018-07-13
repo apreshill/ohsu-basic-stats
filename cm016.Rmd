@@ -7,6 +7,17 @@ output:
     toc: TRUE
     toc_float: TRUE
 ---
+
+```{r setup, include=FALSE}
+# leave this chunk alone
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300)
+library(reprohealth)
+library(tidyverse)
+wb_stats <- wb_reprohealth %>%
+  mutate(year = parse_number(year)) 
+```
 ## Overview
 
 A complete knitted `html` file is due on Sakai by beginning of class Tuesday July 17th (2:30pm). In class on that Tuesday, you'll pair up with another student and review each others' reports. Your final lab is due on Sakai by beginning of class Thursday July 19th (2:30pm). 
@@ -57,7 +68,8 @@ Then at the top of your lab, copy and paste this code:
 ``` r
 library(reprohealth) # load the package
 wb_reprohealth # call the data
-wb_stats <- wb_reprohealth # save the data to your local environment
+wb_stats <- wb_reprohealth %>% # save the data to your local environment
+  mutate(year = parse_number(year)) # fix year
 ```
 
 You can name `wb_stats` anything else you want, this is just an example.
@@ -92,19 +104,11 @@ internet
 - Answer the same 5 questions as you did above for the `reprohealth` data.
 - Gather the data (most data from gapminder has columns in years).
 ```{r}
-internet_tidy <- internet %>% 
-  gather(years, users_per_100, -internet_users_per_100_people) %>% 
-  mutate(years = readr::parse_number(years))
+internet_tidy <- internet %>%
+  rename(country = 1) %>% 
+  gather(year, users_per_100, -country) %>% 
+  mutate(year = readr::parse_number(year)) 
 ```
-
-
-- Join this new data using `dplyr` with the `reprohealth` data you have been working with, and make some observations about the process and result. You may need:
-    - [ModernDive section you read on joins](http://moderndive.netlify.com/5-wrangling.html#joins)
-    - This [tutorial by Jenny Bryan](http://stat545.com/bit001_dplyr-cheatsheet.html)
-    - This [chapter in R4DS](http://r4ds.had.co.nz/relational-data.html)
-    - **Hint!:** you'll probably need to use `tidyr::gather` on your new dataset first, before the join. Tread carefully here! 
-    - Remember, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).
-
 
 ```{r}
 # another example dataset
@@ -115,8 +119,8 @@ age_marriage
 
 marriage_tidy <- age_marriage %>% 
   rename(country = 1) %>% 
-  gather(years, age_first_marriage, -country) %>% 
-  mutate(years = readr::parse_number(years))
+  gather(year, age_first_marriage, -country) %>% 
+  mutate(year = readr::parse_number(year))
 marriage_tidy
 ```
 
@@ -131,10 +135,29 @@ alcohol
 
 alc_tidy <- alcohol %>% 
   rename(country = 1) %>% 
-  gather(years, alc_per_adult, -country) %>% 
-  mutate(years = readr::parse_number(years))
+  gather(year, alc_per_adult, -country) %>% 
+  mutate(year = readr::parse_number(year))
 alc_tidy
 ```
+
+- Join this new data using `dplyr` with the `reprohealth` data you have been working with, and make some observations about the process and result. You may need:
+    - [ModernDive section you read on joins](http://moderndive.netlify.com/5-wrangling.html#joins)
+    - This [tutorial by Jenny Bryan](http://stat545.com/bit001_dplyr-cheatsheet.html)
+    - This [chapter in R4DS](http://r4ds.had.co.nz/relational-data.html)
+    - **Hint!:** you'll probably need to use `tidyr::gather` on your new dataset first, before the join. Tread carefully here! 
+    - Remember, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule).
+
+```{r}
+# let's do this
+int_repro <- wb_stats %>% 
+  left_join(internet_tidy)
+agem_repro <- wb_stats %>% 
+  left_join(marriage_tidy)
+alc_repro <- wb_stats %>% 
+  left_join(alc_tidy)
+```
+
+
 
 
 ## Explore questions
