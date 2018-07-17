@@ -1,5 +1,5 @@
 ---
-title: "CONJ620: CM 1.7"
+title: "CONJ620: CM 2.1"
 subtitle: "Peer Review"
 author: "Alison Hill"
 output:
