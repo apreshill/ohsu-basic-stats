@@ -382,12 +382,12 @@ crime &lt;- read_table(&quot;http://users.stat.ufl.edu/~winner/data/beerhall.dat
 <li>What is the independent variable?</li>
 <li>Copy and paste the provided equation that starts/ends with <code>$$</code> into your narrative (not an R code chunk), and replace <code>y</code> and <code>x</code> in this formula with meaningful variable names (you may wish to reference the <code>crimenames</code> object we made above): <code>$$\hat{y} = b_0 + b_1{x}$$</code> <span class="math display">\[\hat{y} = b_0 + b_1{x}\]</span></li>
 <li>The “best-fitting” regression line is “best” in that it minimizes what?</li>
-<li>Why is this method called “simple linear regression” (as opposed to the method in <a href="http://moderndive.netlify.com/7-multiple-regression.html">Chapter 7</a>?</li>
+<li>Why is this method called “simple linear regression” (as opposed to the method in <a href="http://moderndive.netlify.com/7-multiple-regression.html">Chapter 7</a>)?</li>
 </ul>
 </div>
 <div id="eda" class="section level1">
 <h1><span class="header-section-number">4</span> EDA</h1>
-<p>Conduct a new exploratory data analysis, which involves three things:</p>
+<p>Conduct a <a href="http://moderndive.netlify.com/6-regression.html#model1EDA">new exploratory data analysis</a>, which involves three things:</p>
 <ul>
 <li>Looking at the raw values.</li>
 <li>Computing summary statistics of the variables of interest.</li>
@@ -445,7 +445,7 @@ Variable type: numeric
 </div>
 </div>
 <div id="simple-linear-regression-10-min" class="section level1">
-<h1><span class="header-section-number">5</span> Simple linear regression (⏰ 10 min)</h1>
+<h1><span class="header-section-number">5</span> <a href="http://moderndive.netlify.com/6-regression.html#model1table">Simple linear regression</a> (⏰ 10 min)</h1>
 <p><strong>Part 1:</strong> First “fit” the linear regression model to the data using the <code>lm()</code> function, then apply the <code>get_regression_table()</code> function from the <code>moderndive</code> R package to the model object. Use the output to fill in this formula with <code>y</code>, <code>x</code>, and the intercept and slope coefficients: (copy and paste into your narative: <code>$$\hat{y} = b_0 + b_1{x}$$</code>)</p>
 <p><span class="math display">\[\hat{y} = b_0 + b_1{x}\]</span></p>
 <p><strong>Part 2:</strong> Interpret the intercept coefficient and the slope coefficient (see <a href="http://moderndive.netlify.com/6-regression.html#model1table">here</a> for an example). How do the regression results match up with the results from your exploratory data analysis above?</p>
@@ -458,7 +458,7 @@ get_regression_table(crime_lm)</code></pre>
 2 public_houses    0.116     0.036      3.22   0.003    0.043    0.189</code></pre>
 </div>
 <div id="observedfitted-values-and-residuals-10-min" class="section level1">
-<h1><span class="header-section-number">6</span> Observed/fitted values and residuals (⏰ 10 min)</h1>
+<h1><span class="header-section-number">6</span> <a href="http://moderndive.netlify.com/6-regression.html#model1points">Observed/fitted values and residuals</a> (⏰ 10 min)</h1>
 <p><strong>Part 1:</strong> What are the observed and fitted values for the Cornwall (<code>ID</code> = 20) and Monmouth regions (<code>ID</code> = 23)? Which region do you think the reverend called “the happiest example of the infrequency of crime”?</p>
 <pre class="r"><code>regression_points &lt;- get_regression_points(crime_lm)
 regression_points %&gt;% 
@@ -489,7 +489,7 @@ regression_points %&gt;%
 2    33        83           449          162.    -78.5 Derby   </code></pre>
 </div>
 <div id="residual-analysis-10-min" class="section level1">
-<h1><span class="header-section-number">7</span> Residual analysis (⏰ 10 min)</h1>
+<h1><span class="header-section-number">7</span> <a href="http://moderndive.netlify.com/6-regression.html#model1residuals">Residual analysis</a> (⏰ 10 min)</h1>
 <p><strong>Part 1:</strong> Perform a residual analysis and look for any systematic patterns in the residuals. Ideally, there should be little to no pattern- why? Does it seem like there is no systematic pattern to the residuals?</p>
 <pre class="r"><code>ggplot(regression_points, aes(x = public_houses, y = residual)) +
   geom_point() +
@@ -506,10 +506,6 @@ regression_points %&gt;%
   labs(x = &quot;Residual&quot;) +
   geom_vline(aes(xintercept = 0), color = &quot;red&quot;)</code></pre>
 <p><img src="cm021-solutions_files/figure-html/crime_resid_density-1.png" width="2100" /></p>
-<div class="figure">
-<img src="cm021-solutions_files/figure-html/crime_resid_density-1.png" />
-
-</div>
 <pre class="r"><code>regression_points %&gt;% 
   summarize(mean_resid = mean(residual))</code></pre>
 <pre><code># A tibble: 1 x 1

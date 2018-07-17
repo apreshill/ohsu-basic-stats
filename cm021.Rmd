@@ -72,12 +72,12 @@ Note: you don't need to use R to answer these questions, but please create a sec
 `$$\hat{y} = b_0 + b_1{x}$$`
 $$\hat{y} = b_0 + b_1{x}$$
 - The “best-fitting” regression line is “best” in that it minimizes what?
-- Why is this method called "simple linear regression" (as opposed to the method in [Chapter 7](http://moderndive.netlify.com/7-multiple-regression.html)?
+- Why is this method called "simple linear regression" (as opposed to the method in [Chapter 7](http://moderndive.netlify.com/7-multiple-regression.html))?
 
 
 # EDA
 
-Conduct a new exploratory data analysis, which involves three things:
+Conduct a [new exploratory data analysis](http://moderndive.netlify.com/6-regression.html#model1EDA), which involves three things:
 
 - Looking at the raw values.
 - Computing summary statistics of the variables of interest.
@@ -123,7 +123,7 @@ ggplot(crime, aes(x = public_houses, y = criminals)) +
 
 ![](`r knitr::fig_chunk('crime_scatterplot','png')`)
 
-# Simple linear regression (⏰ 10 min)
+# [Simple linear regression](http://moderndive.netlify.com/6-regression.html#model1table) (⏰ 10 min)
 
 **Part 1:** First “fit” the linear regression model to the data using the `lm()` function, then apply the `get_regression_table()` function from the `moderndive` R package to the model object. Use the output to fill in this formula with `y`, `x`, and the intercept and slope coefficients: (copy and paste into your narative: `$$\hat{y} = b_0 + b_1{x}$$`)
 
@@ -136,7 +136,7 @@ crime_lm <- lm(criminals ~ public_houses, data = crime)
 get_regression_table(crime_lm)
 ```
 
-# Observed/fitted values and residuals (⏰ 10 min)
+# [Observed/fitted values and residuals](http://moderndive.netlify.com/6-regression.html#model1points) (⏰ 10 min)
 
 **Part 1:** What are the observed and fitted values for the Cornwall (`ID` = 20) and Monmouth regions (`ID` = 23)? Which region do you think the reverend called "the happiest example of the infrequency of crime"?
 
@@ -161,7 +161,7 @@ regression_points %>%
   filter(criminals == min(criminals) | residual == min(residual))
 ```
 
-# Residual analysis (⏰ 10 min)
+# [Residual analysis](http://moderndive.netlify.com/6-regression.html#model1residuals) (⏰ 10 min)
 
 **Part 1:** Perform a residual analysis and look for any systematic patterns in the residuals. Ideally, there should be little to no pattern- why? Does it seem like there is no systematic pattern to the residuals? 
   
