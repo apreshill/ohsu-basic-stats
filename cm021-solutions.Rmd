@@ -1,5 +1,5 @@
 ---
-title: "CONJ620: CM 1.7"
+title: "CONJ620: CM 2.1"
 subtitle: "Simple linear regression"
 author: "Alison Hill"
 date: "7/17/2018"
@@ -8,6 +8,7 @@ output:
     toc: true
     toc_float: true
     number_sections: true
+    code_folding: hide
 ---
 
 
@@ -15,7 +16,7 @@ output:
 # leave this chunk alone
 options(knitr.table.format = "html") 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
-  comment = NA, dpi = 300, include = FALSE)
+  comment = NA, dpi = 300, include = TRUE, echo = TRUE)
 ```
 
 

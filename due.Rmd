@@ -34,7 +34,11 @@ due <- read_csv("due.csv") %>%
   mutate(`Lab Due` = ifelse(ps == "-" | is.na(ps) | is.na(ps_link),
     ps,
     paste0("<a href='", ps_link, "'>", ps, "</a>"))) %>% 
-  select(Weekday, Date, `CM / Block`, `Readings Due` = Reading, `DataCamp Due`, `Lab Due`)
+  mutate(big_lab_due = ifelse(big_lab == "-" | is.na(big_lab) | is.na(big_lab_link),
+    big_lab,
+    paste0("<a href='", big_lab_link, "'>", big_lab, "</a>"))) %>% 
+  select(Weekday, Date, `CM / Block`, `Readings Due` = Reading, 
+         `DataCamp Due`, `Lab Due`, `Integrative Lab Due` = big_lab_due)
 ```
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE}

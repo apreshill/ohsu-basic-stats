@@ -12,7 +12,7 @@
 <meta name="author" content="Alison Hill" />
 
 
-<title>CONJ620: CM 1.7</title>
+<title>CONJ620: CM 2.1</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -351,7 +351,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">CONJ620: CM 1.7</h1>
+<h1 class="title toc-ignore">CONJ620: CM 2.1</h1>
 <h3 class="subtitle"><em>Simple linear regression</em></h3>
 <h4 class="author"><em>Alison Hill</em></h4>
 <h4 class="date"><em>7/17/2018</em></h4>
@@ -451,7 +451,7 @@ Variable type: numeric
 <div id="visualize-the-data-5-min" class="section level2">
 <h2><span class="header-section-number">4.3</span> Visualize the data (⏰ 5 min)</h2>
 <p>Recreate the scatterplot below of ale/beer houses per 100K on the x-axis and criminals per 100K population on the y-axis. What can you say about the relationship between public houses and criminals based on this exploration?</p>
-<p><img src="cm017-solutions_files/figure-html/unnamed-chunk-4-1.png" width="2100" /></p>
+<p><img src="cm021-solutions_files/figure-html/unnamed-chunk-4-1.png" width="2100" /></p>
 </div>
 </div>
 <div id="simple-linear-regression-10-min" class="section level1">
@@ -505,9 +505,9 @@ regression_points %&gt;%
   geom_point() +
   labs(x = &quot;Public Houses&quot;, y = &quot;Residual&quot;) +
   geom_hline(yintercept = 0, col = &quot;blue&quot;, size = 1)</code></pre>
-<p><img src="cm017-solutions_files/figure-html/unnamed-chunk-8-1.png" width="2100" /></p>
+<p><img src="cm021-solutions_files/figure-html/unnamed-chunk-8-1.png" width="2100" /></p>
 <p><strong>Part 2:</strong> Recreate this density plot of the residuals (hint: <code>?geom_vline()</code>). Recall that we would like the residuals to be normally distributed with mean 0. Use <code>dplyr</code> to calculate the mean of the residuals- is it (pretty close to) 0? Do you think you have more positive residuals than negative, or vice versa?</p>
-<p><img src="cm017-solutions_files/figure-html/unnamed-chunk-9-1.png" width="2100" /></p>
+<p><img src="cm021-solutions_files/figure-html/unnamed-chunk-9-1.png" width="2100" /></p>
 <pre class="r"><code>regression_points %&gt;% 
   summarize(mean_resid = mean(residual))</code></pre>
 <pre><code># A tibble: 1 x 1

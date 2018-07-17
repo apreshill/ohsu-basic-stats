@@ -5,7 +5,7 @@ Tues,July,3,1.3,<a href='slides/cm013.html'>Data viz / Exploratory Data Analysis
 Thurs,July,5,1.4,<a href='slides/cm014.html'>Data wrangling / more EDA</a>,4,Data taming & wrangling,cm014.html
 Tues,July,10,1.5,<a href='slides/cm015.html'>Data tables / Tidy data</a>,5,Data tables & tidying,cm015.html
 Thurs,July,12,1.6,<a href='slides/cm016.html'>Concept integration</a><br>(<a href='https://bit.ly/conj620-cm016'>Notepad</a>)<br><a href='https://andrewbtran.github.io/NICAR/2018/workflow/docs/01-workflow_intro.html'>- File organization best practices</a><br><a href='https://www.tidyverse.org/articles/2017/12/workflow-vs-script/'>- Project-oriented workflow</a>,6,EDA: integrate + iterate,cm016.html
-Tues,July,17,2.1: Linear models,Simple Regression (one continuous predictor)<br>(<a href='https://bit.ly/conj620-cm017'>Notepad</a>),,,-
+Tues,July,17,2.1: Linear models,Simple Regression (one continuous predictor)<br>(<a href='https://bit.ly/conj620-cm017'>Notepad</a>),7,Simple linear regression,cm021.html
 Thurs,July,19,2.2,Simple Regression (one categorical predictor)<br>(<a href='https://bit.ly/conj620-cm018'>Notepad</a>),,,-
 Tues,July,24,2.3,Multiple Regression (2 continuous predictors),,,-
 Thurs,July,26,2.4,Multiple Regression (continuous + categorical),,,-
