@@ -22,9 +22,9 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
 # Overview
 
 - A complete knitted `html` file is due on Sakai by end of class Tuesday July 17th (before 5pm). 
-- This lab is estimated to take approximately 40 minutes. We'll work together in chunks to keep tabs on time, with the aim that we all *finish* during the in-class work period. 
+- This lab is estimated to take approximately 45 minutes. We'll work together in chunks to keep tabs on time, with the aim that we all *finish* during the in-class work period. 
 - This lab is based on [Chapter 6: Basic Regression in ModernDive](http://moderndive.netlify.com/6-regression.html). Please open it and follow closely!
-- You'll need to load these packages to do the lab:
+- You'll need to load these packages to do the lab (make sure they are installed first, not in your .Rmd file!):
 ```{r load_packages, include = TRUE}
 library(moderndive)
 library(tidyverse)
@@ -94,7 +94,7 @@ glimpse(crime)
 
 ## Look at summary statistics (⏰ 5 min)
 
-Use `select` to select only the independent and dependent variables you identified above, then pipe those variables to `skimr` to see summary statistics for each. Use `dplyr::summarize` to calculate the correlation coefficient. 
+Use `select` to select only the independent and dependent variables you identified above, then pipe those variables to the `skim` function from the `skimr` package (you should have loaded this package at the top) to see summary statistics for each. Use `dplyr::summarize` to calculate the correlation coefficient. 
 
 ```{r}
 crime %>% 
@@ -113,13 +113,15 @@ crime %>%
 
 Recreate the scatterplot below of ale/beer houses per 100K on the x-axis and criminals per 100K population on the y-axis. What can you say about the relationship between public houses and criminals based on this exploration?
 
-```{r echo = FALSE, include = TRUE}
+
+
+```{r crime_scatterplot}
 ggplot(crime, aes(x = public_houses, y = criminals)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
 ```
 
-
+![](`r knitr::fig_chunk('crime_scatterplot','png')`)
 
 # Simple linear regression (⏰ 10 min)
 
@@ -163,22 +165,25 @@ regression_points %>%
 
 **Part 1:** Perform a residual analysis and look for any systematic patterns in the residuals. Ideally, there should be little to no pattern- why? Does it seem like there is no systematic pattern to the residuals? 
   
-```{r}
+```{r crime_resid_scatter}
 ggplot(regression_points, aes(x = public_houses, y = residual)) +
   geom_point() +
   labs(x = "Public Houses", y = "Residual") +
   geom_hline(yintercept = 0, col = "blue", size = 1)
 ```
 
+![](`r knitr::fig_chunk('crime_resid_scatter','png')`)
 
 **Part 2:** Recreate this density plot of the residuals (hint: `?geom_vline()`). Recall that we would like the residuals to be normally distributed with mean 0. Use `dplyr` to calculate the mean of the residuals- is it (pretty close to) 0? Do you think you have more positive residuals than negative, or vice versa?
 
-```{r echo = FALSE, include = TRUE}
+```{r crime_resid_density}
 ggplot(regression_points, aes(x = residual)) +
   geom_density() +
   labs(x = "Residual") +
   geom_vline(aes(xintercept = 0), color = "red")
 ```
+
+![](`r knitr::fig_chunk('crime_resid_density','png')`)
 
 ```{r}
 regression_points %>% 

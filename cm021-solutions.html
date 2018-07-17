@@ -24,7 +24,6 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -169,14 +168,6 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<style type="text/css">
-.code-folding-btn { margin-bottom: 4px; }
-</style>
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
 
 
@@ -341,14 +332,6 @@ div.tocify {
 
 <div class="fluid-row" id="header">
 
-<div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
-</ul>
-</div>
-
 
 
 <h1 class="title toc-ignore">CONJ620: CM 2.1</h1>
@@ -363,9 +346,9 @@ div.tocify {
 <h1><span class="header-section-number">1</span> Overview</h1>
 <ul>
 <li>A complete knitted <code>html</code> file is due on Sakai by end of class Tuesday July 17th (before 5pm).</li>
-<li>This lab is estimated to take approximately 40 minutes. We’ll work together in chunks to keep tabs on time, with the aim that we all <em>finish</em> during the in-class work period.</li>
+<li>This lab is estimated to take approximately 45 minutes. We’ll work together in chunks to keep tabs on time, with the aim that we all <em>finish</em> during the in-class work period.</li>
 <li>This lab is based on <a href="http://moderndive.netlify.com/6-regression.html">Chapter 6: Basic Regression in ModernDive</a>. Please open it and follow closely!</li>
-<li>You’ll need to load these packages to do the lab:</li>
+<li>You’ll need to load these packages to do the lab (make sure they are installed first, not in your .Rmd file!):</li>
 </ul>
 <pre class="r"><code>library(moderndive)
 library(tidyverse)
@@ -426,7 +409,7 @@ $ worship_attendance &lt;dbl&gt; 434, 482, 680, 678, 798, 698, 888, 970, 848...<
 </div>
 <div id="look-at-summary-statistics-5-min" class="section level2">
 <h2><span class="header-section-number">4.2</span> Look at summary statistics (⏰ 5 min)</h2>
-<p>Use <code>select</code> to select only the independent and dependent variables you identified above, then pipe those variables to <code>skimr</code> to see summary statistics for each. Use <code>dplyr::summarize</code> to calculate the correlation coefficient.</p>
+<p>Use <code>select</code> to select only the independent and dependent variables you identified above, then pipe those variables to the <code>skim</code> function from the <code>skimr</code> package (you should have loaded this package at the top) to see summary statistics for each. Use <code>dplyr::summarize</code> to calculate the correlation coefficient.</p>
 <pre class="r"><code>crime %&gt;% 
   select(criminals, public_houses) %&gt;% 
   skim()</code></pre>
@@ -451,7 +434,14 @@ Variable type: numeric
 <div id="visualize-the-data-5-min" class="section level2">
 <h2><span class="header-section-number">4.3</span> Visualize the data (⏰ 5 min)</h2>
 <p>Recreate the scatterplot below of ale/beer houses per 100K on the x-axis and criminals per 100K population on the y-axis. What can you say about the relationship between public houses and criminals based on this exploration?</p>
-<p><img src="cm021-solutions_files/figure-html/unnamed-chunk-4-1.png" width="2100" /></p>
+<pre class="r"><code>ggplot(crime, aes(x = public_houses, y = criminals)) +
+  geom_point() +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE)</code></pre>
+<p><img src="cm021-solutions_files/figure-html/crime_scatterplot-1.png" width="2100" /></p>
+<div class="figure">
+<img src="cm021-solutions_files/figure-html/crime_scatterplot-1.png" />
+
+</div>
 </div>
 </div>
 <div id="simple-linear-regression-10-min" class="section level1">
@@ -505,9 +495,21 @@ regression_points %&gt;%
   geom_point() +
   labs(x = &quot;Public Houses&quot;, y = &quot;Residual&quot;) +
   geom_hline(yintercept = 0, col = &quot;blue&quot;, size = 1)</code></pre>
-<p><img src="cm021-solutions_files/figure-html/unnamed-chunk-8-1.png" width="2100" /></p>
+<p><img src="cm021-solutions_files/figure-html/crime_resid_scatter-1.png" width="2100" /></p>
+<div class="figure">
+<img src="cm021-solutions_files/figure-html/crime_resid_scatter-1.png" />
+
+</div>
 <p><strong>Part 2:</strong> Recreate this density plot of the residuals (hint: <code>?geom_vline()</code>). Recall that we would like the residuals to be normally distributed with mean 0. Use <code>dplyr</code> to calculate the mean of the residuals- is it (pretty close to) 0? Do you think you have more positive residuals than negative, or vice versa?</p>
-<p><img src="cm021-solutions_files/figure-html/unnamed-chunk-9-1.png" width="2100" /></p>
+<pre class="r"><code>ggplot(regression_points, aes(x = residual)) +
+  geom_density() +
+  labs(x = &quot;Residual&quot;) +
+  geom_vline(aes(xintercept = 0), color = &quot;red&quot;)</code></pre>
+<p><img src="cm021-solutions_files/figure-html/crime_resid_density-1.png" width="2100" /></p>
+<div class="figure">
+<img src="cm021-solutions_files/figure-html/crime_resid_density-1.png" />
+
+</div>
 <pre class="r"><code>regression_points %&gt;% 
   summarize(mean_resid = mean(residual))</code></pre>
 <pre><code># A tibble: 1 x 1

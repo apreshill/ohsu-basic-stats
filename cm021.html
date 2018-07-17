@@ -346,9 +346,9 @@ div.tocify {
 <h1><span class="header-section-number">1</span> Overview</h1>
 <ul>
 <li>A complete knitted <code>html</code> file is due on Sakai by end of class Tuesday July 17th (before 5pm).</li>
-<li>This lab is estimated to take approximately 40 minutes. We’ll work together in chunks to keep tabs on time, with the aim that we all <em>finish</em> during the in-class work period.</li>
+<li>This lab is estimated to take approximately 45 minutes. We’ll work together in chunks to keep tabs on time, with the aim that we all <em>finish</em> during the in-class work period.</li>
 <li>This lab is based on <a href="http://moderndive.netlify.com/6-regression.html">Chapter 6: Basic Regression in ModernDive</a>. Please open it and follow closely!</li>
-<li>You’ll need to load these packages to do the lab:</li>
+<li>You’ll need to load these packages to do the lab (make sure they are installed first, not in your .Rmd file!):</li>
 </ul>
 <pre class="r"><code>library(moderndive)
 library(tidyverse)
@@ -399,12 +399,15 @@ crime &lt;- read_table(&quot;http://users.stat.ufl.edu/~winner/data/beerhall.dat
 </div>
 <div id="look-at-summary-statistics-5-min" class="section level2">
 <h2><span class="header-section-number">4.2</span> Look at summary statistics (⏰ 5 min)</h2>
-<p>Use <code>select</code> to select only the independent and dependent variables you identified above, then pipe those variables to <code>skimr</code> to see summary statistics for each. Use <code>dplyr::summarize</code> to calculate the correlation coefficient.</p>
+<p>Use <code>select</code> to select only the independent and dependent variables you identified above, then pipe those variables to the <code>skim</code> function from the <code>skimr</code> package (you should have loaded this package at the top) to see summary statistics for each. Use <code>dplyr::summarize</code> to calculate the correlation coefficient.</p>
 </div>
 <div id="visualize-the-data-5-min" class="section level2">
 <h2><span class="header-section-number">4.3</span> Visualize the data (⏰ 5 min)</h2>
 <p>Recreate the scatterplot below of ale/beer houses per 100K on the x-axis and criminals per 100K population on the y-axis. What can you say about the relationship between public houses and criminals based on this exploration?</p>
-<p><img src="cm021_files/figure-html/unnamed-chunk-4-1.png" width="2100" /></p>
+<div class="figure">
+<img src="cm021_files/figure-html/crime_scatterplot-1.png" />
+
+</div>
 </div>
 </div>
 <div id="simple-linear-regression-10-min" class="section level1">
@@ -422,8 +425,15 @@ crime &lt;- read_table(&quot;http://users.stat.ufl.edu/~winner/data/beerhall.dat
 <div id="residual-analysis-10-min" class="section level1">
 <h1><span class="header-section-number">7</span> Residual analysis (⏰ 10 min)</h1>
 <p><strong>Part 1:</strong> Perform a residual analysis and look for any systematic patterns in the residuals. Ideally, there should be little to no pattern- why? Does it seem like there is no systematic pattern to the residuals?</p>
+<div class="figure">
+<img src="cm021_files/figure-html/crime_resid_scatter-1.png" />
+
+</div>
 <p><strong>Part 2:</strong> Recreate this density plot of the residuals (hint: <code>?geom_vline()</code>). Recall that we would like the residuals to be normally distributed with mean 0. Use <code>dplyr</code> to calculate the mean of the residuals- is it (pretty close to) 0? Do you think you have more positive residuals than negative, or vice versa?</p>
-<p><img src="cm021_files/figure-html/unnamed-chunk-9-1.png" width="2100" /></p>
+<div class="figure">
+<img src="cm021_files/figure-html/crime_resid_density-1.png" />
+
+</div>
 </div>
 
 <p>
