@@ -1,0 +1,60 @@
+---
+title: "CONJ620: CM 1.7"
+subtitle: "Peer Review"
+author: "Alison Hill"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      countIncrementalSlides: false
+      beforeInit: "https://platform.twitter.com/widgets.js"
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300,
+  fig.align = "center", out.width = "65%", cache = FALSE,
+  error = FALSE)
+library(tidyverse)
+```
+
+
+class: inverse, middle, center
+## Peer Review!
+![](https://media.giphy.com/media/Id6RRFgZ3HGaQ/giphy.gif)
+
+
+---
+## How to do peer review well:
+
+- Give thoughtful, constructive and considerate comments.
+
+--
+
+- Be specific and concise.
+
+--
+
+- Try to learn something new and, if you succeed, point that out.
+
+--
+
+- If you can’t find anything to praise or that you found helpful, then at least offer some suggestions in a kind way.
+
+--
+
+- Use criteria to evaluate and comment on:
+    - _Coding style:_ Is code readable? Are there comments that help?
+    - _Coding strategy:_ Do you notice places where the code could be improved upon or simplified? Any functions you know or strategies that you used that the author could benefit from?
+    - _Narrative organization:_ Do you know what section you are "in" when you are reading? Can you follow their steps *without* reading the code or seeing the output? Did they use markdown formatting to help create a narrative structure?
+    - _Narrative quality:_ Does the author interpret anything or use words in complete sentences? Or do they leave it all to the “reader” to figure out what is happening and why? 
+
+---
+## Today's lab
+
+[Lab 07](../cm021.html)
