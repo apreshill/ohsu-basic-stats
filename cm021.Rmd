@@ -172,7 +172,7 @@ ggplot(regression_points, aes(x = public_houses, y = residual)) +
   geom_hline(yintercept = 0, col = "blue", size = 1)
 ```
 
-![](`r knitr::fig_chunk('crime_resid_scatter','png')`)
+
 
 **Part 2:** Recreate this density plot of the residuals (hint: `?geom_vline()`). Recall that we would like the residuals to be normally distributed with mean 0. Use `dplyr` to calculate the mean of the residuals- is it (pretty close to) 0? Do you think you have more positive residuals than negative, or vice versa?
 

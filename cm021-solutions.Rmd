@@ -183,7 +183,6 @@ ggplot(regression_points, aes(x = residual)) +
   geom_vline(aes(xintercept = 0), color = "red")
 ```
 
-![](`r knitr::fig_chunk('crime_resid_density','png')`)
 
 ```{r}
 regression_points %>% 
