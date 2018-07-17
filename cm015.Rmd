@@ -33,7 +33,7 @@ Compute some measure of maternal mortality (`mean`? `median`? `min`? `max`?) for
 
 Join the `reprohealth` data with the `gapminder` data using a dplyr join function and make some observations about the process and result. Explore the different types of joins. You could also create a second data frame to read in locally, then join with `reprohealth`. Examples of a second data frame you could build:
 
-- One row per country, a country variable and one or more variables with extra info, such as language spoken, NATO membership, national animal, [happiness ratings](https://www.kaggle.com/unsdsn/world-happiness), [Olympic medals](https://www.kaggle.com/the-guardian/olympic-games), [human development index](http://hdr.undp.org/en/data), or [maternity leave policies](http://www.oecd.org/gender/data/length-of-maternity-leave-parental-leave-and-paid-father-specific-leave.htm).
+- One row per country, a country variable and one or more variables with extra info, such as language spoken, NATO membership, national animal, [happiness ratings](https://www.kaggle.com/unsdsn/world-happiness), [Olympic medals](https://www.kaggle.com/the-guardian/olympic-games), [human development index](http://hdr.undp.org/en/data), [price of a Big Mac](https://github.com/TheEconomist/big-mac-data), or [maternity leave policies](http://www.oecd.org/gender/data/length-of-maternity-leave-parental-leave-and-paid-father-specific-leave.htm).
 - One row per continent, a continent variable and one or more variables with extra info, such as northern versus southern hemisphere.
 
 ## Report your process

@@ -405,18 +405,18 @@ wb_stats &lt;- wb_reprohealth %&gt;% # save the data to your local environment
 
 internet</code></pre>
 <pre><code># A tibble: 275 x 23
-   internet_users_per_… x1990 x1991 x1992 x1993    x1994    x1995    x1996
-   &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
- 1 Abkhazia               NA     NA    NA    NA NA       NA       NA      
- 2 Afghanistan             0.    NA    NA    NA NA       NA       NA      
- 3 Akrotiri and Dhekel…   NA     NA    NA    NA NA       NA       NA      
- 4 Albania                 0.    NA    NA    NA NA        0.0112   3.22e-2
- 5 Algeria                 0.    NA    NA    NA  3.61e-4  0.00177  1.74e-3
- 6 American Samoa          0.    NA    NA    NA NA       NA       NA      
- 7 Andorra                 0.    NA    NA    NA NA       NA        1.53e+0
- 8 Angola                  0.    NA    NA    NA NA       NA        7.76e-4
- 9 Anguilla               NA     NA    NA    NA NA       NA       NA      
-10 Antigua and Barbuda     0.    NA    NA    NA NA        2.20     2.86e+0
+   internet_users_… x1990 x1991 x1992 x1993    x1994    x1995    x1996
+   &lt;chr&gt;            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Abkhazia            NA    NA    NA    NA NA       NA       NA      
+ 2 Afghanistan          0    NA    NA    NA NA       NA       NA      
+ 3 Akrotiri and Dh…    NA    NA    NA    NA NA       NA       NA      
+ 4 Albania              0    NA    NA    NA NA        0.0112   3.22e-2
+ 5 Algeria              0    NA    NA    NA  3.61e-4  0.00177  1.74e-3
+ 6 American Samoa       0    NA    NA    NA NA       NA       NA      
+ 7 Andorra              0    NA    NA    NA NA       NA        1.53e+0
+ 8 Angola               0    NA    NA    NA NA       NA        7.76e-4
+ 9 Anguilla            NA    NA    NA    NA NA       NA       NA      
+10 Antigua and Bar…     0    NA    NA    NA NA        2.20     2.86e+0
 # ... with 265 more rows, and 15 more variables: x1997 &lt;dbl&gt;, x1998 &lt;dbl&gt;,
 #   x1999 &lt;dbl&gt;, x2000 &lt;dbl&gt;, x2001 &lt;dbl&gt;, x2002 &lt;dbl&gt;, x2003 &lt;dbl&gt;,
 #   x2004 &lt;dbl&gt;, x2005 &lt;dbl&gt;, x2006 &lt;dbl&gt;, x2007 &lt;dbl&gt;, x2008 &lt;dbl&gt;,
@@ -435,18 +435,18 @@ age_marriage &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator age of
 
 age_marriage</code></pre>
 <pre><code># A tibble: 185 x 117
-   ..1      `1616.0` `1666.0` `1685.0` `1710.0` `1716.0` `1735.0` `1760.0`
-   &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
- 1 Afghani…       NA       NA       NA       NA       NA       NA       NA
- 2 Albania        NA       NA       NA       NA       NA       NA       NA
- 3 Algeria        NA       NA       NA       NA       NA       NA       NA
- 4 Angola         NA       NA       NA       NA       NA       NA       NA
- 5 Argenti…       NA       NA       NA       NA       NA       NA       NA
- 6 Armenia        NA       NA       NA       NA       NA       NA       NA
- 7 Austral…       NA       NA       NA       NA       NA       NA       NA
- 8 Austria        NA       NA       NA       NA       NA       NA       NA
- 9 Azerbai…       NA       NA       NA       NA       NA       NA       NA
-10 Bahamas        NA       NA       NA       NA       NA       NA       NA
+   ..1   `1616.0` `1666.0` `1685.0` `1710.0` `1716.0` `1735.0` `1760.0`
+   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Afgh…       NA       NA       NA       NA       NA       NA       NA
+ 2 Alba…       NA       NA       NA       NA       NA       NA       NA
+ 3 Alge…       NA       NA       NA       NA       NA       NA       NA
+ 4 Ango…       NA       NA       NA       NA       NA       NA       NA
+ 5 Arge…       NA       NA       NA       NA       NA       NA       NA
+ 6 Arme…       NA       NA       NA       NA       NA       NA       NA
+ 7 Aust…       NA       NA       NA       NA       NA       NA       NA
+ 8 Aust…       NA       NA       NA       NA       NA       NA       NA
+ 9 Azer…       NA       NA       NA       NA       NA       NA       NA
+10 Baha…       NA       NA       NA       NA       NA       NA       NA
 # ... with 175 more rows, and 109 more variables: `1766.0` &lt;dbl&gt;,
 #   `1775.0` &lt;dbl&gt;, `1780.0` &lt;dbl&gt;, `1785.0` &lt;dbl&gt;, `1791.0` &lt;dbl&gt;,
 #   `1800.0` &lt;dbl&gt;, `1810.0` &lt;dbl&gt;, `1815.0` &lt;dbl&gt;, `1825.0` &lt;dbl&gt;,
@@ -481,16 +481,16 @@ marriage_tidy</code></pre>
 <pre><code># A tibble: 21,460 x 3
    country      year age_first_marriage
    &lt;chr&gt;       &lt;dbl&gt;              &lt;dbl&gt;
- 1 Afghanistan 1616.                 NA
- 2 Albania     1616.                 NA
- 3 Algeria     1616.                 NA
- 4 Angola      1616.                 NA
- 5 Argentina   1616.                 NA
- 6 Armenia     1616.                 NA
- 7 Australia   1616.                 NA
- 8 Austria     1616.                 NA
- 9 Azerbaijan  1616.                 NA
-10 Bahamas     1616.                 NA
+ 1 Afghanistan  1616                 NA
+ 2 Albania      1616                 NA
+ 3 Algeria      1616                 NA
+ 4 Angola       1616                 NA
+ 5 Argentina    1616                 NA
+ 6 Armenia      1616                 NA
+ 7 Australia    1616                 NA
+ 8 Austria      1616                 NA
+ 9 Azerbaijan   1616                 NA
+10 Bahamas      1616                 NA
 # ... with 21,450 more rows</code></pre>
 <p>Pathological in the same way as the previous…</p>
 <pre class="r"><code># yet another example dataset
@@ -499,18 +499,18 @@ alcohol &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator alcohol con
 
 alcohol</code></pre>
 <pre><code># A tibble: 189 x 25
-   ..1      `1985.0` `1986.0` `1987.0` `1988.0` `1989.0` `1990.0` `1991.0`
-   &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
- 1 Afghani…       NA       NA       NA       NA       NA       NA       NA
- 2 Albania        NA       NA       NA       NA       NA       NA       NA
- 3 Algeria        NA       NA       NA       NA       NA       NA       NA
- 4 Andorra        NA       NA       NA       NA       NA       NA       NA
- 5 Angola         NA       NA       NA       NA       NA       NA       NA
- 6 Antigua…       NA       NA       NA       NA       NA       NA       NA
- 7 Argenti…       NA       NA       NA       NA       NA       NA       NA
- 8 Armenia        NA       NA       NA       NA       NA       NA       NA
- 9 Austral…       NA       NA       NA       NA       NA       NA       NA
-10 Austria        NA       NA       NA       NA       NA       NA       NA
+   ..1   `1985.0` `1986.0` `1987.0` `1988.0` `1989.0` `1990.0` `1991.0`
+   &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Afgh…       NA       NA       NA       NA       NA       NA       NA
+ 2 Alba…       NA       NA       NA       NA       NA       NA       NA
+ 3 Alge…       NA       NA       NA       NA       NA       NA       NA
+ 4 Ando…       NA       NA       NA       NA       NA       NA       NA
+ 5 Ango…       NA       NA       NA       NA       NA       NA       NA
+ 6 Anti…       NA       NA       NA       NA       NA       NA       NA
+ 7 Arge…       NA       NA       NA       NA       NA       NA       NA
+ 8 Arme…       NA       NA       NA       NA       NA       NA       NA
+ 9 Aust…       NA       NA       NA       NA       NA       NA       NA
+10 Aust…       NA       NA       NA       NA       NA       NA       NA
 # ... with 179 more rows, and 17 more variables: `1992.0` &lt;dbl&gt;,
 #   `1993.0` &lt;dbl&gt;, `1994.0` &lt;dbl&gt;, `1995.0` &lt;dbl&gt;, `1996.0` &lt;dbl&gt;,
 #   `1997.0` &lt;lgl&gt;, `1998.0` &lt;dbl&gt;, `1999.0` &lt;lgl&gt;, `2000.0` &lt;dbl&gt;,
@@ -524,16 +524,16 @@ alc_tidy</code></pre>
 <pre><code># A tibble: 4,536 x 3
    country              year alc_per_adult
    &lt;chr&gt;               &lt;dbl&gt;         &lt;dbl&gt;
- 1 Afghanistan         1985.            NA
- 2 Albania             1985.            NA
- 3 Algeria             1985.            NA
- 4 Andorra             1985.            NA
- 5 Angola              1985.            NA
- 6 Antigua and Barbuda 1985.            NA
- 7 Argentina           1985.            NA
- 8 Armenia             1985.            NA
- 9 Australia           1985.            NA
-10 Austria             1985.            NA
+ 1 Afghanistan          1985            NA
+ 2 Albania              1985            NA
+ 3 Algeria              1985            NA
+ 4 Andorra              1985            NA
+ 5 Angola               1985            NA
+ 6 Antigua and Barbuda  1985            NA
+ 7 Argentina            1985            NA
+ 8 Armenia              1985            NA
+ 9 Australia            1985            NA
+10 Austria              1985            NA
 # ... with 4,526 more rows</code></pre>
 <ul>
 <li>Join this new data using <code>dplyr</code> with the <code>reprohealth</code> data you have been working with, and make some observations about the process and result. You may need:
