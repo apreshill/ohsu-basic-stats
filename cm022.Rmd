@@ -1,0 +1,151 @@
+---
+title: "CONJ620: CM 2.1"
+subtitle: "Simple linear regression"
+author: "Alison Hill"
+date: "7/17/2018"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+
+```{r setup, include=FALSE}
+# leave this chunk alone
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300, include = FALSE)
+```
+
+
+# Overview
+
+In the [previous lab](cm021.html), we conducted a new exploratory data analysis with the `crime` data, which involved three things:
+
+- Looking at the raw values.
+- Computing summary statistics of the variables of interest.
+- Creating informative visualizations.
+
+In this lab, we'll start where we left off! Refer back to the [lab solutions](cm021-solutions.html) to see the code we used to do the EDA.
+
+- A complete knitted `html` file is due on Sakai by beginning of class Tuesday July 24th (2:30pm). 
+- This lab is estimated to take approximately 45 minutes. We'll work together in chunks to keep tabs on time, with the aim that we all *finish* during the in-class work period. 
+- This lab is based on [Chapter 6: Basic Regression in ModernDive](http://moderndive.netlify.com/6-regression.html). Please open it and follow closely!
+- You'll need to load these packages to do the lab (make sure they are installed first, not in your .Rmd file!):
+```{r load_packages, include = TRUE}
+library(moderndive)
+library(tidyverse)
+library(skimr)
+```
+
+![](http://4.bp.blogspot.com/-qdzqtghTzmU/UD_NNT9C46I/AAAAAAAABoQ/XycEe4wixVM/s1600/03.LesMiserables.US.MasteroftheHouse.jpg)
+
+<br>
+<br>
+<br>
+
+Let's investigate how well we can predict criminals (per 100k population) from the number of public houses (ale/beer houses per 100k population) using simple linear regression. Here is how to read in the data (please copy and paste into a code chunk in your .Rmd):
+
+
+
+```{r crime_data, include = TRUE}
+crimenames <- c("county", "region_name", "region_code",
+               "criminals", "public_houses", "school_attendance",
+               "worship_attendance")
+
+crime <- read_table("http://users.stat.ufl.edu/~winner/data/beerhall.dat",
+                    col_names = crimenames)
+```
+
+
+
+# Basics
+
+- What is the dependent variable? `criminals`
+- What is the independent variable? `public_houses`
+- Copy and paste the provided equation that starts/ends with `$$` into your narrative (not an R code chunk), and replace `y` and `x` in this formula with meaningful variable names (you may wish to reference the `crimenames` object we made above):
+`$$\hat{y} = b_0 + b_1{x}$$`
+$$\hat{criminals} = b_0 + b_1{\textrm{public_houses}}$$
+- The “best-fitting” regression line is “best” in that it minimizes what?
+  - Make sure you read [this](http://moderndive.netlify.com/6-regression.html#leastsquares)
+  
+> The best-fitting regression is one that minimizes the sum of the squared residuals. Squared residuals are calculated by taking the difference between the observed y values (here, criminals) and the fitted or predicted y values (so y hat!), then squaring each of those differences. The differences are squared so that positive and negative deviations of the same amount are treated equally. 
+
+- Why is this method called "simple linear regression" (as opposed to the method in [Chapter 7](http://moderndive.netlify.com/7-multiple-regression.html))?
+
+> Linear regression refer to the form of the statistical model we are using- in linear regression, our model is in the form of a line, defined by an intercept and slope. The "simple" part refers to the fact that we have only one predictor variable (or independent variable/IV). In multiple regression, we'll have two or more predictor variables or IVs. All of these cases of regression are univariate, as opposed to multivariate. Univariate vs. multivariate refers to the number of dependent variables or DVs. In this case, we just want to predict one variable (here, `criminals`). In this course we will not cover multivariate methods.
+
+
+# EDA
+
+Refer back to the [lab solutions](cm021-solutions.html) to see the code we used to do the EDA.
+
+
+# [Simple linear regression](http://moderndive.netlify.com/6-regression.html#model1table) (⏰ 20 min)
+
+**Part 1:** First “fit” the linear regression model to the data using the `lm()` function, then apply the `get_regression_table()` function from the `moderndive` R package to the model object. Use the output to fill in this formula with `y`, `x`, and the intercept and slope coefficients: (copy and paste into your narative: `$$\hat{y} = b_0 + b_1{x}$$`)
+
+$$\hat{y} = b_0 + b_1{x}$$
+
+**Part 2:** Interpret the intercept coefficient and the slope coefficient (see [here](http://moderndive.netlify.com/6-regression.html#model1table) for an example). How do the regression results match up with the results from your exploratory data analysis above?
+
+```{r}
+crime_lm <- lm(criminals ~ public_houses, data = crime)
+get_regression_table(crime_lm)
+```
+
+# [Observed/fitted values and residuals](http://moderndive.netlify.com/6-regression.html#model1points) (⏰ 10 min)
+
+**Part 1:** What are the observed and fitted values for the Cornwall (`ID` = 20) and Monmouth regions (`ID` = 23)? Which region do you think the reverend called "the happiest example of the infrequency of crime"?
+
+```{r}
+regression_points <- get_regression_points(crime_lm)
+regression_points %>% 
+  filter(ID %in% c(20, 23))
+```
+
+**Part 2:** In fact, we could argue with the reverend about the happiest example of the infrequency of crime. There are two ways you could define this, and you'll do with with a `filter` using the `|` operator (think: `or`). 
+
+The first way is that the county had the lowest criminals overall. The second is that the county had the lowest criminals *given their number of public houses*. This would mean that the region has the lowest observed criminals, compared to the fitted value based on predicting criminals from public houses. You'll need to match the `ID` column as a row in the original data (you can just do this visually by comparing the tibbles and typing your answers in your narrative- you don't have to do a join here).
+
+```{r}
+# Derby is lowest residual (ID = 20)
+# Cornwall is the lowest observed (ID = 33)
+regression_points %>% 
+  filter(criminals == min(criminals) | residual == min(residual))
+
+regression_points %>% 
+  left_join(select(crime, county, criminals, public_houses)) %>% 
+  filter(criminals == min(criminals) | residual == min(residual))
+```
+
+# [Residual analysis](http://moderndive.netlify.com/6-regression.html#model1residuals) (⏰ 20 min)
+
+**Part 1:** Perform a residual analysis and look for any systematic patterns in the residuals. Ideally, there should be little to no pattern- why? Does it seem like there is no systematic pattern to the residuals? 
+  
+```{r crime_resid_scatter}
+ggplot(regression_points, aes(x = public_houses, y = residual)) +
+  geom_point() +
+  labs(x = "Public Houses", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1)
+```
+
+
+
+**Part 2:** Recreate this density plot of the residuals (hint: `?geom_vline()`). Recall that we would like the residuals to be normally distributed with mean 0. Use `dplyr` to calculate the mean of the residuals- is it (pretty close to) 0? Do you think you have more positive residuals than negative, or vice versa?
+
+```{r crime_resid_density}
+ggplot(regression_points, aes(x = residual)) +
+  geom_density() +
+  labs(x = "Residual") +
+  geom_vline(aes(xintercept = 0), color = "red")
+```
+
+![](`r knitr::fig_chunk('crime_resid_density','png')`)
+
+```{r}
+regression_points %>% 
+  summarize(mean_resid = mean(residual))
+```
+

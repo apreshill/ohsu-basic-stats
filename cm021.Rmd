@@ -21,7 +21,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
 
 # Overview
 
-- A complete knitted `html` file is due on Sakai by end of class Tuesday July 17th (before 5pm). 
+- A complete knitted `html` file is due on Sakai by beginning of class Thursday July 19th (2:30pm). 
 - This lab is estimated to take approximately 45 minutes. We'll work together in chunks to keep tabs on time, with the aim that we all *finish* during the in-class work period. 
 - This lab is based on [Chapter 6: Basic Regression in ModernDive](http://moderndive.netlify.com/6-regression.html). Please open it and follow closely!
 - You'll need to load these packages to do the lab (make sure they are installed first, not in your .Rmd file!):
@@ -123,70 +123,5 @@ ggplot(crime, aes(x = public_houses, y = criminals)) +
 
 ![](`r knitr::fig_chunk('crime_scatterplot','png')`)
 
-# [Simple linear regression](http://moderndive.netlify.com/6-regression.html#model1table) (⏰ 10 min)
-
-**Part 1:** First “fit” the linear regression model to the data using the `lm()` function, then apply the `get_regression_table()` function from the `moderndive` R package to the model object. Use the output to fill in this formula with `y`, `x`, and the intercept and slope coefficients: (copy and paste into your narative: `$$\hat{y} = b_0 + b_1{x}$$`)
-
-$$\hat{y} = b_0 + b_1{x}$$
-
-**Part 2:** Interpret the intercept coefficient and the slope coefficient (see [here](http://moderndive.netlify.com/6-regression.html#model1table) for an example). How do the regression results match up with the results from your exploratory data analysis above?
-
-```{r}
-crime_lm <- lm(criminals ~ public_houses, data = crime)
-get_regression_table(crime_lm)
-```
-
-# [Observed/fitted values and residuals](http://moderndive.netlify.com/6-regression.html#model1points) (⏰ 10 min)
-
-**Part 1:** What are the observed and fitted values for the Cornwall (`ID` = 20) and Monmouth regions (`ID` = 23)? Which region do you think the reverend called "the happiest example of the infrequency of crime"?
-
-```{r}
-regression_points <- get_regression_points(crime_lm)
-regression_points %>% 
-  filter(ID %in% c(20, 23))
-```
-
-**Part 2:** In fact, we could argue with the reverend about the happiest example of the infrequency of crime. There are two ways you could define this, and you'll do with with a `filter` using the `|` operator (think: `or`). 
-
-The first way is that the county had the lowest criminals overall. The second is that the county had the lowest criminals *given their number of public houses*. This would mean that the region has the lowest observed criminals, compared to the fitted value based on predicting criminals from public houses. You'll need to match the `ID` column as a row in the original data (you can just do this visually by comparing the tibbles and typing your answers in your narrative- you don't have to do a join here).
-
-```{r}
-# Derby is lowest residual (ID = 20)
-# Cornwall is the lowest observed (ID = 33)
-regression_points %>% 
-  filter(criminals == min(criminals) | residual == min(residual))
-
-regression_points %>% 
-  left_join(select(crime, county, criminals, public_houses)) %>% 
-  filter(criminals == min(criminals) | residual == min(residual))
-```
-
-# [Residual analysis](http://moderndive.netlify.com/6-regression.html#model1residuals) (⏰ 10 min)
-
-**Part 1:** Perform a residual analysis and look for any systematic patterns in the residuals. Ideally, there should be little to no pattern- why? Does it seem like there is no systematic pattern to the residuals? 
-  
-```{r crime_resid_scatter}
-ggplot(regression_points, aes(x = public_houses, y = residual)) +
-  geom_point() +
-  labs(x = "Public Houses", y = "Residual") +
-  geom_hline(yintercept = 0, col = "blue", size = 1)
-```
-
-
-
-**Part 2:** Recreate this density plot of the residuals (hint: `?geom_vline()`). Recall that we would like the residuals to be normally distributed with mean 0. Use `dplyr` to calculate the mean of the residuals- is it (pretty close to) 0? Do you think you have more positive residuals than negative, or vice versa?
-
-```{r crime_resid_density}
-ggplot(regression_points, aes(x = residual)) +
-  geom_density() +
-  labs(x = "Residual") +
-  geom_vline(aes(xintercept = 0), color = "red")
-```
-
-![](`r knitr::fig_chunk('crime_resid_density','png')`)
-
-```{r}
-regression_points %>% 
-  summarize(mean_resid = mean(residual))
-```
+Stop here, and turn in your in-class work! We'll start with simple linear regression with this dataset in the [next lab](cm022.html).
 
