@@ -12,7 +12,7 @@
 <meta name="author" content="Alison Hill" />
 
 
-<title>CONJ620: CM 2.1</title>
+<title>CONJ620: CM 2.2</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -334,10 +334,10 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">CONJ620: CM 2.1</h1>
-<h3 class="subtitle"><em>Simple linear regression</em></h3>
+<h1 class="title toc-ignore">CONJ620: CM 2.2</h1>
+<h3 class="subtitle"><em>Simple linear regression, continued</em></h3>
 <h4 class="author"><em>Alison Hill</em></h4>
-<h4 class="date"><em>7/17/2018</em></h4>
+<h4 class="date"><em>7/19/2018</em></h4>
 
 </div>
 
@@ -372,44 +372,31 @@ library(skimr)</code></pre>
 
 crime &lt;- read_table(&quot;http://users.stat.ufl.edu/~winner/data/beerhall.dat&quot;,
                     col_names = crimenames)</code></pre>
-</div>
-<div id="basics" class="section level1">
-<h1><span class="header-section-number">2</span> Basics</h1>
+<p>Recall we are using the <code>crime</code> dataset with:</p>
 <ul>
-<li>What is the dependent variable? <code>criminals</code></li>
-<li>What is the independent variable? <code>public_houses</code></li>
-<li>Copy and paste the provided equation that starts/ends with <code>$$</code> into your narrative (not an R code chunk), and replace <code>y</code> and <code>x</code> in this formula with meaningful variable names (you may wish to reference the <code>crimenames</code> object we made above): <code>$$\hat{y} = b_0 + b_1{x}$$</code> <span class="math display">\[\hat{criminals} = b_0 + b_1{\textrm{public_houses}}\]</span></li>
-<li>The “best-fitting” regression line is “best” in that it minimizes what?</li>
-<li>Make sure you read <a href="http://moderndive.netlify.com/6-regression.html#leastsquares">this</a></li>
+<li>Outcome variable / dependent variable / response variable / y = <code>criminals</code></li>
+<li>Predictor variable / independent variable / explanatory variable / x = <code>public_houses</code></li>
 </ul>
-<blockquote>
-<p>The best-fitting regression is one that minimizes the sum of the squared residuals. Squared residuals are calculated by taking the difference between the observed y values (here, criminals) and the fitted or predicted y values (so y hat!), then squaring each of those differences. The differences are squared so that positive and negative deviations of the same amount are treated equally.</p>
-</blockquote>
-<ul>
-<li>Why is this method called “simple linear regression” (as opposed to the method in <a href="http://moderndive.netlify.com/7-multiple-regression.html">Chapter 7</a>)?</li>
-</ul>
-<blockquote>
-<p>Linear regression refer to the form of the statistical model we are using- in linear regression, our model is in the form of a line, defined by an intercept and slope. The “simple” part refers to the fact that we have only one predictor variable (or independent variable/IV). In multiple regression, we’ll have two or more predictor variables or IVs. All of these cases of regression are univariate, as opposed to multivariate. Univariate vs. multivariate refers to the number of dependent variables or DVs. In this case, we just want to predict one variable (here, <code>criminals</code>). In this course we will not cover multivariate methods.</p>
-</blockquote>
+<p>Here is the linear regression formula: <span class="math display">\[\hat{\textrm{criminals}} = b_0 + b_1{\textrm{public_houses}}\]</span></p>
 </div>
 <div id="eda" class="section level1">
-<h1><span class="header-section-number">3</span> EDA</h1>
+<h1><span class="header-section-number">2</span> EDA</h1>
 <p>Refer back to the <a href="cm021-solutions.html">lab solutions</a> to see the code we used to do the EDA.</p>
 </div>
 <div id="simple-linear-regression-20-min" class="section level1">
-<h1><span class="header-section-number">4</span> <a href="http://moderndive.netlify.com/6-regression.html#model1table">Simple linear regression</a> (⏰ 20 min)</h1>
+<h1><span class="header-section-number">3</span> <a href="http://moderndive.netlify.com/6-regression.html#model1table">Simple linear regression</a> (⏰ 20 min)</h1>
 <p><strong>Part 1:</strong> First “fit” the linear regression model to the data using the <code>lm()</code> function, then apply the <code>get_regression_table()</code> function from the <code>moderndive</code> R package to the model object. Use the output to fill in this formula with <code>y</code>, <code>x</code>, and the intercept and slope coefficients: (copy and paste into your narative: <code>$$\hat{y} = b_0 + b_1{x}$$</code>)</p>
 <p><span class="math display">\[\hat{y} = b_0 + b_1{x}\]</span></p>
 <p><strong>Part 2:</strong> Interpret the intercept coefficient and the slope coefficient (see <a href="http://moderndive.netlify.com/6-regression.html#model1table">here</a> for an example). How do the regression results match up with the results from your exploratory data analysis above?</p>
 </div>
 <div id="observedfitted-values-and-residuals-10-min" class="section level1">
-<h1><span class="header-section-number">5</span> <a href="http://moderndive.netlify.com/6-regression.html#model1points">Observed/fitted values and residuals</a> (⏰ 10 min)</h1>
+<h1><span class="header-section-number">4</span> <a href="http://moderndive.netlify.com/6-regression.html#model1points">Observed/fitted values and residuals</a> (⏰ 10 min)</h1>
 <p><strong>Part 1:</strong> What are the observed and fitted values for the Cornwall (<code>ID</code> = 20) and Monmouth regions (<code>ID</code> = 23)? Which region do you think the reverend called “the happiest example of the infrequency of crime”?</p>
 <p><strong>Part 2:</strong> In fact, we could argue with the reverend about the happiest example of the infrequency of crime. There are two ways you could define this, and you’ll do with with a <code>filter</code> using the <code>|</code> operator (think: <code>or</code>).</p>
 <p>The first way is that the county had the lowest criminals overall. The second is that the county had the lowest criminals <em>given their number of public houses</em>. This would mean that the region has the lowest observed criminals, compared to the fitted value based on predicting criminals from public houses. You’ll need to match the <code>ID</code> column as a row in the original data (you can just do this visually by comparing the tibbles and typing your answers in your narrative- you don’t have to do a join here).</p>
 </div>
 <div id="residual-analysis-20-min" class="section level1">
-<h1><span class="header-section-number">6</span> <a href="http://moderndive.netlify.com/6-regression.html#model1residuals">Residual analysis</a> (⏰ 20 min)</h1>
+<h1><span class="header-section-number">5</span> <a href="http://moderndive.netlify.com/6-regression.html#model1residuals">Residual analysis</a> (⏰ 20 min)</h1>
 <p><strong>Part 1:</strong> Perform a residual analysis and look for any systematic patterns in the residuals. Ideally, there should be little to no pattern- why? Does it seem like there is no systematic pattern to the residuals?</p>
 <p><strong>Part 2:</strong> Recreate this density plot of the residuals (hint: <code>?geom_vline()</code>). Recall that we would like the residuals to be normally distributed with mean 0. Use <code>dplyr</code> to calculate the mean of the residuals- is it (pretty close to) 0? Do you think you have more positive residuals than negative, or vice versa?</p>
 <div class="figure">

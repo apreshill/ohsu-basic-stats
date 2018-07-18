@@ -1,8 +1,8 @@
 ---
-title: "CONJ620: CM 2.1"
-subtitle: "Simple linear regression"
+title: "CONJ620: CM 2.2"
+subtitle: "Simple linear regression, continued"
 author: "Alison Hill"
-date: "7/17/2018"
+date: "7/19/2018"
 output: 
   html_document:
     toc: true
@@ -47,8 +47,6 @@ library(skimr)
 
 Let's investigate how well we can predict criminals (per 100k population) from the number of public houses (ale/beer houses per 100k population) using simple linear regression. Here is how to read in the data (please copy and paste into a code chunk in your .Rmd):
 
-
-
 ```{r crime_data, include = TRUE}
 crimenames <- c("county", "region_name", "region_code",
                "criminals", "public_houses", "school_attendance",
@@ -58,24 +56,13 @@ crime <- read_table("http://users.stat.ufl.edu/~winner/data/beerhall.dat",
                     col_names = crimenames)
 ```
 
+Recall we are using the `crime` dataset with:
 
+- Outcome variable / dependent variable / response variable / y = `criminals`
+- Predictor variable / independent variable / explanatory variable / x = `public_houses`
 
-# Basics
-
-- What is the dependent variable? `criminals`
-- What is the independent variable? `public_houses`
-- Copy and paste the provided equation that starts/ends with `$$` into your narrative (not an R code chunk), and replace `y` and `x` in this formula with meaningful variable names (you may wish to reference the `crimenames` object we made above):
-`$$\hat{y} = b_0 + b_1{x}$$`
-$$\hat{criminals} = b_0 + b_1{\textrm{public_houses}}$$
-- The “best-fitting” regression line is “best” in that it minimizes what?
-  - Make sure you read [this](http://moderndive.netlify.com/6-regression.html#leastsquares)
-  
-> The best-fitting regression is one that minimizes the sum of the squared residuals. Squared residuals are calculated by taking the difference between the observed y values (here, criminals) and the fitted or predicted y values (so y hat!), then squaring each of those differences. The differences are squared so that positive and negative deviations of the same amount are treated equally. 
-
-- Why is this method called "simple linear regression" (as opposed to the method in [Chapter 7](http://moderndive.netlify.com/7-multiple-regression.html))?
-
-> Linear regression refer to the form of the statistical model we are using- in linear regression, our model is in the form of a line, defined by an intercept and slope. The "simple" part refers to the fact that we have only one predictor variable (or independent variable/IV). In multiple regression, we'll have two or more predictor variables or IVs. All of these cases of regression are univariate, as opposed to multivariate. Univariate vs. multivariate refers to the number of dependent variables or DVs. In this case, we just want to predict one variable (here, `criminals`). In this course we will not cover multivariate methods.
-
+Here is the linear regression formula: 
+$$\hat{\textrm{criminals}} = b_0 + b_1{\textrm{public_houses}}$$
 
 # EDA
 
