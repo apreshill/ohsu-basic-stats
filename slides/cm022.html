@@ -3,7 +3,7 @@
   <head>
     <title>CONJ620: CM 2.2</title>
     <meta charset="utf-8">
-    <meta name="author" content="Alison Hill + Grace Lawley" />
+    <meta name="author" content="Alison Hill" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
     <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
@@ -15,8 +15,8 @@
 class: center, middle, inverse, title-slide
 
 # CONJ620: CM 2.2
-## Coding Style
-### Alison Hill + Grace Lawley
+## Coding Style + Linear Models
+### Alison Hill
 
 ---
 
@@ -180,10 +180,8 @@ ggplot(diamonds, mapping = aes(x = price)) +
 
 ---
 
-## Criminals as a function of public houses
+## What do you see?
 
-
-Describe the relationship between public houses and criminals.
 
 `$$\widehat{\textrm{criminals}} = b_0 + b_1~\textrm{public_houses}$$`
 
@@ -195,9 +193,11 @@ Describe the relationship between public houses and criminals.
 ## Use your words
 
 
-Do this in three sentences: 
+--
+
 There seems to be a moderately strong relationship. The slope of the regresion line is positive, also the correlation coefficient of 0.46 is moderate. Meaning as public houses increase, there is an associated increase in criminal activity.
 
+--
 
 ![](cm022_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ---
@@ -212,9 +212,18 @@ There seems to be a moderately strong relationship. The slope of the regresion l
 
 ## Visualizing the linear model
 
-Caution: extrapolating...
+What do you see?
 
 ![](cm022_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Visualizing the linear model
+
+Caution: extrapolating...
+
+![](cm022_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 ---
 
 ## Residuals
@@ -224,7 +233,7 @@ What does a negative residual mean?
 Which counties on the plot have negative residuals, those below or above the line?
 
 
-![](cm022_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+![](cm022_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -309,33 +318,22 @@ While the intercept has a mathematical interpretation (it situates the vertical 
 
 ---
 
-## The linear model with a single predictor
-
-- We're interested in the `\(\beta_0\)` (population parameter for the intercept)
-and the `\(\beta_1\)` (population parameter for the slope) in the 
-following model:
-
-$$ \hat{y} = \beta_0 + \beta_1~x $$
-
---
-
-- But we can't measure the whole population...
-
---
-
-- So we use the sample statistics to estimate them:
-
-$$ \hat{y} = b_0 + b_1~x $$
-
----
-
 ## Least squares regression
 
 The regression line minimizes the sum of squared residuals.
 
+$$ \hat{y} = b_0 + b_1~x $$
+What is another (equivalent) way to say the same thing?
+
 --
 
-If `\(e_i = y - \hat{y}\)`,
+$$ y = b_0 + b_1~x + e $$
+
+$$ y = \hat{y} + e $$
+
+--
+
+If `\(e_i = y_i - \hat{y_i}\)`,
 
 then, the regression line minimizes `\(\sum_{i = 1}^n e_i^2\)`.
 
@@ -343,20 +341,20 @@ then, the regression line minimizes `\(\sum_{i = 1}^n e_i^2\)`.
 
 ## Visualizing residuals
 
-![](cm022_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
-
-
----
-
-## Visualizing residuals (cont.)
-
 ![](cm022_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
 
 ---
 
 ## Visualizing residuals (cont.)
 
 ![](cm022_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+
+## Visualizing residuals (cont.)
+
+![](cm022_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 
 
 
@@ -378,47 +376,37 @@ then, the regression line minimizes `\(\sum_{i = 1}^n e_i^2\)`.
 - The residuals and `\(x\)` values are uncorrelated.
 
 ---
-## The means
-
-![](cm022_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
-
----
-## A thought experiment...
+## A thought experiment...(1)
 
 ![](cm022_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 
 ---
-## A thought experiment...
+## A thought experiment...(2)
+
+![](cm022_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...(2)
 
 "The turquoise points are what we would expect to see if there was `___` association between `public_houses` and `criminals`"
 
-![](cm022_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](cm022_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 ---
-## A thought experiment...
+## A thought experiment...(2)
 
 "The bright blue points are what we would expect to see if there was `___` a `___` of 0.46 between `public_houses` and `criminals`"
-
-![](cm022_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
-
----
-## A thought experiment...
-
-We are looking at **THREE** models!
-
-1. Zero association between the variables (aka, the mean model, aka the null model)
-2. An exact association of 0.46 between the variables
-3. The actual data-generating model (this will always be unknown to us!)
 
 ![](cm022_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
-## A thought experiment...
+## A thought experiment...3 "models"?
 
-Where are the residuals here?
-
---
+1. Zero association between the variables (aka, the mean / null model)
+2. An exact association of 0.46 between the variables
+3. The data itself
 
 ![](cm022_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
 
 ---
 ## A thought experiment...
@@ -435,6 +423,134 @@ Ignore the regression line/predicted points: What would the magnitude of the dif
 --
 
 ![](cm022_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+---
+## What about spread?
+
+Variance is calculated by taking the sum of squared differences from the mean, and dividing by `N-1`
+
+
+
+```
+## # A tibble: 1 x 2
+##   var_crime sd_crime
+##       &lt;dbl&gt;    &lt;dbl&gt;
+## 1     1715.     41.4
+```
+
+--
+
+
+
+```r
+crime %&gt;% 
+  mutate(sq_diff = (criminals - mean(criminals))^2) %&gt;% 
+  summarize(sum_sq_diff = sum(sq_diff),
+            sum_divide_n = sum_sq_diff / (n() - 1),
+            sq_sum_divide_n = sqrt(sum_divide_n))
+```
+
+```
+## # A tibble: 1 x 3
+##   sum_sq_diff sum_divide_n sq_sum_divide_n
+##         &lt;dbl&gt;        &lt;dbl&gt;           &lt;dbl&gt;
+## 1      66898.        1715.            41.4
+```
+
+
+---
+## A thought experiment...
+
+Take another look: the sum of squared differences between the `___` and the `___` values of `criminals` is the numerator of the variance (said another way, divide by `N-1` to get `var(criminals)`)
+
+--
+
+![](cm022_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+The __"Sums of Squares Total"__ is the total amount of error present when the most basic model is applied to the data. 
+
+--
+
+What is the "most basic model"?
+
+--
+
+![](cm022_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+Where are the residuals here?
+
+--
+
+![](cm022_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+The __"Sums of Squares Residual"__ is the total amount of error present when the best-fitting linear model is applied to the data. 
+
+--
+
+What is the "best fitting linear model"?
+
+![](cm022_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...(last!)
+
+What about the difference between the mean and predicted values?
+
+![](cm022_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...(last!)
+
+The __"Sums of Squares Model"__ is the total amount of error present when the fitted values from the best-fitting linear model are compared to the fitted values from the most basic model.
+
+![](cm022_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+
+---
+## All together now
+
+.pull-left[
+`$$SS_{total}$$`
+![](cm022_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+`$$SS_{residual}$$`
+![](cm022_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+
+`$$SS_{model}$$`
+![](cm022_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+]
+
+
+
+---
+## Summing the sums of squares
+
+`$$SS_{total} = SS_{model} + SS_{residual}$$`
+
+
+total variation = "explained" variation + residual ("left over") variation
+
+---
+## All of statistics
+
+$$ \textrm{outcome}_i = \textrm{(Model}_i) + \textrm{error}_i$$
+
+What is the outcome and model for:
+
+- Sum of squares total?
+- Sum of squares residual?
+- Sum of squares model?
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="https://platform.twitter.com/widgets.js"></script>

@@ -83,7 +83,7 @@ crime_lm <- lm(criminals ~ public_houses, data = crime)
 get_regression_table(crime_lm)
 ```
 
-# [Observed/fitted values and residuals](http://moderndive.netlify.com/6-regression.html#model1points) (⏰ 10 min)
+# [Observed/fitted values and residuals](http://moderndive.netlify.com/6-regression.html#model1points) (⏰ 20 min)
 
 **Part 1:** What are the observed and fitted values for the Cornwall (`ID` = 20) and Monmouth regions (`ID` = 23)? Which region do you think the reverend called "the happiest example of the infrequency of crime"?
 
@@ -137,8 +137,3 @@ regression_points %>%
   summarize(mean_resid = mean(residual))
 ```
 
-# to do
-
-## Understanding predictions
-
-- Add mean of x and mean of y to scatterplot with linear regression line, what do you notice? Specifically, where do all three lines intersect, and what does that mean? **Hint:** this will _always_ be the case in a linear regression model!

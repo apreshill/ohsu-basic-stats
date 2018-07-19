@@ -1,7 +1,7 @@
 ---
 title: "CONJ620: CM 2.2"
-subtitle: "Coding Style"
-author: "Alison Hill + Grace Lawley"
+subtitle: "Coding Style + Linear Models"
+author: "Alison Hill"
 output:
   xaringan::moon_reader:
     css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
@@ -193,10 +193,8 @@ ggplot(diamonds, mapping = aes(x = price)) +
 
 ---
 
-## Criminals as a function of public houses
+## What do you see?
 
-
-Describe the relationship between public houses and criminals.
 
 $$\widehat{\textrm{criminals}} = b_0 + b_1~\textrm{public_houses}$$
 
@@ -204,8 +202,7 @@ $$\widehat{\textrm{criminals}} = b_0 + b_1~\textrm{public_houses}$$
 ```{r echo=FALSE}
 ggplot(crime, aes(x = public_houses, y = criminals)) +
   geom_point(size = 2, color = "navy", alpha = .8) +
-  geom_smooth(method = "lm", colour = "dodgerblue") + # lm for linear model
-  labs(title = "Criminals vs. public houses", subtitle = "Just the data") 
+  geom_smooth(method = "lm", colour = "dodgerblue")  # lm for linear model
 ```
 
 ---
@@ -213,9 +210,11 @@ ggplot(crime, aes(x = public_houses, y = criminals)) +
 ## Use your words
 
 
-Do this in three sentences: 
+--
+
 There seems to be a moderately strong relationship. The slope of the regresion line is positive, also the correlation coefficient of `r round(cor(crime$public_houses, crime$criminals),2)` is moderate. Meaning as public houses increase, there is an associated increase in criminal activity.
 
+--
 
 ```{r echo=FALSE}
 ggplot(crime, aes(x = public_houses, y = criminals)) +
@@ -240,6 +239,22 @@ ggplot(crime, aes(x = public_houses, y = criminals)) +
 
 ## Visualizing the linear model
 
+What do you see?
+
+```{r echo=FALSE}
+ggplot(crime, aes(x = public_houses, y = criminals)) +
+  geom_point(size = 2, color = "navy", alpha = .8) +
+  geom_smooth(method = "lm", colour = "dodgerblue", se = FALSE) + 
+  labs(title = "Observed + line") +
+  coord_cartesian(xlim = c(0, 820)) +
+  scale_x_continuous(expand=c(0,0), limits=c(0,820))
+```
+
+
+---
+
+## Visualizing the linear model
+
 Caution: extrapolating...
 
 ```{r echo=FALSE}
@@ -248,8 +263,8 @@ ggplot(crime, aes(x = public_houses, y = criminals)) +
   geom_smooth(method = "lm", colour = "dodgerblue", se = FALSE, 
               fullrange = TRUE) + 
   labs(title = "Observed + line + fullrange") +
-  coord_cartesian(xlim = c(0, 805)) +
-  scale_x_continuous(expand=c(0,0), limits=c(0,805))
+  coord_cartesian(xlim = c(0, 820)) +
+  scale_x_continuous(expand=c(0,0), limits=c(0,820))
 ```
 ---
 
@@ -330,33 +345,22 @@ While the intercept has a mathematical interpretation (it situates the vertical 
 
 ---
 
-## The linear model with a single predictor
-
-- We're interested in the $\beta_0$ (population parameter for the intercept)
-and the $\beta_1$ (population parameter for the slope) in the 
-following model:
-
-$$ \hat{y} = \beta_0 + \beta_1~x $$
-
---
-
-- But we can't measure the whole population...
-
---
-
-- So we use the sample statistics to estimate them:
-
-$$ \hat{y} = b_0 + b_1~x $$
-
----
-
 ## Least squares regression
 
 The regression line minimizes the sum of squared residuals.
 
+$$ \hat{y} = b_0 + b_1~x $$
+What is another (equivalent) way to say the same thing?
+
 --
 
-If $e_i = y - \hat{y}$,
+$$ y = b_0 + b_1~x + e $$
+
+$$ y = \hat{y} + e $$
+
+--
+
+If $e_i = y_i - \hat{y_i}$,
 
 then, the regression line minimizes $\sum_{i = 1}^n e_i^2$.
 
@@ -430,7 +434,7 @@ $$\sum_{i = 1}^n e_i = 0$$
 - The residuals and $x$ values are uncorrelated.
 
 ---
-## The means
+## A thought experiment...(1)
 
 ```{r echo = FALSE}
 crime_scatter +
@@ -442,7 +446,7 @@ crime_scatter +
 ```
 
 ---
-## A thought experiment...
+## A thought experiment...(2)
 
 ```{r echo = FALSE}
 crime_scatter +
@@ -452,7 +456,7 @@ crime_scatter +
 ```
 
 ---
-## A thought experiment...
+## A thought experiment...(2)
 
 "The turquoise points are what we would expect to see if there was `___` association between `public_houses` and `criminals`"
 
@@ -468,7 +472,7 @@ crime_scatter +
   labs(subtitle = "Add mean criminal values")
 ```
 ---
-## A thought experiment...
+## A thought experiment...(2)
 
 "The bright blue points are what we would expect to see if there was `___` a `___` of `r round(cor(crime$criminals, crime$public_houses), 2)` between `public_houses` and `criminals`"
 
@@ -490,16 +494,16 @@ crime_scatter +
 ```
 
 ---
-## A thought experiment...
+## A thought experiment...3 "models"?
 
-We are looking at **THREE** models!
-
-1. Zero association between the variables (aka, the mean model, aka the null model)
+1. Zero association between the variables (aka, the mean / null model)
 2. An exact association of `r round(cor(crime$criminals, crime$public_houses), 2)` between the variables
-3. The actual data-generating model (this will always be unknown to us!)
+3. The data itself
 
 ```{r echo = FALSE}
 crime_scatter +
+  geom_vline(aes(xintercept = min(public_houses)),
+             color = "yellow") +
   geom_hline(aes(yintercept = mean(criminals)),
              color = "turquoise") +
   geom_point(aes(x = public_houses, 
@@ -515,27 +519,6 @@ crime_scatter +
   labs(subtitle = NULL, title = NULL)
 ```
 
----
-## A thought experiment...
-
-Where are the residuals here?
-
---
-
-```{r echo = FALSE}
-crime_scatter +
-  geom_segment(aes(x = public_houses, 
-                   xend = public_houses, 
-                   y = criminals, 
-                   yend = predict(lm(criminals ~ public_houses))), 
-               colour = "red") +
-  geom_point(aes(x = public_houses, 
-             y = predict(lm(criminals ~ public_houses))),
-             fill = "dodgerblue",
-             size = 2,
-             shape = 21) +
-  labs(subtitle = NULL, title = NULL)
-```
 
 ---
 ## A thought experiment...
@@ -567,7 +550,8 @@ Ignore the regression line/predicted points: What would the magnitude of the dif
 --
 
 ```{r echo = FALSE}
-ggplot(crime, aes(x = public_houses, y = criminals)) +
+ss_total <- ggplot(crime, aes(x = public_houses, y = criminals)) +
+  geom_smooth(method = "lm", se = FALSE, colour = "dodgerblue", alpha = .2) +  
   geom_segment(aes(x = public_houses, 
                    xend = public_houses, 
                    y = criminals, 
@@ -582,4 +566,174 @@ ggplot(crime, aes(x = public_houses, y = criminals)) +
              size = 2,
              shape = 21) +
   labs(subtitle = NULL, title = NULL)
+ss_total
 ```
+
+---
+## What about spread?
+
+Variance is calculated by taking the sum of squared differences from the mean, and dividing by `N-1`
+
+
+```{r echo = FALSE}
+crime %>% 
+  summarize(var_crime = var(criminals),
+            sd_crime = sd(criminals))
+```
+
+--
+
+
+```{r}
+crime %>% 
+  mutate(sq_diff = (criminals - mean(criminals))^2) %>% 
+  summarize(sum_sq_diff = sum(sq_diff),
+            sum_divide_n = sum_sq_diff / (n() - 1),
+            sq_sum_divide_n = sqrt(sum_divide_n))
+```
+
+
+---
+## A thought experiment...
+
+Take another look: the sum of squared differences between the `___` and the `___` values of `criminals` is the numerator of the variance (said another way, divide by `N-1` to get `var(criminals)`)
+
+--
+
+```{r echo = FALSE}
+ss_total
+```
+
+---
+## A thought experiment...
+
+The __"Sums of Squares Total"__ is the total amount of error present when the most basic model is applied to the data. 
+
+--
+
+What is the "most basic model"?
+
+--
+
+```{r echo = FALSE}
+ss_total
+```
+
+---
+## A thought experiment...
+
+Where are the residuals here?
+
+--
+
+```{r echo = FALSE}
+ss_resid <- crime_scatter +
+  geom_hline(aes(yintercept = mean(criminals)),
+             color = "turquoise", alpha = .5) + 
+  geom_segment(aes(x = public_houses, 
+                   xend = public_houses, 
+                   y = criminals, 
+                   yend = predict(lm(criminals ~ public_houses))), 
+               colour = "red") +
+  geom_point(aes(x = public_houses, 
+             y = predict(lm(criminals ~ public_houses))),
+             fill = "dodgerblue",
+             size = 2,
+             shape = 21) +
+  labs(subtitle = NULL, title = NULL)
+ss_resid
+```
+
+---
+## A thought experiment...
+
+The __"Sums of Squares Residual"__ is the total amount of error present when the best-fitting linear model is applied to the data. 
+
+--
+
+What is the "best fitting linear model"?
+
+```{r echo = FALSE}
+ss_resid 
+```
+
+---
+## A thought experiment...(last!)
+
+What about the difference between the mean and predicted values?
+
+```{r echo = FALSE}
+ss_model <- crime_scatter +
+  geom_segment(aes(x = public_houses, 
+                   xend = public_houses, 
+                   y = predict(lm(criminals ~ public_houses)), 
+                   yend = mean(criminals)), 
+               colour = "turquoise") +
+  geom_hline(aes(yintercept = mean(criminals)),
+             color = "turquoise") +
+  geom_point(aes(x = public_houses, 
+             y = mean(criminals)),
+             fill = "turquoise",
+             size = 2,
+             shape = 21) +
+  geom_point(aes(x = public_houses, 
+             y = predict(lm(criminals ~ public_houses))),
+             fill = "dodgerblue",
+             size = 2,
+             shape = 21) +
+  labs(subtitle = NULL, title = NULL)
+ss_model
+```
+
+---
+## A thought experiment...(last!)
+
+The __"Sums of Squares Model"__ is the total amount of error present when the fitted values from the best-fitting linear model are compared to the fitted values from the most basic model.
+
+```{r echo = FALSE}
+ss_model
+```
+
+---
+## All together now
+
+.pull-left[
+$$SS_{total}$$
+```{r echo = FALSE}
+ss_total
+```
+
+]
+
+.pull-right[
+$$SS_{residual}$$
+```{r echo = FALSE}
+ss_resid
+```
+
+$$SS_{model}$$
+```{r echo = FALSE}
+ss_model
+```
+]
+
+
+
+---
+## Summing the sums of squares
+
+$$SS_{total} = SS_{model} + SS_{residual}$$
+
+
+total variation = "explained" variation + residual ("left over") variation
+
+---
+## All of statistics
+
+$$ \textrm{outcome}_i = \textrm{(Model}_i) + \textrm{error}_i$$
+
+What is the outcome and model for:
+
+- Sum of squares total?
+- Sum of squares residual?
+- Sum of squares model?
