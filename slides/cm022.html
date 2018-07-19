@@ -25,6 +25,8 @@ class: center, middle, inverse, title-slide
 
 
 
+
+
 class: center, middle
 
 # Coding style
@@ -150,6 +152,289 @@ ggplot(diamonds, mapping = aes(x = price)) +
   # Bad
        y = 'Frequency')
 ```
+
+---
+## Back to linear models
+
+---
+
+## Vocabulary
+
+- **Response variable:** Variable whose behavior or variation you are trying to understand, on the y-axis (dependent variable)
+
+--
+
+- **Explanatory variables:** Other variables that you want to use to explain the variation in the response, on the x-axis (independent variables)
+
+--
+
+- **Predicted value:** Output of the function **model function**
+    - The model function gives the typical value of the response variable
+    *conditioning* on the explanatory variables
+
+--
+
+- **Residuals:** Show how far each case is from its model value
+    - Residual = Observed value - Predicted value
+    - Tells how far above/below the model function each case is
+
+---
+
+## Criminals as a function of public houses
+
+
+Describe the relationship between public houses and criminals.
+
+`$$\widehat{\textrm{criminals}} = b_0 + b_1~\textrm{public_houses}$$`
+
+
+![](cm022_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+## Use your words
+
+
+Do this in three sentences: 
+There seems to be a moderately strong relationship. The slope of the regresion line is positive, also the correlation coefficient of 0.46 is moderate. Meaning as public houses increase, there is an associated increase in criminal activity.
+
+
+![](cm022_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+---
+
+## Visualizing the linear model
+
+... without the measure of uncertainty around the line
+
+![](cm022_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+
+## Visualizing the linear model
+
+Caution: extrapolating...
+
+![](cm022_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+---
+
+## Residuals
+
+What does a negative residual mean? 
+
+Which counties on the plot have negative residuals, those below or above the line?
+
+
+![](cm022_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+
+## Models - upsides and downsides
+
+- Models can sometimes reveal patterns that are not evident in a graph of the
+data. This is a great advantage of modelling over simple visual inspection of
+data. 
+
+- There is a real risk, however, that a model is imposing structure that is
+not really there on the scatter of data, just as people imagine animal shapes in
+the stars. A skeptical approach is always warranted.
+
+---
+
+## Variation around the model...
+
+is just as important as the model, if not more!
+
+*Statistics is the explanation of variation in the context of what remains
+unexplained.*
+
+- The scatter suggests that there might be other factors that account for large parts 
+of painting-to-painting variability, or perhaps just that randomness plays a big role.
+
+- Adding more explanatory variables to a model can sometimes usefully reduce
+the size of the scatter around the model. (We'll talk more about this later.)
+
+---
+## Criminals &amp; public houses
+
+
+```r
+(crime_from_ph &lt;- lm(criminals ~ public_houses, data = crime))
+```
+
+```
+## 
+## Call:
+## lm(formula = criminals ~ public_houses, data = crime)
+## 
+## Coefficients:
+##   (Intercept)  public_houses  
+##      109.3399         0.1162
+```
+
+--
+
+&lt;br&gt;
+
+`$$\widehat{\textrm{criminals}} = 109.34 + .12~\textrm{public_houses}$$`
+--
+
+- **Slope:** For each additional public house per 100k people, the crime per 100k people is expected to be higher, on average, by 0.12.
+
+--
+
+- **Intercept:** Counties with 0 public houses are expected to have crime rates at 109.34 per 100k people, on average.
+    - Does this make sense?
+
+---
+## Intercept
+
+- **Intercept:** Counties with 0 public houses are expected to have crime rates at 109.34 per 100k people, on average.
+    - Does this make sense? 
+    - Do we have any counties with 0?
+    
+
+```r
+crime %&gt;% 
+  filter(public_houses == 0)
+```
+
+```
+## # A tibble: 0 x 7
+## # ... with 7 variables: county &lt;chr&gt;, region_name &lt;chr&gt;,
+## #   region_code &lt;dbl&gt;, criminals &lt;dbl&gt;, public_houses &lt;dbl&gt;,
+## #   school_attendance &lt;dbl&gt;, worship_attendance &lt;dbl&gt;
+```
+
+While the intercept has a mathematical interpretation (it situates the vertical location of the line), it may not always have a practical one.
+
+---
+
+## The linear model with a single predictor
+
+- We're interested in the `\(\beta_0\)` (population parameter for the intercept)
+and the `\(\beta_1\)` (population parameter for the slope) in the 
+following model:
+
+$$ \hat{y} = \beta_0 + \beta_1~x $$
+
+--
+
+- But we can't measure the whole population...
+
+--
+
+- So we use the sample statistics to estimate them:
+
+$$ \hat{y} = b_0 + b_1~x $$
+
+---
+
+## Least squares regression
+
+The regression line minimizes the sum of squared residuals.
+
+--
+
+If `\(e_i = y - \hat{y}\)`,
+
+then, the regression line minimizes `\(\sum_{i = 1}^n e_i^2\)`.
+
+---
+
+## Visualizing residuals
+
+![](cm022_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Visualizing residuals (cont.)
+
+![](cm022_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+---
+
+## Visualizing residuals (cont.)
+
+![](cm022_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+
+
+---
+
+## Properties of the least squares regression line
+
+- The regression line goes through the center of mass point, the coordinates corresponding to average `\(x\)` and average `\(y\)`: `\((\bar{x}, \bar{y})\)`:
+
+`$$\hat{y} = b_0 + b_1 x ~ \rightarrow ~ b_0 = \hat{y} - b_1 x$$`
+
+- The slope has the same sign as the correlation coefficient:
+
+`$$b_1 = r \frac{s_y}{s_x}$$`
+
+- The sum of the residuals is zero: 
+`$$\sum_{i = 1}^n e_i = 0$$`
+
+- The residuals and `\(x\)` values are uncorrelated.
+
+---
+## The means
+
+![](cm022_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+![](cm022_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+"The turquoise points are what we would expect to see if there was `___` association between `public_houses` and `criminals`"
+
+![](cm022_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+---
+## A thought experiment...
+
+"The bright blue points are what we would expect to see if there was `___` a `___` of 0.46 between `public_houses` and `criminals`"
+
+![](cm022_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+We are looking at **THREE** models!
+
+1. Zero association between the variables (aka, the mean model, aka the null model)
+2. An exact association of 0.46 between the variables
+3. The actual data-generating model (this will always be unknown to us!)
+
+![](cm022_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+Where are the residuals here?
+
+--
+
+![](cm022_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+Are there any other "differences" we can calculate with this set of 3 points/models?
+
+![](cm022_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...
+
+Ignore the regression line/predicted points: What would the magnitude of the differences between the observed `criminals` values and the mean value tell us? *(remember what we said the mean line represented: `___` correlation between variables)*
+
+--
+
+![](cm022_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="https://platform.twitter.com/widgets.js"></script>

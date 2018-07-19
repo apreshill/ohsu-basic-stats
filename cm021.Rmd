@@ -56,7 +56,7 @@ crimenames <- c("county", "region_name", "region_code",
                "criminals", "public_houses", "school_attendance",
                "worship_attendance")
 
-crime <- read_table("http://users.stat.ufl.edu/~winner/data/beerhall.dat",
+crime <- read_table(here::here("data", "beerhall.dat"),
                     col_names = crimenames)
 ```
 

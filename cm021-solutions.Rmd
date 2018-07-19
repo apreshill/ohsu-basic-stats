@@ -1,5 +1,5 @@
 ---
-title: "CONJ620: CM 2.1"
+title: "CONJ620: CM 2.1 SOLUTIONS"
 subtitle: "Simple linear regression"
 author: "Alison Hill"
 date: "7/17/2018"
@@ -56,7 +56,7 @@ crimenames <- c("county", "region_name", "region_code",
                "criminals", "public_houses", "school_attendance",
                "worship_attendance")
 
-crime <- read_table("http://users.stat.ufl.edu/~winner/data/beerhall.dat",
+crime <- read_table(here::here("data", "beerhall.dat"),
                     col_names = crimenames)
 ```
 
@@ -72,13 +72,13 @@ Note: you don't need to use R to answer these questions, but please create a sec
 $$\hat{\textrm{criminals}} = b_0 + b_1{\textrm{public_houses}}$$
 
 - The “best-fitting” regression line is “best” in that it minimizes what?
-  - Make sure you read [this](http://moderndive.netlify.com/6-regression.html#leastsquares)
+    - Make sure you read [this](http://moderndive.netlify.com/6-regression.html#leastsquares)
   
 > The best-fitting regression is one that minimizes the sum of the squared residuals. Squared residuals are calculated by taking the difference between the observed y values (here, criminals) and the fitted or predicted y values (so y hat!), then squaring each of those differences. The differences are squared so that positive and negative deviations of the same amount are treated equally. 
 
 - Why is this method called "simple linear regression" (as opposed to the method in [Chapter 7](http://moderndive.netlify.com/7-multiple-regression.html))?
 
-> Linear regression refer to the form of the statistical model we are using- in linear regression, our model is in the form of a line, defined by an intercept and slope. The "simple" part refers to the fact that we have only one predictor variable (or independent variable/IV). In multiple regression, we'll have two or more predictor variables or IVs. All of these cases of regression are univariate, as opposed to multivariate. Univariate vs. multivariate refers to the number of dependent variables or DVs. In this case, we just want to predict one variable (here, `criminals`). In this course we will not cover multivariate methods.
+> Linear regression refers to the form of the statistical model we are using- in linear regression, our model is in the form of a line, defined by an intercept and slope. The "simple" part refers to the fact that we have only one predictor variable (or independent variable/IV). In multiple regression, we'll have two or more predictor variables or IVs. All of these cases of regression are univariate, as opposed to multivariate. Univariate vs. multivariate refers to the number of dependent variables or DVs. In this case, we just want to predict one variable (here, `criminals`). In this course we will not cover multivariate methods.
 
 
 # EDA
@@ -114,6 +114,10 @@ crime %>%
   summarize(corr = cor(criminals, public_houses))
 ```
 
+You might notice that the output from `summarize` is rounded! Nice catch. I found this: https://github.com/tidyverse/dplyr/issues/3336
+
+> "The numbers should be accurate, they're only shown with three significant numbers (rounded)."
+
 ## Visualize the data (⏰ 5 min)
 
 
@@ -125,5 +129,8 @@ ggplot(crime, aes(x = public_houses, y = criminals)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
 ```
+
+> Do this in three sentences: 
+There seems to be a moderately strong relationship. The slope of the regresion line is positive, also the correlation coefficient of `r round(cor(crime$public_houses, crime$criminals),2)` is moderate. Meaning as public houses increase, there is an associated increase in criminal activity.
 
 ![](`r knitr::fig_chunk('crime_scatterplot','png')`)

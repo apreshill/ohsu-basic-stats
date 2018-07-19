@@ -12,7 +12,7 @@
 <meta name="author" content="Alison Hill" />
 
 
-<title>CONJ620: CM 2.1</title>
+<title>CONJ620: CM 2.1 SOLUTIONS</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -161,14 +161,74 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -334,7 +394,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">CONJ620: CM 2.1</h1>
+<h1 class="title toc-ignore">CONJ620: CM 2.1 SOLUTIONS</h1>
 <h3 class="subtitle"><em>Simple linear regression</em></h3>
 <h4 class="author"><em>Alison Hill</em></h4>
 <h4 class="date"><em>7/17/2018</em></h4>
@@ -371,7 +431,7 @@ library(skimr)</code></pre>
                &quot;criminals&quot;, &quot;public_houses&quot;, &quot;school_attendance&quot;,
                &quot;worship_attendance&quot;)
 
-crime &lt;- read_table(&quot;http://users.stat.ufl.edu/~winner/data/beerhall.dat&quot;,
+crime &lt;- read_table(here::here(&quot;data&quot;, &quot;beerhall.dat&quot;),
                     col_names = crimenames)</code></pre>
 </div>
 <div id="basics-10-min" class="section level1">
@@ -381,8 +441,10 @@ crime &lt;- read_table(&quot;http://users.stat.ufl.edu/~winner/data/beerhall.dat
 <li>What is the dependent variable? <code>criminals</code></li>
 <li>What is the independent variable? <code>public_houses</code></li>
 <li><p>Copy and paste the provided equation that starts/ends with <code>$$</code> into your narrative (not an R code chunk), and replace <code>y</code> and <code>x</code> in this formula with meaningful variable names (you may wish to reference the <code>crimenames</code> object we made above): <code>$$\hat{y} = b_0 + b_1{x}$$</code> <span class="math display">\[\hat{\textrm{criminals}} = b_0 + b_1{\textrm{public_houses}}\]</span></p></li>
-<li>The “best-fitting” regression line is “best” in that it minimizes what?</li>
-<li><p>Make sure you read <a href="http://moderndive.netlify.com/6-regression.html#leastsquares">this</a></p></li>
+<li>The “best-fitting” regression line is “best” in that it minimizes what?
+<ul>
+<li>Make sure you read <a href="http://moderndive.netlify.com/6-regression.html#leastsquares">this</a></li>
+</ul></li>
 </ul>
 <blockquote>
 <p>The best-fitting regression is one that minimizes the sum of the squared residuals. Squared residuals are calculated by taking the difference between the observed y values (here, criminals) and the fitted or predicted y values (so y hat!), then squaring each of those differences. The differences are squared so that positive and negative deviations of the same amount are treated equally.</p>
@@ -391,7 +453,7 @@ crime &lt;- read_table(&quot;http://users.stat.ufl.edu/~winner/data/beerhall.dat
 <li>Why is this method called “simple linear regression” (as opposed to the method in <a href="http://moderndive.netlify.com/7-multiple-regression.html">Chapter 7</a>)?</li>
 </ul>
 <blockquote>
-<p>Linear regression refer to the form of the statistical model we are using- in linear regression, our model is in the form of a line, defined by an intercept and slope. The “simple” part refers to the fact that we have only one predictor variable (or independent variable/IV). In multiple regression, we’ll have two or more predictor variables or IVs. All of these cases of regression are univariate, as opposed to multivariate. Univariate vs. multivariate refers to the number of dependent variables or DVs. In this case, we just want to predict one variable (here, <code>criminals</code>). In this course we will not cover multivariate methods.</p>
+<p>Linear regression refers to the form of the statistical model we are using- in linear regression, our model is in the form of a line, defined by an intercept and slope. The “simple” part refers to the fact that we have only one predictor variable (or independent variable/IV). In multiple regression, we’ll have two or more predictor variables or IVs. All of these cases of regression are univariate, as opposed to multivariate. Univariate vs. multivariate refers to the number of dependent variables or DVs. In this case, we just want to predict one variable (here, <code>criminals</code>). In this course we will not cover multivariate methods.</p>
 </blockquote>
 </div>
 <div id="eda" class="section level1">
@@ -439,6 +501,10 @@ Variable type: numeric
    corr
   &lt;dbl&gt;
 1 0.463</code></pre>
+<p>You might notice that the output from <code>summarize</code> is rounded! Nice catch. I found this: <a href="https://github.com/tidyverse/dplyr/issues/3336" class="uri">https://github.com/tidyverse/dplyr/issues/3336</a></p>
+<blockquote>
+<p>“The numbers should be accurate, they’re only shown with three significant numbers (rounded).”</p>
+</blockquote>
 </div>
 <div id="visualize-the-data-5-min" class="section level2">
 <h2><span class="header-section-number">4.3</span> Visualize the data (⏰ 5 min)</h2>
@@ -447,6 +513,9 @@ Variable type: numeric
   geom_point() +
   geom_smooth(method = &quot;lm&quot;, se = FALSE)</code></pre>
 <p><img src="cm021-solutions_files/figure-html/crime_scatterplot-1.png" width="2100" /></p>
+<blockquote>
+<p>Do this in three sentences: There seems to be a moderately strong relationship. The slope of the regresion line is positive, also the correlation coefficient of 0.46 is moderate. Meaning as public houses increase, there is an associated increase in criminal activity.</p>
+</blockquote>
 <div class="figure">
 <img src="cm021-solutions_files/figure-html/crime_scatterplot-1.png" />
 

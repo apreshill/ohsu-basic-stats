@@ -1,0 +1,17 @@
+Dataset:  beerhall.dat
+
+Source: John Clay (1857). "On the Relation Between Crime, Popular
+Instruction, Attendance on Religious Worship, and Beer-House",
+Journal of the Statistical Society of London, Vol. 20 #1, pp 22-32.
+
+Description: Variables for British counties circa 1850 for
+crime, public bars, school attendance, and church attendance.
+
+Variables/Columns
+County  1-16
+Region Name  18-36
+Region code  43
+Criminals per 100k population  48-51
+Ale/Beer Houses per 100k      56-59
+Attendants @ school per 10k   64-67
+Attendants @ public worship per 2000  72-75

@@ -47,12 +47,13 @@ library(skimr)
 
 Let's investigate how well we can predict criminals (per 100k population) from the number of public houses (ale/beer houses per 100k population) using simple linear regression. Here is how to read in the data (please copy and paste into a code chunk in your .Rmd):
 
+
 ```{r crime_data, include = TRUE}
 crimenames <- c("county", "region_name", "region_code",
                "criminals", "public_houses", "school_attendance",
                "worship_attendance")
 
-crime <- read_table("http://users.stat.ufl.edu/~winner/data/beerhall.dat",
+crime <- read_table(here::here("data", "beerhall.dat"),
                     col_names = crimenames)
 ```
 
@@ -136,3 +137,8 @@ regression_points %>%
   summarize(mean_resid = mean(residual))
 ```
 
+# to do
+
+## Understanding predictions
+
+- Add mean of x and mean of y to scatterplot with linear regression line, what do you notice? Specifically, where do all three lines intersect, and what does that mean? **Hint:** this will _always_ be the case in a linear regression model!
