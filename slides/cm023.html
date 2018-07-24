@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CONJ620: CM 2.3</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alison Hill" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/all.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/v4-shims.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
+    <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# CONJ620: CM 2.3
+## Coding Style + Linear Models
+### Alison Hill
+
+---
+
+
+
+
+
+
+
+
+class: center, middle
+
+# Coding style
+
+---
+
+## Style guide
+
+&gt;"Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread."
+&gt;
+&gt;Hadley Wickham
+
+- Style guide for this course is based on the Tidyverse style guide: http://style.tidyverse.org/
+
+- There's more to it than what we'll cover today
+
+---
+
+## File names and code chunk labels
+
+- Do not use spaces in file names, use `-` or `_` to separate words
+- Use all lowercase letters
+
+
+```r
+# Good
+ucb-admit.csv
+
+# Bad
+UCB Admit.csv
+```
+
+---
+
+## Object names
+
+- Use `_` to separate words in object names
+- Use informative but short object names
+- Do not reuse object names within an analysis
+
+
+```r
+# Good
+acs_employed
+
+# Bad
+acs.employed
+acs2
+acs_subset
+acs_subsetted_for_males
+```
+
+---
+
+## Spacing
+
+- Put a space before and after all infix operators (=, +, -, &lt;-, etc.), and when naming arguments in function calls. 
+- Always put a space after a comma, and never before (just like in regular English).
+
+
+```r
+# Good
+average &lt;- mean(feet / 12 + inches, na.rm = TRUE)
+
+# Bad
+average&lt;-mean(feet/12+inches,na.rm=TRUE)
+```
+
+---
+
+## ggplot
+
+- Always end a line with `+`
+- Always indent the next line
+
+
+```r
+# Good
+ggplot(diamonds, mapping = aes(x = price)) +
+  geom_histogram()
+
+# Bad
+ggplot(diamonds,mapping=aes(x=price))+geom_histogram()
+```
+
+---
+
+## Long lines
+
+- Limit your code to 80 characters per line. This fits comfortably on a printed page with a reasonably sized font.
+
+- Take advantage of RStudio editor's auto formatting for indentation at line breaks.
+
+---
+
+## Assignment
+
+- Use `&lt;-` not `=`
+
+
+```r
+# Good
+x &lt;- 2
+
+# Bad
+x = 2
+```
+
+---
+
+## Quotes
+
+Use `"`, not `'`, for quoting text. The only exception is when the text already contains double quotes and no single quotes.
+
+
+```r
+ggplot(diamonds, mapping = aes(x = price)) +
+  geom_histogram() +
+  # Good
+  labs(title = "`Shine bright like a diamond`",
+  # Good
+       x = "Diamond prices",
+  # Bad
+       y = 'Frequency')
+```
+
+---
+class: inverse, middle, center
+## Back to linear models
+
+---
+
+## Vocabulary
+
+- **Outcome variable:** Observed variable whose behavior or variation you are trying to understand, on the y-axis (aka dependent or response variable)
+
+--
+
+- **Explanatory variables:** Other observed variables that you want to use to explain the variation in the outcome, on the x-axis (aka independent or predictor variables)
+
+--
+
+- **Fitted values:** Output of the **model function** (aka predicted values)
+    - The model function gives the typical value of the response variable
+    *conditioning* on the explanatory variables
+
+--
+
+- **Residuals:** Show how far each case is from its fitted model value
+    - Residual = Observed outcome value - Fitted value
+    - Tells how far above/below the model function each case is
+
+---
+## The conceptual linear model
+
+[ModernDive](http://moderndive.netlify.com/6-regression.html#model1table) presented us with this formula:
+
+`$$\widehat{y} = b_0 + b_1 \cdot x$$`
+
+Where:
+
+* the intercept coefficient is `\(b_0\)`, or the value of `\(\widehat{y}\)` when `\(x=0\)`, and 
+* the slope coefficient `\(b_1\)`, or the increase in `\(\widehat{y}\)` for every increase of one in `\(x\)`.
+
+---
+class: center, middle
+## Let's break down this formula
+
+`$$\widehat{y} = b_0 + b_1 \cdot x$$`
+
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+&lt;br&gt;
+--
+
+`$$\overbrace{\widehat{y}}^{fitted} = \overbrace{b_0}^{intercept} + \overbrace{b_1}^{slope} \cdot x$$`
+
+---
+class: center, middle
+## The linear model in R
+
+`$$\widehat{y} = b_0 + b_1 \cdot x$$`
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+&lt;br&gt;
+--
+
+`$$y = \overbrace{b_0 + b_1 \cdot x}^{\hat{y}} + e$$`
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+
+&lt;br&gt;
+--
+
+
+```r
+lm(y ~ x, data = dataframe) 
+```
+
+---
+## `lm` in R
+
+
+```r
+(crime_from_ph &lt;- lm(criminals ~ public_houses, data = crime))
+```
+
+```
+## 
+## Call:
+## lm(formula = criminals ~ public_houses, data = crime)
+## 
+## Coefficients:
+##   (Intercept)  public_houses  
+##      109.3399         0.1162
+```
+
+
+--
+
+&lt;br&gt;
+
+`$$\widehat{\textrm{criminals}} = 109.34 + .12~\textrm{public_houses}$$`
+--
+
+- **Slope:** For each additional public house per 100k people, the crime per 100k people is expected to be higher, on average, by 0.12.
+
+--
+
+- **Intercept:** Counties with 0 public houses are expected to have crime rates at 109.34 per 100k people, on average.
+    - Does this make sense?
+
+---
+## Interpreting `lm` in R
+
+
+&lt;img src="cm023_files/figure-html/basic_lm-1.png" width="70%" /&gt;
+
+
+`$$\widehat{\textrm{criminals}} = 109.34 + .12~\textrm{public_houses}$$`
+
+
+- **Slope:** For each additional public house per 100k people, the crime per 100k people is expected to be higher, on average, by 0.12.
+
+
+
+- **Intercept:** Counties with 0 public houses are expected to have crime rates at 109.34 per 100k people, on average.
+    - Does this make sense?
+    
+---
+## Intercept
+
+- **Intercept:** Counties with 0 public houses are expected to have crime rates at 109.34 per 100k people, on average.
+    - Does this make sense? 
+    - Do we have any counties with 0?
+    
+
+```r
+crime %&gt;% 
+  filter(public_houses == 0)
+```
+
+```
+## # A tibble: 0 x 7
+## # ... with 7 variables: county &lt;chr&gt;, region_name &lt;chr&gt;,
+## #   region_code &lt;dbl&gt;, criminals &lt;dbl&gt;, public_houses &lt;dbl&gt;,
+## #   school_attendance &lt;dbl&gt;, worship_attendance &lt;dbl&gt;
+```
+
+While the intercept has a mathematical interpretation (it situates the vertical location of the line), it may not always have a practical one.
+
+--
+
+A solution we'll talk more about is ["centering" your variables](https://besjournals.onlinelibrary.wiley.com/doi/pdf/10.1111/j.2041-210X.2010.00012.x) before using `lm`.
+
+---
+
+## Properties of the least squares regression line
+
+- The regression line goes through the center of mass point, the coordinates corresponding to average `\(x\)` and average `\(y\)`: `\((\bar{x}, \bar{y})\)`:
+
+`$$\hat{y} = b_0 + b_1 x ~ \rightarrow ~ b_0 = \hat{y} - b_1 x$$`
+
+- The slope has the same sign as the correlation coefficient:
+
+`$$b_1 = r \frac{s_y}{s_x}$$`
+
+- The sum of the residuals is zero: 
+`$$\sum_{i = 1}^n e_i = 0$$`
+
+- The residuals and `\(x\)` values are uncorrelated.
+---
+## Fitted and residual values
+
+
+```r
+(crime_pts &lt;- get_regression_points(crime_from_ph))
+```
+
+```
+## # A tibble: 40 x 5
+##       ID criminals public_houses criminals_hat residual
+##    &lt;int&gt;     &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;    &lt;dbl&gt;
+##  1     1       200           541          172.    27.8 
+##  2     2       160           504          168.    -7.91
+##  3     3       160           552          173.   -13.5 
+##  4     4       147           295          144.     3.38
+##  5     5       178           409          157.    21.1 
+##  6     6       205           568          175.    29.7 
+##  7     7       183           708          192.    -8.61
+##  8     8       156           624          182.   -25.9 
+##  9     9       173           463          163.     9.86
+## 10    10       132           408          157.   -24.8 
+## # ... with 30 more rows
+```
+
+---
+## Fitted values
+
+What do you see?
+
+![](cm023_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Fitted values
+
+Caution: extrapolating...
+
+![](cm023_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+class: center, middle
+## Break the formula down once more...
+
+
+`$$y = b_0 + b_1 \cdot x + e$$`
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+&lt;br&gt;
+--
+
+`$$\overbrace{y}^{observed} = \overbrace{b_0 + b_1 \cdot x}^{fitted} + \overbrace{e}^{residual}$$`
+
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+
+&lt;br&gt;
+--
+
+`$$\overbrace{y}^{outcome} = \overbrace{b_0 + b_1 \cdot x}^{model} + \overbrace{e}^{error}$$`
+
+---
+class: center, middle
+## All of statistics
+
+
+`$$\overbrace{y}^{outcome} = \overbrace{b_0 + b_1 \cdot x}^{model} + \overbrace{e}^{error}$$`
+
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+
+&lt;br&gt;
+--
+
+`$$\textrm{outcome}_i = \textrm{(Model}_i) + \textrm{error}_i$$`
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+
+&lt;br&gt;
+--
+
+&gt; *"All models are wrong but some are useful"* -George Box
+
+---
+class: middle, inverse, center
+
+## So, how useful is your simple linear regression model?
+
+--
+
+1. Create a scatterplot with the residuals on the `\(y\)`-axis and the original explanatory variable `\(x\)` on the `\(x\)`-axis.
+
+--
+
+2. Create a histogram of the residuals, thereby showing the *distribution* of the residuals.
+
+--
+
+## What are we looking for?
+
+---
+
+## Variation around the model...
+
+is just as important as the model, if not more!
+
+*Statistics is the explanation of variation in the context of what remains
+unexplained.*
+
+- The scatter suggests that there might be other factors that account for large parts 
+of country-to-county variability, or perhaps just that randomness plays a big role.
+
+- Adding more explanatory variables to a model can sometimes usefully reduce
+the size of the scatter around the model. (We'll talk more about this later.)
+
+---
+## Scatterplot of the residuals&lt;sup&gt;1&lt;/sup&gt;
+
+"1. the residuals should be on average 0. In other words, sometimes the regression model will make a positive error in that `\(y - \widehat{y} &gt; 0\)`, sometimes the regression model will make a negative error in that `\(y - \widehat{y} &lt; 0\)`, but *on average* the error is 0." 
+
+&lt;img src="cm023_files/figure-html/unnamed-chunk-13-1.png" width="75%" /&gt;
+
+
+
+.footnote[
+[1] From [ModernDive](http://moderndive.netlify.com/6-regression.html#model1residuals)
+
+]
+
+
+---
+## Scatterplot of the residuals&lt;sup&gt;1&lt;/sup&gt;
+
+"2. Further, the value and spread of the residuals should not depend on the value of `\(x\)`."
+
+&lt;img src="cm023_files/figure-html/unnamed-chunk-14-1.png" width="75%" /&gt;
+
+
+
+.footnote[
+[1] From [ModernDive](http://moderndive.netlify.com/6-regression.html#model1residuals)
+]
+
+---
+## Histogram of the residuals&lt;sup&gt;1&lt;/sup&gt;
+
+"we would like the residuals to be normally distributed with mean 0. In other words, be bell-shaped and centered at 0!"
+
+
+```r
+ggplot(crime_pts, aes(x = residual)) +
+  geom_histogram(binwidth = 18, color = "white") 
+```
+
+&lt;img src="cm023_files/figure-html/unnamed-chunk-15-1.png" width="75%" /&gt;
+
+.footnote[
+[1] From [ModernDive](http://moderndive.netlify.com/6-regression.html#model1residuals)
+]
+
+---
+class: center, middle
+## All of statistics
+
+
+`$$\overbrace{y}^{outcome} = \overbrace{b_0 + b_1 \cdot x}^{model} + \overbrace{e}^{error}$$`
+
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+
+&lt;br&gt;
+--
+
+`$$\textrm{outcome}_i = \textrm{(Model}_i) + \textrm{error}_i ~ \rightarrow ~ \textrm{error}_i = \textrm{outcome}_i - \textrm{(Model}_i)$$`
+&lt;br&gt;
+--
+
+`$$\downarrow$$`
+
+&lt;br&gt;
+--
+
+&gt; *"All models are wrong but some are useful"* -George Box
+
+---
+class: middle, inverse, center
+
+
+## So, how useful is your simple linear regression model?
+
+We are now going to answer this a different way...
+
+
+---
+## Residuals
+
+`$$\textrm{error}_i = \textrm{outcome}_i - \textrm{(Model}_i)$$`
+
+1. What is the "outcome"?
+1. What is the "model"?
+
+![](cm023_files/figure-html/fitted_model-1.png)&lt;!-- --&gt;
+
+
+
+---
+## Residuals
+
+`$$\textrm{error}_i = \textrm{outcome}_i - \textrm{(Model}_i)$$`
+
+1. What is the "outcome"? `\(y_i\)` (dark blue dots)
+1. What is the "model"? `\(\hat{y_i}\)` (bright blue dots)
+
+![](cm023_files/figure-html/fitted_model-1.png)
+
+
+
+---
+## What is the "model" saying?
+
+"The bright blue points are what we would expect to see if there was `___` a `___` of 0.46 between `public_houses` and `criminals`"
+
+![](cm023_files/figure-html/fitted_model-1.png)
+
+---
+## Sums of Squares Residual
+
+The total amount of error present when the best-fitting linear model is applied to the data. 
+
+`$$SS_{residual} = \sum{e_i^2} = \sum{(y_i - \hat{y_i})^2}$$`
+--
+
+&lt;img src="cm023_files/figure-html/ss_resid-1.png" width="75%" /&gt;
+
+
+---
+## Least squares regression
+
+The regression line minimizes the sum of squared residuals.
+
+`$$\hat{y} = b_0 + b_1~x$$`
+What is another (equivalent) way to say the same thing?
+
+--
+
+`$$y_i = b_0 + b_1~x_i + e_i$$`
+
+`$$y_i = \hat{y_i} + e_i$$`
+
+--
+
+If `\(e_i = y_i - \hat{y_i}\)`,
+
+then, the regression line minimizes `\(SSR = \sum_{i = 1}^n e_i^2\)`.
+
+---
+class:middle, inverse, center
+
+## The `SSR` compares the best-fitting linear model to the *true (unknown) data-generating model*
+
+`$$\textrm{error}_i = \textrm{outcome}_i - \textrm{(Model}_i)$$`
+
+`$$SS_{residual} = \sum{e_i^2} = \sum{(y_i - \hat{y_i})^2}$$`
+---
+
+## Can you spot another model?
+
+![](cm023_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+## Hint
+
+I ask you to guess how many criminals are in county X, but I don't tell you how many public houses there are.
+
+![](cm023_files/figure-html/basic_lm-1.png)
+---
+
+## The mean as a model
+
+![](cm023_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+---
+## The mean as the "null" model
+
+"The turquoise points are what we would expect to see if there was `___` association between `public_houses` and `criminals`"
+
+![](cm023_files/figure-html/mean_model-1.png)&lt;!-- --&gt;
+
+
+---
+## If the mean is the model...
+
+`$$\textrm{error}_i = \textrm{outcome}_i - \textrm{(Model}_i)$$`
+
+1. What is the "outcome"? 
+1. What is the "model"? 
+
+--
+
+![](cm023_files/figure-html/mean_model-1.png)
+
+---
+## If the mean is the model...
+
+`$$\textrm{error}_i = \textrm{outcome}_i - \textrm{(Model}_i)$$`
+
+1. What is the "outcome"? `\(y_i\)` (dark blue dots)
+1. What is the "model"? `\(\bar{y}\)` (turquoise dots)
+
+--
+
+![](cm023_files/figure-html/mean_model-1.png)
+
+---
+## What is this "model" saying?
+
+Ignore the regression line/predicted points
+
+What would the magnitude of the differences between the observed `criminals` values and the mean value tell us? *(remember what we said the mean line represented: `___` correlation between variables)*
+
+![](cm023_files/figure-html/ss_total-1.png)&lt;!-- --&gt;
+---
+## What about spread?
+
+Variance is calculated by taking the sum of squared differences from the mean, and dividing by `N-1`
+
+
+
+```
+## # A tibble: 1 x 2
+##   var_crime sd_crime
+##       &lt;dbl&gt;    &lt;dbl&gt;
+## 1     1715.     41.4
+```
+
+--
+
+
+
+```r
+crime %&gt;% 
+  summarize(ssr_crime = sum((criminals - mean(criminals))^2),
+            var_crime = ssr_crime / (n() - 1),
+            sd_crime = sqrt(var_crime))
+```
+
+```
+## # A tibble: 1 x 3
+##   ssr_crime var_crime sd_crime
+##       &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1    66898.     1715.     41.4
+```
+
+
+---
+## Take another look
+
+The sum of squared differences between the `___` and the `___` values of `criminals` is the numerator of the variance (said another way, divide by `N-1` to get `var(criminals)`)
+
+--
+
+![](cm023_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+
+---
+
+## Sums of Squares Total
+
+The __"Sums of Squares Total"__ is the total amount of error present when the most basic model is applied to the data. 
+
+--
+
+What is the "most basic model"? The mean (aka null) model!
+
+--
+
+`$$SS_{total} = \sum{(y_i - \bar{y})^2}$$`
+
+--
+
+![](cm023_files/figure-html/ss_total-1.png)
+
+
+
+---
+## A thought experiment...3 "models"?
+
+1. Zero association between the variables (aka, the mean / null model)
+2. An exact association of 0.46 between the variables
+3. The true (but always unknown) data-generating model
+
+![](cm023_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+
+---
+## A thought experiment...
+
+Are there any other "differences" we can calculate with this set of 3 points/models?
+
+![](cm023_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...(last!)
+
+What about the difference between the mean and predicted values?
+
+![](cm023_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+---
+## A thought experiment...(last!)
+
+The __"Sums of Squares Model"__ is the total amount of error present when the fitted values from the best-fitting linear model are compared to the fitted values from the most basic model.
+
+![](cm023_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+
+---
+## All together now
+
+.pull-left[
+`$$SS_{total} = SS_{model} + SS_{residual}$$`
+
+&lt;br&gt;
+
+`$$SS_{total}$$`
+![](cm023_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+`$$SS_{model}$$`
+![](cm023_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+`$$SS_{residual}$$`
+![](cm023_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+]
+
+
+
+---
+## Summing the sums of squares
+
+`$$SS_{total} = SS_{model} + SS_{residual}$$`
+
+
+total variation = "explained" variation + residual ("left over") variation
+
+---
+## All of statistics
+
+$$ \textrm{outcome}_i = \textrm{(Model}_i) + \textrm{error}_i$$
+
+`$$SS_{total} = SS_{model} + SS_{residual}$$`
+
+`$$R^2 = SS_{model} / SS_{total}$$`
+
+
+```r
+library(broom)
+glance(crime_from_ph)
+```
+
+```
+##   r.squared adj.r.squared    sigma statistic     p.value df    logLik
+## 1  0.214242     0.1935641 37.19272  10.36094 0.002634557  2 -200.3762
+##        AIC     BIC deviance df.residual
+## 1 406.7524 411.819 52565.33          38
+```
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
