@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Alison Hill, Chester Ismay, Albert Y. Kim" />
+
+
+<title>CONJ620: CM 2.4</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CONJ 620</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="cm.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Class Meetings
+  </a>
+</li>
+<li>
+  <a href="due.html">
+    <span class="fa fa-calendar-check"></span>
+     
+    Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
+    <span class="fa fa-user-ninja"></span>
+     
+    DataCamp
+  </a>
+</li>
+<li>
+  <a href="https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18">
+    <span class="fa fa-university"></span>
+     
+    Sakai
+  </a>
+</li>
+<li>
+  <a href="https://gitter.im/conj620/Lobby?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">
+    <span class="fa fa-comments"></span>
+     
+    Gitter Chat
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">
+    <span class="fa fa-cogs"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">CONJ620: CM 2.4</h1>
+<h3 class="subtitle"><em>Multiple linear regression</em></h3>
+<h4 class="author"><em>Alison Hill, Chester Ismay, Albert Y. Kim</em></h4>
+<h4 class="date"><em>7/26/2018</em></h4>
+
+</div>
+
+
+<div id="logistics" class="section level1">
+<h1><span class="header-section-number">1</span> Logistics</h1>
+<ul>
+<li>A complete knitted <code>html</code> file is due on Sakai by beginning of class Tuesday July 31th (2:30pm).</li>
+<li>This lab is structured to be similar to this <a href="http://moderndive.netlify.com/12-thinking-with-data.html#seattle-house-prices">Case Study on Seattle House Prices from ModernDive</a>. Please open it and follow along with both datasets!</li>
+</ul>
+</div>
+<div id="overview" class="section level1">
+<h1><span class="header-section-number">2</span> Overview</h1>
+<p>We’ll work with data from this <a href="https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/">538 article</a>. From the article:</p>
+<p>We collected data on key socioeconomic factors for each state, including indicators for:</p>
+<ul>
+<li>education (percent of adults 25 and older with at least a high school degree, as of 2009),</li>
+<li>diversity
+<ul>
+<li>percent nonwhite population, 2015</li>
+<li>percent noncitizen population, 2015,</li>
+</ul></li>
+<li>geographic heterogeneity (percent population in metropolitan areas, 2015),</li>
+<li>economic health
+<ul>
+<li>median household income,</li>
+<li>2016 seasonally adjusted unemployment (September 2016),</li>
+<li>percent poverty among white people. 2015, and</li>
+<li>income inequality as measured by the Gini index, 2015)</li>
+</ul></li>
+<li>percent of the population voted for Donald Trump.</li>
+</ul>
+<p>In this lab, we’ll use a subset of these variables to predict hate crimes in the US.</p>
+</div>
+<div id="the-data" class="section level1">
+<h1><span class="header-section-number">3</span> The Data</h1>
+<p>This data is included in the <code>fivethirtyeight</code> package in the <a href="https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html"><code>hate_crimes</code> data frame</a>, which we’ll refer to as the “Hate crimes” dataset. You can use <a href="https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html"><code>?hate_crimes</code></a> to read more about it and the variables.</p>
+<p>You’ll need to load these packages to do this lab:</p>
+<pre class="r"><code>library(fivethirtyeight)
+library(skimr)
+library(tidyverse)
+library(GGally)</code></pre>
+<p>The data is here:</p>
+<pre class="r"><code>glimpse(hate_crimes)</code></pre>
+<pre><code>Observations: 51
+Variables: 12
+$ state                       &lt;chr&gt; &quot;Alabama&quot;, &quot;Alaska&quot;, &quot;Arizona&quot;, &quot;A...
+$ median_house_inc            &lt;int&gt; 42278, 67629, 49254, 44922, 60487,...
+$ share_unemp_seas            &lt;dbl&gt; 0.060, 0.064, 0.063, 0.052, 0.059,...
+$ share_pop_metro             &lt;dbl&gt; 0.64, 0.63, 0.90, 0.69, 0.97, 0.80...
+$ share_pop_hs                &lt;dbl&gt; 0.821, 0.914, 0.842, 0.824, 0.806,...
+$ share_non_citizen           &lt;dbl&gt; 0.02, 0.04, 0.10, 0.04, 0.13, 0.06...
+$ share_white_poverty         &lt;dbl&gt; 0.12, 0.06, 0.09, 0.12, 0.09, 0.07...
+$ gini_index                  &lt;dbl&gt; 0.472, 0.422, 0.455, 0.458, 0.471,...
+$ share_non_white             &lt;dbl&gt; 0.35, 0.42, 0.49, 0.26, 0.61, 0.31...
+$ share_vote_trump            &lt;dbl&gt; 0.63, 0.53, 0.50, 0.60, 0.33, 0.44...
+$ hate_crimes_per_100k_splc   &lt;dbl&gt; 0.12583893, 0.14374012, 0.22531995...
+$ avg_hatecrimes_per_100k_fbi &lt;dbl&gt; 1.8064105, 1.6567001, 3.4139280, 0...</code></pre>
+</div>
+<div id="alison-editorializing-here" class="section level1">
+<h1><span class="header-section-number">4</span> Alison editorializing here…</h1>
+<p>There are two possible outcome variables here:</p>
+<ol style="list-style-type: decimal">
+<li>pre-election data from the FBI and</li>
+<li>post-election data from the SPLC</li>
+</ol>
+<ul>
+<li>The outcome variable, <span class="math inline">\(y\)</span>, the average annual hate crimes per 100,000 population, FBI, 2010-2015 (<code>avg_hatecrimes_per_100k_fbi</code>)</li>
+<li>The outcome variable, <span class="math inline">\(y\)</span>, hate crimes per 100,000 population, Southern Poverty Law Center, Nov. 9-18, 2016 (<code>hate_crimes_per_100k_splc</code>)</li>
+</ul>
+<p>Proposal: focus on building pre-election model, then perhaps compare coefficients to post-election model on their own?</p>
+<p>In the article, they claim that two variables remained significant in both model outputs: income inequality and percent population with a high school degree. The three explanatory/predictor variables we’ll use are:</p>
+<ul>
+<li><code>gini_index</code> (income inequality)</li>
+<li><code>share_pop_hs</code></li>
+<li><code>share_vote_trump</code> (make categorical?)</li>
+</ul>
+</div>
+<div id="univariate-eda" class="section level1">
+<h1><span class="header-section-number">5</span> Univariate EDA</h1>
+<p>will flush out more if use this dataset</p>
+<pre class="r"><code>skim(hate_crimes)</code></pre>
+<pre><code>Skim summary statistics
+ n obs: 51 
+ n variables: 12 
+
+Variable type: character 
+ variable missing complete  n min max empty n_unique
+    state       0       51 51   4  20     0       51
+
+Variable type: integer 
+         variable missing complete  n     mean      sd    p0   p25   p50
+ median_house_inc       0       51 51 55223.61 9208.48 35521 48657 54916
+   p75  p100     hist
+ 60719 76165 ▂▅▆▇▇▃▃▂
+
+Variable type: numeric 
+                    variable missing complete  n  mean    sd    p0   p25
+ avg_hatecrimes_per_100k_fbi       1       50 51 2.37  1.71  0.27  1.29 
+                  gini_index       0       51 51 0.45  0.021 0.42  0.44 
+   hate_crimes_per_100k_splc       4       47 51 0.3   0.25  0.067 0.14 
+           share_non_citizen       3       48 51 0.055 0.031 0.01  0.03 
+             share_non_white       0       51 51 0.32  0.16  0.06  0.2  
+                share_pop_hs       0       51 51 0.87  0.034 0.8   0.84 
+             share_pop_metro       0       51 51 0.75  0.18  0.31  0.63 
+            share_unemp_seas       0       51 51 0.05  0.011 0.028 0.042
+            share_vote_trump       0       51 51 0.49  0.12  0.04  0.41 
+         share_white_poverty       0       51 51 0.092 0.025 0.04  0.075
+   p50   p75   p100     hist
+ 1.99  3.18  10.95  ▇▇▅▁▁▁▁▁
+ 0.45  0.47   0.53  ▅▅▇▇▁▁▁▁
+ 0.23  0.36   1.52  ▇▃▁▁▁▁▁▁
+ 0.045 0.08   0.13  ▃▇▂▃▂▂▂▁
+ 0.28  0.42   0.81  ▆▇▆▇▅▂▁▁
+ 0.87  0.9    0.92  ▂▅▅▃▃▅▇▆
+ 0.79  0.9    1     ▂▁▃▅▂▇▆▇
+ 0.051 0.058  0.073 ▂▅▇▃▇▆▃▂
+ 0.49  0.57   0.7   ▁▁▁▃▇▇▆▃
+ 0.09  0.1    0.17  ▁▅▃▇▃▁▁▁</code></pre>
+<pre class="r"><code># Histogram of gini index:
+ggplot(hate_crimes, aes(x = gini_index)) +
+  geom_density() +
+  labs(x = &quot;gini index&quot;, title = &quot;Income inequality&quot;)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-2-1.png" width="2100" /></p>
+<pre class="r"><code># Histogram of share pop hs:
+ggplot(hate_crimes, aes(x = share_pop_hs)) +
+  geom_density() +
+  labs(x = &quot;percent of adults 25+ with at least HS degree&quot;, title = &quot;Education&quot;)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-2-2.png" width="2100" /></p>
+<pre class="r"><code># Histogram of turmp:
+ggplot(hate_crimes, aes(x = share_vote_trump)) +
+  geom_density() +
+  labs(x = &quot;percent voted for Trump&quot;, title = &quot;Trump&quot;)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-2-3.png" width="2100" /></p>
+</div>
+<div id="bivariate-eda" class="section level1">
+<h1><span class="header-section-number">6</span> Bivariate EDA</h1>
+<p>Let’s look at all 3 of these predictors of the pre-election hate crimes:</p>
+<pre class="r"><code>hate_crimes %&gt;% 
+  select(avg_hatecrimes_per_100k_fbi,
+         gini_index, share_pop_hs, share_vote_trump) %&gt;%
+  ggpairs(.)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-3-1.png" width="2100" /></p>
+<p>OK, one point appears to be an outlier. I’m going to color by DC so you can see this:</p>
+<pre class="r"><code>hate_crimes %&gt;% 
+  mutate(dc = ifelse(state == &quot;District of Columbia&quot;, &quot;dc&quot;, &quot;not&quot;)) %&gt;% 
+  select(avg_hatecrimes_per_100k_fbi, dc,
+         gini_index, share_pop_hs, share_vote_trump) %&gt;%
+  ggpairs(., mapping = aes(color = dc))</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-4-1.png" width="2100" /></p>
+<p>This is where Alison goes off track to figure this out…</p>
+<pre class="r"><code>hate_crimes %&gt;% 
+  filter(!state == &quot;District of Columbia&quot;) %&gt;% 
+  select(avg_hatecrimes_per_100k_fbi, 
+         gini_index, share_pop_hs, share_vote_trump, share_non_citizen) %&gt;%
+  ggpairs(.)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-5-1.png" width="2100" /></p>
+<p>Question: should we exclude District of Columbia here? I think so- it appears to have multivariate weirdness.</p>
+<pre class="r"><code>hate_crimes %&gt;% 
+  filter(state == &quot;District of Columbia&quot;)</code></pre>
+<pre><code># A tibble: 1 x 12
+  state median_house_inc share_unemp_seas share_pop_metro share_pop_hs
+  &lt;chr&gt;            &lt;int&gt;            &lt;dbl&gt;           &lt;dbl&gt;        &lt;dbl&gt;
+1 Dist…            68277            0.067               1        0.871
+# ... with 7 more variables: share_non_citizen &lt;dbl&gt;,
+#   share_white_poverty &lt;dbl&gt;, gini_index &lt;dbl&gt;, share_non_white &lt;dbl&gt;,
+#   share_vote_trump &lt;dbl&gt;, hate_crimes_per_100k_splc &lt;dbl&gt;,
+#   avg_hatecrimes_per_100k_fbi &lt;dbl&gt;</code></pre>
+<p>Here is me excluding it (and making categorical versions at the same time:</p>
+<pre class="r"><code>hate_states &lt;- hate_crimes %&gt;% 
+  filter(!state == &quot;District of Columbia&quot;) %&gt;%
+  mutate(
+    cat_pop_hs = case_when(
+      share_pop_hs &lt; .85 ~ 0, #low
+      between(share_pop_hs, .85, .89) ~ 1, #medium
+      TRUE ~ 2 #high
+      ),
+    cat_non_citizen = case_when(
+      share_non_citizen &lt;= .05 ~ 0, #low
+      TRUE ~ 1 #high
+      ),
+    cat_trump = case_when(
+      share_vote_trump &lt; .5 ~ &quot;low&quot;,
+      TRUE ~ &quot;high&quot;
+    ))</code></pre>
+</div>
+<div id="multiple-regression-models" class="section level1">
+<h1><span class="header-section-number">7</span> Multiple regression models</h1>
+<p>So one group could do this…</p>
+<pre class="r"><code>hate_model &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   share_pop_hs,
+                 data = hate_states)
+
+summary(hate_model)</code></pre>
+<pre><code>
+Call:
+lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + share_pop_hs, 
+    data = hate_states)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.19014 -0.79311 -0.03152  0.81289  2.56505 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)   -26.225     10.684  -2.455  0.01795 * 
+gini_index     28.159     12.853   2.191  0.03356 * 
+share_pop_hs   18.049      6.649   2.714  0.00931 **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.133 on 46 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.1408,    Adjusted R-squared:  0.1034 
+F-statistic: 3.768 on 2 and 46 DF,  p-value: 0.03051</code></pre>
+<p>Then maybe group 2:</p>
+<pre class="r"><code>hate_model2 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   share_pop_hs +
+                   share_vote_trump,
+                 data = hate_states)
+
+summary(hate_model2)</code></pre>
+<pre><code>
+Call:
+lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + share_pop_hs + 
+    share_vote_trump, data = hate_states)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.18901 -0.79297 -0.03008  0.80592  2.56791 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)      -26.10852   12.82977  -2.035   0.0478 *
+gini_index        28.04377   14.69043   1.909   0.0627 .
+share_pop_hs      17.99349    7.47966   2.406   0.0203 *
+share_vote_trump  -0.03265    1.93564  -0.017   0.9866  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.146 on 45 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.1408,    Adjusted R-squared:  0.0835 
+F-statistic: 2.458 on 3 and 45 DF,  p-value: 0.07508</code></pre>
+<p>Then maybe group 3:</p>
+<pre class="r"><code>hate_model3 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   share_pop_hs +
+                   cat_trump,
+                 data = hate_states)
+
+summary(hate_model3)</code></pre>
+<pre><code>
+Call:
+lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + share_pop_hs + 
+    cat_trump, data = hate_states)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.18473 -0.79379 -0.03785  0.82822  2.56073 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)  -26.50400   12.05860  -2.198   0.0331 *
+gini_index    28.45705   14.19969   2.004   0.0511 .
+share_pop_hs  18.22542    7.53183   2.420   0.0196 *
+cat_trumplow  -0.01919    0.36907  -0.052   0.9588  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.146 on 45 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.1408,    Adjusted R-squared:  0.08355 
+F-statistic: 2.459 on 3 and 45 DF,  p-value: 0.075</code></pre>
+<p>Then maybe group 4 (tricky! need to talk about factors :):</p>
+<pre class="r"><code>hate_model4 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   as.factor(cat_pop_hs),
+                 data = hate_states)
+
+summary(hate_model4)</code></pre>
+<pre><code>
+Call:
+lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + as.factor(cat_pop_hs), 
+    data = hate_states)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-2.00476 -0.80254  0.03371  0.62569  2.33648 
+
+Coefficients:
+                       Estimate Std. Error t value Pr(&gt;|t|)  
+(Intercept)            -12.1426     6.5428  -1.856   0.0700 .
+gini_index              30.1624    14.0239   2.151   0.0369 *
+as.factor(cat_pop_hs)1   0.5485     0.4293   1.278   0.2079  
+as.factor(cat_pop_hs)2   1.4869     0.5856   2.539   0.0146 *
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.154 on 45 degrees of freedom
+  (1 observation deleted due to missingness)
+Multiple R-squared:  0.1283,    Adjusted R-squared:  0.07013 
+F-statistic: 2.207 on 3 and 45 DF,  p-value: 0.1003</code></pre>
+</div>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="by-nc.png" height="400" width="65"/></a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

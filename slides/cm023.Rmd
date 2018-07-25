@@ -909,6 +909,10 @@ $$SS_{total} = SS_{model} + SS_{residual}$$
 
 $$R^2 = SS_{model} / SS_{total}$$
 
+--
+
+also true...
+$$R^2 = (1 - SS_{residual}) / SS_{total}$$
 ```{r}
 library(broom)
 glance(crime_from_ph)

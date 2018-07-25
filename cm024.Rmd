@@ -1,0 +1,221 @@
+---
+title: "CONJ620: CM 2.4"
+subtitle: "Multiple linear regression"
+author: "Alison Hill, Chester Ismay, Albert Y. Kim"
+date: "7/26/2018"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+
+```{r setup, include=FALSE}
+# leave this chunk alone
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300)
+```
+
+
+# Logistics
+
+- A complete knitted `html` file is due on Sakai by beginning of class Tuesday July 31th (2:30pm). 
+- This lab is structured to be similar to this [Case Study on Seattle House Prices from ModernDive](http://moderndive.netlify.com/12-thinking-with-data.html#seattle-house-prices). Please open it and follow along with both datasets!
+
+# Overview
+
+We'll work with data from this [538 article](https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/). From the article:
+
+We collected data on key socioeconomic factors for each state, including indicators for:
+
+- education (percent of adults 25 and older with at least a high school degree, as of 2009), 
+- diversity
+    - percent nonwhite population, 2015
+    - percent noncitizen population, 2015,
+- geographic heterogeneity (percent population in metropolitan areas, 2015), 
+- economic health 
+    - median household income, 
+    - 2016 seasonally adjusted unemployment (September 2016), 
+    - percent poverty among white people. 2015, and 
+    - income inequality as measured by the Gini index, 2015)
+- percent of the population voted for Donald Trump. 
+
+In this lab, we'll use a subset of these variables to predict hate crimes in the US.
+
+# The Data
+
+This data is included in the `fivethirtyeight` package in the [`hate_crimes` data frame](https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html), which we’ll refer to as the “Hate crimes” dataset. You can use [`?hate_crimes`](https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html) to read more about it and the variables.
+
+You'll need to load these packages to do this lab:
+
+```{r load_packages, include = TRUE}
+library(fivethirtyeight)
+library(skimr)
+library(tidyverse)
+library(GGally)
+```
+
+
+The data is here:
+
+```{r}
+glimpse(hate_crimes)
+```
+
+# Alison editorializing here...
+
+There are two possible outcome variables here: 
+
+1. pre-election data from the FBI and 
+2. post-election data from the SPLC
+
+- The outcome variable, $y$, the average annual hate crimes per 100,000 population, FBI, 2010-2015 (`avg_hatecrimes_per_100k_fbi`)
+- The outcome variable, $y$, hate crimes per 100,000 population, Southern Poverty Law Center, Nov. 9-18, 2016 (`hate_crimes_per_100k_splc`)
+
+Proposal: focus on building pre-election model, then perhaps compare coefficients to post-election model on their own?
+
+In the article, they claim that two variables remained significant in both model outputs: income inequality and percent population with a high school degree. The three explanatory/predictor variables we’ll use are:
+
+- `gini_index` (income inequality)
+- `share_pop_hs` 
+- `share_vote_trump` (make categorical?)
+
+# Univariate EDA 
+
+will flush out more if use this dataset
+
+```{r}
+skim(hate_crimes)
+
+# Histogram of gini index:
+ggplot(hate_crimes, aes(x = gini_index)) +
+  geom_density() +
+  labs(x = "gini index", title = "Income inequality")
+
+# Histogram of share pop hs:
+ggplot(hate_crimes, aes(x = share_pop_hs)) +
+  geom_density() +
+  labs(x = "percent of adults 25+ with at least HS degree", title = "Education")
+
+# Histogram of turmp:
+ggplot(hate_crimes, aes(x = share_vote_trump)) +
+  geom_density() +
+  labs(x = "percent voted for Trump", title = "Trump")
+```
+
+# Bivariate EDA
+
+Let's look at all 3 of these predictors of the pre-election hate crimes:
+
+```{r}
+hate_crimes %>% 
+  select(avg_hatecrimes_per_100k_fbi,
+         gini_index, share_pop_hs, share_vote_trump) %>%
+  ggpairs(.)
+```
+
+OK, one point appears to be an outlier. I'm going to color by DC so you can see this:
+
+```{r}
+hate_crimes %>% 
+  mutate(dc = ifelse(state == "District of Columbia", "dc", "not")) %>% 
+  select(avg_hatecrimes_per_100k_fbi, dc,
+         gini_index, share_pop_hs, share_vote_trump) %>%
+  ggpairs(., mapping = aes(color = dc))
+```
+
+This is where Alison goes off track to figure this out...
+
+```{r}
+hate_crimes %>% 
+  filter(!state == "District of Columbia") %>% 
+  select(avg_hatecrimes_per_100k_fbi, 
+         gini_index, share_pop_hs, share_vote_trump, share_non_citizen) %>%
+  ggpairs(.)
+```
+
+Question: should we exclude District of Columbia here? I think so- it appears to have multivariate weirdness.
+
+```{r}
+hate_crimes %>% 
+  filter(state == "District of Columbia")
+```
+
+
+Here is me excluding it (and making categorical versions at the same time:
+
+
+```{r}
+hate_states <- hate_crimes %>% 
+  filter(!state == "District of Columbia") %>%
+  mutate(
+    cat_pop_hs = case_when(
+      share_pop_hs < .85 ~ 0, #low
+      between(share_pop_hs, .85, .89) ~ 1, #medium
+      TRUE ~ 2 #high
+      ),
+    cat_non_citizen = case_when(
+      share_non_citizen <= .05 ~ 0, #low
+      TRUE ~ 1 #high
+      ),
+    cat_trump = case_when(
+      share_vote_trump < .5 ~ "low",
+      TRUE ~ "high"
+    ))
+```
+
+
+# Multiple regression models
+
+So one group could do this...
+
+```{r}
+hate_model <- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   share_pop_hs,
+                 data = hate_states)
+
+summary(hate_model)
+```
+
+Then maybe group 2:
+
+```{r}
+hate_model2 <- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   share_pop_hs +
+                   share_vote_trump,
+                 data = hate_states)
+
+summary(hate_model2)
+```
+
+Then maybe group 3:
+
+```{r}
+hate_model3 <- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   share_pop_hs +
+                   cat_trump,
+                 data = hate_states)
+
+summary(hate_model3)
+```
+
+Then maybe group 4 (tricky! need to talk about factors :):
+
+```{r}
+hate_model4 <- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   as.factor(cat_pop_hs),
+                 data = hate_states)
+
+summary(hate_model4)
+```
+
+
+
+
+
