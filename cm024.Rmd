@@ -232,6 +232,15 @@ data %>%
   correlate()
 ```
 
+We also want to create scatterplots to see the association between each pair of variables in the model (both between the explanatory and the outcome, but also between all explanatory variables with each other). Let's start with the `gini_index`:
+
+```{r echo = FALSE}
+ggplot(hate_demo, aes(x = gini_index, y = avg_hatecrimes_per_100k_fbi)) +
+  geom_point() +
+  geom_text(data = filter(hate_demo, state == "District of Columbia"), 
+            aes(label = state), hjust = 1, vjust = 1)
+```
+
 
 We could actually do all of this with one function! We'll use `GGally::ggpairs()` to create a pairwise comparison of multivariate data. This includes what is known as a "Generalized Pairs Plot," which is an improved version of a [scatterplot matrix](https://www.rdocumentation.org/packages/graphics/versions/3.5.1/topics/pairs). This function provides two different comparisons of each pair of columns, and displays either the density (continuous numeric) or count (factors) of the respective variable along the diagonal. You can read more about the function and package [here](http://ggobi.github.io/ggally/#ggallyggpairs). 
 
@@ -263,6 +272,8 @@ tips %>%
           columns = c("total_bill", "time", "tip"))
 ```
 
+> Calculate all the correlation coefficients.
+> Make a `ggpairs` plot between all explanatory and outcome variables.
 > Following this narrative in [ModernDive](http://moderndive.netlify.com/7-multiple-regression.html#model3EDA), write a few sentences describing the output here.
 
 # Multiple regression models  (⏰ 20 min)
@@ -288,14 +299,17 @@ $$b_{x1} = r_{{x_1}y} ~\dfrac{s_y}{s_{x_1}}$$
         - The first numerical explanatory variable $x_1$ `share_vote_hs` is on of the floor axes.
         - The second numerical explanatory variable $x_2$ `gini_index` is on the other floor axis.
 
-```{r echo = FALSE}
+```{r eval = FALSE}
 library(plotly)
-p <- plot_ly(hate_demo, x = ~share_pop_hs, y = ~gini_index, z = ~avg_hatecrimes_per_100k_fbi) %>%
+dim_scatter <- plot_ly(hate_demo, 
+                       x = ~share_pop_hs, 
+                       y = ~gini_index, 
+                       z = ~avg_hatecrimes_per_100k_fbi) %>%
   add_markers() %>%
   layout(scene = list(xaxis = list(title = 'HS'),
                      yaxis = list(title = 'Gini'),
                      zaxis = list(title = 'Hate Crimes')))
-p
+dim_scatter
 ```
 
 ```{r include = FALSE}
