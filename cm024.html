@@ -453,6 +453,7 @@ div.tocify {
 <p>This data is included in the <code>fivethirtyeight</code> package in the <a href="https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html"><code>hate_crimes</code> data frame</a>, which we’ll refer to as the “Hate crimes” dataset. You can use <a href="https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html"><code>?hate_crimes</code></a> to read more about it and the variables.</p>
 <p>You’ll need to load these packages to do this lab:</p>
 <pre class="r"><code>library(fivethirtyeight) # new to you!
+library(moderndive)
 library(skimr)
 library(tidyverse)
 library(GGally) # new to you!</code></pre>
@@ -645,10 +646,10 @@ tips %&gt;%
 <ul>
 <li>Fit a multiple regression model and get the regression table. You’ll be assigned one of the following models:
 <ul>
-<li>Two numerical predictors with a <code>+</code></li>
-<li>One numerical / one categorical with parallel slopes</li>
-<li>One numerical / one categorical interaction model</li>
-<li>Two numerical predictors with a <code>*</code></li>
+<li>Two numerical predictors with a <code>+</code> (<code>gini_index</code> and <code>share_pop_hs</code>)</li>
+<li>One numerical / one categorical with parallel slopes (<code>gini_index</code> and <code>cat_trump</code>)</li>
+<li>One numerical / one categorical interaction model (<code>gini_index</code> and <code>cat_trump</code>)</li>
+<li>Two numerical predictors with a <code>*</code> (<code>gini_index</code> and <code>share_pop_hs</code>)</li>
 </ul></li>
 <li>Sketch out the <em>modeling equation</em> for your model (not in your R Markdown)
 <ul>

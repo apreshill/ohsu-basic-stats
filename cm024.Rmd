@@ -62,6 +62,7 @@ You'll need to load these packages to do this lab:
 
 ```{r load_packages}
 library(fivethirtyeight) # new to you!
+library(moderndive)
 library(skimr)
 library(tidyverse)
 library(GGally) # new to you!
@@ -269,10 +270,10 @@ tips %>%
 Do the following:
 
 - Fit a multiple regression model and get the regression table. You'll be assigned one of the following models:
-    - Two numerical predictors with a `+` 
-    - One numerical / one categorical with parallel slopes 
-    - One numerical / one categorical interaction model 
-    - Two numerical predictors with a `*`
+    - Two numerical predictors with a `+` (`gini_index` and `share_pop_hs`)
+    - One numerical / one categorical with parallel slopes (`gini_index` and `cat_trump`)
+    - One numerical / one categorical interaction model (`gini_index` and `cat_trump`)
+    - Two numerical predictors with a `*` (`gini_index` and `share_pop_hs`)
 - Sketch out the *modeling equation* for your model (not in your R Markdown)
     - Parallel slopes example [here](http://moderndive.netlify.com/7-multiple-regression.html#model4table)
     - Interaction model [here](http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable)
@@ -295,7 +296,7 @@ hate_model1 <- lm(avg_hatecrimes_per_100k_fbi ~
                    cat_trump,
                  data = hate_demo)
 
-summary(hate_model1)
+get_regression_table(hate_model1)
 
 
 
@@ -304,13 +305,13 @@ hate_model2 <- lm(avg_hatecrimes_per_100k_fbi ~
                    share_pop_hs,
                  data = hate_demo)
 
-summary(hate_model2)
+get_regression_table(hate_model2)
 
 hate_model3 <- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index*share_pop_hs,
                  data = hate_demo)
 
-summary(hate_model3)
+get_regression_table(hate_model3)
 ```
 
 
