@@ -54,15 +54,9 @@ You'll need to load these packages to do this lab:
 library(fivethirtyeight)
 library(skimr)
 library(tidyverse)
-library(GGally)
+library(GGally) # new to you!
 ```
 
-
-The data is here:
-
-```{r}
-glimpse(hate_crimes)
-```
 
 # Alison editorializing here...
 
@@ -76,34 +70,137 @@ There are two possible outcome variables here:
 
 Proposal: focus on building pre-election model, then perhaps compare coefficients to post-election model on their own?
 
+# All together
+
+We'll still use `hate_crimes` to demonstrate multiple regression with:
+
+1. A numerical outcome variable $y$, in this case the average annual hate crimes per 100,000 population according to the FBI for years 2010-2015 (`avg_hatecrimes_per_100k_fbi`)
+1. Two explanatory variables:
+    1. A first numerical explanatory variable $x_1$. In this case, each state's percent noncitizen population in 2015 (`share_non_citizen`)
+    1. A second numerical explanatory variable $x_2$. In this case, each state's percent population in metropolitan areas in 2015 (`share_pop_metro`) 
+
+In the lab, we'll consider a different scenario:
+
+1. The same numerical outcome variable $y$: credit card balance.
+1. Two new explanatory variables:
+    1. A first numerical explanatory variable $x_1$: their credit rating.
+    1. A second numerical explanatory variable $x_2$: their age.
+
+# EDA
+
+Recall that a [new exploratory data analysis](http://moderndive.netlify.com/6-regression.html#model1EDA) involves three things:
+
+* Looking at the raw values.
+* Computing summary statistics of the variables of interest.
+* Creating informative visualizations.
+
+General functions you'll want to call- add narrative to interpret each!:
+
+- `dplyr::glimpse()`
+- `skimr::skim()`
+- `ggplot2::ggplot()`
+    - `geom_histogram()` or `geom_density()` for numeric continuous variables
+    - `geom_bar()` or `geom_col()` for categorical variables
+
+At this stage, you may also find your want to use `filter`, `mutate`, `arrange`, `select`, or `count`. Let your questions lead you!
+
+
+## Look at the raw values
+
+- How many states are here? Are they all "states"?
+
+```{r}
+glimpse(hate_crimes)
+```
+
+- Let's merge in `region` to, using the built-in `states` dataset in R:
+
+```{r}
+# load the data
+data("state")
+
+# make a dataframe
+state_info <- data_frame(state_name = state.name, 
+                         state_region = state.region)
+
+# drop DC, merge to get region
+hate_states <- hate_crimes %>% 
+  filter(!state == "District of Columbia") %>% 
+  left_join(state_info, by = c("state" = "state_name"))
+```
+
+- Let's select just the variables we need
+
+```{r}
+hate_demo <- hate_states %>% 
+  select(avg_hatecrimes_per_100k_fbi, share_pop_metro, share_non_citizen)
+```
+
+## Compute summary statistics
+
+```{r}
+skim(hate_demo)
+```
+
+For simple regression, we also calculated correlation coefficients. For [multiple regression](http://moderndive.netlify.com/7-multiple-regression.html#model3EDA), your EDA can be more efficient by computing multiple correlation coefficients at once. We'll use the `cor()` function to do this.
+
+```{r}
+cor(hate_demo)
+```
+
+Wah- those are all `NA`!
+
+```{r}
+cor(hate_demo, use = "pairwise.complete.obs")
+```
+
+
+You could do the same thing in the `corrr` package, using the `correlate` function:
+
+```{r}
+library(corrr)
+correlate(hate_demo)
+```
+
+Your interpretation of these correlation coefficents goes here:
+
+1.
+1.
+1.
+
+
+## Create informative visualizations
+
+```{r}
+# Histogram of share_pop_metro:
+ggplot(hate_demo, aes(x = share_pop_metro)) +
+  geom_density() +
+  labs(x = "metro population percent", title = "Geographic heterogeneity")
+
+# Histogram of share_non_citizen:
+ggplot(hate_demo, aes(x = share_non_citizen)) +
+  geom_density() +
+  labs(x = "", title = "Diversity")
+```
+
+Luckily, we just have two predictors here. We could actually make all the plots using `GGally::ggpairs()`.
+
+```{r}
+ggpairs(hate_demo)
+```
+
+You get: 
+
+- The correlation coefficients, AND
+- The univariate density plots, AND
+- The bivariate scatterplots!
+
 In the article, they claim that two variables remained significant in both model outputs: income inequality and percent population with a high school degree. The three explanatory/predictor variables we’ll use are:
 
 - `gini_index` (income inequality)
 - `share_pop_hs` 
 - `share_vote_trump` (make categorical?)
 
-# Univariate EDA 
-
-will flush out more if use this dataset
-
-```{r}
-skim(hate_crimes)
-
-# Histogram of gini index:
-ggplot(hate_crimes, aes(x = gini_index)) +
-  geom_density() +
-  labs(x = "gini index", title = "Income inequality")
-
-# Histogram of share pop hs:
-ggplot(hate_crimes, aes(x = share_pop_hs)) +
-  geom_density() +
-  labs(x = "percent of adults 25+ with at least HS degree", title = "Education")
-
-# Histogram of turmp:
-ggplot(hate_crimes, aes(x = share_vote_trump)) +
-  geom_density() +
-  labs(x = "percent voted for Trump", title = "Trump")
-```
 
 # Bivariate EDA
 
@@ -169,15 +266,15 @@ hate_states <- hate_crimes %>%
 
 # Multiple regression models
 
-So one group could do this...
+Group 1: Two numerical predictors
 
 ```{r}
-hate_model <- lm(avg_hatecrimes_per_100k_fbi ~ 
+hate_model1 <- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index + 
                    share_pop_hs,
                  data = hate_states)
 
-summary(hate_model)
+summary(hate_model1)
 ```
 
 Then maybe group 2:
@@ -216,6 +313,23 @@ summary(hate_model4)
 ```
 
 
+hail mary here
+```{r}
+library(janitor)
+thai_d <- readxl::read_xlsx(here::here("data", "Thai_vitamin D dataset.xlsx"),
+                            sheet = 1) %>% 
+  clean_names()
+
+glimpse(thai_d)
+
+ggplot(thai_d, aes(x = ageyears, y = x25d, color = sex)) +
+  geom_point() +
+  facet_wrap(~sex) +
+  geom_smooth(method = "lm")
+
+mod <- lm(x25d ~ ageyears + sex, data = thai_d)
+mod2 <- lm(x25d ~ ageyears*sex, data = thai_d)
+```
 
 
 
