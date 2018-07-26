@@ -285,10 +285,18 @@ $$b_{x1} = r_{{x_1}y} ~\dfrac{s_y}{s_{x_1}}$$
 - For those with the two numerical predictors, you may want to look into making a [3D scatterplot](https://plot.ly/r/3d-scatter-plots/).
     - The numerical outcome variable $y$ `avg_hatecrimes_per_100k_fbi` goes on the z-axis (vertical axis)
     - The two numerical explanatory variables form the "floor" axes. In this case
-        - The first numerical explanatory variable $x_1$ `share_vote_trump` is on of the floor axes.
+        - The first numerical explanatory variable $x_1$ `share_vote_hs` is on of the floor axes.
         - The second numerical explanatory variable $x_2$ `gini_index` is on the other floor axis.
 
-
+```{r echo = FALSE}
+library(plotly)
+p <- plot_ly(hate_demo, x = ~share_pop_hs, y = ~gini_index, z = ~avg_hatecrimes_per_100k_fbi) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = 'HS'),
+                     yaxis = list(title = 'Gini'),
+                     zaxis = list(title = 'Hate Crimes')))
+p
+```
 
 ```{r include = FALSE}
 hate_model1 <- lm(avg_hatecrimes_per_100k_fbi ~ 
@@ -317,15 +325,7 @@ get_regression_table(hate_model3)
 
 
 
-```{r eval = FALSE}
-library(plotly)
-p <- plot_ly(hate_demo, x = ~share_vote_trump, y = ~gini_index, z = ~avg_hatecrimes_per_100k_fbi) %>%
-  add_markers() %>%
-  layout(scene = list(xaxis = list(title = 'Trump'),
-                     yaxis = list(title = 'Gini'),
-                     zaxis = list(title = 'Hate Crimes')))
-p
-```
+
 
 
 

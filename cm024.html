@@ -26,6 +26,13 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-0.9/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.7.1/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="site_libs/plotlyjs-1.29.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotlyjs-1.29.2/plotly-latest.min.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -667,18 +674,13 @@ tips %&gt;%
 <li>The numerical outcome variable <span class="math inline">\(y\)</span> <code>avg_hatecrimes_per_100k_fbi</code> goes on the z-axis (vertical axis)</li>
 <li>The two numerical explanatory variables form the “floor” axes. In this case
 <ul>
-<li>The first numerical explanatory variable <span class="math inline">\(x_1\)</span> <code>share_vote_trump</code> is on of the floor axes.</li>
+<li>The first numerical explanatory variable <span class="math inline">\(x_1\)</span> <code>share_vote_hs</code> is on of the floor axes.</li>
 <li>The second numerical explanatory variable <span class="math inline">\(x_2\)</span> <code>gini_index</code> is on the other floor axis.</li>
 </ul></li>
 </ul></li>
 </ul>
-<pre class="r"><code>library(plotly)
-p &lt;- plot_ly(hate_demo, x = ~share_vote_trump, y = ~gini_index, z = ~avg_hatecrimes_per_100k_fbi) %&gt;%
-  add_markers() %&gt;%
-  layout(scene = list(xaxis = list(title = &#39;Trump&#39;),
-                     yaxis = list(title = &#39;Gini&#39;),
-                     zaxis = list(title = &#39;Hate Crimes&#39;)))
-p</code></pre>
+<div id="4212549cc87d" style="width:2100px;height:1500px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="4212549cc87d">{"x":{"visdat":{"421244a1b5a6":["function () ","plotlyVisDat"]},"cur_data":"421244a1b5a6","attrs":{"421244a1b5a6":{"x":{},"y":{},"z":{},"alpha":1,"sizes":[10,100],"type":"scatter3d","mode":"markers"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"scene":{"xaxis":{"title":"HS"},"yaxis":{"title":"Gini"},"zaxis":{"title":"Hate Crimes"}},"xaxis":{"domain":[0,1]},"yaxis":{"domain":[0,1]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":[{"name":"Collaborate","icon":{"width":1000,"ascent":500,"descent":-50,"path":"M487 375c7-10 9-23 5-36l-79-259c-3-12-11-23-22-31-11-8-22-12-35-12l-263 0c-15 0-29 5-43 15-13 10-23 23-28 37-5 13-5 25-1 37 0 0 0 3 1 7 1 5 1 8 1 11 0 2 0 4-1 6 0 3-1 5-1 6 1 2 2 4 3 6 1 2 2 4 4 6 2 3 4 5 5 7 5 7 9 16 13 26 4 10 7 19 9 26 0 2 0 5 0 9-1 4-1 6 0 8 0 2 2 5 4 8 3 3 5 5 5 7 4 6 8 15 12 26 4 11 7 19 7 26 1 1 0 4 0 9-1 4-1 7 0 8 1 2 3 5 6 8 4 4 6 6 6 7 4 5 8 13 13 24 4 11 7 20 7 28 1 1 0 4 0 7-1 3-1 6-1 7 0 2 1 4 3 6 1 1 3 4 5 6 2 3 3 5 5 6 1 2 3 5 4 9 2 3 3 7 5 10 1 3 2 6 4 10 2 4 4 7 6 9 2 3 4 5 7 7 3 2 7 3 11 3 3 0 8 0 13-1l0-1c7 2 12 2 14 2l218 0c14 0 25-5 32-16 8-10 10-23 6-37l-79-259c-7-22-13-37-20-43-7-7-19-10-37-10l-248 0c-5 0-9-2-11-5-2-3-2-7 0-12 4-13 18-20 41-20l264 0c5 0 10 2 16 5 5 3 8 6 10 11l85 282c2 5 2 10 2 17 7-3 13-7 17-13z m-304 0c-1-3-1-5 0-7 1-1 3-2 6-2l174 0c2 0 4 1 7 2 2 2 4 4 5 7l6 18c0 3 0 5-1 7-1 1-3 2-6 2l-173 0c-3 0-5-1-8-2-2-2-4-4-4-7z m-24-73c-1-3-1-5 0-7 2-2 3-2 6-2l174 0c2 0 5 0 7 2 3 2 4 4 5 7l6 18c1 2 0 5-1 6-1 2-3 3-5 3l-174 0c-3 0-5-1-7-3-3-1-4-4-5-6z"},"click":"function(gd) { \n        // is this being viewed in RStudio?\n        if (location.search == '?viewer_pane=1') {\n          alert('To learn about plotly for collaboration, visit:\\n https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html');\n        } else {\n          window.open('https://cpsievert.github.io/plotly_book/plot-ly-for-collaboration.html', '_blank');\n        }\n      }"}],"cloud":false},"data":[{"x":[0.821,0.914,0.842,0.824,0.806,0.893,0.886,0.874,0.871,0.853,0.839,0.884,0.864,0.866,0.914,0.897,0.817,0.822,0.902,0.89,0.89,0.879,0.915,0.804,0.868,0.908,0.898,0.839,0.913,0.874,0.828,0.847,0.843,0.901,0.876,0.856,0.891,0.879,0.847,0.836,0.899,0.831,0.799,0.904,0.91,0.866,0.897,0.828,0.898,0.918],"y":[0.472,0.422,0.455,0.458,0.471,0.457,0.486,0.44,0.532,0.474,0.468,0.433,0.465,0.44,0.427,0.445,0.466,0.475,0.437,0.443,0.475,0.451,0.44,0.468,0.455,0.435,0.432,0.448,0.425,0.464,0.464,0.499,0.464,0.433,0.452,0.454,0.449,0.461,0.467,0.461,0.442,0.468,0.469,0.419,0.444,0.459,0.441,0.451,0.43,0.423],"z":[1.806410489,1.656700109,3.413927994,0.869208872,2.397985899,2.804688765,3.772701469,1.469979563,10.95347971,0.698070342,0.412011824,1.891330529,1.044015798,1.757356567,0.561395565,2.143986672,4.207889621,1.341169554,2.626610924,1.324839538,4.801899339,3.200442266,3.612411816,0.622745989,1.908954989,2.954959378,2.68624842,2.113990154,2.105988585,4.413202591,1.886435184,3.102164284,1.262679796,4.741069885,3.240420404,1.08167215,3.394886113,0.43092759,1.282571834,1.937082833,3.301737127,3.13605115,0.752768305,2.384065044,1.90308139,1.724754584,3.817740296,2.037053631,1.121944651,0.26694076],"type":"scatter3d","mode":"markers","marker":{"fillcolor":"rgba(31,119,180,1)","color":"rgba(31,119,180,1)","line":{"color":"transparent"}},"frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1}},"base_url":"https://plot.ly"},"evals":["config.modeBarButtonsToAdd.0.click"],"jsHooks":{"render":[{"code":"function(el, x) { var ctConfig = crosstalk.var('plotlyCrosstalkOpts').set({\"on\":\"plotly_click\",\"persistent\":false,\"dynamic\":false,\"selectize\":false,\"opacityDim\":0.2,\"selected\":{\"opacity\":1}}); }","data":null}]}}</script>
 </div>
 
 <p>
