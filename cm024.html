@@ -406,31 +406,47 @@ div.tocify {
 <h1><span class="header-section-number">1</span> Logistics</h1>
 <ul>
 <li>A complete knitted <code>html</code> file is due on Sakai by beginning of class Tuesday July 31th (2:30pm).</li>
-<li>This lab is structured to be similar to this <a href="http://moderndive.netlify.com/12-thinking-with-data.html#seattle-house-prices">Case Study on Seattle House Prices from ModernDive</a>. Please open it and follow along with both datasets!</li>
+<li>This lab is structured to be similar to this <a href="https://moderndive.com/12-thinking-with-data.html#seattle-house-prices">Case Study on Seattle House Prices from ModernDive</a>. Please open it and follow along with both datasets!</li>
+<li>The structure of this lab is as follows:</li>
+<li>In class, we’ll walk through the univariate EDA steps for 3 key variables:
+<ul>
+<li>the outcome variable</li>
+<li>a numeric predictor variable</li>
+</ul></li>
+<li>In the lab, you’ll do:
+<ul>
+<li>First 20 min: interpret EDA Part I (univariate)</li>
+<li>Next 20 min: do EDA Part II (bivariate)</li>
+<li>Last 20 min: do lm, attempt to interpret three values that define the regression plane</li>
+</ul></li>
+<li>On your own, you’ll do:
+<ul>
+<li>Analysis of observed/fitted values and residuals following <a href="http://moderndive.netlify.com/7-multiple-regression.html#model3points">ModernDive</a></li>
+<li>Residual analysis following <a href="http://moderndive.netlify.com/7-multiple-regression.html#model3residuals">ModernDive</a></li>
+</ul></li>
 </ul>
 </div>
 <div id="overview" class="section level1">
 <h1><span class="header-section-number">2</span> Overview</h1>
-<p>We’ll work with data from this <a href="https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/">538 article</a>. From the article:</p>
-<p>We collected data on key socioeconomic factors for each state, including indicators for:</p>
+<p>We’ll work with data from this <a href="https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/">538 article</a>. In the article, the authors describe collecting data on key socioeconomic factors for each state, including indicators for:</p>
 <ul>
-<li>education (percent of adults 25 and older with at least a high school degree, as of 2009),</li>
+<li>education (percent of adults 25 and older with at least a high school degree, as of 2009)</li>
 <li>diversity
 <ul>
-<li>percent nonwhite population, 2015</li>
-<li>percent noncitizen population, 2015,</li>
+<li>percent nonwhite population (2015), and</li>
+<li>percent noncitizen population (2015).</li>
 </ul></li>
-<li>geographic heterogeneity (percent population in metropolitan areas, 2015),</li>
+<li>geographic heterogeneity (percent population in metropolitan areas, 2015)</li>
 <li>economic health
 <ul>
 <li>median household income,</li>
 <li>2016 seasonally adjusted unemployment (September 2016),</li>
-<li>percent poverty among white people. 2015, and</li>
-<li>income inequality as measured by the Gini index, 2015)</li>
+<li>percent poverty among white people (2015), and</li>
+<li>income inequality (as measured by the Gini index, 2015)</li>
 </ul></li>
 <li>percent of the population voted for Donald Trump.</li>
 </ul>
-<p>In this lab, we’ll use a subset of these variables to predict hate crimes in the US.</p>
+<p>In this lab, we’ll use a subset of these variables to predict hate crimes in the US. There are two possible outcome variables here: (1) pre-election data from the FBI, and (2) post-election data from the Southern Poverty Law Center. We’ll focus on the pre-election data in this lab.</p>
 </div>
 <div id="the-data" class="section level1">
 <h1><span class="header-section-number">3</span> The Data</h1>
@@ -439,8 +455,42 @@ div.tocify {
 <pre class="r"><code>library(fivethirtyeight)
 library(skimr)
 library(tidyverse)
-library(GGally)</code></pre>
-<p>The data is here:</p>
+library(GGally) # new to you!</code></pre>
+<p>We’ll still use <code>hate_crimes</code> to demonstrate multiple regression with:</p>
+<ol style="list-style-type: decimal">
+<li>A numerical outcome variable <span class="math inline">\(y\)</span>, in this case average annual hate crimes per 100,000 population, FBI, 2010-2015 (<code>avg_hatecrimes_per_100k_fbi</code>)</li>
+<li>Three possible explanatory variables:
+<ol style="list-style-type: decimal">
+<li>A first numerical explanatory variable <span class="math inline">\(x_1\)</span>: percent of adults in each state 25 and older with at least a high school degree (2009) (<code>share_pop_hs</code>)</li>
+<li>A second numerical explanatory variable <span class="math inline">\(x_2\)</span>: each state’s income inequality (as measured by the Gini index, 2015) (<code>gini_index</code>)</li>
+<li>A third numerical explanatory variable <span class="math inline">\(x_3\)</span>: each state’s percent population that voted for Donald Trump (<code>share_vote_trump</code>)</li>
+</ol></li>
+</ol>
+</div>
+<div id="eda-part-i-20-min" class="section level1">
+<h1><span class="header-section-number">4</span> EDA, Part I (⏰ 20 min)</h1>
+<p>Recall that a <a href="http://moderndive.netlify.com/6-regression.html#model1EDA">new exploratory data analysis</a> involves three things:</p>
+<ul>
+<li>Looking at the raw values.</li>
+<li>Computing summary statistics of the variables of interest.</li>
+<li>Creating informative visualizations.</li>
+</ul>
+<p>General functions we use below- add narrative to interpret each!:</p>
+<ul>
+<li><code>dplyr::glimpse()</code></li>
+<li><code>skimr::skim()</code></li>
+<li><code>ggplot2::ggplot()</code>
+<ul>
+<li><code>geom_histogram()</code> or <code>geom_density()</code> for numeric continuous variables</li>
+<li><code>geom_bar()</code> or <code>geom_col()</code> for categorical variables</li>
+</ul></li>
+</ul>
+<p>At this stage, you may also find your want to use <code>filter</code>, <code>mutate</code>, <code>arrange</code>, <code>select</code>, or <code>count</code>. Let your questions lead you! Feel free to add onto the EDA that follows.</p>
+<div id="look-at-the-raw-values" class="section level2">
+<h2><span class="header-section-number">4.1</span> Look at the raw values</h2>
+<ul>
+<li>How many states are here? Are they all “states”?</li>
+</ul>
 <pre class="r"><code>glimpse(hate_crimes)</code></pre>
 <pre><code>Observations: 51
 Variables: 12
@@ -456,253 +506,249 @@ $ share_non_white             &lt;dbl&gt; 0.35, 0.42, 0.49, 0.26, 0.61, 0.31...
 $ share_vote_trump            &lt;dbl&gt; 0.63, 0.53, 0.50, 0.60, 0.33, 0.44...
 $ hate_crimes_per_100k_splc   &lt;dbl&gt; 0.12583893, 0.14374012, 0.22531995...
 $ avg_hatecrimes_per_100k_fbi &lt;dbl&gt; 1.8064105, 1.6567001, 3.4139280, 0...</code></pre>
-</div>
-<div id="alison-editorializing-here" class="section level1">
-<h1><span class="header-section-number">4</span> Alison editorializing here…</h1>
-<p>There are two possible outcome variables here:</p>
-<ol style="list-style-type: decimal">
-<li>pre-election data from the FBI and</li>
-<li>post-election data from the SPLC</li>
-</ol>
 <ul>
-<li>The outcome variable, <span class="math inline">\(y\)</span>, the average annual hate crimes per 100,000 population, FBI, 2010-2015 (<code>avg_hatecrimes_per_100k_fbi</code>)</li>
-<li>The outcome variable, <span class="math inline">\(y\)</span>, hate crimes per 100,000 population, Southern Poverty Law Center, Nov. 9-18, 2016 (<code>hate_crimes_per_100k_splc</code>)</li>
+<li>How many rows do we have per state? Is there ever more than 1 year per state?</li>
 </ul>
-<p>Proposal: focus on building pre-election model, then perhaps compare coefficients to post-election model on their own?</p>
-<p>In the article, they claim that two variables remained significant in both model outputs: income inequality and percent population with a high school degree. The three explanatory/predictor variables we’ll use are:</p>
-<ul>
-<li><code>gini_index</code> (income inequality)</li>
-<li><code>share_pop_hs</code></li>
-<li><code>share_vote_trump</code> (make categorical?)</li>
-</ul>
+<pre class="r"><code>hate_crimes %&gt;% 
+  count(state, sort = TRUE)</code></pre>
+<pre><code># A tibble: 51 x 2
+   state                    n
+   &lt;chr&gt;                &lt;int&gt;
+ 1 Alabama                  1
+ 2 Alaska                   1
+ 3 Arizona                  1
+ 4 Arkansas                 1
+ 5 California               1
+ 6 Colorado                 1
+ 7 Connecticut              1
+ 8 Delaware                 1
+ 9 District of Columbia     1
+10 Florida                  1
+# ... with 41 more rows</code></pre>
 </div>
-<div id="univariate-eda" class="section level1">
-<h1><span class="header-section-number">5</span> Univariate EDA</h1>
-<p>will flush out more if use this dataset</p>
-<pre class="r"><code>skim(hate_crimes)</code></pre>
+<div id="compute-summary-statistics" class="section level2">
+<h2><span class="header-section-number">4.2</span> Compute summary statistics</h2>
+<p>Let’s select just the variables we need first.</p>
+<pre class="r"><code>hate_demo &lt;- hate_crimes %&gt;% 
+  select(state, avg_hatecrimes_per_100k_fbi, share_pop_hs, gini_index, 
+         share_vote_trump) </code></pre>
+<p>Following the narrative in <a href="http://moderndive.netlify.com/7-multiple-regression.html#model3EDA">ModernDive</a>, write a few sentences describing the output here.</p>
+<pre class="r"><code>skim(hate_demo)</code></pre>
 <pre><code>Skim summary statistics
  n obs: 51 
- n variables: 12 
+ n variables: 5 
 
 Variable type: character 
  variable missing complete  n min max empty n_unique
     state       0       51 51   4  20     0       51
 
-Variable type: integer 
-         variable missing complete  n     mean      sd    p0   p25   p50
- median_house_inc       0       51 51 55223.61 9208.48 35521 48657 54916
-   p75  p100     hist
- 60719 76165 ▂▅▆▇▇▃▃▂
-
 Variable type: numeric 
-                    variable missing complete  n  mean    sd    p0   p25
- avg_hatecrimes_per_100k_fbi       1       50 51 2.37  1.71  0.27  1.29 
-                  gini_index       0       51 51 0.45  0.021 0.42  0.44 
-   hate_crimes_per_100k_splc       4       47 51 0.3   0.25  0.067 0.14 
-           share_non_citizen       3       48 51 0.055 0.031 0.01  0.03 
-             share_non_white       0       51 51 0.32  0.16  0.06  0.2  
-                share_pop_hs       0       51 51 0.87  0.034 0.8   0.84 
-             share_pop_metro       0       51 51 0.75  0.18  0.31  0.63 
-            share_unemp_seas       0       51 51 0.05  0.011 0.028 0.042
-            share_vote_trump       0       51 51 0.49  0.12  0.04  0.41 
-         share_white_poverty       0       51 51 0.092 0.025 0.04  0.075
-   p50   p75   p100     hist
- 1.99  3.18  10.95  ▇▇▅▁▁▁▁▁
- 0.45  0.47   0.53  ▅▅▇▇▁▁▁▁
- 0.23  0.36   1.52  ▇▃▁▁▁▁▁▁
- 0.045 0.08   0.13  ▃▇▂▃▂▂▂▁
- 0.28  0.42   0.81  ▆▇▆▇▅▂▁▁
- 0.87  0.9    0.92  ▂▅▅▃▃▅▇▆
- 0.79  0.9    1     ▂▁▃▅▂▇▆▇
- 0.051 0.058  0.073 ▂▅▇▃▇▆▃▂
- 0.49  0.57   0.7   ▁▁▁▃▇▇▆▃
- 0.09  0.1    0.17  ▁▅▃▇▃▁▁▁</code></pre>
-<pre class="r"><code># Histogram of gini index:
-ggplot(hate_crimes, aes(x = gini_index)) +
-  geom_density() +
-  labs(x = &quot;gini index&quot;, title = &quot;Income inequality&quot;)</code></pre>
-<p><img src="cm024_files/figure-html/unnamed-chunk-2-1.png" width="2100" /></p>
-<pre class="r"><code># Histogram of share pop hs:
-ggplot(hate_crimes, aes(x = share_pop_hs)) +
-  geom_density() +
-  labs(x = &quot;percent of adults 25+ with at least HS degree&quot;, title = &quot;Education&quot;)</code></pre>
-<p><img src="cm024_files/figure-html/unnamed-chunk-2-2.png" width="2100" /></p>
-<pre class="r"><code># Histogram of turmp:
-ggplot(hate_crimes, aes(x = share_vote_trump)) +
-  geom_density() +
-  labs(x = &quot;percent voted for Trump&quot;, title = &quot;Trump&quot;)</code></pre>
-<p><img src="cm024_files/figure-html/unnamed-chunk-2-3.png" width="2100" /></p>
+                    variable missing complete  n mean    sd   p0  p25  p50
+ avg_hatecrimes_per_100k_fbi       1       50 51 2.37 1.71  0.27 1.29 1.99
+                  gini_index       0       51 51 0.45 0.021 0.42 0.44 0.45
+                share_pop_hs       0       51 51 0.87 0.034 0.8  0.84 0.87
+            share_vote_trump       0       51 51 0.49 0.12  0.04 0.41 0.49
+  p75  p100     hist
+ 3.18 10.95 ▇▇▅▁▁▁▁▁
+ 0.47  0.53 ▅▅▇▇▁▁▁▁
+ 0.9   0.92 ▂▅▅▃▃▅▇▆
+ 0.57  0.7  ▁▁▁▃▇▇▆▃</code></pre>
 </div>
-<div id="bivariate-eda" class="section level1">
-<h1><span class="header-section-number">6</span> Bivariate EDA</h1>
-<p>Let’s look at all 3 of these predictors of the pre-election hate crimes:</p>
-<pre class="r"><code>hate_crimes %&gt;% 
-  select(avg_hatecrimes_per_100k_fbi,
-         gini_index, share_pop_hs, share_vote_trump) %&gt;%
-  ggpairs(.)</code></pre>
-<p><img src="cm024_files/figure-html/unnamed-chunk-3-1.png" width="2100" /></p>
-<p>OK, one point appears to be an outlier. I’m going to color by DC so you can see this:</p>
-<pre class="r"><code>hate_crimes %&gt;% 
-  mutate(dc = ifelse(state == &quot;District of Columbia&quot;, &quot;dc&quot;, &quot;not&quot;)) %&gt;% 
-  select(avg_hatecrimes_per_100k_fbi, dc,
-         gini_index, share_pop_hs, share_vote_trump) %&gt;%
-  ggpairs(., mapping = aes(color = dc))</code></pre>
-<p><img src="cm024_files/figure-html/unnamed-chunk-4-1.png" width="2100" /></p>
-<p>This is where Alison goes off track to figure this out…</p>
-<pre class="r"><code>hate_crimes %&gt;% 
-  filter(!state == &quot;District of Columbia&quot;) %&gt;% 
-  select(avg_hatecrimes_per_100k_fbi, 
-         gini_index, share_pop_hs, share_vote_trump, share_non_citizen) %&gt;%
-  ggpairs(.)</code></pre>
-<p><img src="cm024_files/figure-html/unnamed-chunk-5-1.png" width="2100" /></p>
-<p>Question: should we exclude District of Columbia here? I think so- it appears to have multivariate weirdness.</p>
-<pre class="r"><code>hate_crimes %&gt;% 
-  filter(state == &quot;District of Columbia&quot;)</code></pre>
-<pre><code># A tibble: 1 x 12
-  state median_house_inc share_unemp_seas share_pop_metro share_pop_hs
-  &lt;chr&gt;            &lt;int&gt;            &lt;dbl&gt;           &lt;dbl&gt;        &lt;dbl&gt;
-1 Dist…            68277            0.067               1        0.871
-# ... with 7 more variables: share_non_citizen &lt;dbl&gt;,
-#   share_white_poverty &lt;dbl&gt;, gini_index &lt;dbl&gt;, share_non_white &lt;dbl&gt;,
-#   share_vote_trump &lt;dbl&gt;, hate_crimes_per_100k_splc &lt;dbl&gt;,
-#   avg_hatecrimes_per_100k_fbi &lt;dbl&gt;</code></pre>
-<p>Here is me excluding it (and making categorical versions at the same time:</p>
-<pre class="r"><code>hate_states &lt;- hate_crimes %&gt;% 
-  filter(!state == &quot;District of Columbia&quot;) %&gt;%
+<div id="create-informative-visualizations" class="section level2">
+<h2><span class="header-section-number">4.3</span> Create informative visualizations</h2>
+<p>First let’s look at the outcome variable:</p>
+<pre class="r"><code># Density of hate crimes (DV):
+ggplot(hate_demo, aes(x = avg_hatecrimes_per_100k_fbi)) +
+  geom_density() +
+  labs(x = &quot;&quot;, title = &quot;Hate Crimes&quot;)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-6-1.png" width="2100" /></p>
+<p>Next we’ll look at our three explanatory variables as continuous:</p>
+<pre class="r"><code># Histogram of share_pop_hs (IV):
+ggplot(hate_demo, aes(x = share_pop_hs)) +
+  geom_density() +
+  labs(x = &quot;&quot;, title = &quot;HS&quot;)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-7-1.png" width="2100" /></p>
+<pre class="r"><code># Histogram of gini (IV):
+ggplot(hate_demo, aes(x = gini_index)) +
+  geom_density() +
+  labs(x = &quot;&quot;, title = &quot;Gini&quot;)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-7-2.png" width="2100" /></p>
+<pre class="r"><code># Histogram of trump (IV):
+ggplot(hate_demo, aes(x = share_vote_trump)) +
+  geom_density() +
+  labs(x = &quot;&quot;, title = &quot;Trump&quot;)</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-7-3.png" width="2100" /></p>
+<p>Let’s make <code>share_vote_trump</code> a categorical variable:</p>
+<pre class="r"><code>hate_demo &lt;- hate_demo %&gt;% 
   mutate(
-    cat_pop_hs = case_when(
-      share_pop_hs &lt; .85 ~ 0, #low
-      between(share_pop_hs, .85, .89) ~ 1, #medium
-      TRUE ~ 2 #high
-      ),
-    cat_non_citizen = case_when(
-      share_non_citizen &lt;= .05 ~ 0, #low
-      TRUE ~ 1 #high
-      ),
     cat_trump = case_when(
-      share_vote_trump &lt; .5 ~ &quot;low&quot;,
-      TRUE ~ &quot;high&quot;
-    ))</code></pre>
+      share_vote_trump &lt; .5 ~ &quot;less than half&quot;, 
+      TRUE ~ &quot;more than half&quot;
+      )) %&gt;% 
+  mutate(cat_trump = as.factor(cat_trump)) %&gt;% 
+  select(-share_vote_trump)</code></pre>
+<blockquote>
+<p>Following the narrative in <a href="http://moderndive.netlify.com/12-thinking-with-data.html#house-prices-EDA-I">ModernDive</a>, write a few sentences describing the output here.</p>
+</blockquote>
 </div>
-<div id="multiple-regression-models" class="section level1">
-<h1><span class="header-section-number">7</span> Multiple regression models</h1>
-<p>So one group could do this…</p>
-<pre class="r"><code>hate_model &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+</div>
+<div id="eda-part-ii-20-min" class="section level1">
+<h1><span class="header-section-number">5</span> EDA, Part II (⏰ 20 min)</h1>
+<p>Part I of this EDA was univariate in nature in that we only considered one variable at a time. The goal of modeling, however, is to explore relationships between variables. Specifically, we care about bivariate relationships between pairs of variables. But with 1 outcome and 3 explanatory variables, that means we have <span class="math inline">\(3 \times 2 = 6\)</span> correlations to compute.</p>
+<p>For simple regression, we calculated correlation coefficients between the outcome and explanatory variables. For <a href="http://moderndive.netlify.com/7-multiple-regression.html#model3EDA">multiple regression</a>, your EDA should involve multiple correlation coefficients. We’ll use the <code>cor()</code> function to do this. You’ll want to first <code>select</code> only numeric variables first.</p>
+<p>Use this code as an example:</p>
+<pre class="r"><code>data %&gt;% 
+  select(-my_char_var, -my_factor_var) %&gt;% 
+  cor()</code></pre>
+<p>To produce this output:</p>
+<pre><code>                            avg_hatecrimes_per_100k_fbi share_pop_hs
+avg_hatecrimes_per_100k_fbi                           1           NA
+share_pop_hs                                         NA    1.0000000
+gini_index                                           NA   -0.5920518
+                            gini_index
+avg_hatecrimes_per_100k_fbi         NA
+share_pop_hs                -0.5920518
+gini_index                   1.0000000</code></pre>
+<p>Lots of <code>NA</code> correlations though! Try this code instead:</p>
+<pre class="r"><code>data %&gt;% 
+  select(-my_char_var, -my_factor_var) %&gt;% 
+  cor(., use = &quot;pairwise.complete.obs&quot;)</code></pre>
+<p>You could do the same thing in the <code>corrr</code> package, using the <code>correlate</code> function:</p>
+<pre class="r"><code>library(corrr)
+data %&gt;% 
+  select(-my_char_var, -my_factor_var) %&gt;% 
+  correlate()</code></pre>
+<p>We could actually do all of this with one function! We’ll use <code>GGally::ggpairs()</code> to create a pairwise comparison of multivariate data. This includes what is known as a “Generalized Pairs Plot,” which is an improved version of a <a href="https://www.rdocumentation.org/packages/graphics/versions/3.5.1/topics/pairs">scatterplot matrix</a>. This function provides two different comparisons of each pair of columns, and displays either the density (continuous numeric) or count (factors) of the respective variable along the diagonal. You can read more about the function and package <a href="http://ggobi.github.io/ggally/#ggallyggpairs">here</a>.</p>
+<p>There are three pieces to the output: <code>lower</code>, <code>upper</code>, and <code>diag</code>. Read more about the sections of the <a href="http://ggobi.github.io/ggally/#matrix_sections">matrix here</a>.</p>
+<p>Here is how you can use the function:</p>
+<pre class="r"><code>data %&gt;% 
+  select(-my_char_var) %&gt;% 
+  ggpairs()</code></pre>
+<p>And here is some demo output of how to use it using a dataset called <code>tips</code>:</p>
+<pre class="r"><code>data(tips, package = &quot;reshape&quot;)
+tips %&gt;% 
+  select(total_bill, time, tip) %&gt;% 
+  ggpairs()</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-15-1.png" width="2100" /></p>
+<p>And it builds from <code>ggplot2</code>, so you can add aesthetic mappings for color, etc. Hurray!</p>
+<pre class="r"><code>tips %&gt;% 
+  ggpairs(., aes(color = sex),
+          columns = c(&quot;total_bill&quot;, &quot;time&quot;, &quot;tip&quot;))</code></pre>
+<p><img src="cm024_files/figure-html/unnamed-chunk-16-1.png" width="2100" /></p>
+<blockquote>
+<p>Following this narrative in <a href="http://moderndive.netlify.com/7-multiple-regression.html#model3EDA">ModernDive</a>, write a few sentences describing the output here.</p>
+</blockquote>
+</div>
+<div id="multiple-regression-models-20-min" class="section level1">
+<h1><span class="header-section-number">6</span> Multiple regression models (⏰ 20 min)</h1>
+<p>Group 1: Two numerical predictors with a <code>+</code> Group 2: One numerical / one categorical with parallel slopes Group 3: One numerical / one categorical interaction model Group 4?: Two numerical predictors with a <code>*</code></p>
+<pre class="r"><code>hate_model1 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index + 
-                   share_pop_hs,
-                 data = hate_states)
+                   cat_trump,
+                 data = hate_demo)
 
-summary(hate_model)</code></pre>
+summary(hate_model1)</code></pre>
 <pre><code>
 Call:
-lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + share_pop_hs, 
-    data = hate_states)
+lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + cat_trump, 
+    data = hate_demo)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--2.19014 -0.79311 -0.03152  0.81289  2.56505 
+    Min      1Q  Median      3Q     Max 
+-2.5693 -1.0129 -0.1008  0.9312  5.8009 
 
 Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)   
-(Intercept)   -26.225     10.684  -2.455  0.01795 * 
-gini_index     28.159     12.853   2.191  0.03356 * 
-share_pop_hs   18.049      6.649   2.714  0.00931 **
+                        Estimate Std. Error t value Pr(&gt;|t|)   
+(Intercept)             -12.1397     4.9812  -2.437   0.0186 * 
+gini_index               32.5042    10.8630   2.992   0.0044 **
+cat_trumpmore than half  -0.5110     0.4493  -1.137   0.2612   
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 1.133 on 46 degrees of freedom
+Residual standard error: 1.566 on 47 degrees of freedom
   (1 observation deleted due to missingness)
-Multiple R-squared:  0.1408,    Adjusted R-squared:  0.1034 
-F-statistic: 3.768 on 2 and 46 DF,  p-value: 0.03051</code></pre>
+Multiple R-squared:  0.1995,    Adjusted R-squared:  0.1654 
+F-statistic: 5.857 on 2 and 47 DF,  p-value: 0.005358</code></pre>
 <p>Then maybe group 2:</p>
 <pre class="r"><code>hate_model2 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index + 
-                   share_pop_hs +
-                   share_vote_trump,
-                 data = hate_states)
+                   share_pop_hs,
+                 data = hate_demo)
 
 summary(hate_model2)</code></pre>
 <pre><code>
 Call:
-lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + share_pop_hs + 
-    share_vote_trump, data = hate_states)
+lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + share_pop_hs, 
+    data = hate_demo)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--2.18901 -0.79297 -0.03008  0.80592  2.56791 
+    Min      1Q  Median      3Q     Max 
+-2.7064 -0.9064  0.0390  0.7721  3.4995 
 
 Coefficients:
-                  Estimate Std. Error t value Pr(&gt;|t|)  
-(Intercept)      -26.10852   12.82977  -2.035   0.0478 *
-gini_index        28.04377   14.69043   1.909   0.0627 .
-share_pop_hs      17.99349    7.47966   2.406   0.0203 *
-share_vote_trump  -0.03265    1.93564  -0.017   0.9866  
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -54.017      9.763  -5.533 1.36e-06 ***
+gini_index     64.324     11.106   5.792 5.55e-07 ***
+share_pop_hs   31.287      6.813   4.592 3.29e-05 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
-Residual standard error: 1.146 on 45 degrees of freedom
+Residual standard error: 1.319 on 47 degrees of freedom
   (1 observation deleted due to missingness)
-Multiple R-squared:  0.1408,    Adjusted R-squared:  0.0835 
-F-statistic: 2.458 on 3 and 45 DF,  p-value: 0.07508</code></pre>
+Multiple R-squared:  0.4322,    Adjusted R-squared:  0.408 
+F-statistic: 17.89 on 2 and 47 DF,  p-value: 1.673e-06</code></pre>
 <p>Then maybe group 3:</p>
 <pre class="r"><code>hate_model3 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index + 
-                   share_pop_hs +
-                   cat_trump,
-                 data = hate_states)
+                   gini_index*share_pop_hs,
+                 data = hate_demo)
 
 summary(hate_model3)</code></pre>
 <pre><code>
 Call:
-lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + share_pop_hs + 
-    cat_trump, data = hate_states)
+lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index * share_pop_hs, 
+    data = hate_demo)
 
 Residuals:
-     Min       1Q   Median       3Q      Max 
--2.18473 -0.79379 -0.03785  0.82822  2.56073 
+    Min      1Q  Median      3Q     Max 
+-2.7947 -0.9659  0.1121  0.7480  3.5795 
 
 Coefficients:
-              Estimate Std. Error t value Pr(&gt;|t|)  
-(Intercept)  -26.50400   12.05860  -2.198   0.0331 *
-gini_index    28.45705   14.19969   2.004   0.0511 .
-share_pop_hs  18.22542    7.53183   2.420   0.0196 *
-cat_trumplow  -0.01919    0.36907  -0.052   0.9588  
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+                        Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)                42.86     171.10   0.250    0.803
+gini_index               -147.47     373.61  -0.395    0.695
+share_pop_hs              -78.65     193.96  -0.405    0.687
+gini_index:share_pop_hs   240.56     424.17   0.567    0.573
 
-Residual standard error: 1.146 on 45 degrees of freedom
+Residual standard error: 1.329 on 46 degrees of freedom
   (1 observation deleted due to missingness)
-Multiple R-squared:  0.1408,    Adjusted R-squared:  0.08355 
-F-statistic: 2.459 on 3 and 45 DF,  p-value: 0.075</code></pre>
-<p>Then maybe group 4 (tricky! need to talk about factors :):</p>
-<pre class="r"><code>hate_model4 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index + 
-                   as.factor(cat_pop_hs),
-                 data = hate_states)
+Multiple R-squared:  0.4362,    Adjusted R-squared:  0.3994 
+F-statistic: 11.86 on 3 and 46 DF,  p-value: 7.048e-06</code></pre>
+<pre class="r"><code>library(plotly)
 
-summary(hate_model4)</code></pre>
-<pre><code>
-Call:
-lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + as.factor(cat_pop_hs), 
-    data = hate_states)
+mtcars$am[which(mtcars$am == 0)] &lt;- &#39;Automatic&#39;
+mtcars$am[which(mtcars$am == 1)] &lt;- &#39;Manual&#39;
+mtcars$am &lt;- as.factor(mtcars$am)
 
-Residuals:
-     Min       1Q   Median       3Q      Max 
--2.00476 -0.80254  0.03371  0.62569  2.33648 
-
-Coefficients:
-                       Estimate Std. Error t value Pr(&gt;|t|)  
-(Intercept)            -12.1426     6.5428  -1.856   0.0700 .
-gini_index              30.1624    14.0239   2.151   0.0369 *
-as.factor(cat_pop_hs)1   0.5485     0.4293   1.278   0.2079  
-as.factor(cat_pop_hs)2   1.4869     0.5856   2.539   0.0146 *
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 1.154 on 45 degrees of freedom
-  (1 observation deleted due to missingness)
-Multiple R-squared:  0.1283,    Adjusted R-squared:  0.07013 
-F-statistic: 2.207 on 3 and 45 DF,  p-value: 0.1003</code></pre>
+p &lt;- plot_ly(hate_demo, x = ~share_vote_trump, y = ~gini_index, z = ~avg_hatecrimes_per_100k_fbi) %&gt;%
+  add_markers() %&gt;%
+  layout(scene = list(xaxis = list(title = &#39;Trump&#39;),
+                     yaxis = list(title = &#39;Gini&#39;),
+                     zaxis = list(title = &#39;Hate Crimes&#39;)))
+p</code></pre>
+<ol style="list-style-type: decimal">
+<li>The numerical outcome variable <span class="math inline">\(y\)</span> <code>avg_hatecrimes_per_100k_fbi</code> is on the z-axis (vertical axis)</li>
+<li>The two numerical explanatory variables form the “floor” axes. In this case
+<ol style="list-style-type: decimal">
+<li>The first numerical explanatory variable <span class="math inline">\(x_1\)</span> <code>share_vote_trump</code> is on of the floor axes.</li>
+<li>The second numerical explanatory variable <span class="math inline">\(x_2\)</span> <code>gini_index</code> is on the other floor axis.</li>
+</ol>
+parallel slopes</li>
+</ol>
+<pre class="r"><code>simple_mod &lt;- lm(avg_hatecrimes_per_100k_fbi ~ share_pop_hs,
+                 data = hate_demo)
+ggplot(hate_demo, aes(x = share_pop_hs, 
+                      y = avg_hatecrimes_per_100k_fbi)) +
+  geom_abline(aes(intercept=a, slope=b))</code></pre>
 </div>
 
 <p>

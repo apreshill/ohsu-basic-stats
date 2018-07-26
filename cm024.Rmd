@@ -23,26 +23,36 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
 
 - A complete knitted `html` file is due on Sakai by beginning of class Tuesday July 31th (2:30pm). 
 - This lab is structured to be similar to this [Case Study on Seattle House Prices from ModernDive](https://moderndive.com/12-thinking-with-data.html#seattle-house-prices). Please open it and follow along with both datasets!
+- The structure of this lab is as follows:
+  - In class, we'll walk through the univariate EDA steps for 3 key variables:
+      - the outcome variable
+      - a numeric predictor variable
+  - In the lab, you'll do:
+      - First 20 min: interpret EDA Part I (univariate)
+      - Next 20 min: do EDA Part II (bivariate)
+      - Last 20 min: do lm, attempt to interpret three values that define the regression plane
+  - On your own, you'll do: 
+      - Analysis of observed/fitted values and residuals following [ModernDive](http://moderndive.netlify.com/7-multiple-regression.html#model3points)
+      - Residual analysis following [ModernDive](http://moderndive.netlify.com/7-multiple-regression.html#model3residuals)
+      
 
 # Overview
 
-We'll work with data from this [538 article](https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/). From the article:
+We'll work with data from this [538 article](https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/). In the article, the authors describe collecting data on key socioeconomic factors for each state, including indicators for:
 
-We collected data on key socioeconomic factors for each state, including indicators for:
-
-- education (percent of adults 25 and older with at least a high school degree, as of 2009), 
+- education (percent of adults 25 and older with at least a high school degree, as of 2009) 
 - diversity
-    - percent nonwhite population, 2015
-    - percent noncitizen population, 2015,
-- geographic heterogeneity (percent population in metropolitan areas, 2015), 
+    - percent nonwhite population (2015), and 
+    - percent noncitizen population (2015).
+- geographic heterogeneity (percent population in metropolitan areas, 2015)
 - economic health 
     - median household income, 
     - 2016 seasonally adjusted unemployment (September 2016), 
-    - percent poverty among white people. 2015, and 
-    - income inequality as measured by the Gini index, 2015)
+    - percent poverty among white people (2015), and 
+    - income inequality (as measured by the Gini index, 2015)
 - percent of the population voted for Donald Trump. 
 
-In this lab, we'll use a subset of these variables to predict hate crimes in the US.
+In this lab, we'll use a subset of these variables to predict hate crimes in the US. There are two possible outcome variables here: (1) pre-election data from the FBI, and (2) post-election data from the Southern Poverty Law Center. We'll focus on the pre-election data in this lab.
 
 # The Data
 
@@ -58,35 +68,28 @@ library(GGally) # new to you!
 ```
 
 
-# Alison editorializing here...
-
-There are two possible outcome variables here: 
-
-1. pre-election data from the FBI and 
-2. post-election data from the SPLC
-
-- The outcome variable, $y$, the average annual hate crimes per 100,000 population, FBI, 2010-2015 (`avg_hatecrimes_per_100k_fbi`)
-- The outcome variable, $y$, hate crimes per 100,000 population, Southern Poverty Law Center, Nov. 9-18, 2016 (`hate_crimes_per_100k_splc`)
-
-Proposal: focus on building a pre-election model, then perhaps compare coefficients to post-election model on their own?
-
-# All together
-
 We'll still use `hate_crimes` to demonstrate multiple regression with:
 
-1. A numerical outcome variable $y$, in this case the average annual hate crimes per 100,000 population according to the FBI for years 2010-2015 (`avg_hatecrimes_per_100k_fbi`)
-1. Two explanatory variables:
-    1. A first numerical explanatory variable $x_1$. In this case, each state's percent noncitizen population in 2015 (`share_non_citizen`)
-    1. A second numerical explanatory variable $x_2$. In this case, each state's percent population in metropolitan areas in 2015 (`share_pop_metro`) 
+1. A numerical outcome variable $y$, in this case average annual hate crimes per 100,000 population, FBI, 2010-2015 (`avg_hatecrimes_per_100k_fbi`)
+1. Three possible explanatory variables:
+    1. A first numerical explanatory variable $x_1$: percent of adults in each state 25 and older with at least a high school degree (2009) (`share_pop_hs`)
+    1. A second numerical explanatory variable $x_2$: each state's income inequality (as measured by the Gini index, 2015) (`gini_index`) 
+    1. A third numerical explanatory variable $x_3$: each state's percent population that voted for Donald Trump (`share_vote_trump`) 
 
-In the lab, we'll consider a different scenario:
+```{r include = FALSE}
+ggplot(hate_crimes, aes(x = avg_hatecrimes_per_100k_fbi, 
+                        y = hate_crimes_per_100k_splc)) +
+  geom_point() +
+  geom_smooth(method = "lm")
 
-1. The same numerical outcome variable $y$: credit card balance.
-1. Two new explanatory variables:
-    1. A first numerical explanatory variable $x_1$: their credit rating.
-    1. A second numerical explanatory variable $x_2$: their age.
+ggplot(filter(hate_crimes, !state == "District of Columbia"), 
+              aes(x = avg_hatecrimes_per_100k_fbi, 
+                  y = hate_crimes_per_100k_splc)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
 
-# EDA
+# EDA, Part I (⏰ 20 min)
 
 Recall that a [new exploratory data analysis](http://moderndive.netlify.com/6-regression.html#model1EDA) involves three things:
 
@@ -94,7 +97,7 @@ Recall that a [new exploratory data analysis](http://moderndive.netlify.com/6-re
 * Computing summary statistics of the variables of interest.
 * Creating informative visualizations.
 
-General functions you'll want to call- add narrative to interpret each!:
+General functions we use below- add narrative to interpret each!:
 
 - `dplyr::glimpse()`
 - `skimr::skim()`
@@ -102,14 +105,8 @@ General functions you'll want to call- add narrative to interpret each!:
     - `geom_histogram()` or `geom_density()` for numeric continuous variables
     - `geom_bar()` or `geom_col()` for categorical variables
 
-At this stage, you may also find your want to use `filter`, `mutate`, `arrange`, `select`, or `count`. Let your questions lead you!
+At this stage, you may also find your want to use `filter`, `mutate`, `arrange`, `select`, or `count`. Let your questions lead you! Feel free to add onto the EDA that follows.
 
-<<<<<<< HEAD
-=======
-- `gini_index` (income inequality)
-- `share_pop_hs` 
-- `share_vote_trump` (make categorical?) <!-- CHESTER: Are you thinking about `cut`ting this into a few groups? -->
->>>>>>> 4453036e376dad699f95643c05587bdbb1c90fcb
 
 ## Look at the raw values
 
@@ -119,166 +116,167 @@ At this stage, you may also find your want to use `filter`, `mutate`, `arrange`,
 glimpse(hate_crimes)
 ```
 
-- Let's merge in `region` to, using the built-in `states` dataset in R:
+- How many rows do we have per state? Is there ever more than 1 year per state?
 
 ```{r}
-# load the data
-data("state")
-
-# make a dataframe
-state_info <- data_frame(state_name = state.name, 
-                         state_region = state.region)
-
-# drop DC, merge to get region
-hate_states <- hate_crimes %>% 
-  filter(!state == "District of Columbia") %>% 
-  left_join(state_info, by = c("state" = "state_name"))
+hate_crimes %>% 
+  count(state, sort = TRUE)
 ```
 
-- Let's select just the variables we need
-
-```{r}
-hate_demo <- hate_states %>% 
-  select(avg_hatecrimes_per_100k_fbi, share_pop_metro, share_non_citizen)
-```
 
 ## Compute summary statistics
+
+Let's select just the variables we need first.
+
+```{r}
+hate_demo <- hate_crimes %>% 
+  select(state, avg_hatecrimes_per_100k_fbi, share_pop_hs, gini_index, 
+         share_vote_trump) 
+```
+
+Following the narrative in [ModernDive](http://moderndive.netlify.com/7-multiple-regression.html#model3EDA), write a few sentences describing the output here.
 
 ```{r}
 skim(hate_demo)
 ```
 
-For simple regression, we also calculated correlation coefficients. For [multiple regression](http://moderndive.netlify.com/7-multiple-regression.html#model3EDA), your EDA can be more efficient by computing multiple correlation coefficients at once. We'll use the `cor()` function to do this.
+## Create informative visualizations
+
+First let's look at the outcome variable:
 
 ```{r}
-cor(hate_demo)
+# Density of hate crimes (DV):
+ggplot(hate_demo, aes(x = avg_hatecrimes_per_100k_fbi)) +
+  geom_density() +
+  labs(x = "", title = "Hate Crimes")
 ```
 
-Wah- those are all `NA`!
+Next we'll look at our three explanatory variables as continuous:
 
 ```{r}
-cor(hate_demo, use = "pairwise.complete.obs")
+# Histogram of share_pop_hs (IV):
+ggplot(hate_demo, aes(x = share_pop_hs)) +
+  geom_density() +
+  labs(x = "", title = "HS")
+
+# Histogram of gini (IV):
+ggplot(hate_demo, aes(x = gini_index)) +
+  geom_density() +
+  labs(x = "", title = "Gini")
+
+# Histogram of trump (IV):
+ggplot(hate_demo, aes(x = share_vote_trump)) +
+  geom_density() +
+  labs(x = "", title = "Trump")
+```
+
+Let's make `share_vote_trump` a categorical variable:
+
+```{r}
+hate_demo <- hate_demo %>% 
+  mutate(
+    cat_trump = case_when(
+      share_vote_trump < .5 ~ "less than half", 
+      TRUE ~ "more than half"
+      )) %>% 
+  mutate(cat_trump = as.factor(cat_trump)) %>% 
+  select(-share_vote_trump)
+```
+
+> Following the narrative in [ModernDive](http://moderndive.netlify.com/12-thinking-with-data.html#house-prices-EDA-I), write a few sentences describing the output here.
+
+# EDA, Part II (⏰ 20 min)
+
+Part I of this EDA was univariate in nature in that we only considered one variable at a time. The goal of modeling, however, is to explore relationships between variables. Specifically, we care about bivariate relationships between pairs of variables. But with 1 outcome and 3 explanatory variables, that means we have $3 \times 2 = 6$ correlations to compute. 
+
+For simple regression, we calculated correlation coefficients between the outcome and explanatory variables. For [multiple regression](http://moderndive.netlify.com/7-multiple-regression.html#model3EDA), your EDA should involve multiple correlation coefficients. We'll use the `cor()` function to do this. You'll want to first `select` only numeric variables first.
+
+Use this code as an example:
+
+```{r eval = FALSE}
+data %>% 
+  select(-my_char_var, -my_factor_var) %>% 
+  cor()
+```
+
+To produce this output:
+
+```{r echo = FALSE}
+hate_demo %>% 
+  select(-state, -cat_trump) %>% 
+  cor()
+```
+
+Lots of `NA` correlations though! Try this code instead:
+
+```{r eval = FALSE}
+data %>% 
+  select(-my_char_var, -my_factor_var) %>% 
+  cor(., use = "pairwise.complete.obs")
+```
+
+```{r include = FALSE}
+hate_demo %>% 
+  select(-state, -cat_trump) %>%  
+  cor(., use = "pairwise.complete.obs")
 ```
 
 
 You could do the same thing in the `corrr` package, using the `correlate` function:
 
-```{r}
+```{r eval = FALSE}
 library(corrr)
-correlate(hate_demo)
+data %>% 
+  select(-my_char_var, -my_factor_var) %>% 
+  correlate()
 ```
 
-Your interpretation of these correlation coefficents goes here:
 
-1.
-1.
-1.
+We could actually do all of this with one function! We'll use `GGally::ggpairs()` to create a pairwise comparison of multivariate data. This includes what is known as a "Generalized Pairs Plot," which is an improved version of a [scatterplot matrix](https://www.rdocumentation.org/packages/graphics/versions/3.5.1/topics/pairs). This function provides two different comparisons of each pair of columns, and displays either the density (continuous numeric) or count (factors) of the respective variable along the diagonal. You can read more about the function and package [here](http://ggobi.github.io/ggally/#ggallyggpairs). 
+
+There are three pieces to the output: `lower`, `upper`, and `diag`. Read more about the sections of the [matrix here](http://ggobi.github.io/ggally/#matrix_sections).
+
+Here is how you can use the function:
+
+```{r eval = FALSE}
+data %>% 
+  select(-my_char_var) %>% 
+  ggpairs()
+```
 
 
-## Create informative visualizations
+And here is some demo output of how to use it using a dataset called `tips`:
 
 ```{r}
-# Histogram of share_pop_metro:
-ggplot(hate_demo, aes(x = share_pop_metro)) +
-  geom_density() +
-  labs(x = "metro population percent", title = "Geographic heterogeneity")
-
-# Histogram of share_non_citizen:
-ggplot(hate_demo, aes(x = share_non_citizen)) +
-  geom_density() +
-  labs(x = "", title = "Diversity")
+data(tips, package = "reshape")
+tips %>% 
+  select(total_bill, time, tip) %>% 
+  ggpairs()
 ```
 
-Luckily, we just have two predictors here. We could actually make all the plots using `GGally::ggpairs()`.
+And it builds from `ggplot2`, so you can add aesthetic mappings for color, etc. Hurray!
 
 ```{r}
-ggpairs(hate_demo)
+tips %>% 
+  ggpairs(., aes(color = sex),
+          columns = c("total_bill", "time", "tip"))
 ```
 
-You get: 
+> Following this narrative in [ModernDive](http://moderndive.netlify.com/7-multiple-regression.html#model3EDA), write a few sentences describing the output here.
 
-- The correlation coefficients, AND
-- The univariate density plots, AND
-- The bivariate scatterplots!
+# Multiple regression models  (⏰ 20 min)
 
-In the article, they claim that two variables remained significant in both model outputs: income inequality and percent population with a high school degree. The three explanatory/predictor variables we’ll use are:
+Group 1: Two numerical predictors with a `+` 
+Group 2: One numerical / one categorical with parallel slopes 
+Group 3: One numerical / one categorical interaction model 
+Group 4?: Two numerical predictors with a `*`
 
-- `gini_index` (income inequality)
-- `share_pop_hs` 
-- `share_vote_trump` (make categorical?)
-
-
-# Bivariate EDA
-
-Let's look at all 3 of these predictors of the pre-election hate crimes:
-
-```{r}
-hate_crimes %>% 
-  select(avg_hatecrimes_per_100k_fbi,
-         gini_index, share_pop_hs, share_vote_trump) %>%
-  ggpairs(.)
-```
-
-OK, one point appears to be an outlier. I'm going to color by DC so you can see this:
-
-```{r}
-hate_crimes %>% 
-  mutate(dc = ifelse(state == "District of Columbia", "dc", "not")) %>% 
-  select(avg_hatecrimes_per_100k_fbi, dc,
-         gini_index, share_pop_hs, share_vote_trump) %>%
-  ggpairs(., mapping = aes(color = dc))
-```
-
-This is where Alison goes off track to figure this out...
-
-```{r}
-hate_crimes %>% 
-  filter(!state == "District of Columbia") %>% 
-  select(avg_hatecrimes_per_100k_fbi, 
-         gini_index, share_pop_hs, share_vote_trump, share_non_citizen) %>%
-  ggpairs(.)
-```
-
-Question: should we exclude District of Columbia here? I think so- it appears to have multivariate weirdness.
-
-```{r}
-hate_crimes %>% 
-  filter(state == "District of Columbia")
-```
-
-
-Here is me excluding it (and making categorical versions at the same time:
-
-
-```{r}
-hate_states <- hate_crimes %>% 
-  filter(!state == "District of Columbia") %>%
-  mutate(
-    cat_pop_hs = case_when(
-      share_pop_hs < .85 ~ 0, #low
-      between(share_pop_hs, .85, .89) ~ 1, #medium
-      TRUE ~ 2 #high
-      ),
-    cat_non_citizen = case_when(
-      share_non_citizen <= .05 ~ 0, #low
-      TRUE ~ 1 #high
-      ),
-    cat_trump = case_when(
-      share_vote_trump < .5 ~ "low",
-      TRUE ~ "high"
-    ))
-```
-
-
-# Multiple regression models
-
-Group 1: Two numerical predictors
 
 ```{r}
 hate_model1 <- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index + 
-                   share_pop_hs,
-                 data = hate_states)
+                   cat_trump,
+                 data = hate_demo)
 
 summary(hate_model1)
 ```
@@ -288,9 +286,8 @@ Then maybe group 2:
 ```{r}
 hate_model2 <- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index + 
-                   share_pop_hs +
-                   share_vote_trump,
-                 data = hate_states)
+                   share_pop_hs,
+                 data = hate_demo)
 
 summary(hate_model2)
 ```
@@ -299,43 +296,44 @@ Then maybe group 3:
 
 ```{r}
 hate_model3 <- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index + 
-                   share_pop_hs +
-                   cat_trump,
-                 data = hate_states)
+                   gini_index*share_pop_hs,
+                 data = hate_demo)
 
 summary(hate_model3)
 ```
 
-Then maybe group 4 (tricky! need to talk about factors :):
 
-```{r}
-hate_model4 <- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index + 
-                   as.factor(cat_pop_hs),
-                 data = hate_states)
 
-summary(hate_model4)
+
+
+```{r eval = FALSE}
+library(plotly)
+
+mtcars$am[which(mtcars$am == 0)] <- 'Automatic'
+mtcars$am[which(mtcars$am == 1)] <- 'Manual'
+mtcars$am <- as.factor(mtcars$am)
+
+p <- plot_ly(hate_demo, x = ~share_vote_trump, y = ~gini_index, z = ~avg_hatecrimes_per_100k_fbi) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = 'Trump'),
+                     yaxis = list(title = 'Gini'),
+                     zaxis = list(title = 'Hate Crimes')))
+p
 ```
 
 
-hail mary here
-```{r}
-library(janitor)
-thai_d <- readxl::read_xlsx(here::here("data", "Thai_vitamin D dataset.xlsx"),
-                            sheet = 1) %>% 
-  clean_names()
-
-glimpse(thai_d)
-
-ggplot(thai_d, aes(x = ageyears, y = x25d, color = sex)) +
-  geom_point() +
-  facet_wrap(~sex) +
-  geom_smooth(method = "lm")
-
-mod <- lm(x25d ~ ageyears + sex, data = thai_d)
-mod2 <- lm(x25d ~ ageyears*sex, data = thai_d)
+1. The numerical outcome variable $y$ `avg_hatecrimes_per_100k_fbi` is on the z-axis (vertical axis)
+1. The two numerical explanatory variables form the "floor" axes. In this case
+    1. The first numerical explanatory variable $x_1$ `share_vote_trump` is on of the floor axes.
+    1. The second numerical explanatory variable $x_2$ `gini_index` is on the other floor axis.
+    
+    parallel slopes
+    
+```{r eval = FALSE}
+simple_mod <- lm(avg_hatecrimes_per_100k_fbi ~ share_pop_hs,
+                 data = hate_demo)
+ggplot(hate_demo, aes(x = share_pop_hs, 
+                      y = avg_hatecrimes_per_100k_fbi)) +
+  geom_abline(aes(intercept=a, slope=b))
 ```
-
-
 
