@@ -452,18 +452,18 @@ div.tocify {
 <h1><span class="header-section-number">3</span> The Data</h1>
 <p>This data is included in the <code>fivethirtyeight</code> package in the <a href="https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html"><code>hate_crimes</code> data frame</a>, which we’ll refer to as the “Hate crimes” dataset. You can use <a href="https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html"><code>?hate_crimes</code></a> to read more about it and the variables.</p>
 <p>You’ll need to load these packages to do this lab:</p>
-<pre class="r"><code>library(fivethirtyeight)
+<pre class="r"><code>library(fivethirtyeight) # new to you!
 library(skimr)
 library(tidyverse)
 library(GGally) # new to you!</code></pre>
-<p>We’ll still use <code>hate_crimes</code> to demonstrate multiple regression with:</p>
+<p>We’ll use <code>hate_crimes</code> to demonstrate multiple regression with:</p>
 <ol style="list-style-type: decimal">
 <li>A numerical outcome variable <span class="math inline">\(y\)</span>, in this case average annual hate crimes per 100,000 population, FBI, 2010-2015 (<code>avg_hatecrimes_per_100k_fbi</code>)</li>
 <li>Three possible explanatory variables:
 <ol style="list-style-type: decimal">
 <li>A first numerical explanatory variable <span class="math inline">\(x_1\)</span>: percent of adults in each state 25 and older with at least a high school degree (2009) (<code>share_pop_hs</code>)</li>
 <li>A second numerical explanatory variable <span class="math inline">\(x_2\)</span>: each state’s income inequality (as measured by the Gini index, 2015) (<code>gini_index</code>)</li>
-<li>A third numerical explanatory variable <span class="math inline">\(x_3\)</span>: each state’s percent population that voted for Donald Trump (<code>share_vote_trump</code>)</li>
+<li>A third numerical explanatory variable <span class="math inline">\(x_3\)</span>: each state’s percent population that voted for Donald Trump (<code>share_vote_trump</code>). At a later stage, we’ll convert this variable to a factor.</li>
 </ol></li>
 </ol>
 </div>
@@ -641,114 +641,43 @@ tips %&gt;%
 </div>
 <div id="multiple-regression-models-20-min" class="section level1">
 <h1><span class="header-section-number">6</span> Multiple regression models (⏰ 20 min)</h1>
-<p>Group 1: Two numerical predictors with a <code>+</code> Group 2: One numerical / one categorical with parallel slopes Group 3: One numerical / one categorical interaction model Group 4?: Two numerical predictors with a <code>*</code></p>
-<pre class="r"><code>hate_model1 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index + 
-                   cat_trump,
-                 data = hate_demo)
-
-summary(hate_model1)</code></pre>
-<pre><code>
-Call:
-lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + cat_trump, 
-    data = hate_demo)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--2.5693 -1.0129 -0.1008  0.9312  5.8009 
-
-Coefficients:
-                        Estimate Std. Error t value Pr(&gt;|t|)   
-(Intercept)             -12.1397     4.9812  -2.437   0.0186 * 
-gini_index               32.5042    10.8630   2.992   0.0044 **
-cat_trumpmore than half  -0.5110     0.4493  -1.137   0.2612   
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 1.566 on 47 degrees of freedom
-  (1 observation deleted due to missingness)
-Multiple R-squared:  0.1995,    Adjusted R-squared:  0.1654 
-F-statistic: 5.857 on 2 and 47 DF,  p-value: 0.005358</code></pre>
-<p>Then maybe group 2:</p>
-<pre class="r"><code>hate_model2 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index + 
-                   share_pop_hs,
-                 data = hate_demo)
-
-summary(hate_model2)</code></pre>
-<pre><code>
-Call:
-lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index + share_pop_hs, 
-    data = hate_demo)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--2.7064 -0.9064  0.0390  0.7721  3.4995 
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   -54.017      9.763  -5.533 1.36e-06 ***
-gini_index     64.324     11.106   5.792 5.55e-07 ***
-share_pop_hs   31.287      6.813   4.592 3.29e-05 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Residual standard error: 1.319 on 47 degrees of freedom
-  (1 observation deleted due to missingness)
-Multiple R-squared:  0.4322,    Adjusted R-squared:  0.408 
-F-statistic: 17.89 on 2 and 47 DF,  p-value: 1.673e-06</code></pre>
-<p>Then maybe group 3:</p>
-<pre class="r"><code>hate_model3 &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index*share_pop_hs,
-                 data = hate_demo)
-
-summary(hate_model3)</code></pre>
-<pre><code>
-Call:
-lm(formula = avg_hatecrimes_per_100k_fbi ~ gini_index * share_pop_hs, 
-    data = hate_demo)
-
-Residuals:
-    Min      1Q  Median      3Q     Max 
--2.7947 -0.9659  0.1121  0.7480  3.5795 
-
-Coefficients:
-                        Estimate Std. Error t value Pr(&gt;|t|)
-(Intercept)                42.86     171.10   0.250    0.803
-gini_index               -147.47     373.61  -0.395    0.695
-share_pop_hs              -78.65     193.96  -0.405    0.687
-gini_index:share_pop_hs   240.56     424.17   0.567    0.573
-
-Residual standard error: 1.329 on 46 degrees of freedom
-  (1 observation deleted due to missingness)
-Multiple R-squared:  0.4362,    Adjusted R-squared:  0.3994 
-F-statistic: 11.86 on 3 and 46 DF,  p-value: 7.048e-06</code></pre>
+<p>Do the following:</p>
+<ul>
+<li>Fit a multiple regression model and get the regression table. You’ll be assigned one of the following models:
+<ul>
+<li>Two numerical predictors with a <code>+</code></li>
+<li>One numerical / one categorical with parallel slopes</li>
+<li>One numerical / one categorical interaction model</li>
+<li>Two numerical predictors with a <code>*</code></li>
+</ul></li>
+<li>Sketch out the <em>modeling equation</em> for your model (not in your R Markdown)
+<ul>
+<li>Parallel slopes example <a href="http://moderndive.netlify.com/7-multiple-regression.html#model4table">here</a></li>
+<li>Interaction model <a href="http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable">here</a></li>
+</ul></li>
+<li>Interpret the output from the regression table (in complete sentences, but you may use bullet points to organize)
+<ul>
+<li>Parallel slopes example <a href="http://moderndive.netlify.com/7-multiple-regression.html#model4table">here</a></li>
+<li>Interaction model <a href="http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable">here</a></li>
+</ul></li>
+<li>Compare the coefficients from your multiple regression model to the “simple” correlation coefficients for each variable. Recall that in a simple linear regression: <span class="math display">\[b_{x1} = r_{{x_1}y} ~\dfrac{s_y}{s_{x_1}}\]</span></li>
+<li>For those with the two numerical predictors, you may want to look into making a <a href="https://plot.ly/r/3d-scatter-plots/">3D scatterplot</a>.
+<ul>
+<li>The numerical outcome variable <span class="math inline">\(y\)</span> <code>avg_hatecrimes_per_100k_fbi</code> goes on the z-axis (vertical axis)</li>
+<li>The two numerical explanatory variables form the “floor” axes. In this case
+<ul>
+<li>The first numerical explanatory variable <span class="math inline">\(x_1\)</span> <code>share_vote_trump</code> is on of the floor axes.</li>
+<li>The second numerical explanatory variable <span class="math inline">\(x_2\)</span> <code>gini_index</code> is on the other floor axis.</li>
+</ul></li>
+</ul></li>
+</ul>
 <pre class="r"><code>library(plotly)
-
-mtcars$am[which(mtcars$am == 0)] &lt;- &#39;Automatic&#39;
-mtcars$am[which(mtcars$am == 1)] &lt;- &#39;Manual&#39;
-mtcars$am &lt;- as.factor(mtcars$am)
-
 p &lt;- plot_ly(hate_demo, x = ~share_vote_trump, y = ~gini_index, z = ~avg_hatecrimes_per_100k_fbi) %&gt;%
   add_markers() %&gt;%
   layout(scene = list(xaxis = list(title = &#39;Trump&#39;),
                      yaxis = list(title = &#39;Gini&#39;),
                      zaxis = list(title = &#39;Hate Crimes&#39;)))
 p</code></pre>
-<ol style="list-style-type: decimal">
-<li>The numerical outcome variable <span class="math inline">\(y\)</span> <code>avg_hatecrimes_per_100k_fbi</code> is on the z-axis (vertical axis)</li>
-<li>The two numerical explanatory variables form the “floor” axes. In this case
-<ol style="list-style-type: decimal">
-<li>The first numerical explanatory variable <span class="math inline">\(x_1\)</span> <code>share_vote_trump</code> is on of the floor axes.</li>
-<li>The second numerical explanatory variable <span class="math inline">\(x_2\)</span> <code>gini_index</code> is on the other floor axis.</li>
-</ol>
-parallel slopes</li>
-</ol>
-<pre class="r"><code>simple_mod &lt;- lm(avg_hatecrimes_per_100k_fbi ~ share_pop_hs,
-                 data = hate_demo)
-ggplot(hate_demo, aes(x = share_pop_hs, 
-                      y = avg_hatecrimes_per_100k_fbi)) +
-  geom_abline(aes(intercept=a, slope=b))</code></pre>
 </div>
 
 <p>

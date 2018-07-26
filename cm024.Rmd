@@ -60,21 +60,21 @@ This data is included in the `fivethirtyeight` package in the [`hate_crimes` dat
 
 You'll need to load these packages to do this lab:
 
-```{r load_packages, include = TRUE}
-library(fivethirtyeight)
+```{r load_packages}
+library(fivethirtyeight) # new to you!
 library(skimr)
 library(tidyverse)
 library(GGally) # new to you!
 ```
 
 
-We'll still use `hate_crimes` to demonstrate multiple regression with:
+We'll use `hate_crimes` to demonstrate multiple regression with:
 
 1. A numerical outcome variable $y$, in this case average annual hate crimes per 100,000 population, FBI, 2010-2015 (`avg_hatecrimes_per_100k_fbi`)
 1. Three possible explanatory variables:
     1. A first numerical explanatory variable $x_1$: percent of adults in each state 25 and older with at least a high school degree (2009) (`share_pop_hs`)
     1. A second numerical explanatory variable $x_2$: each state's income inequality (as measured by the Gini index, 2015) (`gini_index`) 
-    1. A third numerical explanatory variable $x_3$: each state's percent population that voted for Donald Trump (`share_vote_trump`) 
+    1. A third numerical explanatory variable $x_3$: each state's percent population that voted for Donald Trump (`share_vote_trump`). At a later stage, we'll convert this variable to a factor.
 
 ```{r include = FALSE}
 ggplot(hate_crimes, aes(x = avg_hatecrimes_per_100k_fbi, 
@@ -266,35 +266,46 @@ tips %>%
 
 # Multiple regression models  (⏰ 20 min)
 
-Group 1: Two numerical predictors with a `+` 
-Group 2: One numerical / one categorical with parallel slopes 
-Group 3: One numerical / one categorical interaction model 
-Group 4?: Two numerical predictors with a `*`
+Do the following:
+
+- Fit a multiple regression model and get the regression table. You'll be assigned one of the following models:
+    - Two numerical predictors with a `+` 
+    - One numerical / one categorical with parallel slopes 
+    - One numerical / one categorical interaction model 
+    - Two numerical predictors with a `*`
+- Sketch out the *modeling equation* for your model (not in your R Markdown)
+    - Parallel slopes example [here](http://moderndive.netlify.com/7-multiple-regression.html#model4table)
+    - Interaction model [here](http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable)
+- Interpret the output from the regression table (in complete sentences, but you may use bullet points to organize)
+    - Parallel slopes example [here](http://moderndive.netlify.com/7-multiple-regression.html#model4table)
+    - Interaction model [here](http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable)
+- Compare the coefficients from your multiple regression model to the "simple" correlation coefficients for each variable. Recall that in a simple linear regression: 
+$$b_{x1} = r_{{x_1}y} ~\dfrac{s_y}{s_{x_1}}$$
+- For those with the two numerical predictors, you may want to look into making a [3D scatterplot](https://plot.ly/r/3d-scatter-plots/).
+    - The numerical outcome variable $y$ `avg_hatecrimes_per_100k_fbi` goes on the z-axis (vertical axis)
+    - The two numerical explanatory variables form the "floor" axes. In this case
+        - The first numerical explanatory variable $x_1$ `share_vote_trump` is on of the floor axes.
+        - The second numerical explanatory variable $x_2$ `gini_index` is on the other floor axis.
 
 
-```{r}
+
+```{r include = FALSE}
 hate_model1 <- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index + 
                    cat_trump,
                  data = hate_demo)
 
 summary(hate_model1)
-```
 
-Then maybe group 2:
 
-```{r}
+
 hate_model2 <- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index + 
                    share_pop_hs,
                  data = hate_demo)
 
 summary(hate_model2)
-```
 
-Then maybe group 3:
-
-```{r}
 hate_model3 <- lm(avg_hatecrimes_per_100k_fbi ~ 
                    gini_index*share_pop_hs,
                  data = hate_demo)
@@ -305,14 +316,8 @@ summary(hate_model3)
 
 
 
-
 ```{r eval = FALSE}
 library(plotly)
-
-mtcars$am[which(mtcars$am == 0)] <- 'Automatic'
-mtcars$am[which(mtcars$am == 1)] <- 'Manual'
-mtcars$am <- as.factor(mtcars$am)
-
 p <- plot_ly(hate_demo, x = ~share_vote_trump, y = ~gini_index, z = ~avg_hatecrimes_per_100k_fbi) %>%
   add_markers() %>%
   layout(scene = list(xaxis = list(title = 'Trump'),
@@ -322,18 +327,4 @@ p
 ```
 
 
-1. The numerical outcome variable $y$ `avg_hatecrimes_per_100k_fbi` is on the z-axis (vertical axis)
-1. The two numerical explanatory variables form the "floor" axes. In this case
-    1. The first numerical explanatory variable $x_1$ `share_vote_trump` is on of the floor axes.
-    1. The second numerical explanatory variable $x_2$ `gini_index` is on the other floor axis.
-    
-    parallel slopes
-    
-```{r eval = FALSE}
-simple_mod <- lm(avg_hatecrimes_per_100k_fbi ~ share_pop_hs,
-                 data = hate_demo)
-ggplot(hate_demo, aes(x = share_pop_hs, 
-                      y = avg_hatecrimes_per_100k_fbi)) +
-  geom_abline(aes(intercept=a, slope=b))
-```
 
