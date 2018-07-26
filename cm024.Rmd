@@ -22,7 +22,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
 # Logistics
 
 - A complete knitted `html` file is due on Sakai by beginning of class Tuesday July 31th (2:30pm). 
-- This lab is structured to be similar to this [Case Study on Seattle House Prices from ModernDive](http://moderndive.netlify.com/12-thinking-with-data.html#seattle-house-prices). Please open it and follow along with both datasets!
+- This lab is structured to be similar to this [Case Study on Seattle House Prices from ModernDive](https://moderndive.com/12-thinking-with-data.html#seattle-house-prices). Please open it and follow along with both datasets!
 
 # Overview
 
@@ -74,13 +74,13 @@ There are two possible outcome variables here:
 - The outcome variable, $y$, the average annual hate crimes per 100,000 population, FBI, 2010-2015 (`avg_hatecrimes_per_100k_fbi`)
 - The outcome variable, $y$, hate crimes per 100,000 population, Southern Poverty Law Center, Nov. 9-18, 2016 (`hate_crimes_per_100k_splc`)
 
-Proposal: focus on building pre-election model, then perhaps compare coefficients to post-election model on their own?
+Proposal: focus on building a pre-election model, then perhaps compare coefficients to post-election model on their own?
 
 In the article, they claim that two variables remained significant in both model outputs: income inequality and percent population with a high school degree. The three explanatory/predictor variables we’ll use are:
 
 - `gini_index` (income inequality)
 - `share_pop_hs` 
-- `share_vote_trump` (make categorical?)
+- `share_vote_trump` (make categorical?) <!-- CHESTER: Are you thinking about `cut`ting this into a few groups? -->
 
 # Univariate EDA 
 
