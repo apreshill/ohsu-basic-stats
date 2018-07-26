@@ -292,7 +292,9 @@ Do the following:
     - Parallel slopes example [here](http://moderndive.netlify.com/7-multiple-regression.html#model4table)
     - Interaction model [here](http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable)
 - Compare the coefficients from your multiple regression model to the "simple" correlation coefficients for each variable. Recall that in a simple linear regression: 
+
 $$b_{x1} = r_{{x_1}y} ~\dfrac{s_y}{s_{x_1}}$$
+
 - For those with the two numerical predictors, you may want to look into making a [3D scatterplot](https://plot.ly/r/3d-scatter-plots/).
     - The numerical outcome variable $y$ `avg_hatecrimes_per_100k_fbi` goes on the z-axis (vertical axis)
     - The two numerical explanatory variables form the "floor" axes. In this case
