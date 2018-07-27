@@ -737,8 +737,8 @@ crime %>%
 
 ```{r}
 crime %>% 
-  summarize(ssr_crime = sum((criminals - mean(criminals))^2),
-            var_crime = ssr_crime / (n() - 1),
+  summarize(sst_crime = sum((criminals - mean(criminals))^2),
+            var_crime = sst_crime / (n() - 1),
             sd_crime = sqrt(var_crime))
 ```
 

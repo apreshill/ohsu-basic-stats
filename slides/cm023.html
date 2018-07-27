@@ -675,14 +675,14 @@ Variance is calculated by taking the sum of squared differences from the mean, a
 
 ```r
 crime %&gt;% 
-  summarize(ssr_crime = sum((criminals - mean(criminals))^2),
-            var_crime = ssr_crime / (n() - 1),
+  summarize(sst_crime = sum((criminals - mean(criminals))^2),
+            var_crime = sst_crime / (n() - 1),
             sd_crime = sqrt(var_crime))
 ```
 
 ```
 ## # A tibble: 1 x 3
-##   ssr_crime var_crime sd_crime
+##   sst_crime var_crime sd_crime
 ##       &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
 ## 1    66898.     1715.     41.4
 ```
@@ -789,6 +789,10 @@ $$ \textrm{outcome}_i = \textrm{(Model}_i) + \textrm{error}_i$$
 
 `$$R^2 = SS_{model} / SS_{total}$$`
 
+--
+
+also true...
+`$$R^2 = (1 - SS_{residual}) / SS_{total}$$`
 
 ```r
 library(broom)
