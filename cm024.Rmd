@@ -30,8 +30,8 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE,
   - In the lab, you'll do:
       - First 20 min: interpret EDA Part I (univariate)
       - Next 20 min: do EDA Part II (bivariate)
-      - Last 20 min: do lm, attempt to interpret three values that define the regression plane
-  - On your own, you'll do: 
+      - Last 20 min: fit a regression model, obtain the regression table, and attempt to interpret the three values that define the regression plane
+  - In the next lab, you'll do: 
       - Analysis of observed/fitted values and residuals following [ModernDive](http://moderndive.netlify.com/7-multiple-regression.html#model3points)
       - Residual analysis following [ModernDive](http://moderndive.netlify.com/7-multiple-regression.html#model3residuals)
       
@@ -280,7 +280,7 @@ tips %>%
 
 Do the following:
 
-- Fit a multiple regression model and get the regression table. You'll be assigned one of the following models:
+- Fit a multiple regression model and get the regression table. You'll be assigned **one** of the following models:
     - Two numerical predictors with a `+` (`gini_index` and `share_pop_hs`)
     - One numerical / one categorical with parallel slopes (`gini_index` and `cat_trump`)
     - One numerical / one categorical interaction model (`gini_index` and `cat_trump`)
