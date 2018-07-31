@@ -117,7 +117,7 @@ At this stage, you may also find your want to use `filter`, `mutate`, `arrange`,
 glimpse(hate_crimes)
 ```
 
-- How many rows do we have per state? Is there ever more than 1 year per state?
+- How many rows do we have per state? Is there ever more than 1 row per state?
 
 ```{r}
 hate_crimes %>% 

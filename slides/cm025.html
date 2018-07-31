@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CONJ620: CM 2.5</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alison Hill" />
+    <link href="libs/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
+    <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# CONJ620: CM 2.5
+## Outliers &amp; Diagnostics
+### Alison Hill
+
+---
+
+
+
+
+
+
+
+## Packages
+
+
+```r
+library(fivethirtyeight) 
+library(moderndive)
+library(skimr)
+library(tidyverse)
+library(GGally) 
+library(broom)
+```
+
+---
+## Data
+
+
+```r
+glimpse(hate_crimes)
+```
+
+```
+Observations: 51
+Variables: 12
+$ state                       &lt;chr&gt; "Alabama", "Alaska", "Arizona", "A...
+$ median_house_inc            &lt;int&gt; 42278, 67629, 49254, 44922, 60487,...
+$ share_unemp_seas            &lt;dbl&gt; 0.060, 0.064, 0.063, 0.052, 0.059,...
+$ share_pop_metro             &lt;dbl&gt; 0.64, 0.63, 0.90, 0.69, 0.97, 0.80...
+$ share_pop_hs                &lt;dbl&gt; 0.821, 0.914, 0.842, 0.824, 0.806,...
+$ share_non_citizen           &lt;dbl&gt; 0.02, 0.04, 0.10, 0.04, 0.13, 0.06...
+$ share_white_poverty         &lt;dbl&gt; 0.12, 0.06, 0.09, 0.12, 0.09, 0.07...
+$ gini_index                  &lt;dbl&gt; 0.472, 0.422, 0.455, 0.458, 0.471,...
+$ share_non_white             &lt;dbl&gt; 0.35, 0.42, 0.49, 0.26, 0.61, 0.31...
+$ share_vote_trump            &lt;dbl&gt; 0.63, 0.53, 0.50, 0.60, 0.33, 0.44...
+$ hate_crimes_per_100k_splc   &lt;dbl&gt; 0.12583893, 0.14374012, 0.22531995...
+$ avg_hatecrimes_per_100k_fbi &lt;dbl&gt; 1.8064105, 1.6567001, 3.4139280, 0...
+```
+
+
+---
+## Pre-processing
+
+
+```r
+hate_demo &lt;- hate_crimes %&gt;% 
+  select(state, avg_hatecrimes_per_100k_fbi, share_pop_hs, gini_index, 
+         share_vote_trump) %&gt;%  
+  mutate(
+    cat_trump = case_when(
+      share_vote_trump &lt; .5 ~ "less than half", 
+      TRUE ~ "more than half"
+      )) %&gt;% 
+  mutate(cat_trump = as.factor(cat_trump)) %&gt;% 
+  select(-share_vote_trump)
+```
+
+---
+class: inverse, middle, center
+
+## Two numerical predictors with a `+` (`gini_index` and `share_pop_hs`)
+
+(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
+
+---
+class: inverse, middle, center
+
+## One numerical / one categorical with parallel slopes (`gini_index` and `cat_trump`)
+
+(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
+
+---
+## Parallel slopes
+
+
+```r
+hate_para &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   cat_trump,
+                 data = hate_demo)
+
+get_regression_table(hate_para)
+```
+
+```
+# A tibble: 3 x 7
+  term              estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept          -12.1       4.98      -2.44   0.019   -22.2    -2.12 
+2 gini_index          32.5      10.9        2.99   0.004    10.7    54.4  
+3 cat_trumpmore th…   -0.511     0.449     -1.14   0.261    -1.42    0.393
+```
+
+---
+## Visualize parallel slopes model
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-4-1.png" width="60%" /&gt;
+
+---
+class: inverse, middle, center
+
+## One numerical / one categorical interaction model (`gini_index` and `cat_trump`)
+
+(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
+
+---
+## Interaction
+
+
+```r
+hate_int &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   cat_trump,
+                 data = hate_demo)
+
+get_regression_table(hate_int)
+```
+
+```
+# A tibble: 3 x 7
+  term              estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept          -12.1       4.98      -2.44   0.019   -22.2    -2.12 
+2 gini_index          32.5      10.9        2.99   0.004    10.7    54.4  
+3 cat_trumpmore th…   -0.511     0.449     -1.14   0.261    -1.42    0.393
+```
+
+---
+## Visualize interaction model
+
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-6-1.png" width="60%" /&gt;
+
+---
+class: middle, inverse, center
+
+##Two numerical predictors with a `*` (`gini_index` and `share_pop_hs`)
+
+(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
+
+---
+## Continuous interaction
+
+
+```r
+hate_cont &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index * 
+                   cat_trump,
+                 data = hate_demo)
+
+get_regression_table(hate_cont)
+```
+
+```
+# A tibble: 4 x 7
+  term              estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept            -20.4      5.66     -3.61   0.001   -31.8     -9.02
+2 gini_index            50.6     12.4       4.10   0        25.7     75.5 
+3 cat_trumpmore th…     25.7     10.0       2.56   0.014     5.53    45.9 
+4 gini_index:cat_t…    -57.9     22.1      -2.62   0.012  -102.     -13.4 
+```
+
+
+---
+class: middle, inverse, center
+
+
+![](https://pbs.twimg.com/media/Ck_mqMOUUAE-mU7.jpg)
+
+---
+## Definitions
+
+&gt; "Unusual data are problematic in linear models fit by least squares because they can unduly influence the results of the analysis, and because their presence may be a signal that the model fails to capture important characteristics of the data."
+
+* An **outlier** is an observation whose response-variable value is conditionally unusual given the values of the explanatory variables.
+* In contrast, a **univariate outlier** is a value of `\(y\)` or `\(x\)` that is unconditionally unusual; such a value may or may not be a regression outlier.
+
+from [John Fox](https://socialsciences.mcmaster.ca/jfox/Courses/Brazil-2009/slides-handout.pdf)
+
+---
+
+![](images/fox-outliers.png)
+---
+## Types of influence
+
+
+* Extremity on the x’s (leverage)
+* Extremity on y (discrepancy)
+* Influence on the regression estimates 
+    * Global
+    * Specific coefficients
+    
+---
+## Start with one model
+
+I'll choose the parallel slopes model
+
+
+```r
+hate_mod &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   cat_trump,
+                 data = hate_demo)
+
+get_regression_table(hate_mod)
+```
+
+```
+# A tibble: 3 x 7
+  term              estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept          -12.1       4.98      -2.44   0.019   -22.2    -2.12 
+2 gini_index          32.5      10.9        2.99   0.004    10.7    54.4  
+3 cat_trumpmore th…   -0.511     0.449     -1.14   0.261    -1.42    0.393
+```
+
+---
+## Diagnostic data frame
+
+Use `data` argument to merge original data with diagnostics!
+From [https://github.com/tidymodels/broom/issues/91](https://github.com/tidymodels/broom/issues/91)
+
+
+```r
+hate_mod &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + cat_trump, data = hate_demo)
+
+hate_diag &lt;- augment(hate_mod, data = hate_demo) 
+
+glimpse(hate_diag)
+```
+
+```
+Observations: 50
+Variables: 12
+$ state                       &lt;chr&gt; "Alabama", "Alaska", "Arizona", "A...
+$ avg_hatecrimes_per_100k_fbi &lt;dbl&gt; 1.8064105, 1.6567001, 3.4139280, 0...
+$ share_pop_hs                &lt;dbl&gt; 0.821, 0.914, 0.842, 0.824, 0.806,...
+$ gini_index                  &lt;dbl&gt; 0.472, 0.422, 0.455, 0.458, 0.471,...
+$ cat_trump                   &lt;fct&gt; more than half, more than half, mo...
+$ .fitted                     &lt;dbl&gt; 2.691360, 1.066151, 2.138789, 2.23...
+$ .se.fit                     &lt;dbl&gt; 0.3892770, 0.4420798, 0.3166400, 0...
+$ .resid                      &lt;dbl&gt; -0.88494927, 0.59054912, 1.2751392...
+$ .hat                        &lt;dbl&gt; 0.06178909, 0.07968851, 0.04088142...
+$ .sigma                      &lt;dbl&gt; 1.577229, 1.580366, 1.571287, 1.56...
+$ .cooksd                     &lt;dbl&gt; 7.471722e-03, 4.459757e-03, 9.8213...
+$ .std.resid                  &lt;dbl&gt; -0.58339849, 0.39308437, 0.8314164...
+```
+
+---
+## Contaminated observation or special snowflake?
+
+* A **contaminated observation** is one that has been damaged in some way. Some examples:
+    * Error of execution of the research procedure.
+    * Inaccurate measurement of the dependent measure. 
+    * Data entry error.
+    * Error in calculating a measure.
+    * Non-attentive or distracted participants.
+* The outlier may simply be an **extremely rare case**. For example, a college freshman might be 12 years old and have an 800
+SAT in math. Such an individual is extremely rare, but data is valid.
+
+---
+class: middle, inverse, center
+
+![](https://pbs.twimg.com/media/BtmLxH_CUAId7qh.jpg:large)
+
+
+---
+class: middle, inverse, center
+
+![](images/ori-outliers.png)
+---
+## Extremity on the `x`: leverage
+
+* Standardized measure of how far the observed value for each observation is from the mean value on the set of `x` values
+* Observations with high leverage have the potential to be influential, especially if also extreme on `y`
+* The response-variable values are not at all involved in calculating leverage.
+
+---
+## Leverage
+
+* Measure of how unusual the `x` value of a point is, relative to the `x` observations as a whole; leverage describes how unusual an observation is in predictor(s) data.
+* `\(1/n \leq h_i \leq 1\)`. 
+* If `\(h_{i}\)` is large then the `\(i\)`th observation has considerable impact on the fitted value
+
+--
+
+
+```r
+hate_diag %&gt;% 
+  select(state, .hat) %&gt;%
+  arrange(desc(.hat))
+```
+
+```
+                  state       .hat
+1  District of Columbia 0.30605701
+2              New York 0.12231083
+3                  Utah 0.11184064
+4         New Hampshire 0.09126208
+5                Alaska 0.07968851
+6           Connecticut 0.07869977
+7               Wyoming 0.07697280
+8             Wisconsin 0.07675971
+9             Louisiana 0.06836569
+10                 Iowa 0.06707231
+11              Alabama 0.06178909
+12                Maine 0.06049818
+13             Nebraska 0.05686194
+14                Texas 0.05607860
+15                Idaho 0.05510857
+16         North Dakota 0.05510857
+17             Delaware 0.05497246
+18            Minnesota 0.05497246
+19        Massachusetts 0.05450091
+20              Georgia 0.05436757
+21          Mississippi 0.05436757
+22            Tennessee 0.05436757
+23           Washington 0.05332302
+24              Florida 0.05287842
+25              Montana 0.05189052
+26             Kentucky 0.05123421
+27             Maryland 0.05031284
+28              Vermont 0.04895210
+29           California 0.04858833
+30       North Carolina 0.04848579
+31              Indiana 0.04552950
+32       South Carolina 0.04508490
+33               Nevada 0.04447147
+34         Rhode Island 0.04421549
+35         South Dakota 0.04365872
+36               Oregon 0.04359189
+37             Illinois 0.04260646
+38             Arkansas 0.04255011
+39             Michigan 0.04212145
+40           New Jersey 0.04194630
+41           New Mexico 0.04194630
+42               Kansas 0.04157430
+43              Arizona 0.04088142
+44             Missouri 0.04088142
+45         Pennsylvania 0.04054322
+46             Oklahoma 0.04051766
+47             Virginia 0.04008900
+48                 Ohio 0.04007883
+49             Colorado 0.04001971
+50        West Virginia 0.04000377
+```
+
+---
+## Leverage 
+
+[Rules of thumb from John Fox](https://socialsciences.mcmaster.ca/jfox/Courses/Brazil-2009/slides-handout.pdf)
+
+
+```r
+k &lt;- 2
+mean_hat &lt;- (k + 1)/nrow(hate_demo)
+# "large" samples
+hate_diag %&gt;% 
+  select(state, .hat) %&gt;%
+  filter(.hat &gt; (2*mean_hat))
+```
+
+```
+                 state      .hat
+1 District of Columbia 0.3060570
+2             New York 0.1223108
+```
+
+
+```r
+# "small" samples
+hate_diag %&gt;% 
+  select(state, .hat) %&gt;%
+  filter(.hat &gt; (3*mean_hat))
+```
+
+```
+                 state     .hat
+1 District of Columbia 0.306057
+```
+
+---
+## Plot leverage against `x`
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-13-1.png" width="70%" /&gt;
+
+---
+## Plot leverage against `x`
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-14-1.png" width="70%" /&gt;
+
+---
+class: middle, inverse, center
+## Your turn
+
+With your model, use `broom::augment()` to find observations with high leverage 
+
+
+---
+## Extremity on `y`: discrepancy
+
+* The discrepancy (or `\(distance^2\)`) between each predicted and observed value of yi
+* A studentized residual is an observed residual divided by its standard error; two types:
+    * Internally studentized (`rstandard`): re-normalize the residuals to have unit variance, using a measure of the error variance.
+    * Also `broom::.std.resid`
+* Externally studentized (`rstudent`): re-normalize the residuals to have unit variance, using a leave-one-out measure of the error variance. This is a measure of the size of the residual, standardized by the estimated standard deviation of residuals based on all the data but that observation. Sometimes called jackknifed residuals.
+
+---
+## Internally studentized residuals
+
+.pull-left[
+
+```r
+hate_diag %&gt;% 
+  select(state, .std.resid) %&gt;% 
+  arrange(.std.resid) %&gt;% 
+  slice(1:5)
+```
+
+```
+         state .std.resid
+1      Florida  -1.685781
+2 Pennsylvania  -1.573596
+3      Georgia  -1.411365
+4  Mississippi  -1.272986
+5     Illinois  -1.260035
+```
+]
+
+.pull-right[
+
+```r
+hate_diag %&gt;% 
+  select(state, .std.resid) %&gt;% 
+  arrange(desc(.std.resid)) %&gt;% 
+  slice(1:5)
+```
+
+```
+                 state .std.resid
+1 District of Columbia   4.446637
+2         North Dakota   2.179217
+3             Kentucky   1.122040
+4           Washington   1.065196
+5         South Dakota   1.035280
+```
+]
+
+---
+## Externally studentized residuals
+
+* `rstudent`
+* Sadly, not available in `broom::augment`
+
+
+```r
+hate_diag &lt;- hate_diag %&gt;% 
+  mutate(.ext.resid = rstudent(hate_mod)) # add 
+
+hate_diag %&gt;% 
+  select(state, .std.resid, .ext.resid) %&gt;% 
+  arrange(desc(.ext.resid)) %&gt;% 
+  slice(1:5)
+```
+
+```
+                 state .std.resid .ext.resid
+1 District of Columbia   4.446637   5.779728
+2         North Dakota   2.179217   2.273845
+3             Kentucky   1.122040   1.125212
+4           Washington   1.065196   1.066758
+5         South Dakota   1.035280   1.036089
+```
+
+---
+## Expect 5% are 2+
+
+
+```r
+hate_diag %&gt;%
+  filter(abs(.ext.resid) &gt;= 2) %&gt;%
+  select(state, gini_index, .resid, .std.resid, .ext.resid)
+```
+
+```
+                 state gini_index   .resid .std.resid .ext.resid
+1 District of Columbia      0.532 5.800914   4.446637   5.779728
+2         North Dakota      0.433 3.317373   2.179217   2.273845
+```
+
+2 out of 51 are high:
+3.9% of observations with ESR considered to be relatively large
+(expected ≈ 2 or 3 observations)
+
+---
+class: middle, inverse, center
+## Your turn
+
+With your model, find observations with high externally studentized residuals (and thus high discrepancy), and compare to the raw residual value, and the internally studentized residual value. What do you notice?
+
+---
+class: middle, inverse, center
+## Your turn 
+
+A common heuristic: 
+
+Influence on Coefficients = Leverage × Discrepancy
+
+Do you have any observations with both high leverage and high discrepancy?
+
+---
+## Parallel slopes with and without DC
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-19-1.png" width="60%" /&gt;
+
+---
+## Interaction model with and without DC
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-20-1.png" width="60%" /&gt;
+
+---
+class: middle, inverse, center
+
+## Influence on regression estimates
+
+---
+## Cook's distance
+
+Global influence
+
+* Influence on regression line, measured by how much the regression line would change if the point were not included in the analysis.
+* Cook's distance measures the influence of case `\(i\)` on all `\(n\)` fitted values `\(y_i\)` 
+* Cook's distance refers to how far, on average, predicted `\(\hat{y_i}\)` values will move if the observation in question is dropped from the data set
+
+
+---
+## Cook's distance
+
+
+```r
+n &lt;- nrow(hate_demo)
+k &lt;- 2 # predictors (not including intercept)
+d &lt;- 4/(n - k - 1)
+d
+```
+
+```
+[1] 0.08333333
+```
+
+
+```r
+hate_diag %&gt;%
+  filter(.cooksd &gt; d) %&gt;% 
+  select(state, avg_hatecrimes_per_100k_fbi, .cooksd)
+```
+
+```
+                 state avg_hatecrimes_per_100k_fbi    .cooksd
+1 District of Columbia                    10.95348 2.90683707
+2         North Dakota                     4.74107 0.09232451
+```
+
+---
+## Plot leverage versus Cook's d
+
+
+```r
+ggplot(hate_diag, aes(x = .hat, y = .cooksd)) + 
+  geom_point() +
+  geom_text(aes(label = state), size = 3, vjust = 2) + 
+  geom_line(aes(y = d), colour = "red", lty = "dashed")
+```
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-23-1.png" width="60%" /&gt;
+
+
+---
+## Specific measures of influence
+
+* How each individual regression coefficient is changed by deleting each case from the dataset
+* Number of DFBETAS is the number of predictors in your model
+* Also for the intercept- generally not interesting one bit!
+* Recommendation: I would look at DFBETAS after Cook’s to isolate which explantory variables might be unduly influencing your overall regression equation
+
+
+```r
+hate_betas &lt;- hate_diag %&gt;% 
+  cbind(dfbetas(hate_mod))
+```
+
+
+
+---
+## Summing up diagnostics
+
+
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; Influence &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Index &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Function &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Leverage &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Hat values &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; .hat from broom::augment &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Discrepancy &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Externally studentized residual &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; rstudent(model) within mutate &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Global influence &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Cook's d &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; .cooksd from broom::augment &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Specific influence &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; DFBETAS &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; dfbetas(model) &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+
+##How to read these plots (clockwise)
+
+The plot in the _upper left_ shows the residual errors plotted versus their fitted values. The residuals should be randomly distributed around the horizontal line representing a residual error of zero; that is, there should not be a distinct trend in the distribution of points.
+
+---
+##How to read these plots (clockwise)
+
+The plot in the _upper right_ is a standard Q-Q plot, which should suggest that the residual errors are normally distributed.
+
+---
+## QQ plots
+
+A Q-Q plot displays quantiles of one distribution against quantiles of another. What this means is that the data are ranked and sorted.
+
+* A normal Q-Q plot displays quantiles of the normal distribution on the *x*-axis against quantiles of the empirical (i.e., the observed) distribution on the *y*-axis.
+• A straight line is typically plotted through the points corresponding to the 1st and 3rd quantiles of each variable. If the empirical data is normally distributed, all the points on the normal Q-Q plot will form a perfectly straight line.
+
+---
+
+Description of Point Pattern
+Possible Interpretation
+all but a few points fall on line
+outliers in the data
+left end sags below line; right end lifts above line
+long tails at both ends of the data distribution
+left end lifts above line; right end sags below line
+short tails at both ends of the data distribution
+curved pattern with increasing slope (L to R)
+data distribution is skewed to the right
+curved pattern with decreasing slope (L to R)
+data distribution is skewed to the left
+staircase pattern (plateaus and gaps)
+data have been rounded or are discrete
+
+---
+##How to read these plots (clockwise)
+
+The scale-location plot in the _lower left_ shows the square root of the standardized residuals (sort of a square root of relative error) as a function of the fitted values. Again, there should be no obvious trend in this plot.
+
+---
+##How to read these plots (clockwise)
+
+Finally, the plot in the _lower right_ shows each points’ leverage.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://platform.twitter.com/widgets.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
