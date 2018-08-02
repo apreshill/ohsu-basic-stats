@@ -534,6 +534,12 @@ knitr::kable(diag_table, format = "html")
 
 The plot in the _upper left_ shows the residual errors plotted versus their fitted values. The residuals should be randomly distributed around the horizontal line representing a residual error of zero; that is, there should not be a distinct trend in the distribution of points.
 
+```{r}
+library(ggfortify)
+autoplot(hate_mod, label.size = 3)
+```
+
+
 ---
 ##How to read these plots (clockwise)
 
@@ -545,7 +551,7 @@ The plot in the _upper right_ is a standard Q-Q plot, which should suggest that 
 A Q-Q plot displays quantiles of one distribution against quantiles of another. What this means is that the data are ranked and sorted.
 
 * A normal Q-Q plot displays quantiles of the normal distribution on the *x*-axis against quantiles of the empirical (i.e., the observed) distribution on the *y*-axis.
-• A straight line is typically plotted through the points corresponding to the 1st and 3rd quantiles of each variable. If the empirical data is normally distributed, all the points on the normal Q-Q plot will form a perfectly straight line.
+* A straight line is typically plotted through the points corresponding to the 1st and 3rd quantiles of each variable. If the empirical data is normally distributed, all the points on the normal Q-Q plot will form a perfectly straight line.
 
 ---
 
@@ -573,3 +579,36 @@ The scale-location plot in the _lower left_ shows the square root of the standar
 ##How to read these plots (clockwise)
 
 Finally, the plot in the _lower right_ shows each points’ leverage.
+
+---
+# RMSE
+
+the root mean square error for regression says how far typical
+points are above or below the regression line. The RMSE is to the regression line
+as the SD is to the average. For instance, if the scatter diagram is football-shaped,
+about 68% of the points on the scatter diagram will be within one RMSE of the regression
+line, about 95% of then will be within 2 RMSE of the regression line
+
+The advantage of RMSE metric is that it is more "normalized". Specifically, SSE will be depending on the amount of the data. The MSE would not depend on the amount of the data, but the RMSE also expresses the error in the same units as y
+y
+.
+
+```{r include = FALSE, eval = FALSE}
+# Mean squared error
+d_diag <- d_diag %>% 
+  summarize(mse = mean(.resid^2),
+            rmse = sqrt(mse),
+            rss = sum(.resid^2))
+
+# Root mean squared error
+rmse <- sqrt(mse)
+
+# Residual sum of squares
+rss <- sum(residuals(fit)^2)
+
+## Proportion of values contained between 1 RMSE
+print(mean(abs(ehat) < RMSE))
+## [1] 0.7133581
+## Proportion of values contained between 2 RMSEs
+print(mean(abs(ehat) < 2 * RMSE))
+```
