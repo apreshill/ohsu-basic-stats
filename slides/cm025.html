@@ -80,21 +80,60 @@ hate_demo &lt;- hate_crimes %&gt;%
 ```
 
 ---
-class: inverse, middle, center
+class: middle, center, inverse
 
-## Two numerical predictors with a `+` (`gini_index` and `share_pop_hs`)
+## Your turn
 
-(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
+As groups, discuss your model output: 
 
+(1) look at the regression table, and 
+
+(2) attempt to interpret the three values that define the regression plane
+
+⏰
+
+---
+## Two numerical predictors
+
+
+```r
+hate_two &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   share_pop_hs,
+                 data = hate_demo)
+
+get_regression_table(hate_two)
+```
+
+```
+# A tibble: 3 x 7
+  term         estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept       -54.0      9.76     -5.53       0    -73.7    -34.4
+2 gini_index       64.3     11.1       5.79       0     42.0     86.7
+3 share_pop_hs     31.3      6.81      4.59       0     17.6     45.0
+```
+
+---
+## Two numerical predictors
+
+`$$\widehat{\textrm{avg_crimes}} = -54 + 64.3~ \textrm{gini_index} + 31.3~\textrm{share_pop_hs}$$`
+
+
+See Model 1!
+![](images/lm-whiteboard-process.jpg)
 ---
 class: inverse, middle, center
 
 ## One numerical / one categorical with parallel slopes (`gini_index` and `cat_trump`)
 
-(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
+See Model 2!
+![](images/lm-whiteboard-3models.jpg)
 
 ---
 ## Parallel slopes
+
+`$$\widehat{\textrm{avg_crimes}} = -12.1 + 32.5~ \textrm{gini_index} + -.51~\textrm{cat_trump}$$`
 
 
 ```r
@@ -118,7 +157,7 @@ get_regression_table(hate_para)
 ---
 ## Visualize parallel slopes model
 
-&lt;img src="cm025_files/figure-html/unnamed-chunk-4-1.png" width="60%" /&gt;
+&lt;img src="cm025_files/figure-html/unnamed-chunk-5-1.png" width="60%" /&gt;
 
 ---
 class: inverse, middle, center
@@ -153,7 +192,7 @@ get_regression_table(hate_int)
 ## Visualize interaction model
 
 
-&lt;img src="cm025_files/figure-html/unnamed-chunk-6-1.png" width="60%" /&gt;
+&lt;img src="cm025_files/figure-html/unnamed-chunk-7-1.png" width="60%" /&gt;
 
 ---
 class: middle, inverse, center
@@ -408,12 +447,12 @@ hate_diag %&gt;%
 ---
 ## Plot leverage against `x`
 
-&lt;img src="cm025_files/figure-html/unnamed-chunk-13-1.png" width="70%" /&gt;
+&lt;img src="cm025_files/figure-html/unnamed-chunk-14-1.png" width="70%" /&gt;
 
 ---
 ## Plot leverage against `x`
 
-&lt;img src="cm025_files/figure-html/unnamed-chunk-14-1.png" width="70%" /&gt;
+&lt;img src="cm025_files/figure-html/unnamed-chunk-15-1.png" width="70%" /&gt;
 
 ---
 class: middle, inverse, center
@@ -533,174 +572,6 @@ A common heuristic:
 Influence on Coefficients = Leverage × Discrepancy
 
 Do you have any observations with both high leverage and high discrepancy?
-
----
-## Parallel slopes with and without DC
-
-&lt;img src="cm025_files/figure-html/unnamed-chunk-19-1.png" width="60%" /&gt;
-
----
-## Interaction model with and without DC
-
-&lt;img src="cm025_files/figure-html/unnamed-chunk-20-1.png" width="60%" /&gt;
-
----
-class: middle, inverse, center
-
-## Influence on regression estimates
-
----
-## Cook's distance
-
-Global influence
-
-* Influence on regression line, measured by how much the regression line would change if the point were not included in the analysis.
-* Cook's distance measures the influence of case `\(i\)` on all `\(n\)` fitted values `\(y_i\)` 
-* Cook's distance refers to how far, on average, predicted `\(\hat{y_i}\)` values will move if the observation in question is dropped from the data set
-
-
----
-## Cook's distance
-
-
-```r
-n &lt;- nrow(hate_demo)
-k &lt;- 2 # predictors (not including intercept)
-d &lt;- 4/(n - k - 1)
-d
-```
-
-```
-[1] 0.08333333
-```
-
-
-```r
-hate_diag %&gt;%
-  filter(.cooksd &gt; d) %&gt;% 
-  select(state, avg_hatecrimes_per_100k_fbi, .cooksd)
-```
-
-```
-                 state avg_hatecrimes_per_100k_fbi    .cooksd
-1 District of Columbia                    10.95348 2.90683707
-2         North Dakota                     4.74107 0.09232451
-```
-
----
-## Plot leverage versus Cook's d
-
-
-```r
-ggplot(hate_diag, aes(x = .hat, y = .cooksd)) + 
-  geom_point() +
-  geom_text(aes(label = state), size = 3, vjust = 2) + 
-  geom_line(aes(y = d), colour = "red", lty = "dashed")
-```
-
-&lt;img src="cm025_files/figure-html/unnamed-chunk-23-1.png" width="60%" /&gt;
-
-
----
-## Specific measures of influence
-
-* How each individual regression coefficient is changed by deleting each case from the dataset
-* Number of DFBETAS is the number of predictors in your model
-* Also for the intercept- generally not interesting one bit!
-* Recommendation: I would look at DFBETAS after Cook’s to isolate which explantory variables might be unduly influencing your overall regression equation
-
-
-```r
-hate_betas &lt;- hate_diag %&gt;% 
-  cbind(dfbetas(hate_mod))
-```
-
-
-
----
-## Summing up diagnostics
-
-
-
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; Influence &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Index &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; Function &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Leverage &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Hat values &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; .hat from broom::augment &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Discrepancy &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Externally studentized residual &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; rstudent(model) within mutate &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Global influence &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Cook's d &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; .cooksd from broom::augment &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Specific influence &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; DFBETAS &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; dfbetas(model) &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
----
-
-
-##How to read these plots (clockwise)
-
-The plot in the _upper left_ shows the residual errors plotted versus their fitted values. The residuals should be randomly distributed around the horizontal line representing a residual error of zero; that is, there should not be a distinct trend in the distribution of points.
-
----
-##How to read these plots (clockwise)
-
-The plot in the _upper right_ is a standard Q-Q plot, which should suggest that the residual errors are normally distributed.
-
----
-## QQ plots
-
-A Q-Q plot displays quantiles of one distribution against quantiles of another. What this means is that the data are ranked and sorted.
-
-* A normal Q-Q plot displays quantiles of the normal distribution on the *x*-axis against quantiles of the empirical (i.e., the observed) distribution on the *y*-axis.
-• A straight line is typically plotted through the points corresponding to the 1st and 3rd quantiles of each variable. If the empirical data is normally distributed, all the points on the normal Q-Q plot will form a perfectly straight line.
-
----
-
-Description of Point Pattern
-Possible Interpretation
-all but a few points fall on line
-outliers in the data
-left end sags below line; right end lifts above line
-long tails at both ends of the data distribution
-left end lifts above line; right end sags below line
-short tails at both ends of the data distribution
-curved pattern with increasing slope (L to R)
-data distribution is skewed to the right
-curved pattern with decreasing slope (L to R)
-data distribution is skewed to the left
-staircase pattern (plateaus and gaps)
-data have been rounded or are discrete
-
----
-##How to read these plots (clockwise)
-
-The scale-location plot in the _lower left_ shows the square root of the standardized residuals (sort of a square root of relative error) as a function of the fitted values. Again, there should be no obvious trend in this plot.
-
----
-##How to read these plots (clockwise)
-
-Finally, the plot in the _lower right_ shows each points’ leverage.
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="https://platform.twitter.com/widgets.js"></script>

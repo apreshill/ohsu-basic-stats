@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Alison Hill" />
+
+
+<title>CONJ620: CM 2.6</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CONJ 620</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="cm.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Class Meetings
+  </a>
+</li>
+<li>
+  <a href="due.html">
+    <span class="fa fa-calendar-check"></span>
+     
+    Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
+    <span class="fa fa-user-ninja"></span>
+     
+    DataCamp
+  </a>
+</li>
+<li>
+  <a href="https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18">
+    <span class="fa fa-university"></span>
+     
+    Sakai
+  </a>
+</li>
+<li>
+  <a href="https://gitter.im/conj620/Lobby?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">
+    <span class="fa fa-comments"></span>
+     
+    Gitter Chat
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">
+    <span class="fa fa-cogs"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">CONJ620: CM 2.6</h1>
+<h3 class="subtitle"><em>Integrative Lab</em></h3>
+<h4 class="author"><em>Alison Hill</em></h4>
+
+</div>
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>A complete knitted <code>html</code> file is due on Sakai by Monday August 13th at 8am. In class on that Tuesday, you’ll pair up with another student and review each others’ reports. Your final lab is due on Sakai by beginning of class Thursday July 19th (2:30pm).</p>
+<p>The goal is to carefully, thoroughly, and thoughtfully conduct an linear regression analysis. You are also asked to communicate clearly about the steps in your analysis process with others, by sharing your R code, output, and narrative. As such, your code cannot “stand alone”- it is meant to complement / enhance / support your narrative.</p>
+</div>
+<div id="tools" class="section level2">
+<h2>Tools</h2>
+<p>You will use R Markdown to construct your analysis report. You’ll submit your work as an html file knit from your <code>.Rmd</code> file (please leave the default code chunk options for <code>eval = TRUE</code> and <code>echo = TRUE</code>). In that document, you’ll use <code>dplyr</code>, <code>tidyr</code>, and <code>ggplot2</code> to do description and visualization. You may also wish to use the <code>janitor</code> package to make <code>tabyl</code>s, and some of the accompanying <code>adorn</code> functions.</p>
+<p>Your lab should serve as your own personal cheatsheet in the future for regression analyses. Give yourself the cheatsheet you deserve! Remember:</p>
+<ul>
+<li><code>rmarkdown</code> should be your EDA <em>documentation</em> tool</li>
+<li>your own words with <code>markdown</code> formatting are your ONLY <em>narrative</em> tool</li>
+<li><code>dplyr</code> should be your <em>data manipulation</em> tool</li>
+<li><code>tidyr</code> should be your <em>data reshaping</em> tool</li>
+<li><code>janitor::tabyl</code> should be your <em>data table-making</em> tool</li>
+<li>you may wish to combine with <code>knitr::kable()</code> for formatting tables</li>
+<li><code>ggplot2</code> should be your <em>data visualization</em> tool</li>
+</ul>
+<p>For all things, graphical and tabular, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule). You’ll need this loaded at the top:</p>
+<pre class="r"><code>library(tidyverse) # all the good stuff
+library(readxl) # for reading in xlsx files
+library(janitor) # for clean_names
+library(knitr) # for kable
+library(moderndive) # for getting tables
+library(corrr) # for correlation matrix
+library(skimr) # for skim
+library(GGally) # for ggpairs
+library(broom) # for pulling out model results</code></pre>
+<p>The <code>tidyverse</code> meta-package includes <code>dplyr</code>, <code>ggplot2</code>, and <code>tidyr</code>.</p>
+</div>
+<div id="the-data" class="section level2">
+<h2>The Data</h2>
+<p>You will work with an open access dataset from a publication in PLOS ONE titled: <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104825"><em>Vitamin D Status among Thai School Children and the Association with 1,25-Dihydroxyvitamin D and Parathyroid Hormone Levels</em></a>. The data is available as an excel file on <a href="https://datadryad.org/resource/doi:10.5061/dryad.7763s/1">Data Dryad</a>, where you can download the <code>.xlsx</code> file.</p>
+<p>You could also access the data through a package called <a href="https://github.com/ropensci/rdryad"><code>rdryad</code></a>, from <a href="https://ropensci.org">ROpenSci</a>, which allows you to access the DataDryad Application Program Interface (API) from within R. To go this route, follow my code:</p>
+<pre class="r"><code># install.packages(&quot;rdryad&quot;)
+# install.packages(&quot;purrr&quot;)
+library(rdryad) # to access the API
+library(readxl) # to read in the xlsx file
+library(purrr) # for 1 function: pluck!
+path_to_xlsx &lt;- dryad_fetch(dryad_files(doi = &#39;10.5061/dryad.7763s/1&#39;)) %&gt;% 
+  pluck(1)
+vitd &lt;- read_xlsx(path_to_xlsx, sheet = 1)</code></pre>
+<p>I’m also going to recommend you use the <code>janitor::clean_names</code> function, because some of these variable names start with an underscore and therefore will always need to be referenced surrounded by backticks.</p>
+<pre class="r"><code>library(janitor)
+vitd &lt;- vitd %&gt;% 
+  clean_names()
+glimpse(vitd)</code></pre>
+<pre><code>Observations: 537
+Variables: 19
+$ id          &lt;dbl&gt; 101, 102, 104, 105, 106, 107, 108, 110, 112, 113, ...
+$ sex         &lt;chr&gt; &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, &quot;M&quot;, &quot;M&quot;, &quot;M&quot;, &quot;F&quot;, &quot;F&quot;, &quot;F&quot;, ...
+$ ageyears    &lt;dbl&gt; 7.749487, 7.040383, 7.289528, 7.251198, 6.845995, ...
+$ height      &lt;dbl&gt; 121.80, 120.40, 117.00, 115.60, 113.30, 121.60, 12...
+$ weight      &lt;dbl&gt; 20.0, 18.1, 19.6, 19.3, 17.0, 23.8, 24.1, 23.1, 22...
+$ bmi         &lt;dbl&gt; 13.48141, 12.48606, 14.31807, 14.44248, 13.24308, ...
+$ zwfa        &lt;dbl&gt; -1.29, -1.47, -1.09, -1.17, -2.18, -0.28, -0.07, -...
+$ underweight &lt;chr&gt; &quot;not underweight&quot;, &quot;not underweight&quot;, &quot;not underwe...
+$ zbfa        &lt;dbl&gt; -1.45, -2.24, -0.75, -0.65, -1.88, 0.28, -0.48, -1...
+$ wasted      &lt;chr&gt; &quot;not wasted&quot;, &quot;wasted&quot;, &quot;not wasted&quot;, &quot;not wasted&quot;...
+$ zhfa        &lt;dbl&gt; -0.58, -0.12, -0.98, -1.20, -1.45, -0.77, 0.34, -0...
+$ stunted     &lt;chr&gt; &quot;not stunted&quot;, &quot;not stunted&quot;, &quot;not stunted&quot;, &quot;not ...
+$ period      &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+$ ifyeswhen   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA...
+$ school      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+$ baseline_ca &lt;dbl&gt; NA, NA, NA, 57.6876, NA, NA, 290.4152, 131.2554, N...
+$ pth         &lt;dbl&gt; 66.7, 55.1, 29.5, 48.9, 20.7, 23.9, 23.4, 24.7, 33...
+$ x25d        &lt;dbl&gt; 72.2, 73.4, 64.6, 73.6, 88.5, 85.8, NA, 75.2, 82.9...
+$ x125d       &lt;dbl&gt; 265, 144, 320, 245, 251, 206, 200, 205, 254, 223, ...</code></pre>
+<p>That is better! You are ready to start exploring the <code>vitd</code> data.</p>
+</div>
+<div id="exploratory-data-analysis" class="section level2">
+<h2>Exploratory Data Analysis</h2>
+<p>We’ll conduct a linear regression analysis to examine the impact of age and BMI, and its interaction with sex, on serum 25(OH)D concentrations (a measure of vitamin D levels). If you read in the data using <code>rdryad</code>, you can also download the codebook like this:</p>
+<pre class="r"><code>codebook &lt;- read_xlsx(path_to_xlsx, sheet = 2)</code></pre>
+<p>The relevant variables you will need are:</p>
+<pre class="r"><code>lm_vars &lt;- c(&quot;sex&quot;, &quot;bmi&quot;, &quot;ageyears&quot;, &quot;_25D&quot;)
+codebook %&gt;% 
+  filter(Variable %in% lm_vars) %&gt;% 
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Variable
+</th>
+<th style="text-align:left;">
+Description
+</th>
+<th style="text-align:left;">
+Unit or coding where applicable
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+sex
+</td>
+<td style="text-align:left;">
+Sex of child participant
+</td>
+<td style="text-align:left;">
+F=female, M=male
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+ageyears
+</td>
+<td style="text-align:left;">
+Age of child participant
+</td>
+<td style="text-align:left;">
+YEARS
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+bmi
+</td>
+<td style="text-align:left;">
+Body Mass Index of child participant
+</td>
+<td style="text-align:left;">
+kg/m2
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+_25D
+</td>
+<td style="text-align:left;">
+Serum 25-hydroxyvitamin D concentrations
+</td>
+<td style="text-align:left;">
+nmol/L
+</td>
+</tr>
+</tbody>
+</table>
+<p>Recall that a <a href="http://moderndive.netlify.com/6-regression.html#model1EDA">new exploratory data analysis</a> involves three things:</p>
+<ul>
+<li>Looking at the raw values.
+<ul>
+<li><code>dplyr::glimpse()</code></li>
+</ul></li>
+<li>Computing summary statistics of the variables of interest.
+<ul>
+<li><code>skimr::skim()</code></li>
+<li><code>corrr::correlate()</code></li>
+</ul></li>
+<li>Creating informative visualizations.
+<ul>
+<li><code>ggplot2::ggplot()</code>
+<ul>
+<li><code>geom_histogram()</code> or <code>geom_density()</code> for numeric continuous variables</li>
+<li><code>geom_bar()</code> or <code>geom_col()</code> for categorical variables</li>
+</ul></li>
+<li><code>GGally::ggpairs()</code></li>
+</ul></li>
+</ul>
+<p>Conduct a thorough EDA of the <code>vitd</code> data. You may wish to have a level 1 header (<code>#</code>) for your EDA, then use level 2 sub-headers (<code>##</code>) to make sure you cover all three EDA bases. Remember from our previous <a href="cm024.html">EDA integrative lab</a>, <strong>at a minimum</strong> you should answer these questions:</p>
+<ul>
+<li>How many variables/columns?</li>
+<li>How many rows/observations?</li>
+<li>Which variables are numbers?</li>
+<li>Which are categorical variables (numeric or character variables with variables that have a fixed and known set of possible values; aka <a href="https://stats.idre.ucla.edu/r/modules/factor-variables/">factor</a> variables)?</li>
+<li>Complete this sentence: “There is one row per…”</li>
+<li>What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable (like <code>sex</code>)?</li>
+</ul>
+<p>At this stage, you may also find you want to use <code>filter</code>, <code>mutate</code>, <code>arrange</code>, <code>select</code>, or <code>count</code>. Let your questions lead you!</p>
+<pre class="r"><code>small_vitd &lt;- vitd %&gt;% 
+  select(ageyears, zbfa, sex, x25d, zhfa)
+ggpairs(small_vitd, aes(colour=sex))</code></pre>
+<p><img src="cm026_files/figure-html/unnamed-chunk-6-1.png" width="2100" /></p>
+</div>
+<div id="regression-modeling" class="section level2">
+<h2>Regression modeling</h2>
+<p>Fit a multiple regression model and get the regression table. Interpret the output from the regression table (in complete sentences, but you may use bullet points to organize). You may wish to enhance the interpretability of your results by <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/j.2041-210X.2010.00012.x">mean centering numerical predictor variables</a>.</p>
+<p>Some examples:</p>
+<pre><code>- Parallel slopes example [here](http://moderndive.netlify.com/7-multiple-regression.html#model4table)
+- Interaction model [here](http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable)</code></pre>
+<p>The authors state: “Specifically, serum 25(OH)D concentrations were 19% higher in males at the mean age (9.9 years).” Is that true? In your narrative, walk through how you would use the numbers in the regression table to arrive at a numerical answer.</p>
+<pre class="r"><code>vitd &lt;- vitd %&gt;% 
+  mutate(age_ctr = ageyears - mean(ageyears))
+dmod &lt;- lm(x25d ~ age_ctr*sex + zbfa + zhfa, data = vitd)
+get_regression_table(dmod)</code></pre>
+<pre><code># A tibble: 6 x 7
+  term         estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept      66.4       1.08     61.7     0        64.3    68.6  
+2 age_ctr        -3.09      0.486    -6.37    0        -4.05   -2.14 
+3 sexM           12.5       1.18     10.6     0        10.2    14.9  
+4 zbfa            0.145     0.592     0.246   0.806    -1.02    1.31 
+5 zhfa           -1.74      0.759    -2.29    0.022    -3.23   -0.248
+6 age_ctr:sexM    2.96      0.705     4.20    0         1.57    4.34 </code></pre>
+<pre class="r"><code>d_pts &lt;- get_regression_points(dmod)</code></pre>
+</div>
+<div id="residual-analysis" class="section level2">
+<h2>Residual Analysis</h2>
+<p>Perform a (raw) residual analysis first with a histogram, faceting by <code>sex</code>. Also look at the residuals as compared to the two predictor variables:</p>
+<ul>
+<li><span class="math inline">\(x_1\)</span>: numerical explanatory/predictor variable of <code>age</code></li>
+<li><span class="math inline">\(x_2\)</span>: categorical explanatory/predictor variable of <code>sex</code></li>
+</ul>
+<pre class="r"><code>ggplot(d_pts, aes(x = residual)) +
+  geom_histogram(binwidth = 10, color = &quot;white&quot;) +
+  labs(x = &quot;Residual&quot;) +
+  facet_wrap(~sex)</code></pre>
+<p><img src="cm026_files/figure-html/unnamed-chunk-8-1.png" width="2100" /></p>
+<pre class="r"><code>ggplot(d_pts, aes(x = age_ctr, y = residual)) +
+  geom_point() +
+  labs(x = &quot;age&quot;, y = &quot;Residual&quot;) +
+  geom_hline(yintercept = 0, col = &quot;blue&quot;, size = 1) +
+  facet_wrap(~ sex)</code></pre>
+<p><img src="cm026_files/figure-html/unnamed-chunk-9-1.png" width="2100" /></p>
+</div>
+<div id="outlier-analysis" class="section level2">
+<h2>Outlier Analysis</h2>
+<p>Examine points with high leverage and discrepancy (use the externally studentized residuals as the index for discrepancy). How many observations would you expect to have high discrepancy in this sample? Do you see any observations that have <em>both</em> high leverage and discrepancy? Is</p>
+<pre class="r"><code>d_diag &lt;- augment(dmod, data = vitd) %&gt;% 
+  mutate(.ext.resid = rstudent(dmod))
+
+# leverage
+k &lt;- 3
+mean_hat &lt;- (k + 1)/nrow(vitd)
+d_diag %&gt;% 
+  select(id, .hat) %&gt;%
+  filter(.hat &gt; (3*mean_hat))</code></pre>
+<pre><code>     id       .hat
+1   154 0.02781555
+2   207 0.02637300
+3   216 0.05034237
+4   217 0.04300224
+5   303 0.02976582
+6   313 0.02421982
+7   359 0.02991766
+8   436 0.03071131
+9   556 0.02409323
+10  648 0.03075009
+11  656 0.02856977
+12  722 0.02268958
+13  740 0.02296305
+14  755 0.03783697
+15  756 0.02239927
+16  810 0.02515592
+17  819 0.03427783
+18  902 0.02646237
+19  951 0.02734662
+20  954 0.03929082
+21  955 0.02372193
+22 1025 0.03350995
+23 1053 0.02517300
+24 1054 0.03574501
+25 1062 0.02577991</code></pre>
+<pre class="r"><code># discrepancy
+d_diag %&gt;%
+  filter(abs(.ext.resid) &gt;= 2) %&gt;%
+  select(id, ageyears, .resid, .std.resid, .ext.resid) %&gt;% 
+  arrange(desc(abs(.ext.resid)))</code></pre>
+<pre><code>     id  ageyears    .resid .std.resid .ext.resid
+1   616  8.822724  47.25680   3.511245   3.550054
+2   156  8.269678 -46.28809  -3.448065  -3.484673
+3   524  9.619439  46.16004   3.431614   3.467663
+4   658 11.943870  44.05147   3.285540   3.316866
+5   446  9.414100  41.41208   3.074817   3.100073
+6   740  9.901437  37.22064   2.788160   2.806464
+7   701  6.958248  36.89580   2.752035   2.769563
+8   403  8.045175 -36.23028  -2.693803  -2.710125
+9   850 10.887060  35.01967   2.604066   2.618635
+10  158  9.474333  33.98932   2.521972   2.535047
+11 1054 13.017110 -32.76722  -2.470774  -2.482968
+12  148 11.467490 -32.72256  -2.433903  -2.445487
+13  133  9.860370 -32.45912  -2.408755  -2.419933
+14  241 11.092400 -32.19180  -2.392238  -2.403155
+15  444 10.158800  32.17293   2.392171   2.403086
+16  218  7.921971 -30.41363  -2.264144  -2.273164
+17  656 12.373720  29.90983   2.246972   2.255754
+18  550 11.363450 -29.77785  -2.216750  -2.225124
+19  612  7.850787  29.76977   2.215730   2.224090
+20  244 10.996580 -29.45503  -2.190650  -2.198680
+21  439  9.685147  29.08890   2.161640   2.169300
+22  229 10.128680 -28.54158  -2.129190  -2.136447
+23 1014  8.715948  28.29060   2.102285   2.109218
+24  243 10.988360 -28.02182  -2.095609  -2.102464
+25  708  7.722108  27.84815   2.073991   2.080594
+26 1033 11.141680  27.30186   2.027986   2.034072</code></pre>
+<pre class="r"><code>n &lt;- nrow(vitd)
+k &lt;- 3 # predictors (not including intercept)
+d &lt;- 4/(n - k - 1)
+d</code></pre>
+<pre><code>[1] 0.00750469</code></pre>
+<pre class="r"><code>d_diag %&gt;%
+  filter(.cooksd &gt; d) %&gt;% 
+  select(id, x25d, .cooksd) %&gt;% 
+  arrange(desc(.cooksd))</code></pre>
+<pre><code>     id  x25d     .cooksd
+1  1054  46.6 0.037717119
+2   740 116.0 0.030451086
+3   658 124.0 0.026347160
+4   656 109.0 0.024747939
+5   156  36.1 0.024023060
+6   217  55.9 0.022462063
+7   701 113.0 0.018666978
+8   524 125.0 0.015816704
+9   243  50.9 0.014722458
+10  616 127.0 0.014313795
+11  755  58.4 0.011413686
+12  229  41.8 0.011382900
+13  204 103.0 0.010457442
+14  348  84.3 0.010406030
+15  325 109.0 0.010345458
+16  403  36.9 0.010093313
+17  940 105.0 0.009892844
+18  916  56.5 0.009750818
+19  850 114.0 0.009672431
+20  704  50.0 0.009385923
+21  218  50.2 0.009282641
+22  619  58.7 0.009035615
+23  148  46.6 0.008982435
+24  550  50.1 0.008850494
+25  446 121.0 0.008751905
+26  612 105.0 0.008529980
+27  708 108.0 0.008372157
+28  444 101.0 0.007992574
+29  236  37.2 0.007929961
+30  722  84.3 0.007705361</code></pre>
+<pre class="r"><code>ggplot(d_diag, aes(x = .hat, y = .cooksd, color = sex)) + 
+  geom_point() +
+  geom_text(aes(label = id), size = 3, vjust = 2) + 
+  geom_hline(aes(yintercept = d), colour = &quot;red&quot;, lty = &quot;dashed&quot;) +
+  geom_vline(aes(xintercept = 3*mean_hat), color = &quot;dodgerblue&quot;, lty = &quot;dashed&quot;)</code></pre>
+<p><img src="cm026_files/figure-html/unnamed-chunk-11-1.png" width="2100" /></p>
+</div>
+<div id="sums-of-squares" class="section level2">
+<h2>Sums of Squares</h2>
+<p>Fill in the blanks in the following code block to calculate the Residual, Model, and Total Sums of Squares:</p>
+<pre class="r"><code>vitd_ss &lt;- d_diag %&gt;% 
+  summarise(total_ss = sum((___ - mean(___))^2),
+            resid_ss = sum((___ - ___)^2), 
+            model_ss = sum((___ - mean(___))^2))
+vitd_ss</code></pre>
+<p>Using <code>dplyr</code>, show that:</p>
+<ul>
+<li>The total sums of squares is equal to the residual plus the model sums of squares</li>
+<li>The total sums of squares divided by <span class="math inline">\((n-1)\)</span> is equal to the variance of the <code>y</code> outcome variable (<em>hint:</em> you may need to look how many observations actually contributed to the model- not the same as the original <span class="math inline">\(n\)</span> due to missing values!)</li>
+<li>The <span class="math inline">\(R^2\)</span> value in your model output is the model sums of squares divided by the total sums of squares (<em>hint:</em> <code>broom::glance(my_model)</code>).</li>
+</ul>
+</div>
+<div id="the-null-model" class="section level2">
+<h2>The “null” model</h2>
+<p>In class, I asserted that <code>lm</code> is by default comparing the model you specify in your <code>lm</code> call to a null model defined by using a line with an intercept but slope = 0, which estimates the mean of <span class="math inline">\(y\)</span>. Let’s build an intercept-only linear regression model to prove this.</p>
+<pre class="r"><code>vitd_complete &lt;- vitd %&gt;% 
+  drop_na(x25d, sex, ageyears, zbfa, zhfa)
+int_mod &lt;- lm(x25d ~ 1, data = vitd_complete)
+get_regression_table(int_mod)</code></pre>
+<pre><code># A tibble: 1 x 7
+  term      estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept     74.3      0.67      111.       0     73.0     75.6</code></pre>
+<pre class="r"><code>anova(int_mod, dmod)</code></pre>
+<pre><code>Analysis of Variance Table
+
+Model 1: x25d ~ 1
+Model 2: x25d ~ age_ctr * sex + zbfa + zhfa
+  Res.Df    RSS Df Sum of Sq      F    Pr(&gt;F)    
+1    527 124823                                  
+2    522  95212  5     29611 32.468 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>Look very carefully at this output and answer these questions:</p>
+<ul>
+<li>What is the <code>RSS</code> for line 1 (corresponding to the intercept-only model, Model 1) equal to that you calculated above?</li>
+<li>What is the <code>RSS</code> for line 2 (corresponding to Model 2) equal to that you calculated above?</li>
+<li>What is the <code>Sum of Sq</code> equal to that you calculated above?</li>
+<li>In &lt; 3 sentences, explain what it means to use <code>lm(y ~ x + z)</code> versus <code>lm(y ~ 1)</code>, and what happens “under the hood” here that you now see in the <code>anova</code> output.</li>
+</ul>
+</div>
+<div id="rmse" class="section level2">
+<h2>RMSE</h2>
+<p>the root mean square error for regression says how far typical points are above or below the regression line. The RMSE is to the regression line as the SD is to the average. For instance, if the scatter diagram is football-shaped, about 68% of the points on the scatter diagram will be within one RMSE of the regression line, about 95% of then will be within 2 RMSE of the regression line</p>
+<p>The advantage of RMSE metric is that it is more “normalized”. Specifically, SSE will be depending on the amount of the data. The MSE would not depend on the amount of the data, but the RMSE also expresses the error in the same units as y y .</p>
+<pre class="r"><code># Mean squared error
+d_diag &lt;- d_diag %&gt;% 
+  summarize(mse = mean(.resid^2),
+            rmse = sqrt(mse),
+            rss = sum(.resid^2))
+
+# Root mean squared error
+rmse &lt;- sqrt(mse)
+
+# Residual sum of squares
+rss &lt;- sum(residuals(fit)^2)
+
+## Proportion of values contained between 1 RMSE
+print(mean(abs(ehat) &lt; RMSE))
+## [1] 0.7133581
+## Proportion of values contained between 2 RMSEs
+print(mean(abs(ehat) &lt; 2 * RMSE))</code></pre>
+</div>
+<div id="replication" class="section level2">
+<h2>Replication</h2>
+<p>In the <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104825">original paper</a>, they presented this figure:</p>
+<div class="figure">
+<img src="http://journals.plos.org/plosone/article/figure/image?size=large&amp;id=10.1371/journal.pone.0104825.g001" />
+
+</div>
+<p>Look at the published figure carefully:</p>
+<ul>
+<li>What appears to be the minimum value of serum 25D levels?</li>
+<li>What appears to be the max?</li>
+<li>Do those match your EDA?</li>
+<li>More generally, if you saw this kind of plot “in the wild” (i.e., you were a reviewer, or a peer showed it to you), what</li>
+</ul>
+<p>Now, recreate this figure in <code>ggplot2</code> using our data.</p>
+<pre class="r"><code>ggplot(vitd, aes(x = age_ctr, 
+                 y = x25d,
+                 color = sex)) +
+  geom_smooth(method = &quot;lm&quot;, se = FALSE) +
+  geom_point(alpha = .5)</code></pre>
+<p><img src="cm026_files/figure-html/unnamed-chunk-16-1.png" width="2100" /></p>
+<pre class="r"><code>ggplot(d_pts, aes(x = age_ctr, 
+                 y = x25d_hat,
+                 color = sex)) +
+  #geom_smooth(method = &quot;lm&quot;, se = FALSE) +
+  geom_jitter(alpha = .5, height = 1)</code></pre>
+<p><img src="cm026_files/figure-html/unnamed-chunk-17-1.png" width="2100" /></p>
+</div>
+<div id="report-your-process" class="section level2">
+<h2>Report your process</h2>
+<p>You’re encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it’s a blog post, a fellow student, an online tutorial, etc.</p>
+</div>
+<div id="grading" class="section level2">
+<h2>Grading</h2>
+<p>This lab is worth 5 points total, scored as follows:</p>
+<p>2 points for your initial EDA:</p>
+<ul>
+<li><p>2 (Strong attempt): EDA reflects strong independent problem solving, with clearly thought out attempts to approach questions and problems, and a diligent and honest effort to answer questions and find the solutions.</p></li>
+<li><p>1 (Adequate attempt): EDA reflects some attempt to approach the posed tasks, but approach appears to be superficial and lacks depth of analysis. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.</p></li>
+<li><p>0 (No attempt or incomplete): Didn’t tackle all sections. Or didn’t make companion graphs. Or didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix.</p></li>
+</ul>
+<p>3 points for the quality of the final EDA:</p>
+<ul>
+<li><p>3 (Exceptional): EDA is thorough, concise, and clearly demonstrates ability to competently and thoughtfully work with data as well as how to report on that process as a complement to code. Impeccable organization and presentation in the report.</p></li>
+<li><p>2 (Adequate): Hits all the elements in all sections. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.</p></li>
+<li><p>1 (Inadequate): EDA attempts to address question with substantial inaccuracies in analysis and/or interpretation. Didn’t tackle all sections. Or didn’t make companion graphs. Or didn’t interpret anything but left it all to the “reader”. Or more than one technical problem that is relatively easy to fix.</p></li>
+<li><p>0 (Insufficient): Nothing to grade, assignment was late.</p></li>
+</ul>
+</div>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="by-nc.png" height="400" width="65"/></a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

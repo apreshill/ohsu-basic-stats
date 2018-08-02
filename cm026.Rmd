@@ -1,0 +1,365 @@
+---
+title: 'CONJ620: CM 2.6'
+author: "Alison Hill"
+subtitle: Integrative Lab
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+# leave this chunk alone
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300)
+library(tidyverse)
+```
+
+## Overview
+
+A complete knitted `html` file is due on Sakai by Monday August 13th at 8am. In class on that Tuesday, you'll pair up with another student and review each others' reports. Your final lab is due on Sakai by beginning of class Thursday July 19th (2:30pm). 
+
+The goal is to carefully, thoroughly, and thoughtfully conduct an linear regression analysis. You are also asked to communicate clearly about the steps in your analysis process with others, by sharing your R code, output, and narrative. As such, your code cannot "stand alone"- it is meant to complement / enhance / support your narrative. 
+
+## Tools
+
+You will use R Markdown to construct your analysis report. You'll submit your work as an html file knit from your `.Rmd` file (please leave the default code chunk options for `eval = TRUE` and `echo = TRUE`). In that document, you'll use `dplyr`, `tidyr`, and `ggplot2` to do description and visualization. You may also wish to use the `janitor` package to make `tabyl`s, and some of the accompanying `adorn` functions.
+
+Your lab should serve as your own personal cheatsheet in the future for regression analyses. Give yourself the cheatsheet you deserve! Remember:
+
+- `rmarkdown` should be your EDA *documentation* tool
+- your own words with `markdown` formatting are your ONLY *narrative* tool
+- `dplyr` should be your *data manipulation* tool
+- `tidyr` should be your *data reshaping* tool
+- `janitor::tabyl` should be your *data table-making* tool
+  - you may wish to combine with `knitr::kable()` for formatting tables
+- `ggplot2` should be your *data visualization* tool
+
+
+For all things, graphical and tabular, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule). You'll need this loaded at the top:
+
+```{r warning = FALSE, message = FALSE}
+library(tidyverse) # all the good stuff
+library(readxl) # for reading in xlsx files
+library(janitor) # for clean_names
+library(knitr) # for kable
+library(moderndive) # for getting tables
+library(corrr) # for correlation matrix
+library(skimr) # for skim
+library(GGally) # for ggpairs
+library(broom) # for pulling out model results
+```
+
+The `tidyverse` meta-package includes `dplyr`, `ggplot2`, and `tidyr`.
+
+## The Data
+
+You will work with an open access dataset from a publication in PLOS ONE titled:
+[_Vitamin D Status among Thai School Children and the Association with 1,25-Dihydroxyvitamin D and Parathyroid Hormone Levels_](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104825). The data is available as an excel file on [Data Dryad](https://datadryad.org/resource/doi:10.5061/dryad.7763s/1), where you can download the `.xlsx` file.
+
+You could also access the data through a package called [`rdryad`](https://github.com/ropensci/rdryad), from [ROpenSci](https://ropensci.org), which allows you to access the DataDryad Application Program Interface (API) from within R. To go this route, follow my code:
+
+
+```{r}
+# install.packages("rdryad")
+# install.packages("purrr")
+library(rdryad) # to access the API
+library(readxl) # to read in the xlsx file
+library(purrr) # for 1 function: pluck!
+path_to_xlsx <- dryad_fetch(dryad_files(doi = '10.5061/dryad.7763s/1')) %>% 
+  pluck(1)
+vitd <- read_xlsx(path_to_xlsx, sheet = 1)
+```
+
+I'm also going to recommend you use the `janitor::clean_names` function, because some of these variable names start with an underscore and therefore will always need to be referenced surrounded by backticks.
+
+```{r}
+library(janitor)
+vitd <- vitd %>% 
+  clean_names()
+glimpse(vitd)
+```
+
+That is better! You are ready to start exploring the `vitd` data.
+
+## Exploratory Data Analysis
+
+We'll conduct a linear regression analysis to examine the impact of age and BMI, and its interaction with sex, on serum 25(OH)D concentrations (a measure of vitamin D levels). If you read in the data using `rdryad`, you can also download the codebook like this:
+
+```{r}
+codebook <- read_xlsx(path_to_xlsx, sheet = 2)
+```
+
+
+The relevant variables you will need are:
+
+```{r}
+lm_vars <- c("sex", "bmi", "ageyears", "_25D")
+codebook %>% 
+  filter(Variable %in% lm_vars) %>% 
+  knitr::kable()
+```
+
+Recall that a [new exploratory data analysis](http://moderndive.netlify.com/6-regression.html#model1EDA) involves three things:
+
+* Looking at the raw values.
+    * `dplyr::glimpse()`
+* Computing summary statistics of the variables of interest.
+    * `skimr::skim()`
+    * `corrr::correlate()`
+* Creating informative visualizations.
+    * `ggplot2::ggplot()`
+        * `geom_histogram()` or `geom_density()` for numeric continuous variables
+        * `geom_bar()` or `geom_col()` for categorical variables
+    * `GGally::ggpairs()`
+
+Conduct a thorough EDA of the `vitd` data. You may wish to have a level 1 header (`#`) for your EDA, then use level 2 sub-headers (`##`) to make sure you cover all three EDA bases. Remember from our previous [EDA integrative lab](cm024.html), **at a minimum** you should answer these questions:
+
+- How many variables/columns?
+- How many rows/observations?
+- Which variables are numbers?
+- Which are categorical variables (numeric or character variables with variables that have a fixed and known set of possible values; aka [factor](https://stats.idre.ucla.edu/r/modules/factor-variables/) variables)?
+- Complete this sentence: "There is one row per..."
+- What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable (like `sex`)?
+
+At this stage, you may also find you want to use `filter`, `mutate`, `arrange`, `select`, or `count`. Let your questions lead you! 
+
+```{r}
+small_vitd <- vitd %>% 
+  select(ageyears, zbfa, sex, x25d, zhfa)
+ggpairs(small_vitd, aes(colour=sex))
+```
+
+
+## Regression modeling
+
+Fit a multiple regression model and get the regression table. Interpret the output from the regression table (in complete sentences, but you may use bullet points to organize). You may wish to enhance the interpretability of your results by [mean centering numerical predictor variables](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/j.2041-210X.2010.00012.x).
+
+Some examples:
+
+    - Parallel slopes example [here](http://moderndive.netlify.com/7-multiple-regression.html#model4table)
+    - Interaction model [here](http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable)
+    
+The authors state: "Specifically, serum 25(OH)D concentrations were 19% higher in males at the mean age (9.9 years)." Is that true? In your narrative, walk through how you would use the numbers in the regression table to arrive at a numerical answer.
+
+```{r}
+vitd <- vitd %>% 
+  mutate(age_ctr = ageyears - mean(ageyears))
+dmod <- lm(x25d ~ age_ctr*sex + zbfa + zhfa, data = vitd)
+get_regression_table(dmod)
+d_pts <- get_regression_points(dmod)
+```
+
+## Residual Analysis
+
+Perform a (raw) residual analysis first with a histogram, faceting by `sex`. Also look at the residuals as compared to the two predictor variables:
+
+- $x_1$: numerical explanatory/predictor variable of `age`
+- $x_2$: categorical explanatory/predictor variable of `sex`
+
+```{r}
+ggplot(d_pts, aes(x = residual)) +
+  geom_histogram(binwidth = 10, color = "white") +
+  labs(x = "Residual") +
+  facet_wrap(~sex)
+```
+
+```{r}
+ggplot(d_pts, aes(x = age_ctr, y = residual)) +
+  geom_point() +
+  labs(x = "age", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1) +
+  facet_wrap(~ sex)
+```
+
+
+
+## Outlier Analysis
+
+Examine points with high leverage and discrepancy (use the externally studentized residuals as the index for discrepancy). How many observations would you expect to have high discrepancy in this sample? Do you see any observations that have *both* high leverage and discrepancy? Is 
+
+```{r}
+d_diag <- augment(dmod, data = vitd) %>% 
+  mutate(.ext.resid = rstudent(dmod))
+
+# leverage
+k <- 3
+mean_hat <- (k + 1)/nrow(vitd)
+d_diag %>% 
+  select(id, .hat) %>%
+  filter(.hat > (3*mean_hat))
+
+# discrepancy
+d_diag %>%
+  filter(abs(.ext.resid) >= 2) %>%
+  select(id, ageyears, .resid, .std.resid, .ext.resid) %>% 
+  arrange(desc(abs(.ext.resid)))
+```
+
+```{r}
+n <- nrow(vitd)
+k <- 3 # predictors (not including intercept)
+d <- 4/(n - k - 1)
+d
+
+d_diag %>%
+  filter(.cooksd > d) %>% 
+  select(id, x25d, .cooksd) %>% 
+  arrange(desc(.cooksd))
+
+ggplot(d_diag, aes(x = .hat, y = .cooksd, color = sex)) + 
+  geom_point() +
+  geom_text(aes(label = id), size = 3, vjust = 2) + 
+  geom_hline(aes(yintercept = d), colour = "red", lty = "dashed") +
+  geom_vline(aes(xintercept = 3*mean_hat), color = "dodgerblue", lty = "dashed")
+```
+
+## Sums of Squares
+
+Fill in the blanks in the following code block to calculate the Residual, Model, and Total Sums of Squares:
+
+```{r pseudo, eval = FALSE}
+vitd_ss <- d_diag %>% 
+  summarise(total_ss = sum((___ - mean(___))^2),
+            resid_ss = sum((___ - ___)^2), 
+            model_ss = sum((___ - mean(___))^2))
+vitd_ss
+```
+
+Using `dplyr`, show that:
+
+* The total sums of squares is equal to the residual plus the model sums of squares
+* The total sums of squares divided by $(n-1)$ is equal to the variance of the `y` outcome variable (*hint:* you may need to look how many observations actually contributed to the model- not the same as the original $n$ due to missing values!)
+* The $R^2$ value in your model output is the model sums of squares divided by the total sums of squares (*hint:* `broom::glance(my_model)`).
+
+```{r include = FALSE}
+vitd_ss <- d_diag %>% 
+  summarise(total_ss = sum((x25d - mean(x25d))^2),
+            resid_ss = sum((x25d - .fitted)^2), 
+            model_ss = sum((.fitted - mean(x25d))^2),
+            total = resid_ss + model_ss,
+            rsq = model_ss / total_ss,
+            var_est = total_ss / (n()-1),
+            vitd_var = var(x25d))
+vitd_ss
+glance(dmod)
+```
+
+
+## The "null" model
+
+In class, I asserted that `lm` is by default comparing the model you specify in your `lm` call to a null model defined by using a line with an intercept but slope = 0, which estimates the mean of $y$. Let's build an intercept-only linear regression model to prove this.
+
+```{r}
+vitd_complete <- vitd %>% 
+  drop_na(x25d, sex, ageyears, zbfa, zhfa)
+int_mod <- lm(x25d ~ 1, data = vitd_complete)
+get_regression_table(int_mod)
+```
+
+```{r}
+anova(int_mod, dmod)
+```
+
+Look very carefully at this output and answer these questions:
+
+* What is the `RSS` for line 1 (corresponding to the intercept-only model, Model 1) equal to that you calculated above?
+* What is the `RSS` for line 2 (corresponding to Model 2) equal to that you calculated above?
+* What is the `Sum of Sq` equal to that you calculated above?
+* In < 3 sentences, explain what it means to use `lm(y ~ x + z)` versus `lm(y ~ 1)`, and what happens "under the hood" here that you now see in the `anova` output. 
+
+## RMSE
+
+the root mean square error for regression says how far typical
+points are above or below the regression line. The RMSE is to the regression line
+as the SD is to the average. For instance, if the scatter diagram is football-shaped,
+about 68% of the points on the scatter diagram will be within one RMSE of the regression
+line, about 95% of then will be within 2 RMSE of the regression line
+
+The advantage of RMSE metric is that it is more "normalized". Specifically, SSE will be depending on the amount of the data. The MSE would not depend on the amount of the data, but the RMSE also expresses the error in the same units as y
+y
+.
+
+```{r eval = FALSE}
+# Mean squared error
+d_diag <- d_diag %>% 
+  summarize(mse = mean(.resid^2),
+            rmse = sqrt(mse),
+            rss = sum(.resid^2))
+
+# Root mean squared error
+rmse <- sqrt(mse)
+
+# Residual sum of squares
+rss <- sum(residuals(fit)^2)
+
+## Proportion of values contained between 1 RMSE
+print(mean(abs(ehat) < RMSE))
+## [1] 0.7133581
+## Proportion of values contained between 2 RMSEs
+print(mean(abs(ehat) < 2 * RMSE))
+```
+
+
+## Replication
+
+In the [original paper](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104825), they presented this figure:
+
+![](http://journals.plos.org/plosone/article/figure/image?size=large&id=10.1371/journal.pone.0104825.g001)
+
+Look at the published figure carefully:
+
+* What appears to be the minimum value of serum 25D levels?
+* What appears to be the max?
+* Do those match your EDA?
+* More generally, if you saw this kind of plot "in the wild" (i.e., you were a reviewer, or a peer showed it to you), what 
+
+Now, recreate this figure in `ggplot2` using our data.
+
+```{r}
+ggplot(vitd, aes(x = age_ctr, 
+                 y = x25d,
+                 color = sex)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_point(alpha = .5)
+```
+
+
+```{r}
+ggplot(d_pts, aes(x = age_ctr, 
+                 y = x25d_hat,
+                 color = sex)) +
+  #geom_smooth(method = "lm", se = FALSE) +
+  geom_jitter(alpha = .5, height = 1)
+```
+
+
+
+## Report your process
+
+You’re encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it’s a blog post, a fellow student, an online tutorial, etc.
+
+## Grading
+
+This lab is worth 5 points total, scored as follows:
+
+2 points for your initial EDA:
+
+- 2 (Strong attempt): EDA reflects strong independent problem solving, with clearly thought out attempts to approach questions and problems, and a diligent and honest effort to answer questions and find the solutions.
+
+- 1 (Adequate attempt): EDA reflects some attempt to approach the posed tasks, but approach appears to be superficial and lacks depth of analysis. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.
+
+- 0 (No attempt or incomplete): Didn't tackle all sections. Or didn't make companion graphs. Or didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix.
+
+
+3 points for the quality of the final EDA:
+
+- 3 (Exceptional): EDA is thorough, concise, and clearly demonstrates ability to competently and thoughtfully work with data as well as how to report on that process as a complement to code. Impeccable organization and presentation in the report.
+
+- 2 (Adequate): Hits all the elements in all sections. No obvious mistakes. Pleasant to read. No head scratchers. Solid and complete.
+
+- 1 (Inadequate): EDA attempts to address question with substantial inaccuracies in analysis and/or interpretation. Didn't tackle all sections. Or didn't make companion graphs. Or didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix.
+
+- 0 (Insufficient): Nothing to grade, assignment was late.
+    
