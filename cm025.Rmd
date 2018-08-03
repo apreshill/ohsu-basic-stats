@@ -39,7 +39,9 @@ We'll continue to work with data from this [538 article](https://fivethirtyeight
     - income inequality (as measured by the Gini index, 2015)
 - percent of the population voted for Donald Trump. 
 
-In the [previous lab](cm024.html), we used a subset of these variables to predict hate crimes in the US, focusing on the pre-election data.
+In the [previous lab](cm024.html), we used a subset of these variables to predict hate crimes in the US, focusing on the pre-election data. 
+
+In this lab, we review concepts originally presented in the Nature Points of Significance article: [Analyzing outliers: influential or nuisance?](https://www.nature.com/articles/nmeth.3812)
 
 # The Data
 
