@@ -83,7 +83,7 @@ As groups, discuss your model output:
 `r emo::ji("alarm")`
 
 ---
-## Two numerical predictors
+## Model 1: Two numerical predictors
 
 ```{r}
 hate_two <- lm(avg_hatecrimes_per_100k_fbi ~ 
@@ -94,26 +94,21 @@ hate_two <- lm(avg_hatecrimes_per_100k_fbi ~
 get_regression_table(hate_two)
 ```
 
+
 ---
-## Two numerical predictors
+## Model 1: Two numerical predictors
 
 $$\widehat{\textrm{avg_crimes}} = -54 + 64.3~ \textrm{gini_index} + 31.3~\textrm{share_pop_hs}$$
 
 
-See Model 1!
-![](images/lm-whiteboard-process.jpg)
----
-class: inverse, middle, center
 
-## One numerical / one categorical with parallel slopes (`gini_index` and `cat_trump`)
 
-See Model 2!
-![](images/lm-whiteboard-3models.jpg)
+```{r echo = FALSE}
+knitr::include_graphics("images/lm-whiteboard-process.jpg")
+```
 
 ---
-## Parallel slopes
-
-$$\widehat{\textrm{avg_crimes}} = -12.1 + 32.5~ \textrm{gini_index} + -.51~\textrm{cat_trump}$$
+## Model 2: Parallel slopes
 
 ```{r}
 hate_para <- lm(avg_hatecrimes_per_100k_fbi ~ 
@@ -124,8 +119,39 @@ hate_para <- lm(avg_hatecrimes_per_100k_fbi ~
 get_regression_table(hate_para)
 ```
 
+```{r include = FALSE}
+para_pts <- get_regression_points(hate_para)
+para_pts %>% 
+  summarize(var_resid = var(residual),
+            se_resid = sd(residual))
+```
+
+```{r include = FALSE}
+hate_minus <- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   gini_index + 
+                   cat_trump,
+                 data = filter(hate_demo, !state == "District of Columbia"))
+#get_regression_table(hate_minus)
+minus_pts <- get_regression_points(hate_minus)
+minus_pts %>% 
+  summarize(var_resid = var(residual),
+            se_resid = sd(residual))
+```
+
 ---
-## Visualize parallel slopes model
+## Model 2: Parallel slopes
+
+$$\widehat{\textrm{avg_crimes}} = -12.1 + 32.5~ \textrm{gini_index} + -.51~\textrm{cat_trump}$$
+
+
+```{r echo = FALSE}
+knitr::include_graphics("images/lm-whiteboard-process.jpg")
+```
+
+
+
+---
+## Model 2: Parallel slopes
 
 ```{r echo = FALSE}
 coeff <- lm(avg_hatecrimes_per_100k_fbi ~ 
@@ -151,18 +177,30 @@ ggplot(hate_demo, aes(x = gini_index, y = avg_hatecrimes_per_100k_fbi, col = cat
 ```
 
 ---
-class: inverse, middle, center
+## Model 3: Interaction model
 
-## One numerical / one categorical interaction model (`gini_index` and `cat_trump`)
-
-(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
+$$\widehat{\textrm{avg_crimes}} = -20.4 + 50.6~ \textrm{gini_index} + 25.7~\textrm{cat_trump} -57.9~\textrm{gini*cat_trump}$$
+```{r echo = FALSE}
+knitr::include_graphics("images/lm-whiteboard-3models.jpg")
+```
 
 ---
-## Interaction
+## Model 3: Interaction model
+
+$$\widehat{\textrm{avg_crimes}_{trump=1}} = 5.3 - 7.3~ \textrm{gini_index}$$
+
+$$\widehat{\textrm{avg_crimes}_{trump=0}} = -20.4 + 50.6~ \textrm{gini_index}$$
+
+```{r echo = FALSE}
+knitr::include_graphics("images/lm-whiteboard-3models.jpg")
+```
+
+---
+## Model 3: Interaction model
 
 ```{r}
 hate_int <- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index + 
+                   gini_index* 
                    cat_trump,
                  data = hate_demo)
 
@@ -184,15 +222,43 @@ ggplot(hate_demo, aes(x = gini_index,
   guides(color=FALSE)
 ```
 
----
-class: middle, inverse, center
-
-##Two numerical predictors with a `*` (`gini_index` and `share_pop_hs`)
-
-(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
 
 ---
-## Continuous interaction
+## Model 3: Center predictors
+
+Would this be easier to interpret after centering the predictor `gini_index`?
+
+$$\widehat{\textrm{avg_crimes}_{trump=1}} = 2.54 - 7.3~ \textrm{gini_index}$$
+
+$$\widehat{\textrm{avg_crimes}_{trump=0}} = 1.98 + 50.6~ \textrm{gini_index}$$
+
+```{r echo = FALSE}
+hate_int <- lm(avg_hatecrimes_per_100k_fbi ~ 
+                   I(gini_index - mean(gini_index))* 
+                   cat_trump,
+                 data = hate_demo)
+
+get_regression_table(hate_int)
+```
+
+
+
+---
+## Model 3: Center predictors
+
+```{r echo = FALSE}
+ggplot(hate_demo, aes(x = (gini_index - mean(gini_index)), 
+                      y = avg_hatecrimes_per_100k_fbi,
+                      color = cat_trump)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~cat_trump) +
+  theme_minimal() +
+  guides(color=FALSE)
+```
+
+---
+## Model 4: Continuous interaction
 
 ```{r}
 hate_cont <- lm(avg_hatecrimes_per_100k_fbi ~ 

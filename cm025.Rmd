@@ -1,0 +1,112 @@
+---
+title: "CONJ620: CM 2.5"
+subtitle: "Linear Regression Outliers and Diagnostics"
+author: "Alison Hill"
+date: "7/26/2018"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+
+```{r setup, include=FALSE}
+# leave this chunk alone
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300)
+```
+
+
+# Logistics
+
+- A complete knitted `html` file is due on Sakai by Friday August 3rd (2:30pm). 
+
+# Overview
+
+We'll continue to work with data from this [538 article](https://fivethirtyeight.com/features/higher-rates-of-hate-crimes-are-tied-to-income-inequality/). In the article, the authors describe collecting data on key socioeconomic factors for each state, including indicators for:
+
+- education (percent of adults 25 and older with at least a high school degree, as of 2009) 
+- diversity
+    - percent nonwhite population (2015), and 
+    - percent noncitizen population (2015).
+- geographic heterogeneity (percent population in metropolitan areas, 2015)
+- economic health 
+    - median household income, 
+    - 2016 seasonally adjusted unemployment (September 2016), 
+    - percent poverty among white people (2015), and 
+    - income inequality (as measured by the Gini index, 2015)
+- percent of the population voted for Donald Trump. 
+
+In the [previous lab](cm024.html), we used a subset of these variables to predict hate crimes in the US, focusing on the pre-election data.
+
+# The Data
+
+This data is included in the `fivethirtyeight` package in the [`hate_crimes` data frame](https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html), which we’ll refer to as the “Hate crimes” dataset. You can use [`?hate_crimes`](https://fivethirtyeight-r.netlify.com/reference/hate_crimes.html) to read more about it and the variables.
+
+You'll need to load these packages to do this lab:
+
+```{r load_packages}
+library(fivethirtyeight) 
+library(moderndive)
+library(skimr)
+library(tidyverse)
+library(GGally) 
+```
+
+
+We used `hate_crimes` to demonstrate multiple regression with:
+
+1. A numerical outcome variable $y$, in this case average annual hate crimes per 100,000 population, FBI, 2010-2015 (`avg_hatecrimes_per_100k_fbi`)
+1. Three possible explanatory variables:
+    1. A first numerical explanatory variable $x_1$: percent of adults in each state 25 and older with at least a high school degree (2009) (`share_pop_hs`)
+    1. A second numerical explanatory variable $x_2$: each state's income inequality (as measured by the Gini index, 2015) (`gini_index`) 
+    1. A third numerical explanatory variable $x_3$: each state's percent population that voted for Donald Trump (`share_vote_trump`). At a later stage, we'll convert this variable to a factor.
+
+```{r include = FALSE}
+ggplot(hate_crimes, aes(x = avg_hatecrimes_per_100k_fbi, 
+                        y = hate_crimes_per_100k_splc)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+ggplot(filter(hate_crimes, !state == "District of Columbia"), 
+              aes(x = avg_hatecrimes_per_100k_fbi, 
+                  y = hate_crimes_per_100k_splc)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+# Leverage
+
+With your linear regression model from the [previous lab](cm024.html), use `broom::augment()` to find observations with high leverage.
+
+We did this together [in class](slides/cm025.html).
+
+Additional notes on leverage:
+
+* In simple-regression analysis, the hat-values measure distance from
+the mean of $\bar{x}$.
+* In multiple regression, $h_i$ measures distance from the centroid (point of means) of the `x`’s, taking into account the correlational and variational structure of the `x`’s
+
+
+# Discrepancy
+
+With your model, find observations with high externally studentized residuals (and thus high discrepancy), and compare to the raw residual value, and the internally studentized residual value. What do you notice?
+
+We did this together [in class](slides/cm025.html).
+
+Additional notes on discrepancy:
+
+* High-leverage observations tend to have small residuals, because these observations can coerce the regression surface to be close to them.
+* The formula for the studentized residual is:
+
+$$t_{i}={\widehat {\varepsilon }_{i} \over \widehat {\sigma }{\sqrt  {1-h_{{ii}}\ }}}$$
+
+* For internally studentized residuals, $\widehat{\sigma}^2$ is calculated as:
+
+$$\widehat{\sigma}^2={1 \over n-m}\sum_{j=1}^n \widehat{\varepsilon}_j^{\,2}$$
+
+* For externally studentized residuals, $\widehat{\sigma}_{(i)}^2$ is calculated as:
+
+$$\widehat{\sigma}_{(i)}^2={1 \over n-m-1}\sum_{\begin{smallmatrix}j = 1\\j \ne i\end{smallmatrix}}^n \widehat{\varepsilon}_j^{\,2}$$

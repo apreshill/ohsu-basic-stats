@@ -93,7 +93,7 @@ As groups, discuss your model output:
 ⏰
 
 ---
-## Two numerical predictors
+## Model 1: Two numerical predictors
 
 
 ```r
@@ -114,26 +114,19 @@ get_regression_table(hate_two)
 3 share_pop_hs     31.3      6.81      4.59       0     17.6     45.0
 ```
 
+
 ---
-## Two numerical predictors
+## Model 1: Two numerical predictors
 
 `$$\widehat{\textrm{avg_crimes}} = -54 + 64.3~ \textrm{gini_index} + 31.3~\textrm{share_pop_hs}$$`
 
 
-See Model 1!
-![](images/lm-whiteboard-process.jpg)
----
-class: inverse, middle, center
 
-## One numerical / one categorical with parallel slopes (`gini_index` and `cat_trump`)
 
-See Model 2!
-![](images/lm-whiteboard-3models.jpg)
+&lt;img src="images/lm-whiteboard-process.jpg" width="60%" /&gt;
 
 ---
-## Parallel slopes
-
-`$$\widehat{\textrm{avg_crimes}} = -12.1 + 32.5~ \textrm{gini_index} + -.51~\textrm{cat_trump}$$`
+## Model 2: Parallel slopes
 
 
 ```r
@@ -154,25 +147,47 @@ get_regression_table(hate_para)
 3 cat_trumpmore th…   -0.511     0.449     -1.14   0.261    -1.42    0.393
 ```
 
----
-## Visualize parallel slopes model
 
-&lt;img src="cm025_files/figure-html/unnamed-chunk-5-1.png" width="60%" /&gt;
 
----
-class: inverse, middle, center
 
-## One numerical / one categorical interaction model (`gini_index` and `cat_trump`)
-
-(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
 
 ---
-## Interaction
+## Model 2: Parallel slopes
+
+`$$\widehat{\textrm{avg_crimes}} = -12.1 + 32.5~ \textrm{gini_index} + -.51~\textrm{cat_trump}$$`
+
+
+&lt;img src="images/lm-whiteboard-process.jpg" width="60%" /&gt;
+
+
+
+---
+## Model 2: Parallel slopes
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-9-1.png" width="60%" /&gt;
+
+---
+## Model 3: Interaction model
+
+`$$\widehat{\textrm{avg_crimes}} = -20.4 + 50.6~ \textrm{gini_index} + 25.7~\textrm{cat_trump} -57.9~\textrm{gini*cat_trump}$$`
+&lt;img src="images/lm-whiteboard-3models.jpg" width="60%" /&gt;
+
+---
+## Model 3: Interaction model
+
+`$$\widehat{\textrm{avg_crimes}_{trump=1}} = 5.3 - 7.3~ \textrm{gini_index}$$`
+
+`$$\widehat{\textrm{avg_crimes}_{trump=0}} = -20.4 + 50.6~ \textrm{gini_index}$$`
+
+&lt;img src="images/lm-whiteboard-3models.jpg" width="60%" /&gt;
+
+---
+## Model 3: Interaction model
 
 
 ```r
 hate_int &lt;- lm(avg_hatecrimes_per_100k_fbi ~ 
-                   gini_index + 
+                   gini_index* 
                    cat_trump,
                  data = hate_demo)
 
@@ -180,29 +195,51 @@ get_regression_table(hate_int)
 ```
 
 ```
-# A tibble: 3 x 7
+# A tibble: 4 x 7
   term              estimate std_error statistic p_value lower_ci upper_ci
   &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-1 intercept          -12.1       4.98      -2.44   0.019   -22.2    -2.12 
-2 gini_index          32.5      10.9        2.99   0.004    10.7    54.4  
-3 cat_trumpmore th…   -0.511     0.449     -1.14   0.261    -1.42    0.393
+1 intercept            -20.4      5.66     -3.61   0.001   -31.8     -9.02
+2 gini_index            50.6     12.4       4.10   0        25.7     75.5 
+3 cat_trumpmore th…     25.7     10.0       2.56   0.014     5.53    45.9 
+4 gini_index:cat_t…    -57.9     22.1      -2.62   0.012  -102.     -13.4 
 ```
 
 ---
 ## Visualize interaction model
 
 
-&lt;img src="cm025_files/figure-html/unnamed-chunk-7-1.png" width="60%" /&gt;
+&lt;img src="cm025_files/figure-html/unnamed-chunk-13-1.png" width="60%" /&gt;
+
 
 ---
-class: middle, inverse, center
+## Model 3: Center predictors
 
-##Two numerical predictors with a `*` (`gini_index` and `share_pop_hs`)
+Would this be easier to interpret after centering the predictor `gini_index`?
 
-(1) fit a regression model, (2) obtain the regression table, and (3) attempt to interpret the three values that define the regression plane
+`$$\widehat{\textrm{avg_crimes}_{trump=1}} = 2.54 - 7.3~ \textrm{gini_index}$$`
+
+`$$\widehat{\textrm{avg_crimes}_{trump=0}} = 1.98 + 50.6~ \textrm{gini_index}$$`
+
+
+```
+# A tibble: 4 x 7
+  term              estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept            2.54      0.299      8.49   0         1.94    3.14 
+2 I(gini_index - m…   50.6      12.4        4.10   0        25.7    75.5  
+3 cat_trumpmore th…   -0.562     0.424     -1.32   0.192    -1.42    0.292
+4 I(gini_index - m…  -57.9      22.1       -2.62   0.012  -102.    -13.4  
+```
+
+
 
 ---
-## Continuous interaction
+## Model 3: Center predictors
+
+&lt;img src="cm025_files/figure-html/unnamed-chunk-15-1.png" width="60%" /&gt;
+
+---
+## Model 4: Continuous interaction
 
 
 ```r
@@ -447,12 +484,12 @@ hate_diag %&gt;%
 ---
 ## Plot leverage against `x`
 
-&lt;img src="cm025_files/figure-html/unnamed-chunk-14-1.png" width="70%" /&gt;
+&lt;img src="cm025_files/figure-html/unnamed-chunk-22-1.png" width="70%" /&gt;
 
 ---
 ## Plot leverage against `x`
 
-&lt;img src="cm025_files/figure-html/unnamed-chunk-15-1.png" width="70%" /&gt;
+&lt;img src="cm025_files/figure-html/unnamed-chunk-23-1.png" width="70%" /&gt;
 
 ---
 class: middle, inverse, center
