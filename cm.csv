@@ -9,8 +9,8 @@ Tues,July,17,2.1: Linear models,<a href='slides/cm021.html'>Simple Regression (o
 Thurs,July,19,2.2,Simple Regression (one categorical predictor)<br>(<a href='https://bit.ly/conj620-cm018'>Notepad</a>),8,Simple linear regression,cm022.html
 Tues,July,24,2.3,<a href='slides/cm023.html'>Multiple Regression (2 continuous predictors)</a>,,,-
 Thurs,July,26,2.4,Multiple Regression (continuous + categorical),9,Multiple regression,cm024.html
-Tues,July,31,2.5,<a href='slides/cm025.html'>Residuals / Diagnostics / Outliers</a>,,,
-Thurs,August,2,2.6,Concept integration,,Regression: integrate + iterate,
+Tues,July,31,2.5,<a href='slides/cm025.html'>Residuals / Diagnostics / Outliers</a>,10,Diagnostics,cm025.html
+Thurs,August,2,2.6,Concept integration,11,Regression: integrate + iterate,cm026.html
 Tues,August,7,3.1: Inference,Sampling,,,-
 Thurs,August,9,3.2,Confidence Intervals,,,-
 Tues,August,14,3.3,Hypothesis Testing<br><a href='https://github.com/Lakens/perfect-t-test/blob/master/perfect_independent_t-test.Rmd'>- Perfect 2-sample t-test</a>,,,-
