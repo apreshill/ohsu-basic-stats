@@ -9,6 +9,8 @@ output:
     number_sections: true
 ---
 
+
+test this
 ```{r setup, include=FALSE}
 # leave this chunk alone
 options(knitr.table.format = "html") 
