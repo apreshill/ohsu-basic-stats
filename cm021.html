@@ -26,8 +26,9 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -161,74 +162,14 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-
-<style type="text/css">
-.tabset-dropdown > .nav-tabs {
-  display: inline-table;
-  max-height: 500px;
-  min-height: 44px;
-  overflow-y: auto;
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
-  font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
-}
-
-.tabset-dropdown > .nav-tabs > li.active {
-  display: block;
-}
-
-.tabset-dropdown > .nav-tabs > li > a,
-.tabset-dropdown > .nav-tabs > li > a:focus,
-.tabset-dropdown > .nav-tabs > li > a:hover {
-  border: none;
-  display: inline-block;
-  border-radius: 4px;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
-  display: block;
-  float: none;
-}
-
-.tabset-dropdown > .nav-tabs > li {
-  display: none;
-}
-</style>
-
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
 </script>
 
 <!-- code folding -->
+
 
 
 
@@ -421,10 +362,7 @@ library(skimr)</code></pre>
 <blockquote>
 <p>“It is a mere truism to say that the progress of popular education, and the formation of religious habits, are fatally opposed by the temptations to animal pleasures, which abound wherever BEER-HOUSES and low ALE-HOUSES abound.”</p>
 </blockquote>
-<div class="figure">
-<img src="http://4.bp.blogspot.com/-qdzqtghTzmU/UD_NNT9C46I/AAAAAAAABoQ/XycEe4wixVM/s1600/03.LesMiserables.US.MasteroftheHouse.jpg" />
-
-</div>
+<p><img src="http://4.bp.blogspot.com/-qdzqtghTzmU/UD_NNT9C46I/AAAAAAAABoQ/XycEe4wixVM/s1600/03.LesMiserables.US.MasteroftheHouse.jpg" /></p>
 <p><br> <br> <br></p>
 <p>Clearly, the reverend considered public houses in Britain to be a scourge on society, namely that they “promote drunkenness and its consequent evil” (i.e., crime). Let’s investigate how well we can predict criminals (per 100k population) from the number of public houses (ale/beer houses per 100k population) using simple linear regression. Here is how to read in the data (please copy and paste into a code chunk in your .Rmd):</p>
 <pre class="r"><code>crimenames &lt;- c(&quot;county&quot;, &quot;region_name&quot;, &quot;region_code&quot;,
@@ -464,10 +402,7 @@ crime &lt;- read_table(here::here(&quot;data&quot;, &quot;beerhall.dat&quot;),
 <div id="visualize-the-data-5-min" class="section level2">
 <h2><span class="header-section-number">4.3</span> Visualize the data (⏰ 5 min)</h2>
 <p>Recreate the scatterplot below of ale/beer houses per 100K on the x-axis and criminals per 100K population on the y-axis. What can you say about the relationship between public houses and criminals based on this exploration?</p>
-<div class="figure">
-<img src="cm021_files/figure-html/crime_scatterplot-1.png" />
-
-</div>
+<p><img src="cm021_files/figure-html/crime_scatterplot-1.png" /></p>
 <p>Stop here, and turn in your in-class work! We’ll start with simple linear regression with this dataset in the <a href="cm022.html">next lab</a>.</p>
 </div>
 </div>

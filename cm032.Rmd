@@ -1,0 +1,28 @@
+---
+title: 'CONJ620: CM 3.2'
+author: "Alison Hill"
+subtitle: Introduction to Inference
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+# leave this chunk alone
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300)
+```
+
+# Data
+
+https://www.cdc.gov/brfss/annual_data/annual_2016.html
+
+# Resources
+
+tinyurl.com/inference3
+
+https://github.com/AllenDowney/CompStats/blob/master/resampling.ipynb
+
