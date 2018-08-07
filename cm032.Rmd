@@ -10,13 +10,21 @@ output:
 ---
 
 
-test this
+
 ```{r setup, include=FALSE}
 # leave this chunk alone
 options(knitr.table.format = "html") 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
   comment = NA, dpi = 300)
 ```
+
+# Estimate
+
+# Quantify precision
+
+# Test
+
+
 
 # Data
 
