@@ -342,21 +342,262 @@ div.tocify {
 </div>
 
 
-<div id="estimate" class="section level1">
-<h1><span class="header-section-number">1</span> Estimate</h1>
+<div id="estimation-of-us-male-height" class="section level1">
+<h1><span class="header-section-number">1</span> Estimation of US male height</h1>
+<p>Suppose we want to estimate the average height of men in the U.S.</p>
+<p>We can use data from the BRFSS:</p>
+<p>“The Behavioral Risk Factor Surveillance System (BRFSS) is the nation’s premier system of health-related telephone surveys that collect state data about U.S. residents regarding their health-related risk behaviors, chronic health conditions, and use of preventive services.”</p>
+<p>The following function reads the most recent data from BRFSS (2016), selects just the columns we need, and saves the results in an HDF file.</p>
+<p>After we run this function, it is much faster to read the HDF file than the original data.</p>
+<pre class="r"><code>male_heights &lt;- read_csv(here::here(&quot;data&quot;, &quot;male_heights.csv&quot;))</code></pre>
+<div id="estimate" class="section level2">
+<h2><span class="header-section-number">1.1</span> Estimate</h2>
+<p>Height in self-reported height in centimeters.</p>
+<p>How many unique heights are there?</p>
+<pre class="r"><code>all_ones &lt;- male_heights %&gt;% 
+  count(HTM4) %&gt;% 
+  arrange(n)</code></pre>
+<p>How many men were 103 cm? How about 231 cm?</p>
+<p>What is the <code>mean</code> and <code>sd</code> of male heights?</p>
+<pre class="r"><code>library(skimr)
+skim(male_heights)</code></pre>
+<pre><code>Skim summary statistics
+ n obs: 204509 
+ n variables: 4 
+
+── Variable type:integer ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n     mean       sd   p0   p25   p50
+     HTM4       0   204509 204509   178.06     7.79   91   173   178
+   id_num       0   204509 204509 1e+05    59036.81    1 51128 1e+05
+    WTKG3    2970   201539 204509  8993.52  1930.56 2268  7711  8618
+    p75  p100     hist
+    183   231 ▁▁▁▁▇▇▁▁
+ 153382 2e+05 ▇▇▇▇▇▇▇▇
+   9979 27216 ▁▇▇▁▁▁▁▁
+
+── Variable type:numeric ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n   mean      sd  p0    p25    p50    p75
+  _LLCPWT       0   204509 204509 581.91 1013.13 0.8 102.05 252.75 631.23
+     p100     hist
+ 28708.95 ▇▁▁▁▁▁▁▁</code></pre>
 </div>
-<div id="quantify-precision" class="section level1">
-<h1><span class="header-section-number">2</span> Quantify precision</h1>
+<div id="quantify-precision" class="section level2">
+<h2><span class="header-section-number">1.2</span> Quantify precision</h2>
+<p>At this point we have an estimate of the average adult male height. We’d like to know how accurate this estimate is, and how precise. In the context of estimation, these words have a technical distinction:</p>
+<p>“Given a set of data points from repeated measurements of the same quantity, the set can be said to be precise if the values are close to each other, while the set can be said to be accurate if their average is close to the true value of the quantity being measured.”</p>
+<p>Usually accuracy is what we really care about, but it’s hard to measure accuracy unless you know the true value. And if you knew the true value, you wouldn’t have to estimate it in the first place.</p>
+<p>Quantifying precision is not as useful, but it is much easier. Here’s one way to do it:</p>
+<ul>
+<li><p>Use the data you have to make a model of the population.</p></li>
+<li><p>Use the model to simulate the <strong>random</strong> data collection process.</p></li>
+<li><p>Use the simulated data to compute an estimate.</p></li>
+<li><p>Repeat steps 1-3 and collect the results.</p></li>
+</ul>
+<p>To model the population, I’ll use resampling; that is, I will treat the observed measurements as if they were taken from the entire population, and I will draw random samples from them.</p>
+<p>Here’s a function that takes observed measurements and returns a new set of measurements with the same sample size.</p>
+<p>We sample with replacement, which means that some measurements might be chosen more than once, and some might not be chosen at all. (If we sample without replacement, the resampled data is always identical to the original, so that’s no good.)</p>
+<p>Let’s create our first resample, using the steps laid out in <a href="https://moderndive.com/9-confidence-intervals.html#bootstrapping">ModernDive</a>:</p>
+<ul>
+<li>Specify variables</li>
+<li>Generate replicates</li>
+<li>Calculate summary statistics</li>
+<li>Visualize results</li>
+</ul>
+<pre class="r"><code>males &lt;- male_heights %&gt;% 
+  tally() %&gt;% 
+  pull()
+set.seed(2051)
+mh_resample1 &lt;- male_heights %&gt;% 
+  sample_n(size = males, replace = TRUE)</code></pre>
+<pre class="r"><code>mh_resample1 %&gt;% 
+  count(HTM4 == 103)</code></pre>
+<pre><code># A tibble: 1 x 2
+  `HTM4 == 103`      n
+  &lt;lgl&gt;          &lt;int&gt;
+1 FALSE         204509</code></pre>
+<pre class="r"><code>mh_resample1 %&gt;% 
+  count(HTM4 == 231)</code></pre>
+<pre><code># A tibble: 1 x 2
+  `HTM4 == 231`      n
+  &lt;lgl&gt;          &lt;int&gt;
+1 FALSE         204509</code></pre>
+<pre class="r"><code>set.seed(1903)
+mh_resample2 &lt;- male_heights %&gt;% 
+  sample_n(size = males, replace = TRUE)</code></pre>
+<pre class="r"><code>mh_resample2 %&gt;% 
+  count(HTM4 == 103)</code></pre>
+<pre><code># A tibble: 2 x 2
+  `HTM4 == 103`      n
+  &lt;lgl&gt;          &lt;int&gt;
+1 FALSE         204505
+2 TRUE               4</code></pre>
+<pre class="r"><code>mh_resample2 %&gt;% 
+  count(HTM4 == 231)</code></pre>
+<pre><code># A tibble: 2 x 2
+  `HTM4 == 231`      n
+  &lt;lgl&gt;          &lt;int&gt;
+1 FALSE         204508
+2 TRUE               1</code></pre>
+<pre class="r"><code>set.seed(1701)
+mh_resample3 &lt;- male_heights %&gt;% 
+  sample_n(size = males, replace = TRUE)</code></pre>
+<pre class="r"><code>mh_resample3 %&gt;% 
+  count(HTM4 == 103)</code></pre>
+<pre><code># A tibble: 2 x 2
+  `HTM4 == 103`      n
+  &lt;lgl&gt;          &lt;int&gt;
+1 FALSE         204507
+2 TRUE               2</code></pre>
+<pre class="r"><code>mh_resample3 %&gt;% 
+  count(HTM4 == 231)</code></pre>
+<pre><code># A tibble: 2 x 2
+  `HTM4 == 231`      n
+  &lt;lgl&gt;          &lt;int&gt;
+1 FALSE         204505
+2 TRUE               4</code></pre>
+<pre class="r"><code>skim(mh_resample1)</code></pre>
+<pre><code>Skim summary statistics
+ n obs: 204509 
+ n variables: 4 
+
+── Variable type:integer ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n     mean       sd   p0   p25   p50
+     HTM4       0   204509 204509   178.05     7.77   91   173   178
+   id_num       0   204509 204509 1e+05    59027.77    1 51198 1e+05
+    WTKG3    2920   201589 204509  8990.5   1924.91 2268  7711  8618
+    p75  p100     hist
+    183   229 ▁▁▁▁▆▇▁▁
+ 153458 2e+05 ▇▇▇▇▇▇▇▇
+   9979 27216 ▁▇▇▁▁▁▁▁
+
+── Variable type:numeric ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n   mean      sd  p0    p25    p50    p75
+  _LLCPWT       0   204509 204509 583.01 1012.17 0.8 101.98 253.18 632.08
+     p100     hist
+ 27852.06 ▇▁▁▁▁▁▁▁</code></pre>
+<pre class="r"><code>skim(mh_resample2)</code></pre>
+<pre><code>Skim summary statistics
+ n obs: 204509 
+ n variables: 4 
+
+── Variable type:integer ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n     mean       sd   p0   p25   p50
+     HTM4       0   204509 204509   178.03     7.8    91   173   178
+   id_num       0   204509 204509 1e+05    59104.02    3 51074 1e+05
+    WTKG3    3010   201499 204509  8988.75  1932.09 2268  7711  8618
+    p75  p100     hist
+    183   231 ▁▁▁▁▇▇▁▁
+ 153614 2e+05 ▇▇▇▇▇▇▇▇
+   9979 27216 ▁▇▇▁▁▁▁▁
+
+── Variable type:numeric ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n   mean      sd  p0    p25   p50   p75
+  _LLCPWT       0   204509 204509 584.05 1020.63 0.8 102.88 254.4 630.9
+     p100     hist
+ 28708.95 ▇▁▁▁▁▁▁▁</code></pre>
+<pre class="r"><code>skim(mh_resample3)</code></pre>
+<pre><code>Skim summary statistics
+ n obs: 204509 
+ n variables: 4 
+
+── Variable type:integer ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n     mean       sd   p0   p25   p50
+     HTM4       0   204509 204509   178.06     7.82   91   173   178
+   id_num       0   204509 204509 1e+05    59122.79    3 51285 1e+05
+    WTKG3    3037   201472 204509  8993.03  1936.52 2268  7711  8618
+    p75  p100     hist
+    183   231 ▁▁▁▁▇▇▁▁
+ 153699 2e+05 ▇▇▇▇▇▇▇▇
+   9979 27216 ▁▇▇▁▁▁▁▁
+
+── Variable type:numeric ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n   mean      sd  p0    p25    p50   p75
+  _LLCPWT       0   204509 204509 581.24 1016.46 0.8 102.16 252.82 630.8
+     p100     hist
+ 28708.95 ▇▁▁▁▁▁▁▁</code></pre>
+<p>If we wanted to use <code>infer</code> instead to generate a SINGLE replicate or resample, we would use:</p>
+<pre class="r"><code>library(infer)
+set.seed(1701)
+mh_resample3 &lt;- male_heights %&gt;% 
+  specify(response = HTM4) %&gt;% 
+  generate(reps = 1, type = &quot;bootstrap&quot;)</code></pre>
+<p>Now let’s <code>generate</code> 10,000 replicates, <code>calculate</code> the mean for each replicate, and make a histogram to show the distribution of all the 10,000 calculated means.</p>
+<pre class="r"><code>set.seed(1701)
+mh_boot &lt;- male_heights %&gt;% 
+  specify(response = HTM4) %&gt;% 
+  generate(reps = 1000, type = &quot;bootstrap&quot;) 
+
+mh_boot %&gt;% 
+  count(replicate)</code></pre>
+<pre><code># A tibble: 1,000 x 2
+# Groups:   replicate [1,000]
+   replicate      n
+       &lt;int&gt;  &lt;int&gt;
+ 1         1 204509
+ 2         2 204509
+ 3         3 204509
+ 4         4 204509
+ 5         5 204509
+ 6         6 204509
+ 7         7 204509
+ 8         8 204509
+ 9         9 204509
+10        10 204509
+# ... with 990 more rows</code></pre>
+<pre class="r"><code>set.seed(1701)
+mh_means &lt;- male_heights %&gt;% 
+  specify(response = HTM4) %&gt;% 
+  generate(reps = 1000, type = &quot;bootstrap&quot;) %&gt;% 
+  calculate(stat = &quot;mean&quot;)
+
+mh_means %&gt;% 
+  visualize()</code></pre>
+<p><img src="cm032_files/figure-html/unnamed-chunk-17-1.png" width="2100" /></p>
+<pre class="r"><code>x_bar &lt;- male_heights %&gt;% 
+  summarize(stat = mean(HTM4))
+x_bar</code></pre>
+<pre><code># A tibble: 1 x 1
+   stat
+  &lt;dbl&gt;
+1  178.</code></pre>
+<pre class="r"><code>mh_means %&gt;% 
+  visualize(obs_stat = x_bar)</code></pre>
+<p><img src="cm032_files/figure-html/unnamed-chunk-17-2.png" width="2100" /></p>
+<p>The width of this distribution shows how much the results vary from one experiment to the next.</p>
+<p>We can quantify this variability by computing the standard deviation of the sampling distribution, which is called “standard error”. The standard error is the standard deviation of the sampling distribution.</p>
+<pre class="r"><code>options(pillar.sigfig = 6)
+
+mh_means %&gt;% 
+  summarize(mean_of_means = mean(stat),
+            sd_of_means = sd(stat)) # this is the SE!</code></pre>
+<pre><code># A tibble: 1 x 2
+  mean_of_means sd_of_means
+          &lt;dbl&gt;       &lt;dbl&gt;
+1       178.062   0.0175575</code></pre>
+<p>We can also summarize the sampling distribution with a “confidence interval”, which is a range that contains a specified fraction, like 90%, of the values in sampling_dist_mean.</p>
+<p>The central 90% confidence interval is between the 5th and 95th percentiles of the sampling distribution.</p>
+<pre class="r"><code>mh_means %&gt;% 
+  get_ci()</code></pre>
+<pre><code># A tibble: 1 x 2
+   `2.5%` `97.5%`
+    &lt;dbl&gt;   &lt;dbl&gt;
+1 178.026 178.094</code></pre>
+<p>The following function plots a histogram and shades the 90% confidence interval.</p>
+<pre class="r"><code>mh_means %&gt;% 
+  visualize(endpoints = percentile_ci, direction = &quot;between&quot;)</code></pre>
+<p>You can see that 95% of the data stored in the stat variable in bootstrap_distribution falls between the two endpoints with 2.5% to the left outside of the shading and 2.5% to the right outside of the shading. The cut-off points that provide our range are shown with the darker lines.</p>
+</div>
 </div>
 <div id="test" class="section level1">
-<h1><span class="header-section-number">3</span> Test</h1>
+<h1><span class="header-section-number">2</span> Test</h1>
+<p>Are OKCupid men taller? Are presidents taller?</p>
 </div>
 <div id="data" class="section level1">
-<h1><span class="header-section-number">4</span> Data</h1>
+<h1><span class="header-section-number">3</span> Data</h1>
 <p><a href="https://www.cdc.gov/brfss/annual_data/annual_2016.html" class="uri">https://www.cdc.gov/brfss/annual_data/annual_2016.html</a></p>
 </div>
 <div id="resources" class="section level1">
-<h1><span class="header-section-number">5</span> Resources</h1>
+<h1><span class="header-section-number">4</span> Resources</h1>
 <p>tinyurl.com/inference3</p>
 <p><a href="https://github.com/AllenDowney/CompStats/blob/master/resampling.ipynb" class="uri">https://github.com/AllenDowney/CompStats/blob/master/resampling.ipynb</a></p>
 </div>
