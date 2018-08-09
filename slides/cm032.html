@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CONJ620: CM 3.2</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Alison Hill" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/ohsu.css" type="text/css" />
+    <link rel="stylesheet" href="css/ohsu-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# CONJ620: CM 3.2
+## Sampling, Simulation, &amp; Bootstrapping
+### Alison Hill
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class:middle, inverse, center
+
+## ModernDive
+
+[Chapter 8: Sampling](https://moderndive.com/8-sampling.html)
+
+[Chapter 9: Confidence Intervals](https://moderndive.com/9-confidence-intervals.html)
+
+---
+class:middle, inverse, center
+## Plan for today
+
+--
+
+## Bootstrapping
+
+![](https://media.giphy.com/media/pfhdDIOWiYXaE/giphy.gif)
+
+---
+class:middle, inverse, center
+⏰
+## Challenge
+
+What is "bootstrapping"?
+
+What is a "confidence interval"?
+
+
+---
+class:middle, inverse, center
+🏝
+## Laptops down for now
+
+What is "bootstrapping"?
+
+--
+&lt;br&gt;
+How: 
+
+Simulate the distribution by *drawing samples with replacement*
+
+--
+&lt;br&gt;
+Why:
+
+The data we originally collect estimates its own *approximate sampling distribution*. Given the data we have, what data *could* we have had?
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.001.png)
+
+According to http://www.heightdb.com/
+
+---
+## Just the male celebrities
+
+![](images/bootstrap-slides/bootstrap-slides.002.png)
+
+---
+## EDA on `celeb_heights`
+
+
+
+```r
+ggplot(celeb_heights, aes(x = Height)) +
+  geom_histogram(binwidth = 5, color = "white", fill = "turquoise")
+```
+
+&lt;img src="cm032_files/figure-html/unnamed-chunk-5-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+## EDA on `celeb_heights`
+
+
+```r
+library(skimr)
+skim(celeb_heights)
+```
+
+```
+Skim summary statistics
+ n obs: 12 
+ n variables: 2 
+
+── Variable type:character ──────────────────────────────────────────────────────────────────────────────────
+ variable missing complete  n min max empty n_unique
+     Name       0       12 12   9  16     0       12
+
+── Variable type:integer ────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete  n   mean   sd  p0    p25 p50   p75 p100
+   Height       0       12 12 173.92 8.89 157 168.75 175 178.5  189
+     hist
+ ▂▅▁▅▇▅▂▂
+```
+
+```r
+options(pillar.sigfig = 5) # important!!
+(x_bar &lt;- celeb_heights %&gt;% 
+  summarize(stat = mean(Height)))
+```
+
+```
+# A tibble: 1 x 1
+    stat
+   &lt;dbl&gt;
+1 173.92
+```
+
+
+
+
+---
+## Quantifying uncertainty
+
+We got an `\(\bar{x} =\)` 173.92. What is the uncertainty around this estimate, based on our sample data?
+
+
+```r
+ggplot(celeb_heights, aes(x = Height)) +
+  geom_histogram(binwidth = 5, color = "white", fill = "turquoise") +
+  geom_vline(aes(xintercept = mean(Height)), colour = "red")
+```
+
+&lt;img src="cm032_files/figure-html/unnamed-chunk-7-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+
+![](images/bootstrap-slides/bootstrap-slides.003.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.004.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.005.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.006.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.007.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.008.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.009.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.010.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.011.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.012.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.013.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.014.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.015.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.016.png)
+
+---
+class:middle, center, inverse
+## How to do this in R
+
+
+---
+class:middle
+## Let's start with one resample
+
+.pull-left[
+
+
+```r
+set.seed(0)
+(resamp_heights &lt;- celeb_heights %&gt;% 
+  sample_n(12, replace = TRUE))
+```
+
+```
+# A tibble: 12 x 2
+   Name          Height
+   &lt;chr&gt;          &lt;int&gt;
+ 1 Brad Pitt        180
+ 2 Harry Styles     178
+ 3 Kanye West       173
+ 4 Rob Riches       175
+ 5 Brad Pitt        180
+ 6 Kim Jong Un      175
+ 7 Brad Pitt        180
+ 8 Kevin Hart       157
+ 9 Barack Obama     185
+10 Barack Obama     185
+11 Justin Bieber    170
+12 Kim Jong Un      175
+```
+
+]
+
+.pull-right[
+
+&lt;img src="cm032_files/figure-html/unnamed-chunk-9-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+The mean is 176.08
+]
+
+
+---
+class:middle
+## Let's do three
+
+
+
+```r
+set.seed(0)
+three &lt;- rerun(.n = 3, resample = sample_n(celeb_heights, 
+                                           size = 12, 
+                                           replace = TRUE)) %&gt;% 
+  flatten()
+```
+
+.pull-left[
+
+```r
+three %&gt;% pluck(2)
+```
+
+```
+# A tibble: 12 x 2
+   Name             Height
+   &lt;chr&gt;             &lt;int&gt;
+ 1 Kim Jong Un         175
+ 2 Bruno Mars          165
+ 3 Kanye West          173
+ 4 Daniel Radcliffe    165
+ 5 Bashar al-Assad     189
+ 6 Bruno Mars          165
+ 7 Kevin Hart          157
+ 8 Kanye West          173
+ 9 Daniel Radcliffe    165
+10 Kevin Hart          157
+11 Kim Jong Un         175
+12 Barack Obama        185
+```
+]
+
+.pull-left[
+
+```r
+three %&gt;% pluck(3)
+```
+
+```
+# A tibble: 12 x 2
+   Name             Height
+   &lt;chr&gt;             &lt;int&gt;
+ 1 Zayn Malik          175
+ 2 Harry Styles        178
+ 3 Kanye West          173
+ 4 Justin Bieber       170
+ 5 Kanye West          173
+ 6 Brad Pitt           180
+ 7 Kanye West          173
+ 8 Bashar al-Assad     189
+ 9 Barack Obama        185
+10 Bashar al-Assad     189
+11 Kim Jong Un         175
+12 Daniel Radcliffe    165
+```
+]
+
+---
+class:middle
+## Let's visualize two
+
+.pull-left[
+&lt;img src="cm032_files/figure-html/unnamed-chunk-13-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+The mean is 170.33
+]
+
+.pull-left[
+&lt;img src="cm032_files/figure-html/unnamed-chunk-14-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+
+The mean is 177.08
+]
+
+---
+class:middle, center, inverse
+## Let's do 1,000!
+
+![](https://media.giphy.com/media/YGwNReSwzObrG/giphy.gif)
+
+---
+class:middle, center, inverse
+## We need to use `infer`
+
+---
+
+
+![](images/infer_ci.jpeg)
+
+---
+## `infer` for bootstrapping
+
+
+- `specify()` the DV;
+- `generate()` new resamples:
+    - Resample from our original data **with replacement**, so set `type = "bootstrap"`
+    - Do this **a ton of times** (`reps = 1000`)
+- `calculate()` a summary statistic (here, `stat = "mean"`) for each `rep`
+- `visualize()` the bootstrap distribution of DV means (add `obs_stat = x_bar`)
+
+
+---
+class:middle
+## For one resample
+
+.pull-left[
+
+I used this code before...
+
+
+```r
+set.seed(0)
+(resamp_heights &lt;- celeb_heights %&gt;% 
+  sample_n(12, replace = TRUE))
+```
+
+```
+# A tibble: 12 x 2
+   Name          Height
+   &lt;chr&gt;          &lt;int&gt;
+ 1 Brad Pitt        180
+ 2 Harry Styles     178
+ 3 Kanye West       173
+ 4 Rob Riches       175
+ 5 Brad Pitt        180
+ 6 Kim Jong Un      175
+ 7 Brad Pitt        180
+ 8 Kevin Hart       157
+ 9 Barack Obama     185
+10 Barack Obama     185
+11 Justin Bieber    170
+12 Kim Jong Un      175
+```
+
+]
+
+.pull-right[
+
+Now we switch to `infer`
+
+```r
+set.seed(0)
+(resamp_heights &lt;- celeb_heights %&gt;% 
+  specify(response = Height) %&gt;% 
+  generate(reps = 1, 
+           type = "bootstrap"))
+```
+
+```
+Response: Height (integer)
+# A tibble: 12 x 2
+# Groups:   replicate [1]
+   replicate Height
+       &lt;int&gt;  &lt;int&gt;
+ 1         1    180
+ 2         1    178
+ 3         1    173
+ 4         1    175
+ 5         1    180
+ 6         1    175
+ 7         1    180
+ 8         1    157
+ 9         1    185
+10         1    185
+11         1    170
+12         1    175
+```
+
+]
+
+
+---
+class:middle
+## Let's do three
+
+
+```r
+set.seed(0)
+resamp_heights &lt;- celeb_heights %&gt;% 
+  specify(response = Height) %&gt;% 
+  generate(reps = 3, 
+           type = "bootstrap")
+```
+
+--
+
+.pull-left[
+
+```r
+resamp_heights %&gt;% 
+  count(replicate)
+```
+
+```
+# A tibble: 3 x 2
+# Groups:   replicate [3]
+  replicate     n
+      &lt;int&gt; &lt;int&gt;
+1         1    12
+2         2    12
+3         3    12
+```
+]
+
+.pull-right[
+
+```r
+resamp_heights %&gt;% 
+  group_by(replicate) %&gt;% 
+  summarize(xbar = mean(Height))
+```
+
+```
+# A tibble: 3 x 2
+  replicate   xbar
+      &lt;int&gt;  &lt;dbl&gt;
+1         1 176.08
+2         2 170.33
+3         3 177.08
+```
+]
+---
+class:middle
+## For 1,000 resamples
+
+
+```r
+set.seed(0)
+resamp_heights &lt;- celeb_heights %&gt;% 
+  specify(response = Height) %&gt;% 
+  generate(reps = 1000, 
+           type = "bootstrap")
+```
+
+--
+
+.pull-left[
+
+```r
+resamp_heights %&gt;% 
+  count(replicate)
+```
+
+```
+# A tibble: 1,000 x 2
+# Groups:   replicate [1,000]
+   replicate     n
+       &lt;int&gt; &lt;int&gt;
+ 1         1    12
+ 2         2    12
+ 3         3    12
+ 4         4    12
+ 5         5    12
+ 6         6    12
+ 7         7    12
+ 8         8    12
+ 9         9    12
+10        10    12
+# ... with 990 more rows
+```
+]
+
+.pull-right[
+
+```r
+resamp_heights %&gt;% 
+  group_by(replicate) %&gt;% 
+  summarize(xbar = mean(Height))
+```
+
+```
+# A tibble: 1,000 x 2
+   replicate   xbar
+       &lt;int&gt;  &lt;dbl&gt;
+ 1         1 176.08
+ 2         2 170.33
+ 3         3 177.08
+ 4         4 170.25
+ 5         5 177.92
+ 6         6 178.58
+ 7         7 174.75
+ 8         8 173.58
+ 9         9 175.42
+10        10 174.08
+# ... with 990 more rows
+```
+]
+
+
+---
+class: center, middle, inverse
+
+## We now have 1,000 means
+
+![](https://media.giphy.com/media/xT0GqIsBdw6mkKbq0g/giphy.gif)
+
+This is too many numbers to summarize in a table. We need to *summarize* and *visualize* these numbers.
+
+---
+
+```r
+ch_means &lt;- celeb_heights %&gt;% 
+  specify(response = Height) %&gt;% 
+  generate(reps = 1000, 
+           type = "bootstrap") %&gt;% 
+  calculate(stat = "mean")
+
+ch_means %&gt;% 
+  visualize()
+```
+
+&lt;img src="cm032_files/figure-html/unnamed-chunk-23-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+```r
+ch_means %&gt;% 
+  visualize(obs_stat = x_bar)
+```
+
+&lt;img src="cm032_files/figure-html/unnamed-chunk-24-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+
+```r
+ch_means %&gt;% 
+  visualize(obs_stat = x_bar) +
+  geom_vline(aes(xintercept = mean(stat)), lty = 3, lwd = 3, colour = "green")
+```
+
+&lt;img src="cm032_files/figure-html/unnamed-chunk-25-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+"the bootstrap distribution is centered at the original sample mean"
+
+https://arxiv.org/pdf/1411.5279.pdf
+
+---
+
+```r
+(percentile_ci &lt;- ch_means %&gt;% 
+  get_ci())
+```
+
+```
+# A tibble: 1 x 2
+  `2.5%` `97.5%`
+   &lt;dbl&gt;   &lt;dbl&gt;
+1    169  178.67
+```
+
+
+```r
+ch_means %&gt;% 
+  visualize(endpoints = percentile_ci, direction = "between")
+```
+
+&lt;img src="cm032_files/figure-html/unnamed-chunk-27-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+---
+Using the percentile method, our range of plausible values for the mean height of male celebrities is 169 to 178.67 centimeters.
+
+You can see that 95% of the data stored in the `stat` variable in `ch_means` falls between the two endpoints with 2.5% to the left outside of the shading and 2.5% to the right outside of the shading. 
+
+
+```r
+ch_means %&gt;% 
+  visualize(endpoints = percentile_ci, direction = "between")
+```
+
+&lt;img src="cm032_files/figure-html/unnamed-chunk-28-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+---
+## The standard error method
+
+
+```r
+standard_error_ci &lt;- ch_means %&gt;% 
+  get_ci(type = "se", point_estimate = x_bar)
+standard_error_ci
+```
+
+```
+# A tibble: 1 x 2
+   lower  upper
+   &lt;dbl&gt;  &lt;dbl&gt;
+1 169.13 178.70
+```
+
+```r
+ch_means %&gt;% 
+  summarize(se = sd(stat))
+```
+
+```
+# A tibble: 1 x 1
+      se
+   &lt;dbl&gt;
+1 2.4402
+```
+
+Remember that the standard deviation of the sampling distribution is the standard error, frequently denoted as `se`.
+
+---
+## The classical way
+
+
+
+```r
+ch_means %&gt;% 
+  summarize(se = sd(stat))
+```
+
+```
+# A tibble: 1 x 1
+      se
+   &lt;dbl&gt;
+1 2.4402
+```
+
+--
+
+The `SE` is the standard deviation dividing by square root of the sample size.
+
+```r
+celeb_heights %&gt;% 
+  summarize(sd_height = sd(Height),
+            mean_height = mean(Height),
+            se_height = sd_height/sqrt(n()))
+```
+
+```
+# A tibble: 1 x 3
+  sd_height mean_height se_height
+      &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
+1    8.8878      173.92    2.5657
+```
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "atelier-lakeside-light",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script>
+(function() {
+  var i, text, code, codes = document.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+})();
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

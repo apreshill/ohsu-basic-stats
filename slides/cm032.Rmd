@@ -1,0 +1,548 @@
+---
+title: "CONJ620: CM 3.2"
+subtitle: "Sampling, Simulation, & Bootstrapping"
+author: "Alison Hill"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300,
+  fig.align = "center", out.width = "65%", cache = FALSE)
+library(tidyverse)
+library(infer)
+library(moderndive)
+```
+
+
+
+```{r include = FALSE}
+# library(datapasta)
+celeb_heights <- tibble::tribble(
+               ~Name, ~Height,
+     "Justin Bieber",         170L,
+        "Zayn Malik",         175L,
+       "Kim Jong Un",         175L,
+      "Harry Styles",         178L,
+        "Kanye West",         173L,
+   "Bashar al-Assad",         189L,
+        "Rob Riches",         175L,
+      "Barack Obama",         185L,
+        "Bruno Mars",         165L,
+  "Daniel Radcliffe",         165L,
+         "Brad Pitt",         180L,
+        "Kevin Hart",         157L
+  )
+```
+
+```{r include = FALSE}
+celeb_heights %>% 
+  arrange(Height)
+```
+
+
+```{r include = FALSE}
+set.seed(0)
+celeb_heights %>% 
+  sample_n(12, replace = TRUE)
+```
+
+```{r include = FALSE}
+set.seed(0)
+rerun(.n = 3, resample = sample_n(celeb_heights, size = 12, replace = TRUE)) %>% 
+  flatten()
+```
+
+
+class:middle, inverse, center
+
+## ModernDive
+
+[Chapter 8: Sampling](https://moderndive.com/8-sampling.html)
+
+[Chapter 9: Confidence Intervals](https://moderndive.com/9-confidence-intervals.html)
+
+---
+class:middle, inverse, center
+## Plan for today
+
+--
+
+## Bootstrapping
+
+![](https://media.giphy.com/media/pfhdDIOWiYXaE/giphy.gif)
+
+---
+class:middle, inverse, center
+`r emo::ji("alarm")`
+## Challenge
+
+What is "bootstrapping"?
+
+What is a "confidence interval"?
+
+
+---
+class:middle, inverse, center
+`r emo::ji("island")`
+## Laptops down for now
+
+What is "bootstrapping"?
+
+--
+<br>
+How: 
+
+Simulate the distribution by *drawing samples with replacement*
+
+--
+<br>
+Why:
+
+The data we originally collect estimates its own *approximate sampling distribution*. Given the data we have, what data *could* we have had?
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.001.png)
+
+According to http://www.heightdb.com/
+
+---
+## Just the male celebrities
+
+![](images/bootstrap-slides/bootstrap-slides.002.png)
+
+---
+## EDA on `celeb_heights`
+
+
+```{r out.width = "50%"}
+ggplot(celeb_heights, aes(x = Height)) +
+  geom_histogram(binwidth = 5, color = "white", fill = "turquoise")
+```
+
+---
+## EDA on `celeb_heights`
+
+```{r}
+library(skimr)
+skim(celeb_heights)
+
+options(pillar.sigfig = 5) # important!!
+(x_bar <- celeb_heights %>% 
+  summarize(stat = mean(Height)))
+```
+
+
+
+
+---
+## Quantifying uncertainty
+
+We got an $\bar{x} =$ `r x_bar %>% pull() %>% round(., 2)`. What is the uncertainty around this estimate, based on our sample data?
+
+```{r out.width = "50%"}
+ggplot(celeb_heights, aes(x = Height)) +
+  geom_histogram(binwidth = 5, color = "white", fill = "turquoise") +
+  geom_vline(aes(xintercept = mean(Height)), colour = "red")
+```
+
+
+---
+
+
+![](images/bootstrap-slides/bootstrap-slides.003.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.004.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.005.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.006.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.007.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.008.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.009.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.010.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.011.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.012.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.013.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.014.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.015.png)
+
+---
+
+![](images/bootstrap-slides/bootstrap-slides.016.png)
+
+---
+class:middle, center, inverse
+## How to do this in R
+
+
+---
+class:middle
+## Let's start with one resample
+
+.pull-left[
+
+```{r}
+set.seed(0)
+(resamp_heights <- celeb_heights %>% 
+  sample_n(12, replace = TRUE))
+```
+
+]
+
+.pull-right[
+
+```{r echo = FALSE}
+ggplot(resamp_heights, aes(x = Height)) +
+  geom_histogram(binwidth = 5, colour = "white") +
+  geom_vline(aes(xintercept = mean(Height)), colour = "red")
+```
+
+The mean is `r mean(resamp_heights$Height) %>% round(., 2)`
+]
+
+
+---
+class:middle
+## Let's do three
+
+
+```{r}
+set.seed(0)
+three <- rerun(.n = 3, resample = sample_n(celeb_heights, 
+                                           size = 12, 
+                                           replace = TRUE)) %>% 
+  flatten()
+```
+
+.pull-left[
+```{r}
+three %>% pluck(2)
+```
+]
+
+.pull-left[
+```{r}
+three %>% pluck(3)
+```
+]
+
+---
+class:middle
+## Let's visualize two
+
+.pull-left[
+```{r echo = FALSE}
+three %>% pluck(2) %>% 
+  ggplot(., aes(x = Height)) +
+  geom_histogram(binwidth = 5, colour = "white") +
+  geom_vline(aes(xintercept = mean(Height)), colour = "red")
+```
+
+The mean is `r three %>% pluck(2) %>% summarize(xbar = mean(Height)) %>% pull() %>% round(., 2)`
+]
+
+.pull-left[
+```{r echo = FALSE}
+three %>% pluck(3)  %>% 
+  ggplot(., aes(x = Height)) +
+  geom_histogram(binwidth = 5, colour = "white") +
+  geom_vline(aes(xintercept = mean(Height)), colour = "red")
+```
+
+The mean is `r three %>% pluck(3) %>% summarize(xbar = mean(Height)) %>% pull() %>% round(., 2)`
+]
+
+---
+class:middle, center, inverse
+## Let's do 1,000!
+
+![](https://media.giphy.com/media/YGwNReSwzObrG/giphy.gif)
+
+---
+class:middle, center, inverse
+## We need to use `infer`
+
+---
+
+
+![](images/infer_ci.jpeg)
+
+---
+## `infer` for bootstrapping
+
+
+- `specify()` the DV;
+- `generate()` new resamples:
+    - Resample from our original data **with replacement**, so set `type = "bootstrap"`
+    - Do this **a ton of times** (`reps = 1000`)
+- `calculate()` a summary statistic (here, `stat = "mean"`) for each `rep`
+- `visualize()` the bootstrap distribution of DV means (add `obs_stat = x_bar`)
+
+
+---
+class:middle
+## For one resample
+
+.pull-left[
+
+I used this code before...
+
+```{r}
+set.seed(0)
+(resamp_heights <- celeb_heights %>% 
+  sample_n(12, replace = TRUE))
+```
+
+]
+
+.pull-right[
+
+Now we switch to `infer`
+```{r}
+set.seed(0)
+(resamp_heights <- celeb_heights %>% 
+  specify(response = Height) %>% 
+  generate(reps = 1, 
+           type = "bootstrap"))
+```
+
+]
+
+
+---
+class:middle
+## Let's do three
+
+```{r}
+set.seed(0)
+resamp_heights <- celeb_heights %>% 
+  specify(response = Height) %>% 
+  generate(reps = 3, 
+           type = "bootstrap")
+```
+
+--
+
+.pull-left[
+```{r}
+resamp_heights %>% 
+  count(replicate)
+```
+]
+
+.pull-right[
+```{r}
+resamp_heights %>% 
+  group_by(replicate) %>% 
+  summarize(xbar = mean(Height))
+```
+]
+---
+class:middle
+## For 1,000 resamples
+
+```{r}
+set.seed(0)
+resamp_heights <- celeb_heights %>% 
+  specify(response = Height) %>% 
+  generate(reps = 1000, 
+           type = "bootstrap")
+```
+
+--
+
+.pull-left[
+```{r}
+resamp_heights %>% 
+  count(replicate)
+```
+]
+
+.pull-right[
+```{r}
+resamp_heights %>% 
+  group_by(replicate) %>% 
+  summarize(xbar = mean(Height))
+```
+]
+
+
+---
+class: center, middle, inverse
+
+## We now have 1,000 means
+
+![](https://media.giphy.com/media/xT0GqIsBdw6mkKbq0g/giphy.gif)
+
+This is too many numbers to summarize in a table. We need to *summarize* and *visualize* these numbers.
+
+---
+```{r out.width='50%'}
+ch_means <- celeb_heights %>% 
+  specify(response = Height) %>% 
+  generate(reps = 1000, 
+           type = "bootstrap") %>% 
+  calculate(stat = "mean")
+
+ch_means %>% 
+  visualize()
+```
+
+---
+```{r out.width = '50%'}
+ch_means %>% 
+  visualize(obs_stat = x_bar)
+```
+
+---
+```{r out.width = '50%'}
+ch_means %>% 
+  visualize(obs_stat = x_bar) +
+  geom_vline(aes(xintercept = mean(stat)), lty = 3, lwd = 3, colour = "green")
+```
+
+"the bootstrap distribution is centered at the original sample mean"
+
+https://arxiv.org/pdf/1411.5279.pdf
+
+---
+```{r}
+(percentile_ci <- ch_means %>% 
+  get_ci())
+```
+
+```{r out.width='50%'}
+ch_means %>% 
+  visualize(endpoints = percentile_ci, direction = "between")
+```
+
+---
+Using the percentile method, our range of plausible values for the mean height of male celebrities is `r round(percentile_ci[["2.5%"]], 2)` to `r round(percentile_ci[["97.5%"]], 2)` centimeters.
+
+You can see that 95% of the data stored in the `stat` variable in `ch_means` falls between the two endpoints with 2.5% to the left outside of the shading and 2.5% to the right outside of the shading. 
+
+```{r out.width='50%'}
+ch_means %>% 
+  visualize(endpoints = percentile_ci, direction = "between")
+```
+
+
+---
+## The standard error method
+
+```{r}
+standard_error_ci <- ch_means %>% 
+  get_ci(type = "se", point_estimate = x_bar)
+standard_error_ci
+
+ch_means %>% 
+  summarize(se = sd(stat))
+```
+
+Remember that the standard deviation of the sampling distribution is the standard error, frequently denoted as `se`.
+
+---
+## The classical way
+
+
+```{r}
+ch_means %>% 
+  summarize(se = sd(stat))
+```
+
+--
+
+The `SE` is the standard deviation dividing by square root of the sample size.
+```{r}
+celeb_heights %>% 
+  summarize(sd_height = sd(Height),
+            mean_height = mean(Height),
+            se_height = sd_height/sqrt(n()))
+```
+
+
+```{r include = FALSE, eval = FALSE}
+mydir <- here::here("slides", "images", "bootstrap-slides")
+plot_files <- list.files(paste0(mydir, pattern = "*.png"))
+for (i in 1:length(plot_files)) {
+  cat('![](', paste0(dir, "/plots/", plot_files[i]), '){width=900px}\n\n', sep = '')
+}
+
+library(fs)
+file_nums <- str_pad(seq(1:16), 3, pad = "0")
+my_files <- str_c("bootstrap-slides.", file_nums)
+# dir_ls(here::here("slides", "images", "bootstrap-slides"), recursive = TRUE, glob = "*.png")
+path("slides", "images", "bootstrap-slides", my_files, ext = "png")
+#https://stackoverflow.com/questions/48176518/looping-through-images-in-directory-ioslides
+```
+
+
+
+
+
+
+```{r cars, include = FALSE, eval = FALSE, results='asis'}
+library(tidyverse)
+
+plot_function <- function(var) {
+  subset_df <- subset(mtcars, cyl == var)
+  
+  p <- ggplot() + geom_point(data = subset_df, aes(x = hp, y = mpg))
+  
+  
+  print(p)
+  cat("\n\n")
+  cat("---")
+  cat("\n\n")
+  
+}
+
+cyl_options <- c(4,6,8)
+walk(cyl_options, plot_function)
+```
+
+
