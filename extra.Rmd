@@ -20,14 +20,14 @@ The following assignments can replace either a missed lab or a low grade on a la
 1. Make a cheatsheet
     - Make a cheatsheet for something you feel would be helpful for future students. Use the [RStudio Cheatsheet](https://www.rstudio.com/resources/cheatsheets/how-to-contribute-a-cheatsheet/) template (either Keynote or Powerpoint).
 1. "Stretch" exercises
-    - Write up at least three ~20 minute "stretch" exercises as an "add-on" to one of our existing labs. The stretch exercises should teach additional concepts beyond what we covered in our lab using the same data, and should have specific stated learning objectives and accompanying solutions (both R code + narrative). 
+    - Write up at least three ~20 minute "stretch" exercises (so ~60 min total) as an "add-on" to one of our existing labs. The stretch exercises should teach additional concepts beyond what we covered in our lab using the same data, and should have specific stated learning objectives and accompanying solutions (both R code + narrative). 
 
 # Integrative make-up labs
 
 The following assignments can replace a missed integrative lab (not a low grade). Each integrative make-up lab will be graded by Dr. Hill at the end of the quarter. Integrative make-up labs will be graded as all-or-nothing: 5 or 0 points.
 
 1. Create the "missing" lab
-    - This is your opportunity to create an original lab that covers a topic you feel deserved more attention or coverage in class than it got. Wish we had a lab on advanced data wrangling? Want to dig more into `ggplot2`? Have ideas for a tidy data lab? Need to use non-linear regression for your own research and wish we had covered it? Make the missing lab! You may wish to ask a peer to review your tutorial before submitting it. The lab should be comprehensive and must include:
+    - This is your opportunity to create an original lab that covers a topic you feel deserved more attention or coverage in class than it got. Wish we had a lab on advanced data wrangling? Want to dig more into `ggplot2`? Have ideas for a tidy data lab? Need to use non-linear regression for your own research and wish we had covered it? Make the missing lab! You may wish to ask a peer to review your lab before submitting it. The lab should be comprehensive and must include:
         - Learning objectives, 
         - Packages needed, 
         - Data (either original or open access, but how to access the data must be spelled out), and 
