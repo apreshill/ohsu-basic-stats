@@ -20,7 +20,7 @@ The following assignments can replace either a missed lab or a low grade on a la
 1. Make a cheatsheet
     - Make a cheatsheet for something you feel would be helpful for future students. Use the [RStudio Cheatsheet](https://www.rstudio.com/resources/cheatsheets/how-to-contribute-a-cheatsheet/) template (either Keynote or Powerpoint).
 1. "Stretch" exercises
-    - Write up at least three ~20 minute "stretch" exercises (so ~60 min total) as an "add-on" to one of our existing labs. The stretch exercises should teach additional concepts beyond what we covered in our lab using the same data, and should have specific stated learning objectives and accompanying solutions (both R code + narrative). 
+    - Write up at least three ~10 minute "stretch" exercises (so ~30 min total) as an "add-on" to one of our existing labs. The stretch exercises should teach additional concepts beyond what we covered in our lab using the same data, and should have specific stated learning objectives and accompanying solutions (both R code + narrative). 
 
 # Integrative make-up labs
 
