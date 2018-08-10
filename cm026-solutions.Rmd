@@ -1,0 +1,507 @@
+---
+title: 'CONJ620: CM 2.6'
+author: "Alison Hill"
+subtitle: Integrative Lab
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+# leave this chunk alone
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300)
+
+inline_hook <- function(x) {
+  if (is.numeric(x)) {
+    format(x, digits = 2)
+  } else x
+}
+knitr::knit_hooks$set(inline = inline_hook)
+```
+
+# Overview
+
+The goal of this lab is to carefully, thoroughly, and thoughtfully conduct an linear regression analysis. You are also asked to communicate clearly about the steps in your analysis process with others, by sharing your R code, output, and narrative. As such, your code cannot "stand alone"- it is meant to complement / enhance / support your narrative. As with our previous [integrative lab](cm016.html), this lab will be due in two stages:
+
+1. A complete knitted `html` file is due on Sakai by Thursday August 9th at 2:30pm. 
+2. After class on August 9th, you'll be provided with a code key. You are asked to review your initial submission, and reflect on your own code/narrative after reviewing the key thoroughly. Your self-assessment is due on Sakai by beginning of class Tuesday August 14th (2:30pm). 
+
+Using the key, your self-assessment should include even **more** narrative; where you made mistakes, you must discuss and analyze where you went wrong, and correct them without copying/pasting directly from the key (this typically means that you need to include more narrative than we provide in the key). A good self-assessment will include:
+
+- Assessment of the accuracy and completeness of your "initial solutions"
+- Correct worked solutions with some discussion and analysis of why your initial solution was incorrect, and reflection on the source of your confusion (if you got an answer correct, this is not necessary)
+- Attributions as appropriate to other students who helped you, or other sources such as lecture notes, readings, online resources, etc. that helped you 
+
+# Logistics
+
+You will use R Markdown to construct your analysis report. You'll submit your work as an html file knit from your `.Rmd` file (please leave the default code chunk options for `eval = TRUE` and `echo = TRUE`). Your lab should serve as your own personal cheatsheet in the future for regression analyses. Give yourself the cheatsheet you deserve! 
+
+For all things, code and narrative, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule). You'll need this loaded at the top:
+
+```{r warning = FALSE, message = FALSE}
+library(tidyverse) # all the good stuff
+library(readxl) # for reading in xlsx files
+library(janitor) # for clean_names
+library(knitr) # for kable
+library(moderndive) # for getting tables
+library(corrr) # for correlation matrix
+library(skimr) # for skim
+library(GGally) # for ggpairs
+library(broom) # for pulling out model results
+```
+
+
+# The Data
+
+You will work with an open access dataset from a publication in PLOS ONE titled:
+[_Vitamin D Status among Thai School Children and the Association with 1,25-Dihydroxyvitamin D and Parathyroid Hormone Levels_](https://dx.doi.org/10.1371%2Fjournal.pone.0104825). The data is available as an excel file on [Data Dryad](https://datadryad.org/resource/doi:10.5061/dryad.7763s/1), where you can download the `.xlsx` file.
+
+You could also access the data through a package called [`rdryad`](https://github.com/ropensci/rdryad), from [ROpenSci](https://ropensci.org), which allows you to access the DataDryad Application Programming Interface (API) from within R. To go this route, follow my code:
+
+
+```{r}
+# install.packages("rdryad")
+# install.packages("purrr")
+library(rdryad) # to access the API
+library(readxl) # to read in the xlsx file
+library(purrr) # for 1 function: pluck!
+path_to_xlsx <- dryad_fetch(dryad_files(doi = '10.5061/dryad.7763s/1')) %>% 
+  pluck(1)
+vitd <- read_xlsx(path_to_xlsx, sheet = 1)
+```
+
+I'm also going to recommend you use the `janitor::clean_names` function, because some of these variable names start with an underscore and therefore will always need to be referenced surrounded by backticks.
+
+```{r}
+library(janitor)
+vitd <- vitd %>% 
+  clean_names()
+glimpse(vitd)
+```
+
+That is better! You are ready to start exploring the `vitd` data.
+
+# Your Mission
+
+We'll conduct a linear regression analysis to examine the impact of age, and its interaction with sex, along with height-for-age Z score on serum 25(OH)D concentrations (a measure of vitamin D levels). If you read in the data using `rdryad`, you can also download the codebook like this:
+
+```{r}
+codebook <- read_xlsx(path_to_xlsx, sheet = 2)
+```
+
+
+The relevant variables you will need are:
+
+```{r}
+lm_vars <- c("sex", "_zhfa", "ageyears", "_25D")
+codebook %>% 
+  filter(Variable %in% lm_vars) %>% 
+  knitr::kable()
+```
+
+<br>
+Please note that the variable names in the codebook won't exactly match those in your data if you use `janitor::clean_names()`! All `_` will be replaced by `x` so that you don't have to type backticks in your later R code.
+
+
+# Exploratory Data Analysis
+
+Conduct a thorough EDA of the four variables defined above in the vitamin D dataset. Recall that a [new exploratory data analysis](http://moderndive.netlify.com/6-regression.html#model1EDA) involves three things:
+
+* Looking at the raw values.
+    * `dplyr::glimpse()`
+* Computing summary statistics of the variables of interest.
+    * `skimr::skim()`
+    * `corrr::correlate()`
+* Creating informative visualizations.
+    * `ggplot2::ggplot()`
+        * `geom_histogram()` or `geom_density()` for numeric continuous variables
+        * `geom_bar()` or `geom_col()` for categorical variables
+    * `GGally::ggpairs()`
+        * Note that you can add transparency to points/density plots in the `aes` call, for example: `aes(colour = sex, alpha = 0.7)`
+
+You may wish to have a level 1 header (`#`) for your EDA, then use level 2 sub-headers (`##`) to make sure you cover all three EDA bases. Remember from our previous [EDA for regression lab](cm024.html), **at a minimum** you should answer these questions:
+
+- How many variables/columns?
+- How many rows/observations?
+- Which variables are numbers?
+- Which are categorical variables (numeric or character variables with variables that have a fixed and known set of possible values; aka [factor](https://stats.idre.ucla.edu/r/modules/factor-variables/) variables)?
+- Complete this sentence: "There is one row per..."
+- What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable (like `sex`)?
+
+At this stage, you may also find you want to use `filter`, `mutate`, `arrange`, `select`, or `count`. Let your questions lead you! 
+
+## EDA Solutions
+
+```{r include = TRUE}
+vitd %>% 
+  count(id, sort = TRUE)
+small_vitd <- vitd %>% 
+  select(ageyears, sex, x25d, zhfa)
+glimpse(small_vitd)
+skim(small_vitd)
+small_vitd %>% 
+  group_by(sex) %>% 
+  skim()
+ggpairs(small_vitd, aes(colour = sex, alpha = 0.7),
+        columns = c("x25d", "ageyears", "zhfa"))
+```
+
+
+
+
+Note: to change color of text in a markdown list, use this command before your list: `<ul style="color:cadetblue">` and this command at the end of the list `</ul>`.
+
+<ul style="color:cadetblue">
+- How many variables/columns?
+    - `r ncol(small_vitd)` (I selected just the variables I need)
+- How many rows/observations?
+    - `r nrow(small_vitd)`, but due to missing data, the `lm` will only use `r small_vitd %>% drop_na(x25d) %>% nrow()` observations
+- Which variables are numbers?
+    - `ageyears` is a number, with 0 missing values- range of `r min(small_vitd$ageyears)` to `r max(small_vitd$ageyears)`
+    - `x25d` is a number, with 8 missing values- range of `r min(small_vitd$x25d, na.rm =TRUE)` to `r max(small_vitd$x25d, na.rm =TRUE)`
+    - `zhfa` is a number, with 0 missing values- range of `r min(small_vitd$zhfa)` to `r max(small_vitd$zhfa)`
+- Which are categorical variables (numeric or character variables with variables that have a fixed and known set of possible values; aka [factor](https://stats.idre.ucla.edu/r/modules/factor-variables/) variables)?
+    - `sex` is a categorical variable- the codebook states that `F` = Female, `M` = Male. This means if I treat this variable as a factor, female will be the default reference level of that factor because it comes first alphabetically
+- Complete this sentence: "There is one row per..."
+    - There is one row per study participant 
+- What are the correlations between variables? Does each scatterplot support a linear relationship between variables? Do any of the correlations appear to be conditional on the value of a categorical variable (like `sex`)?
+    - The correlation between vitamin d levels and age looks like it may depend on sex- there is a negative correlation for females (`r small_vitd %>% filter(sex == "F") %>% summarize(corfem = cor(ageyears, x25d, use = "complete")) %>% pull()`) but not for males (`r small_vitd %>% filter(sex == "M") %>% summarize(corm = cor(ageyears, x25d, use = "complete")) %>% pull()`). For girls, it seems like vitamin d levels decrease as age increases, although the linearity of this association is difficult to see from the bivariate scatterplot.
+    - Height-for-age z-scores do not seem to be meaningfully correlated with vitamin d or age, for females or males.
+</ul>
+
+
+# Regression Modeling
+
+Fit a multiple regression model to predict serum 25(OH)D concentrations (`x25d` if you used `janitor::clean_names()`; `_25D` if you did not) and get the regression table. Your model should include:
+
+* An intercept term
+* A coefficient for age in years (`ageyears`)
+* A coefficient for sex (`sex`)
+* A coefficient for the interaction between age and sex (`ageyears:sex`)
+* A coefficient for height-for-age z-scores (`zhfa` if you used `janitor::clean_names()`, `_zhfa` if not)
+
+Interpret the output from the regression table (in complete sentences, but you may use bullet points to organize). You may wish to enhance the interpretability of your results by [mean centering numerical predictor variables](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/j.2041-210X.2010.00012.x).
+
+Some examples:
+
+- Parallel slopes example [here](http://moderndive.netlify.com/7-multiple-regression.html#model4table)
+- Interaction model [here](http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable)
+    
+The authors state: "Specifically, serum 25(OH)D concentrations were 19% higher in males at the mean age (9.9 years)." They also state: "females experienced a...4% decline in serum 25(OH)D levels for each increasing year of age; no decline was seen in male participants with increasing age". In your narrative, walk through how you would use the numbers in the regression table to arrive at these numbers- are they accurate based on your regression model output?
+
+## Regression Modeling Solutions
+
+```{r include = TRUE}
+small_vitd <- small_vitd %>% 
+  mutate(age_ctr = ageyears - mean(ageyears))
+dmod <- lm(x25d ~ age_ctr*sex + zhfa, data = small_vitd)
+get_regression_table(dmod)
+```
+
+
+The modeling equation for males is:
+$$\hat{y}_{male} = 78.9 -.13~\textrm{age_ctr} - 1.73~\textrm{zhfa}$$
+The modeling equation for females is:
+$$\hat{y}_{female} = 66.4 -3.09~\textrm{age_ctr} - 1.73~\textrm{zhfa}$$
+
+<ul style="color:cadetblue">
+- Females are treated as the baseline for comparison for no other reason than “female” is alphabetically earlier than “male.” The $b_{male} = 12.5$ is the vertical “bump” that males get in their vitamin d levels. Or more precisely, it is the average difference in vitamin d levels that males get relative to the baseline of females. From `skimr` output, we can see this is the difference between $\bar{x}_{F}$ = `r small_vitd %>% group_by(sex) %>% summarize(m_d = mean(x25d, na.rm = TRUE)) %>% pull(2) %>% pluck(1)` and $\bar{x}_{M}$ = `r small_vitd %>% group_by(sex) %>% summarize(m_d = mean(x25d, na.rm = TRUE)) %>% pull(2) %>% pluck(2)`
+- We see that females have a lower intercept, and, as they age, they have a more steep associated average decrease in teaching scores: 3.09 vitamin d level units per year as opposed to .13 for males. 
+- Both males and females have the same slope for `zhfa`. In other words, in this model the associated effect of height is the same for males and females. So for every increase of one unit in height-for-age z-scores, there is on average an associated change of $b_{zhfa}$ = -1.73 (a decrease) in vitamin d levels.
+- "Specifically, serum 25(OH)D concentrations were 19% higher in males at the mean age (9.9 years)."
+    - Because I centered the age variable at the mean age (9.9 years), we can compare the intercepts: $(78.9-66.4)/66.4 * 100 = 18.8%$
+- "females experienced a...4% decline in serum 25(OH)D levels for each increasing year of age; no decline was seen in male participants with increasing age"
+    - For each increasing year of age, females had 3.09 less units of vitamin d. If we take the mean age level of 66.4: $3.09/66.4 * 100 = 4.65%$
+</ul>
+
+
+# Residual Analysis
+
+Examine the model residuals following using `get_regression_points(my_model)`. Perform a (raw) residual analysis first with a histogram, faceting by `sex`. Also look at the residuals as compared to the three predictor variables:
+
+- $x_1$: numerical explanatory/predictor variable of `age`
+- $x_2$: categorical explanatory/predictor variable of `sex`
+- $x_3$: numerical explanatory/predictor variable of height-for-age z-scores (`zhfa` if you used `janitor::clean_names()`, `_zhfa` if not)
+
+Explain (a) what you are looking for in the plots, and (b) what you see in the context of assessing how "well" the linear model fits the data.
+
+Some examples:
+
+- Parallel slopes example [here](http://moderndive.netlify.com/7-multiple-regression.html#model3residuals)
+- Interaction model [here](http://moderndive.netlify.com/7-multiple-regression.html#model4residuals)
+
+
+## Residual Analysis Solutions
+
+Note: to change color of text in markdown plain text, use this command before your text: `<span style="color:cadetblue">` and this command at the end `</span>`.
+
+<span style="color:cadetblue">
+Residuals appear roughly unimodal, symmetric, and bell-shaped for both males and females. I don't see any distinct patterns in the residuals for either sex, although in general, larger residuals seem to be more common among males than females, suggesting that the model may work better in terms of accurately predicting vitamin d levels among females compared to males.
+</span>
+
+```{r include = TRUE}
+d_pts <- get_regression_points(dmod)
+ggplot(d_pts, aes(x = residual)) +
+  geom_histogram(binwidth = 10, color = "white") +
+  labs(x = "Residual") +
+  facet_wrap(~sex)
+```
+
+```{r include = TRUE}
+ggplot(d_pts, aes(x = age_ctr, y = residual)) +
+  geom_point() +
+  labs(x = "age", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1) +
+  facet_wrap(~ sex)
+```
+
+```{r include = TRUE}
+ggplot(d_pts, aes(x = zhfa, y = residual)) +
+  geom_point() +
+  labs(x = "age", y = "Residual") +
+  geom_hline(yintercept = 0, col = "blue", size = 1) +
+  facet_wrap(~ sex)
+```
+
+
+
+# Outlier Analysis
+
+Examine points with high leverage and discrepancy (use the externally studentized residuals as the index for discrepancy). Remember that these statistics are not in the output of the `moderndive::get_regression_points()` function- you'll want to use `broom::augment()` instead.
+
+* How many observations would you expect to have high discrepancy in this sample? 
+    * You may want to account for how many females versus males you would expect
+* Do you see any observations that have *both* high leverage and discrepancy? 
+* Do any points that are either high leverage or high discrepancy **also** have high influence on the regression estimates, as measured by Cook's distance?
+* Would you exclude any observations from your model? Justify your answer either way.
+* In general, would you say the overall model fit is better for females or males? Why or why not?
+
+## Outlier Analysis Solutions
+
+```{r include = TRUE}
+d_diag <- augment(dmod, data = vitd) %>% 
+  mutate(.ext.resid = rstudent(dmod))
+
+# leverage
+k <- 3
+mean_hat <- (k + 1)/nrow(small_vitd)
+d_diag %>% 
+  select(id, .hat) %>%
+  filter(.hat > (3*mean_hat))
+
+# discrepancy
+d_diag %>%
+  filter(abs(.ext.resid) >= 2) %>%
+  select(id, ageyears, .resid, .std.resid, .ext.resid) %>% 
+  arrange(desc(abs(.ext.resid)))
+
+# leverage and discrepancy
+d_diag %>% 
+  select(id, .hat, .ext.resid) %>%
+  filter(.hat > (3*mean_hat) & abs(.ext.resid) >= 2)
+
+# discrepancy by gender
+d_diag %>%
+  filter(abs(.ext.resid) >= 2) %>%
+  count(sex)
+```
+
+```{r include = TRUE}
+n <- nrow(small_vitd)
+k <- 3 # predictors (not including intercept)
+d <- 4/(n - k - 1)
+d
+
+d_diag %>%
+  filter(.cooksd > d) %>% 
+  select(id, x25d, .cooksd) %>% 
+  arrange(desc(.cooksd))
+
+ggplot(d_diag, aes(x = .hat, y = .cooksd, color = sex)) + 
+  geom_point() +
+  geom_text(aes(label = id), size = 3, vjust = 2) + 
+  geom_hline(aes(yintercept = d), colour = "red", lty = "dashed") +
+  geom_vline(aes(xintercept = 3*mean_hat), color = "dodgerblue", lty = "dashed")
+
+ggplot(d_diag, aes(x = .ext.resid, y = .cooksd, color = sex)) + 
+  geom_point() +
+  geom_text(aes(label = id), size = 3, vjust = 2) + 
+  geom_hline(aes(yintercept = d), colour = "red", lty = "dashed") +
+  geom_vline(xintercept = c(-2, 2), color = "dodgerblue", lty = "dashed")
+```
+
+
+
+<ul style="color:cadetblue">
+* How many observations would you expect to have high discrepancy in this sample? You may want to account for how many females versus males you would expect.
+  - DISCREPANCY: I expect 5% of observations to have high discrepancy, which is measured by externally studentized residuals, so I would expect generally $.05 \times 529 = 26$ observations to be high on this metric. Given the roughly equal sample sizes, this means I'd expect 13 high values for males and females. Instead, I see 7 females with high leverage, compared to 19 males. This is a pretty big difference, and suggests (as I observed with the unstandardized "raw" residuals), that the model may better explain variability in vitamind d levels for females than for males.
+* Do you see any observations that have *both* high leverage and discrepancy? 
+  - LEVERAGE: 9 observations with high leverage.
+  - LEVERAGE + DISCREPANCY: 0 observations. Huzzah.
+* Do any points that are either high leverage or high discrepancy **also** have high influence on the regression estimates, as measured by Cook's distance?
+  - Yes! I do see one point with high leverage (`.hat`) and high cooks d values: 755 (a male)
+    - Generally I see more green than pink above both cut-offs
+  - Same story comparing high discrepancy and cooks d values: a lot of points here, mainly green. 755 doesn't show up as an extreme for discrepancy.
+* Would you exclude any observations from your model? Justify your answer either way.
+  - There are a lot of "flags" here, but I would not exclude anyone! If I were a vitamin d researcher, I might want to find out what the range of biologically plausible values are for vitamin d levels generally, so that I might have an objective way to identify, for example, where lab testing of vitamin d levels went awry. But as is, I have no way to identify incorrect data from unusual data.
+* In general, would you say the overall model fit is better for females or males? Why or why not?
+  - Across most metrics, the pattern suggests that the model explains variability in vitamin d levels better for females compared to males.
+
+</ul>
+
+# Sums of Squares
+
+Fill in the blanks in the following code block to calculate the Residual, Model, and Total Sums of Squares:
+
+```{r pseudo, eval = FALSE}
+vitd_ss <- d_diag %>% 
+  summarise(total_ss = sum((___ - mean(___))^2),
+            resid_ss = sum((___ - ___)^2), 
+            model_ss = sum((___ - mean(___))^2))
+vitd_ss
+```
+
+Using `dplyr`, show that:
+
+* The total sums of squares is equal to the residual plus the model sums of squares
+
+$$\textrm{total_ss} = \textrm{resid_ss} + \textrm{model_ss}$$
+
+* The total sums of squares divided by $(n-1)$ is equal to the variance of the `y` outcome variable (*hint:* you may need to look how many observations actually contributed to the model- not the same as the original $n$ due to missing values!)
+
+$$var_y = \frac{\textrm{total_ss}}{n-1}$$
+
+* The $R^2$ value in your model output is the model sums of squares divided by the total sums of squares (*hint:* `broom::glance(my_model)`).
+
+$$R^2 = \frac{\textrm{model_ss}}{\textrm{total_ss}}$$
+
+
+## Sums of Squares Solutions
+
+```{r include = TRUE}
+vitd_ss <- d_diag %>% 
+  summarise(total_ss = sum((x25d - mean(x25d))^2),
+            resid_ss = sum((x25d - .fitted)^2), 
+            model_ss = sum((.fitted - mean(x25d))^2),
+            total = resid_ss + model_ss,
+            rsq = model_ss / total_ss,
+            var_est = total_ss / (n()-1),
+            vitd_var = var(x25d))
+vitd_ss
+glance(dmod)
+```
+
+
+
+
+# The NULL Model
+
+In class, I asserted that `lm` is by default comparing the model you specify in your `lm` call to a null model defined by using a line with an intercept but slope = 0, which estimates the mean of $y$. Let's build an intercept-only linear regression model to prove this.
+
+```{r}
+vitd_complete <- small_vitd %>% 
+  drop_na(x25d, sex, ageyears, zhfa)
+int_mod <- lm(x25d ~ 1, data = vitd_complete)
+get_regression_table(int_mod)
+```
+
+What is the "estimate" equal to here (**hint:** look back at your `skim` output)?
+
+```{r}
+anova(int_mod, dmod) # insert your model name from above instead of "dmod"
+```
+
+Use the code above to use the `anova` function to compare the intercept-only model to your linear regresssion model. Look very carefully at this output and answer these questions:
+
+* What is the `RSS` for line 1 (corresponding to the intercept-only model, Model 1) equal to that you calculated above?
+* What is the `RSS` for line 2 (corresponding to Model 2) equal to that you calculated above?
+* What is the `Sum of Sq` equal to that you calculated above?
+* In < 3 sentences, explain what it means to use `lm(y ~ x + z)` versus `lm(y ~ 1)`, and what happens "under the hood" here that you now see in the `anova` output. 
+
+## NULL Model Solutions
+
+<ul style="color:cadetblue">
+* What is the `RSS` for line 1 (corresponding to the intercept-only model, Model 1) equal to that you calculated above?
+    - The total sums of squares, `r vitd_ss %>% pull(1)`
+* What is the `RSS` for line 2 (corresponding to Model 2) equal to that you calculated above?
+    - The residual sums of squares, `r vitd_ss %>% pull(2)`
+* What is the `Sum of Sq` equal to that you calculated above?
+    - The model sums of squares, `r vitd_ss %>% pull(3)`
+* In < 3 sentences, explain what it means to use `lm(y ~ x + z)` versus `lm(y ~ 1)`, and what happens "under the hood" here that you now see in the `anova` output. 
+    - `lm` compares the model I entered to an intercept-only model- it estimates the fit of my model in minimizing the residual sums of squares, and compares that to what is left over or residual after using the mean vitamin d level across all children to predict individual vitamin d levels for each child. The $R^2$ for my model was `r glance(dmod) %>% pull(1)`, which is the ratio of the model sums of squares to the total sums of squares. That is the same as calculating:
+    
+$$1 - \frac{\textrm{Model2}~RSS}{\textrm{Model1}~RSS} = 1 - \frac{95561}{125063} = .236$$
+    
+</ul>
+
+# Replicate a Plot
+
+In the [original paper](https://dx.doi.org/10.1371%2Fjournal.pone.0104825), they presented this figure:
+
+![](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4128742/bin/pone.0104825.g001.jpg)
+<br>
+Figure 1
+Relation between age in years and serum 25-hydroxyvitamin D (nmol/L) concentrations stratified by gender.
+<br>
+Look at the published figure carefully:
+
+* What appears to be the minimum value of serum 25D levels?
+* What appears to be the max?
+* Do those match your EDA?
+* Recreate this figure in `ggplot2` using the observed data (ignore height-for-age z-scores at this point). 
+* Make the same plot where the y-axis should now be mapped to the fitted value for the outcome variable (using the full model with height-for-age z-scores in it). Discuss the differences you see between this plot and the previous. Were you able to recreate the published figure? Is it helpful in understanding the researchers' findings? Was it misleading at all?
+
+## Replicate a Plot Solutions
+
+<span style="color:cadetblue">
+I'll leave the straight-forward answers as a given- they don't match the EDA, we are definitely looking at a plot of fitted values, not the original data. It may have been helpful to put that in the figure legend. The plot is helpful for visualizing the results of the regression analyses, but clarifying that the points were fitted including other variables in the model not pictured (here, `zhfa`) would have made it more reproducible and potentially less misleading.
+</span>
+
+```{r include = TRUE}
+ggplot(d_pts, aes(x = age_ctr, 
+                 y = x25d,
+                 color = sex)) +
+  geom_point(alpha = .5)
+```
+
+```{r include = TRUE}
+ggplot(d_pts, aes(x = age_ctr, 
+                 y = x25d_hat,
+                 color = sex)) +
+  geom_point(alpha = .5)
+```
+
+
+
+
+# Report your process
+
+You’re encouraged to reflect on what was hard/easy, problems you solved, helpful tutorials you read, etc. Give credit to your sources, whether it’s a blog post, a fellow student, an online tutorial, etc.
+
+# Grading
+
+This lab is worth 5 points total, scored as follows:
+
+2 points for your initial submission being “in-good-faith”:
+
+- 2 (Strong attempt): narrative and code reflects strong independent problem solving, with clearly thought out attempts to approach the problems and a diligent and honest effort to find solutions.
+
+- 1 (Adequate attempt): narrative and code reflects some attempt to approach the problems, but approach appears to be superficial and lacks depth of analysis.
+
+- 0 (No attempt or incomplete): No submission, or didn't interpret anything but left it all to the "reader". Or more than one technical problem that is relatively easy to fix.
+
+
+3 points for the quality of the final self-assessment:
+
+- 3 (Exceptional): narrative is thorough, concise, and clearly demonstrates ability to analyze and interpret statistics as well as theoretical understanding of statistical concepts.
+
+- 2 (Adequate): narrative addresses the questions with moderate inaccuracies in analysis and/or interpretation, or offers correct but incomplete solutions.
+
+- 1 (Inadequate): narrative attempts to address questions with substantial inaccuracies in analysis and/or interpretation.
+
+- 0 (Insufficient): narrative does not attempt to address questions or self-assessment is insufficient to grade
+    
