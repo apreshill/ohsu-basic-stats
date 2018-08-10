@@ -1,0 +1,46 @@
+---
+title: "Extra Credit: Make-up Labs"
+subtitle: "Introduction to Biostatistics for the Basic Sciences"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+All make-up labs must be turned in by September 6 to be graded.
+
+# Non-integrative make-up labs
+
+The following assignments can replace either a missed lab or a low grade on a lab. If you missed a lab, you'll need to also submit the missed lab at the same time for full credit. Each make-up lab will be graded by Dr. Hill at the end of the quarter. Make-up labs will be graded as all-or-nothing: check plus or nothing.
+
+1. Make a user-contributed vignette for a dataset from the `fivethirtyeight` R package.
+    - See examples here: http://fivethirtyeight-r.netlify.com/articles/user_contributed_vignettes.html
+1. Take a sad plot and make it better
+    - Find a peer-reviewed publication that includes open access data. You may also use a publication originating in your lab and use the data from that paper. Do a plot makeover using the original data and `ggplot2`, following recommendations laid out by [Weissberger et al.](http://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128). Your report should include narrative that critically examines the pros/cons of the original plot, and discusses the improvements you think your plot makes.
+1. Make a cheatsheet
+    - Make a cheatsheet for something you feel would be helpful for future students. Use the [RStudio Cheatsheet](https://www.rstudio.com/resources/cheatsheets/how-to-contribute-a-cheatsheet/) template (either Keynote or Powerpoint).
+1. "Stretch" exercises
+    - Write up at least three ~20 minute "stretch" exercises as an "add-on" to one of our existing labs. The stretch exercises should teach additional concepts beyond what we covered in our lab using the same data, and should have specific stated learning objectives and accompanying solutions (both R code + narrative). 
+
+# Integrative make-up labs
+
+The following assignments can replace a missed integrative lab (not a low grade). Each integrative make-up lab will be graded by Dr. Hill at the end of the quarter. Integrative make-up labs will be graded as all-or-nothing: 5 or 0 points.
+
+1. Create the "missing" lab
+    - This is your opportunity to create an original lab that covers a topic you feel deserved more attention or coverage in class than it got. Wish we had a lab on advanced data wrangling? Want to dig more into `ggplot2`? Have ideas for a tidy data lab? Need to use non-linear regression for your own research and wish we had covered it? Make the missing lab! You may wish to ask a peer to review your tutorial before submitting it. The lab should be comprehensive and must include:
+        - Learning objectives, 
+        - Packages needed, 
+        - Data (either original or open access, but how to access the data must be spelled out), and 
+        - At least 3 sections that should each take a typical student approximately 20 minutes to complete (so 60 minutes total)
+        - Solutions (both R code + narrative)
+        - Resources used
+1. Data delivery
+    - This class needs some biomedical data! Here is your chance to help future students be able to work with real OHSU biomedical data. Find data in your lab that you can get permission to share publicly (you may need to refer to the [Safe Harbor Method](https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html#safeharborguidance) for deidentification). Make the data share-able, following all of the steps outlined in ["How to share data for collaboration"](https://peerj.com/preprints/3139/). Specifically, you'll need to turn in:
+        - The raw data.
+        - A tidy data set.
+        - A code book describing each variable and its values in the tidy data set.
+        - An R script that contains the exact recipe to go from 1 to 2.
+        - A document that states permission to share the data from the owner/Principal Investigator.
+1. Create the "missing" tutorial
+    - Did you feel like there was a better way to explain a topic covered in class or in the reading? Or maybe you felt that you needed to supplement our in-class coverage with additional readings, Stack Overflow answers, or blog posts to support your learning. Using those materials as inspiration (read: **do not** plagiarize), write a thorough and thoughtful tutorial on the topic for future students. Your tutorial should be in the style of ["Nature: Points of Significance"](https://www.nature.com/collections/qghhqm/pointsofsignificance). You may include code or graphics as needed. You may wish to ask a peer to review your tutorial before submitting it. At the end of your tutorial, you should include a list of additional resources/links you used.
+
