@@ -441,6 +441,8 @@ Use the code above to use the `anova` function to compare the intercept-only mod
 ## NULL Model Solutions
 
 <ul style="color:cadetblue">
+* What is the “estimate” equal to here (hint: look back at your skim output)?
+    - The mean, $\bar{x}_{x25d}$, of vitamin d levels across the full sample
 * What is the `RSS` for line 1 (corresponding to the intercept-only model, Model 1) equal to that you calculated above?
     - The total sums of squares, `r vitd_ss %>% pull(1)`
 * What is the `RSS` for line 2 (corresponding to Model 2) equal to that you calculated above?
