@@ -21,6 +21,9 @@ library(haven)
 library(infer)
 ```
 
+# Logistics
+
+- A complete knitted `html` file is due on Sakai by Tuesday August 14rd (2:30pm). 
 
 # Estimation of US male height
 
