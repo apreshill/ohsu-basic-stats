@@ -23,6 +23,21 @@ inline_hook <- function(x) {
 knitr::knit_hooks$set(inline = inline_hook)
 ```
 
+**Self-Assessment**
+
+<ul style="color:cadetblue">
+How to: 
+
+- Start with your initial submission, and save it as a new file. Then add a sub-section to each of the sections with content called "Self-Assessment". 
+
+- You may want to add color formatting to further highlight the self-assessment section. You can change the color of the font by using `<span style="color:deeppink">` <span style="color:deeppink">span styles like this</span> `</span>`. 
+
+- If you want to change the color of a bulleted list, change `span` to `ul` and use the same method (pick any [color](http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf)). 
+
+- My code is provided here so that you can problem solve- if you need to copy and paste, do so in your self-assessment section, but you'll need to include narrative including attribution and reflection on *what* part of that code chunk you struggled with and *why*.
+</ul>
+
+
 # Overview
 
 The goal of this lab is to carefully, thoroughly, and thoughtfully conduct an linear regression analysis. You are also asked to communicate clearly about the steps in your analysis process with others, by sharing your R code, output, and narrative. As such, your code cannot "stand alone"- it is meant to complement / enhance / support your narrative. As with our previous [integrative lab](cm016.html), this lab will be due in two stages:
@@ -35,6 +50,7 @@ Using the key, your self-assessment should include even **more** narrative; wher
 - Assessment of the accuracy and completeness of your "initial solutions"
 - Correct worked solutions with some discussion and analysis of why your initial solution was incorrect, and reflection on the source of your confusion (if you got an answer correct, this is not necessary)
 - Attributions as appropriate to other students who helped you, or other sources such as lecture notes, readings, online resources, etc. that helped you 
+
 
 # Logistics
 
