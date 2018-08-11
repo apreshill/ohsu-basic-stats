@@ -28,7 +28,7 @@ knitr::knit_hooks$set(inline = inline_hook)
 The goal of this lab is to carefully, thoroughly, and thoughtfully conduct an linear regression analysis. You are also asked to communicate clearly about the steps in your analysis process with others, by sharing your R code, output, and narrative. As such, your code cannot "stand alone"- it is meant to complement / enhance / support your narrative. As with our previous [integrative lab](cm016.html), this lab will be due in two stages:
 
 1. A complete knitted `html` file is due on Sakai by Thursday August 9th at 2:30pm. 
-2. After class on August 9th, you'll be provided with a code key. You are asked to review your initial submission, and reflect on your own code/narrative after reviewing the key thoroughly. Your self-assessment is due on Sakai by beginning of class Tuesday August 14th (2:30pm). 
+2. After class on August 9th, you'll be provided with a code key. You are asked to review your initial submission, and reflect on your own code/narrative after reviewing the key thoroughly. Your self-assessment is due on Sakai by beginning of class Thursday August 16th (2:30pm). 
 
 Using the key, your self-assessment should include even **more** narrative; where you made mistakes, you must discuss and analyze where you went wrong, and correct them without copying/pasting directly from the key (this typically means that you need to include more narrative than we provide in the key). A good self-assessment will include:
 
@@ -209,13 +209,13 @@ The modeling equation for females is:
 $$\hat{y}_{female} = 66.4 -3.09~\textrm{age_ctr} - 1.73~\textrm{zhfa}$$
 
 <ul style="color:cadetblue">
-- Females are treated as the baseline for comparison for no other reason than “female” is alphabetically earlier than “male.” The $b_{male} = 12.5$ is the vertical “bump” that males get in their vitamin d levels. Or more precisely, it is the average difference in vitamin d levels that males get relative to the baseline of females. From `skimr` output, we can see this is the difference between $\bar{x}_{F}$ = `r small_vitd %>% group_by(sex) %>% summarize(m_d = mean(x25d, na.rm = TRUE)) %>% pull(2) %>% pluck(1)` and $\bar{x}_{M}$ = `r small_vitd %>% group_by(sex) %>% summarize(m_d = mean(x25d, na.rm = TRUE)) %>% pull(2) %>% pluck(2)`
+- Females are treated as the baseline for comparison for no other reason than “female” is alphabetically earlier than “male.” The $b_{male} = 12.5$ is the vertical “bump” that males get in their vitamin d levels. Or more precisely, it is the average difference in vitamin d levels that males get relative to the baseline of females. From `skimr` output, we can see this is the difference between $\bar{x}_{F}$ = `r small_vitd %>% group_by(sex) %>% summarize(m_d = mean(x25d, na.rm = TRUE)) %>% pull(2) %>% pluck(1)` and $\bar{x}_{M}$ = `r small_vitd %>% group_by(sex) %>% summarize(m_d = mean(x25d, na.rm = TRUE)) %>% pull(2) %>% pluck(2)` (with some rounding going on here)
 - We see that females have a lower intercept, and, as they age, they have a more steep associated average decrease in teaching scores: 3.09 vitamin d level units per year as opposed to .13 for males. 
 - Both males and females have the same slope for `zhfa`. In other words, in this model the associated effect of height is the same for males and females. So for every increase of one unit in height-for-age z-scores, there is on average an associated change of $b_{zhfa}$ = -1.73 (a decrease) in vitamin d levels.
 - "Specifically, serum 25(OH)D concentrations were 19% higher in males at the mean age (9.9 years)."
-    - Because I centered the age variable at the mean age (9.9 years), we can compare the intercepts: $(78.9-66.4)/66.4 * 100 = 18.8%$
+    - Because I centered the age variable at the mean age (9.9 years), we can compare the intercepts: $(78.9-66.4)/66.4 * 100 = 18.8%$; so seems right.
 - "females experienced a...4% decline in serum 25(OH)D levels for each increasing year of age; no decline was seen in male participants with increasing age"
-    - For each increasing year of age, females had 3.09 less units of vitamin d. If we take the mean age level of 66.4: $3.09/66.4 * 100 = 4.65%$
+    - For each increasing year of age, females had 3.09 less units of vitamin d. If we take the mean age level of 66.4: $3.09/66.4 * 100 = 4.65%$; my math gives me a slightly higher number as a percentage.
 </ul>
 
 
@@ -432,10 +432,10 @@ Use the code above to use the `anova` function to compare the intercept-only mod
 * What is the `Sum of Sq` equal to that you calculated above?
     - The model sums of squares, `r vitd_ss %>% pull(3)`
 * In < 3 sentences, explain what it means to use `lm(y ~ x + z)` versus `lm(y ~ 1)`, and what happens "under the hood" here that you now see in the `anova` output. 
-    - `lm` compares the model I entered to an intercept-only model- it estimates the fit of my model in minimizing the residual sums of squares, and compares that to what is left over or residual after using the mean vitamin d level across all children to predict individual vitamin d levels for each child. The $R^2$ for my model was `r glance(dmod) %>% pull(1)`, which is the ratio of the model sums of squares to the total sums of squares. That is the same as calculating:
+    - `lm` compares the model I entered (model 2) to an intercept-only model (model 1)- it estimates the fit of model 2 in minimizing the residual sums of squares, and compares that to what is left over or residual after using the mean vitamin d level across all children to predict individual vitamin d levels for each child (model 1). The $R^2$ for my model was `r glance(dmod) %>% pull(1)`, which is the ratio of the model sums of squares to the total sums of squares. That is the same as calculating:
     
 $$1 - \frac{\textrm{Model2}~RSS}{\textrm{Model1}~RSS} = 1 - \frac{95561}{125063} = .236$$
-    
+    - added intrepretation not needed but provided here: if the two models were equivalent this number would be $1-1 = 0$. Model 2 always has to perform as least as well as Model 1 (it is not possible to be worse!). You can think of the ratio as 1 minus the proportion of variation "left over" by the null model (model 1) that can be explained by model 2.
 </ul>
 
 # Replicate a Plot
@@ -458,7 +458,7 @@ Look at the published figure carefully:
 ## Replicate a Plot Solutions
 
 <span style="color:cadetblue">
-I'll leave the straight-forward answers as a given- they don't match the EDA, we are definitely looking at a plot of fitted values, not the original data. It may have been helpful to put that in the figure legend. The plot is helpful for visualizing the results of the regression analyses, but clarifying that the points were fitted including other variables in the model not pictured (here, `zhfa`) would have made it more reproducible and potentially less misleading.
+I'll leave the straight-forward answers as a given- they don't match the EDA, we are definitely looking at a plot of fitted values, not the original data. It may have been helpful to put that in the figure legend. The plot is helpful for visualizing the results of the regression analyses, but clarifying that the points were fitted including other variables in the model not pictured (here, `zhfa`) would have made it more reproducible and potentially less misleading. Even then though, there looks to be less variability in their fitted values (especially for males)- I'm honestly not sure how they *actually* made this plot!
 </span>
 
 ```{r include = TRUE}

@@ -12,7 +12,7 @@ Thurs,July,26,2.4,Multiple Regression (continuous + categorical),9,Multiple regr
 Tues,July,31,2.5,<a href='slides/cm025.html'>Residuals / Diagnostics / Outliers</a>,10,Diagnostics,cm025.html
 Thurs,August,2,2.6,Concept integration,11,Regression: integrate + iterate,cm026.html
 Tues,August,7,3.1: Inference,Sampling,,,-
-Thurs,August,9,3.2,<a href='slides/cm032.html'>Confidence Intervals</a>,,Bootstrapping,cm032.html
+Thurs,August,9,3.2,<a href='slides/cm032.html'>Confidence Intervals</a>,12,Bootstrapping,cm032.html
 Tues,August,14,3.3,Hypothesis Testing<br><a href='https://github.com/Lakens/perfect-t-test/blob/master/perfect_independent_t-test.Rmd'>- Perfect 2-sample t-test</a>,,,-
 Thurs,August,16,3.4,Hypothesis Testing<br><a href='https://github.com/Lakens/perfect-t-test/blob/master/Perfect_dependent_t-test.Rmd'>- Perfect paired t-test</a>,,,-
 Tues,August,21,3.5,Hypothesis Testing,,,-

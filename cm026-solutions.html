@@ -550,11 +550,11 @@ $ zhfa     &lt;dbl&gt; -0.58, -0.12, -0.98, -1.20, -1.45, -0.77, 0.34, -0.33...<
  n obs: 537 
  n variables: 4 
 
-── Variable type:character ─────────────────────────────────────────────────────────────────────────────
+── Variable type:character ─────────────────────────────────────────────────
  variable missing complete   n min max empty n_unique
       sex       0      537 537   1   1     0        2
 
-── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────
+── Variable type:numeric ───────────────────────────────────────────────────
  variable missing complete   n  mean    sd    p0   p25   p50   p75   p100
  ageyears       0      537 537  9.89  1.69  6.16  8.38  9.95 11.26  14.03
      x25d       8      529 537 74.31 15.39 36.1  64.3  73.6  84.3  127   
@@ -571,7 +571,7 @@ $ zhfa     &lt;dbl&gt; -0.58, -0.12, -0.98, -1.20, -1.45, -0.77, 0.34, -0.33...<
  n variables: 4 
  group variables: sex 
 
-── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────
+── Variable type:numeric ───────────────────────────────────────────────────
  sex variable missing complete   n  mean    sd    p0   p25   p50   p75
    F ageyears       0      271 271  9.83  1.74  6.16  8.3   9.86 11.18
    F     x25d       3      268 271 68.08 13.19 36.9  58.68 67.35 76.6 
@@ -657,16 +657,16 @@ get_regression_table(dmod)</code></pre>
 <p>The modeling equation for males is: <span class="math display">\[\hat{y}_{male} = 78.9 -.13~\textrm{age_ctr} - 1.73~\textrm{zhfa}\]</span> The modeling equation for females is: <span class="math display">\[\hat{y}_{female} = 66.4 -3.09~\textrm{age_ctr} - 1.73~\textrm{zhfa}\]</span></p>
 <ul style="color:cadetblue">
 <ul>
-<li>Females are treated as the baseline for comparison for no other reason than “female” is alphabetically earlier than “male.” The <span class="math inline">\(b_{male} = 12.5\)</span> is the vertical “bump” that males get in their vitamin d levels. Or more precisely, it is the average difference in vitamin d levels that males get relative to the baseline of females. From <code>skimr</code> output, we can see this is the difference between <span class="math inline">\(\bar{x}_{F}\)</span> = 68 and <span class="math inline">\(\bar{x}_{M}\)</span> = 81</li>
+<li>Females are treated as the baseline for comparison for no other reason than “female” is alphabetically earlier than “male.” The <span class="math inline">\(b_{male} = 12.5\)</span> is the vertical “bump” that males get in their vitamin d levels. Or more precisely, it is the average difference in vitamin d levels that males get relative to the baseline of females. From <code>skimr</code> output, we can see this is the difference between <span class="math inline">\(\bar{x}_{F}\)</span> = 68 and <span class="math inline">\(\bar{x}_{M}\)</span> = 81 (with some rounding going on here)</li>
 <li>We see that females have a lower intercept, and, as they age, they have a more steep associated average decrease in teaching scores: 3.09 vitamin d level units per year as opposed to .13 for males.</li>
 <li>Both males and females have the same slope for <code>zhfa</code>. In other words, in this model the associated effect of height is the same for males and females. So for every increase of one unit in height-for-age z-scores, there is on average an associated change of <span class="math inline">\(b_{zhfa}\)</span> = -1.73 (a decrease) in vitamin d levels.</li>
 <li>“Specifically, serum 25(OH)D concentrations were 19% higher in males at the mean age (9.9 years).”
 <ul>
-<li>Because I centered the age variable at the mean age (9.9 years), we can compare the intercepts: <span class="math inline">\((78.9-66.4)/66.4 * 100 = 18.8%\)</span></li>
+<li>Because I centered the age variable at the mean age (9.9 years), we can compare the intercepts: <span class="math inline">\((78.9-66.4)/66.4 * 100 = 18.8%\)</span>; so seems right.</li>
 </ul></li>
 <li>“females experienced a…4% decline in serum 25(OH)D levels for each increasing year of age; no decline was seen in male participants with increasing age”
 <ul>
-<li>For each increasing year of age, females had 3.09 less units of vitamin d. If we take the mean age level of 66.4: <span class="math inline">\(3.09/66.4 * 100 = 4.65%\)</span></li>
+<li>For each increasing year of age, females had 3.09 less units of vitamin d. If we take the mean age level of 66.4: <span class="math inline">\(3.09/66.4 * 100 = 4.65%\)</span>; my math gives me a slightly higher number as a percentage.</li>
 </ul></li>
 </ul>
 </ul>
@@ -937,10 +937,10 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </ul></li>
 <li>In &lt; 3 sentences, explain what it means to use <code>lm(y ~ x + z)</code> versus <code>lm(y ~ 1)</code>, and what happens “under the hood” here that you now see in the <code>anova</code> output.
 <ul>
-<li><code>lm</code> compares the model I entered to an intercept-only model- it estimates the fit of my model in minimizing the residual sums of squares, and compares that to what is left over or residual after using the mean vitamin d level across all children to predict individual vitamin d levels for each child. The <span class="math inline">\(R^2\)</span> for my model was 0.24, which is the ratio of the model sums of squares to the total sums of squares. That is the same as calculating:</li>
+<li><code>lm</code> compares the model I entered (model 2) to an intercept-only model (model 1)- it estimates the fit of model 2 in minimizing the residual sums of squares, and compares that to what is left over or residual after using the mean vitamin d level across all children to predict individual vitamin d levels for each child (model 1). The <span class="math inline">\(R^2\)</span> for my model was 0.24, which is the ratio of the model sums of squares to the total sums of squares. That is the same as calculating:</li>
 </ul></li>
 </ul>
-<p><span class="math display">\[1 - \frac{\textrm{Model2}~RSS}{\textrm{Model1}~RSS} = 1 - \frac{95561}{125063} = .236\]</span></p>
+<span class="math display">\[1 - \frac{\textrm{Model2}~RSS}{\textrm{Model1}~RSS} = 1 - \frac{95561}{125063} = .236\]</span> - added intrepretation not needed but provided here: if the two models were equivalent this number would be <span class="math inline">\(1-1 = 0\)</span>. Model 2 always has to perform as least as well as Model 1 (it is not possible to be worse!). You can think of the ratio as 1 minus the proportion of variation “left over” by the null model (model 1) that can be explained by model 2.
 </ul>
 </div>
 </div>
@@ -957,7 +957,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </ul>
 <div id="replicate-a-plot-solutions" class="section level2">
 <h2><span class="header-section-number">11.1</span> Replicate a Plot Solutions</h2>
-<p><span style="color:cadetblue"> I’ll leave the straight-forward answers as a given- they don’t match the EDA, we are definitely looking at a plot of fitted values, not the original data. It may have been helpful to put that in the figure legend. The plot is helpful for visualizing the results of the regression analyses, but clarifying that the points were fitted including other variables in the model not pictured (here, <code>zhfa</code>) would have made it more reproducible and potentially less misleading. </span></p>
+<p><span style="color:cadetblue"> I’ll leave the straight-forward answers as a given- they don’t match the EDA, we are definitely looking at a plot of fitted values, not the original data. It may have been helpful to put that in the figure legend. The plot is helpful for visualizing the results of the regression analyses, but clarifying that the points were fitted including other variables in the model not pictured (here, <code>zhfa</code>) would have made it more reproducible and potentially less misleading. Even then though, there looks to be less variability in their fitted values (especially for males)- I’m honestly not sure how they <em>actually</em> made this plot! </span></p>
 <pre class="r"><code>ggplot(d_pts, aes(x = age_ctr, 
                  y = x25d,
                  color = sex)) +
