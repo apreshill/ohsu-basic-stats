@@ -403,10 +403,11 @@ mh_resample3 &lt;- male_heights %&gt;%
 <p>Now let’s <code>generate</code> 1,000 replicates, <code>calculate</code> the mean for each replicate, and make a histogram to show the distribution of all the 1,000 calculated means.</p>
 <p>The width of this distribution shows how much the results vary from one experiment to the next.</p>
 <p>We can quantify this variability by computing the standard deviation of the sampling distribution, which is called “standard error”. The standard error is the standard deviation of the sampling distribution.</p>
-<p>We can also summarize the sampling distribution with a “confidence interval”, which is a range that contains a specified fraction, like 90%, of the values in sampling_dist_mean.</p>
-<p>The central 90% confidence interval is between the 5th and 95th percentiles of the sampling distribution.</p>
-<p>The following function plots a histogram and shades the 90% confidence interval.</p>
-<p>You can see that 95% of the data stored in the stat variable in bootstrap_distribution falls between the two endpoints with 2.5% to the left outside of the shading and 2.5% to the right outside of the shading. The cut-off points that provide our range are shown with the darker lines.</p>
+<p>We can also summarize the sampling distribution with a “confidence interval”, which is a range that contains a specified fraction, like 95%, of the values in <code>mh_means</code>.</p>
+<p>The central 95% confidence interval is between the 2.5th and 97.55th percentiles of the sampling distribution.</p>
+<p>You can also use <code>infer</code> to plot a histogram and shade the 95% confidence interval.</p>
+<p><img src="cm032_files/figure-html/unnamed-chunk-21-1.png" width="2100" /></p>
+<p>You can see that 95% of the data stored in the <code>stat</code> variable in <code>mh_means</code> falls between the two endpoints with 2.5% to the left outside of the shading and 2.5% to the right outside of the shading. The cut-off points that provide our range are shown with the darker lines.</p>
 </div>
 </div>
 

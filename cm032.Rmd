@@ -231,23 +231,23 @@ mh_means %>%
 ```
 
 
-We can also summarize the sampling distribution with a "confidence interval", which is a range that contains a specified fraction, like 90%, of the values in sampling_dist_mean.
+We can also summarize the sampling distribution with a "confidence interval", which is a range that contains a specified fraction, like 95%, of the values in `mh_means`.
 
-The central 90% confidence interval is between the 5th and 95th percentiles of the sampling distribution.
+The central 95% confidence interval is between the 2.5th and 97.55th percentiles of the sampling distribution.
 
 ```{r}
-mh_means %>% 
-  get_ci()
+(percentile_ci <- mh_means %>% 
+  get_ci())
 ```
 
-The following function plots a histogram and shades the 90% confidence interval.
+You can also use `infer` to plot a histogram and shade the 95% confidence interval.
 
-```{r eval = FALSE}
+```{r include = TRUE, echo = FALSE}
 mh_means %>% 
   visualize(endpoints = percentile_ci, direction = "between")
 ```
 
-You can see that 95% of the data stored in the stat variable in bootstrap_distribution falls between the two endpoints with 2.5% to the left outside of the shading and 2.5% to the right outside of the shading. The cut-off points that provide our range are shown with the darker lines.
+You can see that 95% of the data stored in the `stat` variable in `mh_means` falls between the two endpoints with 2.5% to the left outside of the shading and 2.5% to the right outside of the shading. The cut-off points that provide our range are shown with the darker lines.
 
 
 
