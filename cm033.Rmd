@@ -115,6 +115,8 @@ So, our original sample mean was `r round(x_bar1,2)`. We used bootstrapping to q
 
 See [Chapter 8 in ModernDive](https://moderndive.com/8-sampling.html#polls).
 
+Referring to the BRFSS data analyzed in above, answer the following questions:
+
 1. Population: Who is the population of interest that we want to say something about?
 1. What is the population parameter of interest?
     - Hint: https://moderndive.com/9-confidence-intervals.html
@@ -157,7 +159,7 @@ cupid <- profiles %>%
 
 Follow along in [ModernDive, Appendix B.2.4](http://moderndive.netlify.com/b-appendixb).
 
-Evaluate the following competing hypotheses:
+Using the "OKCupid" sample data described above, we'll use bootstrapping to evaluate the following competing hypotheses:
 
 ## In words 
 
@@ -179,7 +181,10 @@ cupid_bar <- cupid %>%
 cupid_bar
 ```
 
-In order to look to see if the observed sample mean of `r cupid_bar %>% pull()` is statistically greater than $\mu_0 = 178.06$, we need to account for the sample size.  We also need to determine a process that replicates how the original sample of size `r nrow(cupid)` was selected.  
+
+## The bootstrap approach
+
+In order to look to see if the observed sample mean of `r cupid_bar %>% pull() %>% round(2)` is statistically greater than $\mu_0 = 178.06$, we need to account for the sample size.  We also need to determine a process that replicates how the original sample of size `r nrow(cupid)` was selected.  
 
 We can use the idea of *bootstrapping* to simulate the population from which the sample came and then generate samples from that simulated population to account for sampling variability.  Recall how bootstrapping would apply in this context:
 
@@ -203,34 +208,13 @@ Follow along in [ModernDive, Appendix B.2.4](http://moderndive.netlify.com/b-app
 1. Create a confidence interval for the unknown population parameter $\mu$ using our "OKCupid" sample data using *bootstrapping*. 
     - Note that we don't need to shift this distribution since we want the center of our confidence interval to be our point estimate $\bar{x}_{obs} = `r cupid_bar %>% pull()`$.
 1. Is `r mu0` is contained in this confidence interval as a plausible value of $\mu$ (the unknown population mean)?
-1. Is the entire interval larger than `r mu0`.  
+1. Is the entire interval larger than `r mu0`?
 1. Does this match with our hypothesis test results of rejecting the null hypothesis in favor of the alternative ($\mu > 178.06$)?
-1. Complete this sentense:
+1. Complete this sentence:
 
 > We are 95% confident the true mean mean height for all US men is between ---- and ---- centimeters.
 
-Which confidence interval is more narrow and hence more precise- your original sample or sample 2a? As a consequence, which would you rather use to estimate your population parameter? Discuss reasons why one interval is wider than the other.
 
-```{r}
-ggplot(cupid, aes(x = height)) +
-  geom_histogram(color = "white", binwidth = 4)
-```
-
-Let's state:
-
-> The average height of US males is `r round(x_bar1, 2)`. Does the data in sample 2a provide convincing evidence that average height of US males in this sample is different from `r round(x_bar1, 2)`? Use a significance level of 5%.
-
-$$H_0: \mu = 178.06$$
-
-$$H_1: \mu \neq 178.06$$
-
-
-To answer this question:
-
-1. Create a bootrapped distribution of sample means based on sample `2a` (use `set.seed(1701)`).
-1. Calculate the 95% confidence interval. 
-1. Does it contain `r round(x_bar1, 2)`?
-1. How many bootstrap samples produced means as or more extreme than the sample mean I got?
 
 ```{r include = FALSE}
 set.seed(1701)
@@ -282,12 +266,15 @@ null_2a %>%
   geom_vline(xintercept = upper_ci)
 ```
 
+```{r eval = FALSE}
 This new distribution is:
 
 - Centered at $\mu_0 = 178.06$, 
 - Bounded on the left by null mu minus mean of bootstrapped means (`r x_bar1` - `r boot_mean` = `r x_bar1 - boot_mean`)
 - Bounded on the right by `r boot_mean`, the bootstrapped sample mean
 - We set `obs_stat` equal to the sample mean, because we want to know: "how extreme is the *difference* between $\mu_0$ and the original sample mean ($\bar{x}_2$), given the bootstrapped distribution of *differences*?"
+```
+
 
 
 ```{r eval = FALSE, include = FALSE}
@@ -305,30 +292,42 @@ null_dist %>%
 
 
 
-# Two means (independent samples)
+# Two means (independent samples) (on your own)
 
 Follow along with [ModernDive Appendix B.5](http://moderndive.netlify.com/b-appendixb).
 
-Bind president sample and cupid sample together with indicator for sample. Then do two-sample t test
+Use this [kaggle dataset](https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go), and do a two-sample t-test to test whether there is a difference in mean heights between men on the "OKCupid" dating site, versus all our POTUSes. I saved the dataset locally, then did the following:
 
-```{r include = FALSE}
-mh_3a <- read_csv(here::here("data", "president_heights_new.csv")) %>% 
+```{r}
+pres <- read_csv(here::here("data", "president_heights_new.csv")) %>% 
   select(height = `height(cm)`)
 
-mh_3 <- cupid %>% 
-  bind_rows(mh_3a, .id = "sample") %>% 
+cupid_pres <- cupid %>% 
+  bind_rows(pres, .id = "sample") %>% 
+  mutate(sample = as.factor(sample))
+```
+
+
+
+
+```{r eval = FALSE}
+pres <- read_csv(here::here("data", "president_heights_new.csv")) %>% 
+  select(height = `height(cm)`)
+
+cupid_pres <- cupid %>% 
+  bind_rows(pres, .id = "sample") %>% 
   mutate(sample = as.factor(sample))
 
-mh_3 %>% 
+cupid_pres %>% 
   group_by(sample) %>% 
   summarize(mh = mean(height),
             sd = sd(height))
 
-d_hat <- mh_3 %>% 
+d_hat <- cupid_pres %>% 
   specify(height ~ sample) %>% 
   calculate(stat = "diff in means", order = c(1, 2))
 
-null_distn <- mh_3 %>% 
+null_distn <- cupid_pres %>% 
   specify(height ~ sample) %>%
   hypothesize(null = "independence") %>%
   generate(reps = 1000, type = "permute") %>%

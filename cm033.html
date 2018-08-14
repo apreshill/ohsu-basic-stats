@@ -384,7 +384,7 @@ options(pillar.sigfig = 6) # you need to set this at the top of your Rmd</code><
  n obs: 204509 
  n variables: 4 
 
-── Variable type:integer ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Variable type:integer ──────────────────────────────────────────────────────────────────────────────────────
  variable missing complete      n     mean       sd   p0   p25   p50
      HTM4       0   204509 204509   178.06     7.79   91   173   178
    id_num       0   204509 204509 1e+05    59036.81    1 51128 1e+05
@@ -394,7 +394,7 @@ options(pillar.sigfig = 6) # you need to set this at the top of your Rmd</code><
  153382 2e+05 ▇▇▇▇▇▇▇▇
    9979 27216 ▁▇▇▁▁▁▁▁
 
-── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+── Variable type:numeric ──────────────────────────────────────────────────────────────────────────────────────
  variable missing complete      n   mean      sd  p0    p25    p50    p75
   _LLCPWT       0   204509 204509 581.91 1013.13 0.8 102.05 252.75 631.23
      p100     hist
@@ -460,6 +460,7 @@ mh_means &lt;- male_heights %&gt;%
 <div id="key-questions-20-min" class="section level1">
 <h1><span class="header-section-number">5</span> Key Questions (⏰ 20 min)</h1>
 <p>See <a href="https://moderndive.com/8-sampling.html#polls">Chapter 8 in ModernDive</a>.</p>
+<p>Referring to the BRFSS data analyzed in above, answer the following questions:</p>
 <ol style="list-style-type: decimal">
 <li>Population: Who is the population of interest that we want to say something about?</li>
 <li>What is the population parameter of interest?
@@ -504,7 +505,7 @@ cupid &lt;- profiles %&gt;%
 <div id="bootstrapping-for-hypothesis-test-20-min" class="section level1">
 <h1><span class="header-section-number">7</span> Bootstrapping for hypothesis test (⏰ 20 min)</h1>
 <p>Follow along in <a href="http://moderndive.netlify.com/b-appendixb">ModernDive, Appendix B.2.4</a>.</p>
-<p>Evaluate the following competing hypotheses:</p>
+<p>Using the “OKCupid” sample data described above, we’ll use bootstrapping to evaluate the following competing hypotheses:</p>
 <div id="in-words" class="section level2">
 <h2><span class="header-section-number">7.1</span> In words</h2>
 <ul>
@@ -521,7 +522,10 @@ cupid &lt;- profiles %&gt;%
 <p>Think: if the population mean <em>were</em> 178.06, how surprised would I be to get a sample mean as or more extreme than the one I got?</p>
 <pre><code>      stat
 1 179.7756</code></pre>
-<p>In order to look to see if the observed sample mean of 179.7755556 is statistically greater than <span class="math inline">\(\mu_0 = 178.06\)</span>, we need to account for the sample size. We also need to determine a process that replicates how the original sample of size 45 was selected.</p>
+</div>
+<div id="the-bootstrap-approach" class="section level2">
+<h2><span class="header-section-number">7.3</span> The bootstrap approach</h2>
+<p>In order to look to see if the observed sample mean of 179.78 is statistically greater than <span class="math inline">\(\mu_0 = 178.06\)</span>, we need to account for the sample size. We also need to determine a process that replicates how the original sample of size 45 was selected.</p>
 <p>We can use the idea of <em>bootstrapping</em> to simulate the population from which the sample came and then generate samples from that simulated population to account for sampling variability. Recall how bootstrapping would apply in this context:</p>
 <ol style="list-style-type: decimal">
 <li>Sample with replacement from our original sample of 45 men and repeat this process 1,000 times,</li>
@@ -541,43 +545,53 @@ cupid &lt;- profiles %&gt;%
 <li>Note that we don’t need to shift this distribution since we want the center of our confidence interval to be our point estimate <span class="math inline">\(\bar{x}_{obs} = 179.7755556\)</span>.</li>
 </ul></li>
 <li>Is 178.06 is contained in this confidence interval as a plausible value of <span class="math inline">\(\mu\)</span> (the unknown population mean)?</li>
-<li>Is the entire interval larger than 178.06.<br />
-</li>
+<li>Is the entire interval larger than 178.06?</li>
 <li>Does this match with our hypothesis test results of rejecting the null hypothesis in favor of the alternative (<span class="math inline">\(\mu &gt; 178.06\)</span>)?</li>
-<li>Complete this sentense:</li>
+<li>Complete this sentence:</li>
 </ol>
 <blockquote>
 <p>We are 95% confident the true mean mean height for all US men is between —- and —- centimeters.</p>
 </blockquote>
-<p>Which confidence interval is more narrow and hence more precise- your original sample or sample 2a? As a consequence, which would you rather use to estimate your population parameter? Discuss reasons why one interval is wider than the other.</p>
-<pre class="r"><code>ggplot(cupid, aes(x = height)) +
-  geom_histogram(color = &quot;white&quot;, binwidth = 4)</code></pre>
-<p><img src="cm033_files/figure-html/unnamed-chunk-11-1.png" width="2100" /></p>
-<p>Let’s state:</p>
-<blockquote>
-<p>The average height of US males is 178.06. Does the data in sample 2a provide convincing evidence that average height of US males in this sample is different from 178.06? Use a significance level of 5%.</p>
-</blockquote>
-<p><span class="math display">\[H_0: \mu = 178.06\]</span></p>
-<p><span class="math display">\[H_1: \mu \neq 178.06\]</span></p>
-<p>To answer this question:</p>
-<ol style="list-style-type: decimal">
-<li>Create a bootrapped distribution of sample means based on sample <code>2a</code> (use <code>set.seed(1701)</code>).</li>
-<li>Calculate the 95% confidence interval.</li>
-<li>Does it contain 178.06?</li>
-<li>How many bootstrap samples produced means as or more extreme than the sample mean I got?</li>
-</ol>
-<p>This new distribution is:</p>
-<ul>
-<li>Centered at <span class="math inline">\(\mu_0 = 178.06\)</span>,</li>
-<li>Bounded on the left by null mu minus mean of bootstrapped means (178.0612149 - 179.7375684 = -1.6763535)</li>
-<li>Bounded on the right by 179.7375684, the bootstrapped sample mean</li>
-<li>We set <code>obs_stat</code> equal to the sample mean, because we want to know: “how extreme is the <em>difference</em> between <span class="math inline">\(\mu_0\)</span> and the original sample mean (<span class="math inline">\(\bar{x}_2\)</span>), given the bootstrapped distribution of <em>differences</em>?”</li>
-</ul>
+<pre class="r"><code>This new distribution is:
+
+- Centered at $\mu_0 = 178.06$, 
+- Bounded on the left by null mu minus mean of bootstrapped means (`r x_bar1` - `r boot_mean` = `r x_bar1 - boot_mean`)
+- Bounded on the right by `r boot_mean`, the bootstrapped sample mean
+- We set `obs_stat` equal to the sample mean, because we want to know: &quot;how extreme is the *difference* between $\mu_0$ and the original sample mean ($\bar{x}_2$), given the bootstrapped distribution of *differences*?&quot;</code></pre>
 </div>
-<div id="two-means-independent-samples" class="section level1">
-<h1><span class="header-section-number">9</span> Two means (independent samples)</h1>
+<div id="two-means-independent-samples-on-your-own" class="section level1">
+<h1><span class="header-section-number">9</span> Two means (independent samples) (on your own)</h1>
 <p>Follow along with <a href="http://moderndive.netlify.com/b-appendixb">ModernDive Appendix B.5</a>.</p>
-<p>Bind president sample and cupid sample together with indicator for sample. Then do two-sample t test</p>
+<p>Use this <a href="https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go">kaggle dataset</a>, and do a two-sample t-test to test whether there is a difference in mean heights between men on the “OKCupid” dating site, versus all our POTUSes. I saved the dataset locally, then did the following:</p>
+<pre class="r"><code>pres &lt;- read_csv(here::here(&quot;data&quot;, &quot;president_heights_new.csv&quot;)) %&gt;% 
+  select(height = `height(cm)`)
+
+cupid_pres &lt;- cupid %&gt;% 
+  bind_rows(pres, .id = &quot;sample&quot;) %&gt;% 
+  mutate(sample = as.factor(sample))</code></pre>
+<pre class="r"><code>pres &lt;- read_csv(here::here(&quot;data&quot;, &quot;president_heights_new.csv&quot;)) %&gt;% 
+  select(height = `height(cm)`)
+
+cupid_pres &lt;- cupid %&gt;% 
+  bind_rows(pres, .id = &quot;sample&quot;) %&gt;% 
+  mutate(sample = as.factor(sample))
+
+cupid_pres %&gt;% 
+  group_by(sample) %&gt;% 
+  summarize(mh = mean(height),
+            sd = sd(height))
+
+d_hat &lt;- cupid_pres %&gt;% 
+  specify(height ~ sample) %&gt;% 
+  calculate(stat = &quot;diff in means&quot;, order = c(1, 2))
+
+null_distn &lt;- cupid_pres %&gt;% 
+  specify(height ~ sample) %&gt;%
+  hypothesize(null = &quot;independence&quot;) %&gt;%
+  generate(reps = 1000, type = &quot;permute&quot;) %&gt;%
+  calculate(stat = &quot;diff in means&quot;, order = c(1, 2))
+null_distn %&gt;% 
+  visualize(obs_stat = d_hat, direction = &quot;two_sided&quot;)</code></pre>
 <div id="bonus" class="section level2">
 <h2><span class="header-section-number">9.1</span> BONUS</h2>
 <p>In the last class, a student asked (paraphrasing here):</p>
