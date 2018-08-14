@@ -542,7 +542,7 @@ cupid &lt;- profiles %&gt;%
 <ol style="list-style-type: decimal">
 <li>Create a confidence interval for the unknown population parameter <span class="math inline">\(\mu\)</span> using our “OKCupid” sample data using <em>bootstrapping</em>.
 <ul>
-<li>Note that we don’t need to shift this distribution since we want the center of our confidence interval to be our point estimate <span class="math inline">\(\bar{x}_{obs} = 179.7755556\)</span>.</li>
+<li>Note that we don’t need to shift this distribution since we want the center of our confidence interval to be our point estimate <span class="math inline">\(\bar{x}_{obs} = 179.78\)</span>.</li>
 </ul></li>
 <li>Is 178.06 is contained in this confidence interval as a plausible value of <span class="math inline">\(\mu\)</span> (the unknown population mean)?</li>
 <li>Is the entire interval larger than 178.06?</li>
@@ -552,12 +552,6 @@ cupid &lt;- profiles %&gt;%
 <blockquote>
 <p>We are 95% confident the true mean mean height for all US men is between —- and —- centimeters.</p>
 </blockquote>
-<pre class="r"><code>This new distribution is:
-
-- Centered at $\mu_0 = 178.06$, 
-- Bounded on the left by null mu minus mean of bootstrapped means (`r x_bar1` - `r boot_mean` = `r x_bar1 - boot_mean`)
-- Bounded on the right by `r boot_mean`, the bootstrapped sample mean
-- We set `obs_stat` equal to the sample mean, because we want to know: &quot;how extreme is the *difference* between $\mu_0$ and the original sample mean ($\bar{x}_2$), given the bootstrapped distribution of *differences*?&quot;</code></pre>
 </div>
 <div id="two-means-independent-samples-on-your-own" class="section level1">
 <h1><span class="header-section-number">9</span> Two means (independent samples) (on your own)</h1>
@@ -569,29 +563,6 @@ cupid &lt;- profiles %&gt;%
 cupid_pres &lt;- cupid %&gt;% 
   bind_rows(pres, .id = &quot;sample&quot;) %&gt;% 
   mutate(sample = as.factor(sample))</code></pre>
-<pre class="r"><code>pres &lt;- read_csv(here::here(&quot;data&quot;, &quot;president_heights_new.csv&quot;)) %&gt;% 
-  select(height = `height(cm)`)
-
-cupid_pres &lt;- cupid %&gt;% 
-  bind_rows(pres, .id = &quot;sample&quot;) %&gt;% 
-  mutate(sample = as.factor(sample))
-
-cupid_pres %&gt;% 
-  group_by(sample) %&gt;% 
-  summarize(mh = mean(height),
-            sd = sd(height))
-
-d_hat &lt;- cupid_pres %&gt;% 
-  specify(height ~ sample) %&gt;% 
-  calculate(stat = &quot;diff in means&quot;, order = c(1, 2))
-
-null_distn &lt;- cupid_pres %&gt;% 
-  specify(height ~ sample) %&gt;%
-  hypothesize(null = &quot;independence&quot;) %&gt;%
-  generate(reps = 1000, type = &quot;permute&quot;) %&gt;%
-  calculate(stat = &quot;diff in means&quot;, order = c(1, 2))
-null_distn %&gt;% 
-  visualize(obs_stat = d_hat, direction = &quot;two_sided&quot;)</code></pre>
 <div id="bonus" class="section level2">
 <h2><span class="header-section-number">9.1</span> BONUS</h2>
 <p>In the last class, a student asked (paraphrasing here):</p>

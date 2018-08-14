@@ -206,7 +206,7 @@ mu0 <- 178.06
 Follow along in [ModernDive, Appendix B.2.4](http://moderndive.netlify.com/b-appendixb).
 
 1. Create a confidence interval for the unknown population parameter $\mu$ using our "OKCupid" sample data using *bootstrapping*. 
-    - Note that we don't need to shift this distribution since we want the center of our confidence interval to be our point estimate $\bar{x}_{obs} = `r cupid_bar %>% pull()`$.
+    - Note that we don't need to shift this distribution since we want the center of our confidence interval to be our point estimate $\bar{x}_{obs} = `r cupid_bar %>% pull() %>% round(2)`$.
 1. Is `r mu0` is contained in this confidence interval as a plausible value of $\mu$ (the unknown population mean)?
 1. Is the entire interval larger than `r mu0`?
 1. Does this match with our hypothesis test results of rejecting the null hypothesis in favor of the alternative ($\mu > 178.06$)?
@@ -266,7 +266,7 @@ null_2a %>%
   geom_vline(xintercept = upper_ci)
 ```
 
-```{r eval = FALSE}
+```{r eval = FALSE, include = FALSE}
 This new distribution is:
 
 - Centered at $\mu_0 = 178.06$, 
@@ -310,7 +310,7 @@ cupid_pres <- cupid %>%
 
 
 
-```{r eval = FALSE}
+```{r eval = FALSE, include = FALSE}
 pres <- read_csv(here::here("data", "president_heights_new.csv")) %>% 
   select(height = `height(cm)`)
 
