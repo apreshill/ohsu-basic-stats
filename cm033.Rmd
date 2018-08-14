@@ -1,0 +1,346 @@
+---
+title: "CONJ620: CM 3.3"
+subtitle: "Resampling-based hypothesis testing"
+author: "Alison Hill"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+---
+
+
+```{r setup, include=FALSE}
+# leave this chunk alone
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300)
+```
+
+
+# Overview
+
+- A complete knitted `html` file is due on Sakai by beginning of class Thursday August 16th (2:30pm). 
+- This lab is based on the assigned [ModernDive readings](https://ohsu-conj620.netlify.com/due.html). Please open and follow closely!
+- You'll need to load these packages to do the lab (make sure they are installed first, not in your .Rmd file!):
+
+```{r}
+library(infer)
+library(tidyverse)
+library(skimr)
+library(okcupiddata)
+options(pillar.sigfig = 6) # you need to set this at the top of your Rmd
+```
+
+# Watch
+
+- [Bunnies, Dragons and the 'Normal' World: Central Limit Theorem | The New York Times](https://www.youtube.com/watch?time_continue=38&v=jvoxEYmQHNM)
+
+# Read
+
+- [The Importance of Being Uncertain](https://www.nature.com/articles/nmeth.2613)
+
+
+# Review Previous Lab
+
+In our [last lab](cm032.html), we used data to estimate the average height of males in the US. The sample data was from the [CDC's 2016 Behavioral Risk Factor Surveillance System (BRFSS)](https://www.cdc.gov/brfss/annual_data/annual_2016.html):
+
+> "The Behavioral Risk Factor Surveillance System (BRFSS) is the nation's premier system of health-related telephone surveys that collect state data about U.S. residents regarding their health-related risk behaviors, chronic health conditions, and use of preventive services."
+
+We started by reading in the data:
+
+```{r}
+male_heights <- read_csv("https://raw.githubusercontent.com/apreshill/ohsu-basic-stats/master/data/male_heights.csv")
+```
+
+Then we estimated the `mean` and `sd` of US male heights using sample statistics.
+
+```{r}
+ggplot(male_heights, aes(x = HTM4)) +
+  geom_histogram(color = "white")
+skim(male_heights)
+x_bar1 <- male_heights %>% 
+  summarize(stat = mean(HTM4))
+x_bar1
+```
+
+Next, we quantified the *precision* of our estimate of the mean using bootstrapping to simulate the sampling distribution of the sample mean. [Recall](https://moderndive.com/8-sampling.html#student-shovels) that sampling distributions are a specific kind of distribution: distributions of *point estimates/sample statistics* based on samples of size $n$ used to estimate an unknown *population parameter*. Here is some sample code:
+
+```{r}
+set.seed(1701)
+mh_means <- male_heights %>% 
+  specify(response = HTM4) %>% 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "mean")
+```
+
+Bootstrapping the sampling distribution helps us describe how values of the sample mean of heights $\widehat{\mu}$ will vary from sample to sample due to **sampling variability** and thus identify "typical" and "atypical" values of $\widehat{\mu}$. 
+
+```{r}
+mh_means %>% 
+  summarize(mean_of_means = mean(stat))
+
+(percentile_ci1 <- mh_means %>% 
+  get_ci())
+
+mh_means %>% 
+  visualize(endpoints = percentile_ci1, direction = "between")
+```
+
+In fact, we could use `dplyr` to count exactly how many bootstrapped means fall outside of the 95% confidence interval (the green shaded region bounded by the two green lines). Counting the number of bootstrapped means shows that we have exactly $25/1000 = .025$ samples below the lower bound (2.5%) CI (now shaded in red).
+
+```{r}
+mh_means %>% 
+  visualize(obs_stat = pull(percentile_ci1[1]), direction = "less")
+
+mh_means %>% 
+  count(stat < pull(percentile_ci1[1]))
+```
+
+We also count exactly $25/1000 = .025$ samples above the upper bound (97.5%) CI.
+
+```{r}
+mh_means %>% 
+  visualize(obs_stat = pull(percentile_ci1[2]), direction = "greater")
+
+mh_means %>% 
+  count(stat > pull(percentile_ci1[2]))
+
+percentile_ci1
+```
+
+So, our original sample mean was `r round(x_bar1,2)`. We used bootstrapping to quantify the precision of that sample estimate. Finally, we used `infer::get_ci(type = "percentile")` to calculate the range of "stats" (here, sample means) that encompasses 95% of the bootstrapped samples- exactly 5% of our bootstrapped samples produce means that fall outside of this range.
+
+# Key Questions (`r emo::ji("alarm")` 20 min)
+
+See [Chapter 8 in ModernDive](https://moderndive.com/8-sampling.html#polls).
+
+1. Population: Who is the population of interest that we want to say something about?
+1. What is the population parameter of interest?
+    - Hint: https://moderndive.com/9-confidence-intervals.html
+1. Census: What would a census be in this case?
+1. Sampling: How do you acquire the sample of size $n$ observations? What is the sample size $n$?
+1. Point estimates/sample statistics: What is the summary statistic based on the sample of size $n$ that estimates the unknown population parameter?
+    - Hint: https://moderndive.com/9-confidence-intervals.html
+1. Representative sampling: Is the sample procedure representative? In other words, do you believe the resulting samples “look like” the population?
+1. Random sampling: Was the sampling random?
+    - Follow-up question: if you took another sample using the exact same methods, do you think you would get the *exact* same sample statistic?
+1. Where is the sampling distribution centered? 
+1. What is the spread of this sampling distribution?
+1. Complete these two sentences:
+
+> Assuming that this sample is representative of all males in the US, we are 95% confident that the average height for males in the US is between ---- and ---- centimeters.
+
+> Assuming that this sample is representative of all males in the US, if we were to collect 1,000 random samples using the exact same sampling method, in 95% of *those* samples (i.e., 950 out of 1,000), the average height for males in the US would be between ---- and ---- centimeters.
+
+
+# "OKCupid" sample
+
+In this lab, you'll use a second different sample to estimate the average height of US males. This sample was taken from male volunteer users of the dating website "OKCupid" living in the San Francisco area. Heights are self-reported in inches. Use the code provided to load the `profiles` from the `okcupiddata` R package. This code filters for all males, converts height to centimeters, drops missing values, and take a random sample of $n$ = 45 observations.
+
+```{r }
+library(okcupiddata)
+set.seed(2018)
+cupid <- profiles %>% 
+  filter(sex == "m") %>%
+  mutate(height = 2.54*height) %>% 
+  drop_na(height) %>% 
+  sample_n(45) %>% 
+  select(height) %>% 
+  remove_rownames()
+```
+
+
+
+
+# Bootstrapping for hypothesis test (`r emo::ji("alarm")` 20 min)
+
+Follow along in [ModernDive, Appendix B.2.4](http://moderndive.netlify.com/b-appendixb).
+
+Evaluate the following competing hypotheses:
+
+## In words 
+
+- Null hypothesis: The mean height for all US men is equal to 178.06 cm.
+
+- Alternative hypothesis:  The mean height for all US men is greater than 178.06 cm.
+
+
+## In symbols (with annotations) 
+
+- $H_0: \mu = \mu_{0}$, where $\mu$ represents the mean height for all US men and $\mu_0$ is 178.06.
+- $H_A: \mu > 178.06$
+
+Think: if the population mean *were* 178.06, how surprised would I be to get a sample mean as or more extreme than the one I got?
+
+```{r echo = FALSE}
+cupid_bar <- cupid %>% 
+  summarize(stat = mean(height))
+cupid_bar
+```
+
+In order to look to see if the observed sample mean of `r cupid_bar %>% pull()` is statistically greater than $\mu_0 = 178.06$, we need to account for the sample size.  We also need to determine a process that replicates how the original sample of size `r nrow(cupid)` was selected.  
+
+We can use the idea of *bootstrapping* to simulate the population from which the sample came and then generate samples from that simulated population to account for sampling variability.  Recall how bootstrapping would apply in this context:
+
+```{r echo=FALSE}
+mu0 <- 178.06
+```
+
+
+1. Sample with replacement from our original sample of `r nrow(cupid)` men and repeat this process 1,000 times, 
+1. Calculate the mean for each of the 1,000 bootstrap samples created in Step 1.,
+1. Combine all of these bootstrap statistics calculated in Step 2 into a `boot_distn` object, and
+1. Shift the center of this distribution over to the null value of `r mu0`. (This is needed since it will be centered at `r cupid_bar %>% pull()` via the process of bootstrapping.)
+1. Use this distribution to observe our $p$-value. Recall this is a right-tailed test so we will be looking for values that are greater than or equal to `r cupid_bar %>% pull()` for our $p$-value.
+
+
+
+# Bootstrapping for a confidence interval (`r emo::ji("alarm")` 20 min)
+
+Follow along in [ModernDive, Appendix B.2.4](http://moderndive.netlify.com/b-appendixb).
+
+1. Create a confidence interval for the unknown population parameter $\mu$ using our "OKCupid" sample data using *bootstrapping*. 
+    - Note that we don't need to shift this distribution since we want the center of our confidence interval to be our point estimate $\bar{x}_{obs} = `r cupid_bar %>% pull()`$.
+1. Is `r mu0` is contained in this confidence interval as a plausible value of $\mu$ (the unknown population mean)?
+1. Is the entire interval larger than `r mu0`.  
+1. Does this match with our hypothesis test results of rejecting the null hypothesis in favor of the alternative ($\mu > 178.06$)?
+1. Complete this sentense:
+
+> We are 95% confident the true mean mean height for all US men is between ---- and ---- centimeters.
+
+Which confidence interval is more narrow and hence more precise- your original sample or sample 2a? As a consequence, which would you rather use to estimate your population parameter? Discuss reasons why one interval is wider than the other.
+
+```{r}
+ggplot(cupid, aes(x = height)) +
+  geom_histogram(color = "white", binwidth = 4)
+```
+
+Let's state:
+
+> The average height of US males is `r round(x_bar1, 2)`. Does the data in sample 2a provide convincing evidence that average height of US males in this sample is different from `r round(x_bar1, 2)`? Use a significance level of 5%.
+
+$$H_0: \mu = 178.06$$
+
+$$H_1: \mu \neq 178.06$$
+
+
+To answer this question:
+
+1. Create a bootrapped distribution of sample means based on sample `2a` (use `set.seed(1701)`).
+1. Calculate the 95% confidence interval. 
+1. Does it contain `r round(x_bar1, 2)`?
+1. How many bootstrap samples produced means as or more extreme than the sample mean I got?
+
+```{r include = FALSE}
+set.seed(1701)
+mh2a_means <- cupid %>% 
+  specify(response = height) %>% 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "mean")
+
+(percentile_ci2 <- mh2a_means %>% 
+  get_ci())
+
+
+boot_mean <- mh2a_means %>% 
+  summarize(mean_of_means = mean(stat)) %>% 
+  pull()
+
+mh2a_means %>% 
+  visualize(endpoints = percentile_ci2, direction = "between")
+
+mh2a_means %>%  
+  count()
+```
+
+
+
+```{r include = FALSE}
+set.seed(1701)
+
+null_2a <- cupid %>%
+  specify(response = height) %>%
+  hypothesize(null = "point", mu = 178.06) %>% # hypothesize step
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+null_2a %>% 
+  visualize(obs_stat = cupid_bar, direction = "two_sided") 
+
+null_2a %>%
+  get_pvalue(obs_stat = cupid_bar, direction = "two_sided")
+
+null_mu <- 178.06
+lower_ci <- null_mu - abs(null_mu - boot_mean)
+upper_ci <- null_mu + abs(null_mu - boot_mean)
+c(lower_ci, upper_ci)
+
+null_2a %>% 
+  visualize(obs_stat = cupid_bar, direction = "two_sided") +
+  geom_vline(xintercept = lower_ci) +
+  geom_vline(xintercept = upper_ci)
+```
+
+This new distribution is:
+
+- Centered at $\mu_0 = 178.06$, 
+- Bounded on the left by null mu minus mean of bootstrapped means (`r x_bar1` - `r boot_mean` = `r x_bar1 - boot_mean`)
+- Bounded on the right by `r boot_mean`, the bootstrapped sample mean
+- We set `obs_stat` equal to the sample mean, because we want to know: "how extreme is the *difference* between $\mu_0$ and the original sample mean ($\bar{x}_2$), given the bootstrapped distribution of *differences*?"
+
+
+```{r eval = FALSE, include = FALSE}
+null_dist <- cupid %>%
+  specify(response = height) %>%
+  hypothesize(null = "point", mu = 178) %>% # hypothesize step
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+null_dist %>% 
+  visualize(obs_stat = 182, direction = "greater")
+null_dist %>%
+  get_pvalue(obs_stat = x_bar1, direction = "two_sided")
+```
+
+
+
+# Two means (independent samples)
+
+Follow along with [ModernDive Appendix B.5](http://moderndive.netlify.com/b-appendixb).
+
+Bind president sample and cupid sample together with indicator for sample. Then do two-sample t test
+
+```{r include = FALSE}
+mh_3a <- read_csv(here::here("data", "president_heights_new.csv")) %>% 
+  select(height = `height(cm)`)
+
+mh_3 <- cupid %>% 
+  bind_rows(mh_3a, .id = "sample") %>% 
+  mutate(sample = as.factor(sample))
+
+mh_3 %>% 
+  group_by(sample) %>% 
+  summarize(mh = mean(height),
+            sd = sd(height))
+
+d_hat <- mh_3 %>% 
+  specify(height ~ sample) %>% 
+  calculate(stat = "diff in means", order = c(1, 2))
+
+null_distn <- mh_3 %>% 
+  specify(height ~ sample) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c(1, 2))
+null_distn %>% 
+  visualize(obs_stat = d_hat, direction = "two_sided")
+```
+
+## BONUS
+
+In the last class, a student asked (paraphrasing here):
+
+> "I don't understand why you would bootstrap- once you have your sample mean there is no variability. Why would you resample when you already know your sample mean?"
+
+Answer this question! Each TA will pick the top answer from their batch of labs. Those 3 students will get a "plus" added to this lab (or if you already got a check plus on this lab, it will be applied to a "check" lab from earlier in the quarter). We'll share the best answers in class!

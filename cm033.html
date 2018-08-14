@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Alison Hill" />
+
+
+<title>CONJ620: CM 3.3</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CONJ 620</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="cm.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Class Meetings
+  </a>
+</li>
+<li>
+  <a href="due.html">
+    <span class="fa fa-calendar-check"></span>
+     
+    Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
+    <span class="fa fa-user-ninja"></span>
+     
+    DataCamp
+  </a>
+</li>
+<li>
+  <a href="https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18">
+    <span class="fa fa-university"></span>
+     
+    Sakai
+  </a>
+</li>
+<li>
+  <a href="https://gitter.im/conj620/Lobby?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">
+    <span class="fa fa-comments"></span>
+     
+    Gitter Chat
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">
+    <span class="fa fa-cogs"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">CONJ620: CM 3.3</h1>
+<h3 class="subtitle"><em>Resampling-based hypothesis testing</em></h3>
+<h4 class="author"><em>Alison Hill</em></h4>
+
+</div>
+
+
+<div id="overview" class="section level1">
+<h1><span class="header-section-number">1</span> Overview</h1>
+<ul>
+<li>A complete knitted <code>html</code> file is due on Sakai by beginning of class Thursday August 16th (2:30pm).</li>
+<li>This lab is based on the assigned <a href="https://ohsu-conj620.netlify.com/due.html">ModernDive readings</a>. Please open and follow closely!</li>
+<li>You’ll need to load these packages to do the lab (make sure they are installed first, not in your .Rmd file!):</li>
+</ul>
+<pre class="r"><code>library(infer)
+library(tidyverse)
+library(skimr)
+library(okcupiddata)
+options(pillar.sigfig = 6) # you need to set this at the top of your Rmd</code></pre>
+</div>
+<div id="watch" class="section level1">
+<h1><span class="header-section-number">2</span> Watch</h1>
+<ul>
+<li><a href="https://www.youtube.com/watch?time_continue=38&amp;v=jvoxEYmQHNM">Bunnies, Dragons and the ‘Normal’ World: Central Limit Theorem | The New York Times</a></li>
+</ul>
+</div>
+<div id="read" class="section level1">
+<h1><span class="header-section-number">3</span> Read</h1>
+<ul>
+<li><a href="https://www.nature.com/articles/nmeth.2613">The Importance of Being Uncertain</a></li>
+</ul>
+</div>
+<div id="review-previous-lab" class="section level1">
+<h1><span class="header-section-number">4</span> Review Previous Lab</h1>
+<p>In our <a href="cm032.html">last lab</a>, we used data to estimate the average height of males in the US. The sample data was from the <a href="https://www.cdc.gov/brfss/annual_data/annual_2016.html">CDC’s 2016 Behavioral Risk Factor Surveillance System (BRFSS)</a>:</p>
+<blockquote>
+<p>“The Behavioral Risk Factor Surveillance System (BRFSS) is the nation’s premier system of health-related telephone surveys that collect state data about U.S. residents regarding their health-related risk behaviors, chronic health conditions, and use of preventive services.”</p>
+</blockquote>
+<p>We started by reading in the data:</p>
+<pre class="r"><code>male_heights &lt;- read_csv(&quot;https://raw.githubusercontent.com/apreshill/ohsu-basic-stats/master/data/male_heights.csv&quot;)</code></pre>
+<p>Then we estimated the <code>mean</code> and <code>sd</code> of US male heights using sample statistics.</p>
+<pre class="r"><code>ggplot(male_heights, aes(x = HTM4)) +
+  geom_histogram(color = &quot;white&quot;)</code></pre>
+<p><img src="cm033_files/figure-html/unnamed-chunk-3-1.png" width="2100" /></p>
+<pre class="r"><code>skim(male_heights)</code></pre>
+<pre><code>Skim summary statistics
+ n obs: 204509 
+ n variables: 4 
+
+── Variable type:integer ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n     mean       sd   p0   p25   p50
+     HTM4       0   204509 204509   178.06     7.79   91   173   178
+   id_num       0   204509 204509 1e+05    59036.81    1 51128 1e+05
+    WTKG3    2970   201539 204509  8993.52  1930.56 2268  7711  8618
+    p75  p100     hist
+    183   231 ▁▁▁▁▇▇▁▁
+ 153382 2e+05 ▇▇▇▇▇▇▇▇
+   9979 27216 ▁▇▇▁▁▁▁▁
+
+── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+ variable missing complete      n   mean      sd  p0    p25    p50    p75
+  _LLCPWT       0   204509 204509 581.91 1013.13 0.8 102.05 252.75 631.23
+     p100     hist
+ 28708.95 ▇▁▁▁▁▁▁▁</code></pre>
+<pre class="r"><code>x_bar1 &lt;- male_heights %&gt;% 
+  summarize(stat = mean(HTM4))
+x_bar1</code></pre>
+<pre><code># A tibble: 1 x 1
+     stat
+    &lt;dbl&gt;
+1 178.061</code></pre>
+<p>Next, we quantified the <em>precision</em> of our estimate of the mean using bootstrapping to simulate the sampling distribution of the sample mean. <a href="https://moderndive.com/8-sampling.html#student-shovels">Recall</a> that sampling distributions are a specific kind of distribution: distributions of <em>point estimates/sample statistics</em> based on samples of size <span class="math inline">\(n\)</span> used to estimate an unknown <em>population parameter</em>. Here is some sample code:</p>
+<pre class="r"><code>set.seed(1701)
+mh_means &lt;- male_heights %&gt;% 
+  specify(response = HTM4) %&gt;% 
+  generate(reps = 1000, type = &quot;bootstrap&quot;) %&gt;% 
+  calculate(stat = &quot;mean&quot;)</code></pre>
+<p>Bootstrapping the sampling distribution helps us describe how values of the sample mean of heights <span class="math inline">\(\widehat{\mu}\)</span> will vary from sample to sample due to <strong>sampling variability</strong> and thus identify “typical” and “atypical” values of <span class="math inline">\(\widehat{\mu}\)</span>.</p>
+<pre class="r"><code>mh_means %&gt;% 
+  summarize(mean_of_means = mean(stat))</code></pre>
+<pre><code># A tibble: 1 x 1
+  mean_of_means
+          &lt;dbl&gt;
+1       178.062</code></pre>
+<pre class="r"><code>(percentile_ci1 &lt;- mh_means %&gt;% 
+  get_ci())</code></pre>
+<pre><code># A tibble: 1 x 2
+   `2.5%` `97.5%`
+    &lt;dbl&gt;   &lt;dbl&gt;
+1 178.026 178.094</code></pre>
+<pre class="r"><code>mh_means %&gt;% 
+  visualize(endpoints = percentile_ci1, direction = &quot;between&quot;)</code></pre>
+<p><img src="cm033_files/figure-html/unnamed-chunk-5-1.png" width="2100" /></p>
+<p>In fact, we could use <code>dplyr</code> to count exactly how many bootstrapped means fall outside of the 95% confidence interval (the green shaded region bounded by the two green lines). Counting the number of bootstrapped means shows that we have exactly <span class="math inline">\(25/1000 = .025\)</span> samples below the lower bound (2.5%) CI (now shaded in red).</p>
+<pre class="r"><code>mh_means %&gt;% 
+  visualize(obs_stat = pull(percentile_ci1[1]), direction = &quot;less&quot;)</code></pre>
+<p><img src="cm033_files/figure-html/unnamed-chunk-6-1.png" width="2100" /></p>
+<pre class="r"><code>mh_means %&gt;% 
+  count(stat &lt; pull(percentile_ci1[1]))</code></pre>
+<pre><code># A tibble: 2 x 2
+  `stat &lt; pull(percentile_ci1[1])`     n
+  &lt;lgl&gt;                            &lt;int&gt;
+1 FALSE                              975
+2 TRUE                                25</code></pre>
+<p>We also count exactly <span class="math inline">\(25/1000 = .025\)</span> samples above the upper bound (97.5%) CI.</p>
+<pre class="r"><code>mh_means %&gt;% 
+  visualize(obs_stat = pull(percentile_ci1[2]), direction = &quot;greater&quot;)</code></pre>
+<p><img src="cm033_files/figure-html/unnamed-chunk-7-1.png" width="2100" /></p>
+<pre class="r"><code>mh_means %&gt;% 
+  count(stat &gt; pull(percentile_ci1[2]))</code></pre>
+<pre><code># A tibble: 2 x 2
+  `stat &gt; pull(percentile_ci1[2])`     n
+  &lt;lgl&gt;                            &lt;int&gt;
+1 FALSE                              975
+2 TRUE                                25</code></pre>
+<pre class="r"><code>percentile_ci1</code></pre>
+<pre><code># A tibble: 1 x 2
+   `2.5%` `97.5%`
+    &lt;dbl&gt;   &lt;dbl&gt;
+1 178.026 178.094</code></pre>
+<p>So, our original sample mean was 178.06. We used bootstrapping to quantify the precision of that sample estimate. Finally, we used <code>infer::get_ci(type = &quot;percentile&quot;)</code> to calculate the range of “stats” (here, sample means) that encompasses 95% of the bootstrapped samples- exactly 5% of our bootstrapped samples produce means that fall outside of this range.</p>
+</div>
+<div id="key-questions-20-min" class="section level1">
+<h1><span class="header-section-number">5</span> Key Questions (⏰ 20 min)</h1>
+<p>See <a href="https://moderndive.com/8-sampling.html#polls">Chapter 8 in ModernDive</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Population: Who is the population of interest that we want to say something about?</li>
+<li>What is the population parameter of interest?
+<ul>
+<li>Hint: <a href="https://moderndive.com/9-confidence-intervals.html" class="uri">https://moderndive.com/9-confidence-intervals.html</a></li>
+</ul></li>
+<li>Census: What would a census be in this case?</li>
+<li>Sampling: How do you acquire the sample of size <span class="math inline">\(n\)</span> observations? What is the sample size <span class="math inline">\(n\)</span>?</li>
+<li>Point estimates/sample statistics: What is the summary statistic based on the sample of size <span class="math inline">\(n\)</span> that estimates the unknown population parameter?
+<ul>
+<li>Hint: <a href="https://moderndive.com/9-confidence-intervals.html" class="uri">https://moderndive.com/9-confidence-intervals.html</a></li>
+</ul></li>
+<li>Representative sampling: Is the sample procedure representative? In other words, do you believe the resulting samples “look like” the population?</li>
+<li>Random sampling: Was the sampling random?
+<ul>
+<li>Follow-up question: if you took another sample using the exact same methods, do you think you would get the <em>exact</em> same sample statistic?</li>
+</ul></li>
+<li>Where is the sampling distribution centered?</li>
+<li>What is the spread of this sampling distribution?</li>
+<li>Complete these two sentences:</li>
+</ol>
+<blockquote>
+<p>Assuming that this sample is representative of all males in the US, we are 95% confident that the average height for males in the US is between —- and —- centimeters.</p>
+</blockquote>
+<blockquote>
+<p>Assuming that this sample is representative of all males in the US, if we were to collect 1,000 random samples using the exact same sampling method, in 95% of <em>those</em> samples (i.e., 950 out of 1,000), the average height for males in the US would be between —- and —- centimeters.</p>
+</blockquote>
+</div>
+<div id="okcupid-sample" class="section level1">
+<h1><span class="header-section-number">6</span> “OKCupid” sample</h1>
+<p>In this lab, you’ll use a second different sample to estimate the average height of US males. This sample was taken from male volunteer users of the dating website “OKCupid” living in the San Francisco area. Heights are self-reported in inches. Use the code provided to load the <code>profiles</code> from the <code>okcupiddata</code> R package. This code filters for all males, converts height to centimeters, drops missing values, and take a random sample of <span class="math inline">\(n\)</span> = 45 observations.</p>
+<pre class="r"><code>library(okcupiddata)
+set.seed(2018)
+cupid &lt;- profiles %&gt;% 
+  filter(sex == &quot;m&quot;) %&gt;%
+  mutate(height = 2.54*height) %&gt;% 
+  drop_na(height) %&gt;% 
+  sample_n(45) %&gt;% 
+  select(height) %&gt;% 
+  remove_rownames()</code></pre>
+</div>
+<div id="bootstrapping-for-hypothesis-test-20-min" class="section level1">
+<h1><span class="header-section-number">7</span> Bootstrapping for hypothesis test (⏰ 20 min)</h1>
+<p>Follow along in <a href="http://moderndive.netlify.com/b-appendixb">ModernDive, Appendix B.2.4</a>.</p>
+<p>Evaluate the following competing hypotheses:</p>
+<div id="in-words" class="section level2">
+<h2><span class="header-section-number">7.1</span> In words</h2>
+<ul>
+<li><p>Null hypothesis: The mean height for all US men is equal to 178.06 cm.</p></li>
+<li><p>Alternative hypothesis: The mean height for all US men is greater than 178.06 cm.</p></li>
+</ul>
+</div>
+<div id="in-symbols-with-annotations" class="section level2">
+<h2><span class="header-section-number">7.2</span> In symbols (with annotations)</h2>
+<ul>
+<li><span class="math inline">\(H_0: \mu = \mu_{0}\)</span>, where <span class="math inline">\(\mu\)</span> represents the mean height for all US men and <span class="math inline">\(\mu_0\)</span> is 178.06.</li>
+<li><span class="math inline">\(H_A: \mu &gt; 178.06\)</span></li>
+</ul>
+<p>Think: if the population mean <em>were</em> 178.06, how surprised would I be to get a sample mean as or more extreme than the one I got?</p>
+<pre><code>      stat
+1 179.7756</code></pre>
+<p>In order to look to see if the observed sample mean of 179.7755556 is statistically greater than <span class="math inline">\(\mu_0 = 178.06\)</span>, we need to account for the sample size. We also need to determine a process that replicates how the original sample of size 45 was selected.</p>
+<p>We can use the idea of <em>bootstrapping</em> to simulate the population from which the sample came and then generate samples from that simulated population to account for sampling variability. Recall how bootstrapping would apply in this context:</p>
+<ol style="list-style-type: decimal">
+<li>Sample with replacement from our original sample of 45 men and repeat this process 1,000 times,</li>
+<li>Calculate the mean for each of the 1,000 bootstrap samples created in Step 1.,</li>
+<li>Combine all of these bootstrap statistics calculated in Step 2 into a <code>boot_distn</code> object, and</li>
+<li>Shift the center of this distribution over to the null value of 178.06. (This is needed since it will be centered at 179.7755556 via the process of bootstrapping.)</li>
+<li>Use this distribution to observe our <span class="math inline">\(p\)</span>-value. Recall this is a right-tailed test so we will be looking for values that are greater than or equal to 179.7755556 for our <span class="math inline">\(p\)</span>-value.</li>
+</ol>
+</div>
+</div>
+<div id="bootstrapping-for-a-confidence-interval-20-min" class="section level1">
+<h1><span class="header-section-number">8</span> Bootstrapping for a confidence interval (⏰ 20 min)</h1>
+<p>Follow along in <a href="http://moderndive.netlify.com/b-appendixb">ModernDive, Appendix B.2.4</a>.</p>
+<ol style="list-style-type: decimal">
+<li>Create a confidence interval for the unknown population parameter <span class="math inline">\(\mu\)</span> using our “OKCupid” sample data using <em>bootstrapping</em>.
+<ul>
+<li>Note that we don’t need to shift this distribution since we want the center of our confidence interval to be our point estimate <span class="math inline">\(\bar{x}_{obs} = 179.7755556\)</span>.</li>
+</ul></li>
+<li>Is 178.06 is contained in this confidence interval as a plausible value of <span class="math inline">\(\mu\)</span> (the unknown population mean)?</li>
+<li>Is the entire interval larger than 178.06.<br />
+</li>
+<li>Does this match with our hypothesis test results of rejecting the null hypothesis in favor of the alternative (<span class="math inline">\(\mu &gt; 178.06\)</span>)?</li>
+<li>Complete this sentense:</li>
+</ol>
+<blockquote>
+<p>We are 95% confident the true mean mean height for all US men is between —- and —- centimeters.</p>
+</blockquote>
+<p>Which confidence interval is more narrow and hence more precise- your original sample or sample 2a? As a consequence, which would you rather use to estimate your population parameter? Discuss reasons why one interval is wider than the other.</p>
+<pre class="r"><code>ggplot(cupid, aes(x = height)) +
+  geom_histogram(color = &quot;white&quot;, binwidth = 4)</code></pre>
+<p><img src="cm033_files/figure-html/unnamed-chunk-11-1.png" width="2100" /></p>
+<p>Let’s state:</p>
+<blockquote>
+<p>The average height of US males is 178.06. Does the data in sample 2a provide convincing evidence that average height of US males in this sample is different from 178.06? Use a significance level of 5%.</p>
+</blockquote>
+<p><span class="math display">\[H_0: \mu = 178.06\]</span></p>
+<p><span class="math display">\[H_1: \mu \neq 178.06\]</span></p>
+<p>To answer this question:</p>
+<ol style="list-style-type: decimal">
+<li>Create a bootrapped distribution of sample means based on sample <code>2a</code> (use <code>set.seed(1701)</code>).</li>
+<li>Calculate the 95% confidence interval.</li>
+<li>Does it contain 178.06?</li>
+<li>How many bootstrap samples produced means as or more extreme than the sample mean I got?</li>
+</ol>
+<p>This new distribution is:</p>
+<ul>
+<li>Centered at <span class="math inline">\(\mu_0 = 178.06\)</span>,</li>
+<li>Bounded on the left by null mu minus mean of bootstrapped means (178.0612149 - 179.7375684 = -1.6763535)</li>
+<li>Bounded on the right by 179.7375684, the bootstrapped sample mean</li>
+<li>We set <code>obs_stat</code> equal to the sample mean, because we want to know: “how extreme is the <em>difference</em> between <span class="math inline">\(\mu_0\)</span> and the original sample mean (<span class="math inline">\(\bar{x}_2\)</span>), given the bootstrapped distribution of <em>differences</em>?”</li>
+</ul>
+</div>
+<div id="two-means-independent-samples" class="section level1">
+<h1><span class="header-section-number">9</span> Two means (independent samples)</h1>
+<p>Follow along with <a href="http://moderndive.netlify.com/b-appendixb">ModernDive Appendix B.5</a>.</p>
+<p>Bind president sample and cupid sample together with indicator for sample. Then do two-sample t test</p>
+<div id="bonus" class="section level2">
+<h2><span class="header-section-number">9.1</span> BONUS</h2>
+<p>In the last class, a student asked (paraphrasing here):</p>
+<blockquote>
+<p>“I don’t understand why you would bootstrap- once you have your sample mean there is no variability. Why would you resample when you already know your sample mean?”</p>
+</blockquote>
+<p>Answer this question! Each TA will pick the top answer from their batch of labs. Those 3 students will get a “plus” added to this lab (or if you already got a check plus on this lab, it will be applied to a “check” lab from earlier in the quarter). We’ll share the best answers in class!</p>
+</div>
+</div>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="by-nc.png" height="400" width="65"/></a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
