@@ -113,7 +113,7 @@ So, our original sample mean was `r round(x_bar1,2)`. We used bootstrapping to q
 
 # Key Questions (`r emo::ji("alarm")` 20 min)
 
-See [Chapter 8 in ModernDive](https://moderndive.com/8-sampling.html#polls).
+See [Chapter 8 in ModernDive](https://moderndive.com/8-sampling.html#concepts-related-to-sampling).
 
 Referring to the BRFSS data analyzed in above, answer the following questions:
 
