@@ -556,8 +556,8 @@ cupid &lt;- profiles %&gt;%
 <div id="two-means-independent-samples-on-your-own" class="section level1">
 <h1><span class="header-section-number">9</span> Two means (independent samples) (on your own)</h1>
 <p>Follow along with <a href="http://moderndive.netlify.com/b-appendixb">ModernDive Appendix B.5</a>.</p>
-<p>Use this <a href="https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go">kaggle dataset</a>, and do a two-sample t-test to test whether there is a difference in mean heights between men on the “OKCupid” dating site, versus all our POTUSes. I saved the dataset locally, then did the following:</p>
-<pre class="r"><code>pres &lt;- read_csv(here::here(&quot;data&quot;, &quot;president_heights_new.csv&quot;)) %&gt;% 
+<p>Use this <a href="https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go">kaggle dataset</a>, and do a two-sample t-test to test whether there is a difference in mean heights between men on the “OKCupid” dating site, versus all our POTUSes. I saved the dataset <a href="http://bit.ly/conj620-potusheights">here</a>, then did the following:</p>
+<pre class="r"><code>pres &lt;- read_csv(&quot;http://bit.ly/conj620-potusheights&quot;) %&gt;% 
   select(height = `height(cm)`)
 
 cupid_pres &lt;- cupid %&gt;% 

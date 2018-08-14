@@ -296,10 +296,10 @@ null_dist %>%
 
 Follow along with [ModernDive Appendix B.5](http://moderndive.netlify.com/b-appendixb).
 
-Use this [kaggle dataset](https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go), and do a two-sample t-test to test whether there is a difference in mean heights between men on the "OKCupid" dating site, versus all our POTUSes. I saved the dataset locally, then did the following:
+Use this [kaggle dataset](https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go), and do a two-sample t-test to test whether there is a difference in mean heights between men on the "OKCupid" dating site, versus all our POTUSes. I saved the dataset [here](http://bit.ly/conj620-potusheights), then did the following:
 
 ```{r}
-pres <- read_csv(here::here("data", "president_heights_new.csv")) %>% 
+pres <- read_csv("http://bit.ly/conj620-potusheights") %>% 
   select(height = `height(cm)`)
 
 cupid_pres <- cupid %>% 
