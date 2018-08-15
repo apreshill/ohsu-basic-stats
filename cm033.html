@@ -384,7 +384,7 @@ options(pillar.sigfig = 6) # you need to set this at the top of your Rmd</code><
  n obs: 204509 
  n variables: 4 
 
-── Variable type:integer ──────────────────────────────────────────────────────────────────────────────────────
+── Variable type:integer ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
  variable missing complete      n     mean       sd   p0   p25   p50
      HTM4       0   204509 204509   178.06     7.79   91   173   178
    id_num       0   204509 204509 1e+05    59036.81    1 51128 1e+05
@@ -394,7 +394,7 @@ options(pillar.sigfig = 6) # you need to set this at the top of your Rmd</code><
  153382 2e+05 ▇▇▇▇▇▇▇▇
    9979 27216 ▁▇▇▁▁▁▁▁
 
-── Variable type:numeric ──────────────────────────────────────────────────────────────────────────────────────
+── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
  variable missing complete      n   mean      sd  p0    p25    p50    p75
   _LLCPWT       0   204509 204509 581.91 1013.13 0.8 102.05 252.75 631.23
      p100     hist
@@ -528,12 +528,13 @@ cupid &lt;- profiles %&gt;%
 <p>In order to look to see if the observed sample mean of 179.78 is statistically greater than <span class="math inline">\(\mu_0 = 178.06\)</span>, we need to account for the sample size. We also need to determine a process that replicates how the original sample of size 45 was selected.</p>
 <p>We can use the idea of <em>bootstrapping</em> to simulate the population from which the sample came and then generate samples from that simulated population to account for sampling variability. Recall how bootstrapping would apply in this context:</p>
 <ol style="list-style-type: decimal">
-<li>Sample with replacement from our original sample of 45 men and repeat this process 1,000 times,</li>
+<li>Sample with replacement from our original sample of 45 men and repeat this process 1,000 times (try <code>set.seed(2018)</code>),</li>
 <li>Calculate the mean for each of the 1,000 bootstrap samples created in Step 1.,</li>
 <li>Combine all of these bootstrap statistics calculated in Step 2 into a <code>boot_distn</code> object, and</li>
-<li>Shift the center of this distribution over to the null value of 178.06. (This is needed since it will be centered at 179.7755556 via the process of bootstrapping.)</li>
-<li>Use this distribution to observe our <span class="math inline">\(p\)</span>-value. Recall this is a right-tailed test so we will be looking for values that are greater than or equal to 179.7755556 for our <span class="math inline">\(p\)</span>-value.</li>
+<li>Shift the center of this distribution over to the null value of 178.06. (This is needed since it will be centered at 179.78 via the process of bootstrapping.)</li>
+<li>Use this distribution to observe our <span class="math inline">\(p\)</span>-value. Recall this is a right-tailed test so we will be looking for values that are greater than or equal to 179.78 for our <span class="math inline">\(p\)</span>-value.</li>
 </ol>
+<p><strong>Hint:</strong> With 2018 as my seed, I got a p-value of 0.073 with 1000 reps; and a p-value of 0.0917 with 10,000 reps.</p>
 </div>
 </div>
 <div id="bootstrapping-for-a-confidence-interval-20-min" class="section level1">
@@ -545,18 +546,22 @@ cupid &lt;- profiles %&gt;%
 <li>Note that we don’t need to shift this distribution since we want the center of our confidence interval to be our point estimate <span class="math inline">\(\bar{x}_{obs} = 179.78\)</span>.</li>
 </ul></li>
 <li>Is 178.06 is contained in this confidence interval as a plausible value of <span class="math inline">\(\mu\)</span> (the unknown population mean)?</li>
-<li>Is the entire interval larger than 178.06?</li>
-<li>Does this match with our hypothesis test results of rejecting the null hypothesis in favor of the alternative (<span class="math inline">\(\mu &gt; 178.06\)</span>)?</li>
+<li>Is the entire interval larger than the single value of 178? (that is, are there multiple integer values for height that fall into this confidence interval?)</li>
+<li>Does this match with our hypothesis test results above, where we failed to reject the null hypothesis in favor of the alternative (<span class="math inline">\(\mu &gt; 178.06\)</span>)?</li>
 <li>Complete this sentence:</li>
 </ol>
 <blockquote>
-<p>We are 95% confident the true mean mean height for all US men is between —- and —- centimeters.</p>
+<p>Assuming that this sample is representative of all males in the US, we are 95% confident that the true average height for males in the US is between —- and —- centimeters.</p>
 </blockquote>
 </div>
 <div id="two-means-independent-samples-on-your-own" class="section level1">
 <h1><span class="header-section-number">9</span> Two means (independent samples) (on your own)</h1>
-<p>Follow along with <a href="http://moderndive.netlify.com/b-appendixb">ModernDive Appendix B.5</a>.</p>
-<p>Use this <a href="https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go">kaggle dataset</a>, and do a two-sample t-test to test whether there is a difference in mean heights between men on the “OKCupid” dating site, versus all our POTUSes. I saved the dataset <a href="http://bit.ly/conj620-potusheights">here</a>, then did the following:</p>
+<p>Follow along with the <a href="http://moderndive.netlify.com/10-hypothesis-testing.html#example-comparing-two-means">ModernDive Chapter 10</a> and <a href="http://moderndive.netlify.com/b-appendixb">ModernDive Appendix B.5</a> (search for the section titled: “Two means (independent samples)”).</p>
+<p>Use this <a href="https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go">kaggle dataset</a>, and test whether there is a difference in mean heights between men on the “OKCupid” dating site, versus all our POTUSes. Use a randomization test, which is a resampling-based method also called a permutation test. From ModernDive:</p>
+<blockquote>
+<p>“We can use the idea of randomization testing (also known as permutation testing) to simulate the population from which the sample came (with two groups of different sizes) and then generate samples using shuffling from that simulated population to account for sampling variability.”</p>
+</blockquote>
+<p>I saved the dataset <a href="http://bit.ly/conj620-potusheights">here</a>, then did the following:</p>
 <pre class="r"><code>pres &lt;- read_csv(&quot;http://bit.ly/conj620-potusheights&quot;) %&gt;% 
   select(height = `height(cm)`)
 

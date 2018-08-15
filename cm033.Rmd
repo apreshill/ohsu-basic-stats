@@ -188,18 +188,47 @@ In order to look to see if the observed sample mean of `r cupid_bar %>% pull() %
 
 We can use the idea of *bootstrapping* to simulate the population from which the sample came and then generate samples from that simulated population to account for sampling variability.  Recall how bootstrapping would apply in this context:
 
-```{r echo=FALSE}
+```{r include=FALSE}
 mu0 <- 178.06
 ```
 
 
-1. Sample with replacement from our original sample of `r nrow(cupid)` men and repeat this process 1,000 times, 
+1. Sample with replacement from our original sample of `r nrow(cupid)` men and repeat this process 1,000 times (try `set.seed(2018)`), 
 1. Calculate the mean for each of the 1,000 bootstrap samples created in Step 1.,
 1. Combine all of these bootstrap statistics calculated in Step 2 into a `boot_distn` object, and
-1. Shift the center of this distribution over to the null value of `r mu0`. (This is needed since it will be centered at `r cupid_bar %>% pull()` via the process of bootstrapping.)
-1. Use this distribution to observe our $p$-value. Recall this is a right-tailed test so we will be looking for values that are greater than or equal to `r cupid_bar %>% pull()` for our $p$-value.
+1. Shift the center of this distribution over to the null value of `r mu0`. (This is needed since it will be centered at `r cupid_bar %>% pull() %>% round(2)` via the process of bootstrapping.)
+1. Use this distribution to observe our $p$-value. Recall this is a right-tailed test so we will be looking for values that are greater than or equal to `r cupid_bar %>% pull() %>% round(2)` for our $p$-value.
 
+```{r include = FALSE}
+set.seed(2018)
 
+null_cupid_1000 <- cupid %>%
+  specify(response = height) %>%
+  hypothesize(null = "point", mu = 178.06) %>% # hypothesize step
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+null_cupid_1000 %>% 
+  visualize(obs_stat = cupid_bar, direction = "greater") 
+
+(cupid_p_1000 <- null_cupid_1000 %>%
+  get_pvalue(obs_stat = cupid_bar, direction = "greater"))
+
+set.seed(2018)
+null_cupid_10000 <- cupid %>%
+  specify(response = height) %>%
+  hypothesize(null = "point", mu = 178.06) %>% # hypothesize step
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+null_cupid_10000 %>% 
+  visualize(obs_stat = cupid_bar, direction = "greater") 
+
+(cupid_p_10000 <- null_cupid_10000 %>%
+  get_pvalue(obs_stat = cupid_bar, direction = "greater"))
+```
+
+**Hint:** With 2018 as my seed, I got a p-value of `r cupid_p_1000 %>% pull()` with 1000 reps; and a p-value of `r cupid_p_10000 %>% pull()` with 10,000 reps.
 
 # Bootstrapping for a confidence interval (`r emo::ji("alarm")` 20 min)
 
@@ -208,63 +237,38 @@ Follow along in [ModernDive, Appendix B.2.4](http://moderndive.netlify.com/b-app
 1. Create a confidence interval for the unknown population parameter $\mu$ using our "OKCupid" sample data using *bootstrapping*. 
     - Note that we don't need to shift this distribution since we want the center of our confidence interval to be our point estimate $\bar{x}_{obs} = `r cupid_bar %>% pull() %>% round(2)`$.
 1. Is `r mu0` is contained in this confidence interval as a plausible value of $\mu$ (the unknown population mean)?
-1. Is the entire interval larger than `r mu0`?
-1. Does this match with our hypothesis test results of rejecting the null hypothesis in favor of the alternative ($\mu > 178.06$)?
+1. Is the entire interval larger than the single value of `r mu0 %>% round(0)`? (that is, are there multiple integer values for height that fall into this confidence interval?)
+1. Does this match with our hypothesis test results above, where we failed to reject the null hypothesis in favor of the alternative ($\mu > 178.06$)?
 1. Complete this sentence:
 
-> We are 95% confident the true mean mean height for all US men is between ---- and ---- centimeters.
+> Assuming that this sample is representative of all males in the US, we are 95% confident that the true average height for males in the US is between ---- and ---- centimeters.
 
 
 
 ```{r include = FALSE}
-set.seed(1701)
-mh2a_means <- cupid %>% 
+set.seed(2018)
+cupid_means <- cupid %>% 
   specify(response = height) %>% 
   generate(reps = 1000, type = "bootstrap") %>% 
   calculate(stat = "mean")
 
-(percentile_ci2 <- mh2a_means %>% 
+(percentile_ci2 <- cupid_means %>% 
   get_ci())
 
-
-boot_mean <- mh2a_means %>% 
+boot_mean <- cupid_means %>% 
   summarize(mean_of_means = mean(stat)) %>% 
   pull()
 
-mh2a_means %>% 
+cupid_means %>% 
   visualize(endpoints = percentile_ci2, direction = "between")
 
-mh2a_means %>%  
+cupid_means %>%  
   count()
 ```
 
 
 
-```{r include = FALSE}
-set.seed(1701)
 
-null_2a <- cupid %>%
-  specify(response = height) %>%
-  hypothesize(null = "point", mu = 178.06) %>% # hypothesize step
-  generate(reps = 1000, type = "bootstrap") %>%
-  calculate(stat = "mean")
-
-null_2a %>% 
-  visualize(obs_stat = cupid_bar, direction = "two_sided") 
-
-null_2a %>%
-  get_pvalue(obs_stat = cupid_bar, direction = "two_sided")
-
-null_mu <- 178.06
-lower_ci <- null_mu - abs(null_mu - boot_mean)
-upper_ci <- null_mu + abs(null_mu - boot_mean)
-c(lower_ci, upper_ci)
-
-null_2a %>% 
-  visualize(obs_stat = cupid_bar, direction = "two_sided") +
-  geom_vline(xintercept = lower_ci) +
-  geom_vline(xintercept = upper_ci)
-```
 
 ```{r eval = FALSE, include = FALSE}
 This new distribution is:
@@ -273,30 +277,30 @@ This new distribution is:
 - Bounded on the left by null mu minus mean of bootstrapped means (`r x_bar1` - `r boot_mean` = `r x_bar1 - boot_mean`)
 - Bounded on the right by `r boot_mean`, the bootstrapped sample mean
 - We set `obs_stat` equal to the sample mean, because we want to know: "how extreme is the *difference* between $\mu_0$ and the original sample mean ($\bar{x}_2$), given the bootstrapped distribution of *differences*?"
+
+null_mu <- 178.06
+lower_ci <- null_mu - abs(null_mu - boot_mean) # if two-sided, would include
+upper_ci <- null_mu + abs(null_mu - boot_mean)
+c(lower_ci, upper_ci)
+
+null_cupid_1000 %>% 
+  visualize(obs_stat = cupid_bar, direction = "greater") +
+  geom_vline(xintercept = lower_ci) +
+  geom_vline(xintercept = upper_ci)
 ```
 
-
-
-```{r eval = FALSE, include = FALSE}
-null_dist <- cupid %>%
-  specify(response = height) %>%
-  hypothesize(null = "point", mu = 178) %>% # hypothesize step
-  generate(reps = 1000, type = "bootstrap") %>%
-  calculate(stat = "mean")
-
-null_dist %>% 
-  visualize(obs_stat = 182, direction = "greater")
-null_dist %>%
-  get_pvalue(obs_stat = x_bar1, direction = "two_sided")
-```
 
 
 
 # Two means (independent samples) (on your own)
 
-Follow along with [ModernDive Appendix B.5](http://moderndive.netlify.com/b-appendixb).
+Follow along with the [ModernDive Chapter 10](http://moderndive.netlify.com/10-hypothesis-testing.html#example-comparing-two-means) and [ModernDive Appendix B.5](http://moderndive.netlify.com/b-appendixb) (search for the section titled: "Two means (independent samples)").
 
-Use this [kaggle dataset](https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go), and do a two-sample t-test to test whether there is a difference in mean heights between men on the "OKCupid" dating site, versus all our POTUSes. I saved the dataset [here](http://bit.ly/conj620-potusheights), then did the following:
+Use this [kaggle dataset](https://www.kaggle.com/hakabuk/us-presidents-heights-how-low-can-u-go), and test whether there is a difference in mean heights between men on the "OKCupid" dating site, versus all our POTUSes. Use a randomization test, which is a resampling-based method also called a permutation test. From ModernDive:
+
+> "We can use the idea of randomization testing (also known as permutation testing) to simulate the population from which the sample came (with two groups of different sizes) and then generate samples using shuffling from that simulated population to account for sampling variability."
+
+I saved the dataset [here](http://bit.ly/conj620-potusheights), then did the following:
 
 ```{r}
 pres <- read_csv("http://bit.ly/conj620-potusheights") %>% 
