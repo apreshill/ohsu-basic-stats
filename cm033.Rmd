@@ -238,7 +238,7 @@ Follow along in [ModernDive, Appendix B.2.4](http://moderndive.netlify.com/b-app
 
 1. Create a confidence interval for the unknown population parameter $\mu$ using our "OKCupid" sample data using *bootstrapping*. 
     - Note that we don't need to shift this distribution since we want the center of our confidence interval to be our point estimate $\bar{x}_{obs} = `r cupid_bar %>% pull() %>% round(2)`$.
-1. Is `r mu0` is contained in this confidence interval as a plausible value of $\mu$ (the unknown population mean)?
+1. Is `r mu0` contained in this confidence interval as a plausible value of $\mu$ (the unknown population mean)?
 1. Is the entire interval larger than the single value of `r mu0 %>% round(0)`? (that is, are there multiple integer values for height that fall into this confidence interval?)
 1. Does this match with our hypothesis test results above, where we failed to reject the null hypothesis in favor of the alternative ($\mu > 178.06$)?
 1. Complete this sentence:
@@ -251,6 +251,7 @@ Follow along in [ModernDive, Appendix B.2.4](http://moderndive.netlify.com/b-app
 set.seed(2018)
 cupid_means <- cupid %>% 
   specify(response = height) %>% 
+ #hypothesize(null = "point", mu = 178.06) %>% # hypothesize step
   generate(reps = 1000, type = "bootstrap") %>% 
   calculate(stat = "mean")
 
@@ -342,7 +343,7 @@ null_distn %>%
   visualize(obs_stat = d_hat, direction = "two_sided")
 ```
 
-## BONUS
+# BONUS
 
 In the last class, a student asked (paraphrasing here):
 

@@ -548,7 +548,7 @@ cupid &lt;- profiles %&gt;%
 <ul>
 <li>Note that we don’t need to shift this distribution since we want the center of our confidence interval to be our point estimate <span class="math inline">\(\bar{x}_{obs} = 179.78\)</span>.</li>
 </ul></li>
-<li>Is 178.06 is contained in this confidence interval as a plausible value of <span class="math inline">\(\mu\)</span> (the unknown population mean)?</li>
+<li>Is 178.06 contained in this confidence interval as a plausible value of <span class="math inline">\(\mu\)</span> (the unknown population mean)?</li>
 <li>Is the entire interval larger than the single value of 178? (that is, are there multiple integer values for height that fall into this confidence interval?)</li>
 <li>Does this match with our hypothesis test results above, where we failed to reject the null hypothesis in favor of the alternative (<span class="math inline">\(\mu &gt; 178.06\)</span>)?</li>
 <li>Complete this sentence:</li>
@@ -571,14 +571,14 @@ cupid &lt;- profiles %&gt;%
 cupid_pres &lt;- cupid %&gt;% 
   bind_rows(pres, .id = &quot;sample&quot;) %&gt;% 
   mutate(sample = as.factor(sample))</code></pre>
-<div id="bonus" class="section level2">
-<h2><span class="header-section-number">9.1</span> BONUS</h2>
+</div>
+<div id="bonus" class="section level1">
+<h1><span class="header-section-number">10</span> BONUS</h1>
 <p>In the last class, a student asked (paraphrasing here):</p>
 <blockquote>
 <p>“I don’t understand why you would bootstrap- once you have your sample mean there is no variability. Why would you resample when you already know your sample mean?”</p>
 </blockquote>
 <p>Answer this question! Each TA will pick the top answer from their batch of labs. Those 3 students will get a “plus” added to this lab (or if you already got a check plus on this lab, it will be applied to a “check” lab from earlier in the quarter). We’ll share the best answers in class!</p>
-</div>
 </div>
 
 <p>
