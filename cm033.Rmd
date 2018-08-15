@@ -175,14 +175,16 @@ Using the "OKCupid" sample data described above, we'll use bootstrapping to eval
 
 Think: if the population mean *were* 178.06, how surprised would I be to get a sample mean as or more extreme than the one I got?
 
-```{r echo = FALSE}
-cupid_bar <- cupid %>% 
-  summarize(stat = mean(height))
-cupid_bar
-```
 
 
 ## The bootstrap approach
+
+First step is to calculate the sample mean you got!
+
+```{r}
+(cupid_bar <- cupid %>% 
+  summarize(stat = mean(height)))
+```
 
 In order to look to see if the observed sample mean of `r cupid_bar %>% pull() %>% round(2)` is statistically greater than $\mu_0 = 178.06$, we need to account for the sample size.  We also need to determine a process that replicates how the original sample of size `r nrow(cupid)` was selected.  
 

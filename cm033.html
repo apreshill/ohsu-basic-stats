@@ -520,11 +520,14 @@ cupid &lt;- profiles %&gt;%
 <li><span class="math inline">\(H_A: \mu &gt; 178.06\)</span></li>
 </ul>
 <p>Think: if the population mean <em>were</em> 178.06, how surprised would I be to get a sample mean as or more extreme than the one I got?</p>
-<pre><code>      stat
-1 179.7756</code></pre>
 </div>
 <div id="the-bootstrap-approach" class="section level2">
 <h2><span class="header-section-number">7.3</span> The bootstrap approach</h2>
+<p>First step is to calculate the sample mean you got!</p>
+<pre class="r"><code>(cupid_bar &lt;- cupid %&gt;% 
+  summarize(stat = mean(height)))</code></pre>
+<pre><code>      stat
+1 179.7756</code></pre>
 <p>In order to look to see if the observed sample mean of 179.78 is statistically greater than <span class="math inline">\(\mu_0 = 178.06\)</span>, we need to account for the sample size. We also need to determine a process that replicates how the original sample of size 45 was selected.</p>
 <p>We can use the idea of <em>bootstrapping</em> to simulate the population from which the sample came and then generate samples from that simulated population to account for sampling variability. Recall how bootstrapping would apply in this context:</p>
 <ol style="list-style-type: decimal">
