@@ -26,9 +26,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -162,14 +161,74 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -297,6 +356,13 @@ div.tocify {
   </a>
 </li>
 <li>
+  <a href="https://distracted-bhabha-a42d09.netlify.com">
+    <span class="fa fa-key"></span>
+     
+    Grades
+  </a>
+</li>
+<li>
   <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
     <span class="fa fa-user-ninja"></span>
      
@@ -384,21 +450,17 @@ options(pillar.sigfig = 6) # you need to set this at the top of your Rmd</code><
  n obs: 204509 
  n variables: 4 
 
-── Variable type:integer ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- variable missing complete      n     mean       sd   p0   p25   p50
-     HTM4       0   204509 204509   178.06     7.79   91   173   178
-   id_num       0   204509 204509 1e+05    59036.81    1 51128 1e+05
-    WTKG3    2970   201539 204509  8993.52  1930.56 2268  7711  8618
-    p75  p100     hist
-    183   231 ▁▁▁▁▇▇▁▁
- 153382 2e+05 ▇▇▇▇▇▇▇▇
-   9979 27216 ▁▇▇▁▁▁▁▁
-
-── Variable type:numeric ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
- variable missing complete      n   mean      sd  p0    p25    p50    p75
-  _LLCPWT       0   204509 204509 581.91 1013.13 0.8 102.05 252.75 631.23
-     p100     hist
- 28708.95 ▇▁▁▁▁▁▁▁</code></pre>
+Variable type: numeric 
+ variable missing complete      n     mean       sd     p0      p25
+  _LLCPWT       0   204509 204509   581.91  1013.13    0.8   102.05
+     HTM4       0   204509 204509   178.06     7.79   91     173   
+   id_num       0   204509 204509 1e+05    59036.81    1   51128   
+    WTKG3    2771   201738 204509  8992.66  1931.2  2268    7711   
+      p50       p75     p100     hist
+   252.75    631.23 28708.95 ▇▁▁▁▁▁▁▁
+   178       183      231    ▁▁▁▁▇▇▁▁
+ 1e+05    153382    2e+05    ▇▇▇▇▇▇▇▇
+  8618      9979    27216    ▁▇▇▁▁▁▁▁</code></pre>
 <pre class="r"><code>x_bar1 &lt;- male_heights %&gt;% 
   summarize(stat = mean(HTM4))
 x_bar1</code></pre>

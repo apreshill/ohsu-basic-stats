@@ -26,9 +26,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -162,14 +161,74 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -294,6 +353,13 @@ div.tocify {
     <span class="fa fa-calendar-check"></span>
      
     Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://distracted-bhabha-a42d09.netlify.com">
+    <span class="fa fa-key"></span>
+     
+    Grades
   </a>
 </li>
 <li>
@@ -560,11 +626,11 @@ $ zhfa     &lt;dbl&gt; -0.58, -0.12, -0.98, -1.20, -1.45, -0.77, 0.34, -0.33...<
  n obs: 537 
  n variables: 4 
 
-── Variable type:character ────────────────────────────────────────────────────────────────────
+Variable type: character 
  variable missing complete   n min max empty n_unique
       sex       0      537 537   1   1     0        2
 
-── Variable type:numeric ──────────────────────────────────────────────────────────────────────
+Variable type: numeric 
  variable missing complete   n  mean    sd    p0   p25   p50   p75   p100
  ageyears       0      537 537  9.89  1.69  6.16  8.38  9.95 11.26  14.03
      x25d       8      529 537 74.31 15.39 36.1  64.3  73.6  84.3  127   
@@ -581,7 +647,7 @@ $ zhfa     &lt;dbl&gt; -0.58, -0.12, -0.98, -1.20, -1.45, -0.77, 0.34, -0.33...<
  n variables: 4 
  group variables: sex 
 
-── Variable type:numeric ──────────────────────────────────────────────────────────────────────
+Variable type: numeric 
  sex variable missing complete   n  mean    sd    p0   p25   p50   p75
    F ageyears       0      271 271  9.83  1.74  6.16  8.3   9.86 11.18
    F     x25d       3      268 271 68.08 13.19 36.9  58.68 67.35 76.6 
@@ -744,43 +810,54 @@ mean_hat &lt;- (k + 1)/nrow(small_vitd)
 d_diag %&gt;% 
   select(id, .hat) %&gt;%
   filter(.hat &gt; (3*mean_hat))</code></pre>
-<pre><code># A tibble: 9 x 2
-     id   .hat
-  &lt;dbl&gt;  &lt;dbl&gt;
-1   207 0.0247
-2   303 0.0294
-3   359 0.0299
-4   436 0.0281
-5   648 0.0224
-6   755 0.0366
-7   902 0.0259
-8   954 0.0390
-9  1053 0.0251</code></pre>
+<pre><code>    id       .hat
+1  207 0.02472936
+2  303 0.02937141
+3  359 0.02991128
+4  436 0.02808036
+5  648 0.02241751
+6  755 0.03662338
+7  902 0.02593086
+8  954 0.03903172
+9 1053 0.02511987</code></pre>
 <pre class="r"><code># discrepancy
 d_diag %&gt;%
   filter(abs(.ext.resid) &gt;= 2) %&gt;%
   select(id, ageyears, .resid, .std.resid, .ext.resid) %&gt;% 
   arrange(desc(abs(.ext.resid)))</code></pre>
-<pre><code># A tibble: 26 x 5
-      id ageyears .resid .std.resid .ext.resid
-   &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
- 1   616     8.82   47.2       3.51       3.55
- 2   156     8.27  -46.5      -3.46      -3.50
- 3   524     9.62   46.1       3.43       3.46
- 4   658    11.9    43.8       3.26       3.29
- 5   446     9.41   41.4       3.08       3.10
- 6   740     9.90   37.7       2.80       2.82
- 7   701     6.96   36.8       2.75       2.77
- 8   403     8.05  -36.2      -2.70      -2.71
- 9   850    10.9    35.0       2.60       2.61
-10   158     9.47   33.9       2.51       2.53
-# ... with 16 more rows</code></pre>
+<pre><code>     id  ageyears    .resid .std.resid .ext.resid
+1   616  8.822724  47.22766   3.509627   3.548228
+2   156  8.269678 -46.47235  -3.460493  -3.497383
+3   524  9.619439  46.12290   3.428426   3.464227
+4   658 11.943870  43.84302   3.263728   3.294267
+5   446  9.414100  41.42309   3.076571   3.101776
+6   740  9.901437  37.69411   2.804681   2.823275
+7   701  6.958248  36.83751   2.748425   2.765809
+8   403  8.045175 -36.24964  -2.695624  -2.711919
+9   850 10.887060  34.97146   2.600100   2.614539
+10  158  9.474333  33.86881   2.513564   2.526442
+11  148 11.467490 -32.64923  -2.429196  -2.440659
+12 1054 13.017110 -32.29858  -2.416726  -2.427988
+13  133  9.860370 -32.49099  -2.411642  -2.422823
+14  241 11.092400 -32.20219  -2.393730  -2.404629
+15  444 10.158800  32.20380   2.392914   2.403799
+16  218  7.921971 -30.51524  -2.271308  -2.280393
+17  656 12.373720  30.34874   2.265852   2.274860
+18  550 11.363450 -29.95725  -2.226879  -2.235356
+19  612  7.850787  29.67716   2.209275   2.217518
+20  244 10.996580 -29.27397  -2.176115  -2.183928
+21  439  9.685147  29.09661   2.162651   2.170294
+22  229 10.128680 -28.80008  -2.148396  -2.155861
+23 1014  8.715948  28.29069   2.102882   2.109796
+24  708  7.722108  27.82986   2.073172   2.079740
+25  243 10.988360 -27.61464  -2.055192  -2.061556
+26 1033 11.141680  27.36183   2.032800   2.038914</code></pre>
 <pre class="r"><code># leverage and discrepancy
 d_diag %&gt;% 
   select(id, .hat, .ext.resid) %&gt;%
   filter(.hat &gt; (3*mean_hat) &amp; abs(.ext.resid) &gt;= 2)</code></pre>
-<pre><code># A tibble: 0 x 3
-# ... with 3 variables: id &lt;dbl&gt;, .hat &lt;dbl&gt;, .ext.resid &lt;dbl&gt;</code></pre>
+<pre><code>[1] id         .hat       .ext.resid
+&lt;0 rows&gt; (or 0-length row.names)</code></pre>
 <pre class="r"><code># discrepancy by gender
 d_diag %&gt;%
   filter(abs(.ext.resid) &gt;= 2) %&gt;%
@@ -799,20 +876,35 @@ d</code></pre>
   filter(.cooksd &gt; d) %&gt;% 
   select(id, x25d, .cooksd) %&gt;% 
   arrange(desc(.cooksd))</code></pre>
-<pre><code># A tibble: 28 x 3
-      id  x25d .cooksd
-   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
- 1   156  36.1  0.0255
- 2  1054  46.6  0.0239
- 3   701 113    0.0221
- 4   658 124    0.0214
- 5   524 125    0.0167
- 6   656 109    0.0164
- 7   616 127    0.0162
- 8   740 116    0.0143
- 9   229  41.8  0.0132
-10   755  58.4  0.0128
-# ... with 18 more rows</code></pre>
+<pre><code>     id  x25d     .cooksd
+1   156  36.1 0.025541252
+2  1054  46.6 0.023933215
+3   701 113.0 0.022103136
+4   658 124.0 0.021432904
+5   524 125.0 0.016714035
+6   656 109.0 0.016449111
+7   616 127.0 0.016217442
+8   740 116.0 0.014339336
+9   229  41.8 0.013191057
+10  755  58.4 0.012815041
+11  348  84.3 0.011960428
+12  403  36.9 0.011528463
+13  204 103.0 0.011309589
+14  704  50.0 0.011042363
+15  148  46.6 0.010645525
+16  446 121.0 0.010356668
+17  850 114.0 0.010229443
+18  218  50.2 0.010120106
+19  708 108.0 0.009891891
+20  612 105.0 0.009884597
+21  217  55.9 0.008640295
+22  860  57.3 0.008351111
+23  241  49.6 0.008209918
+24  916  56.5 0.008192610
+25  427  78.1 0.008172130
+26  243  50.9 0.008104123
+27  901  52.3 0.007990439
+28  639  39.8 0.007670300</code></pre>
 <pre class="r"><code>ggplot(d_diag, aes(x = .hat, y = .cooksd, color = sex)) + 
   geom_point() +
   geom_text(aes(label = id), size = 3, vjust = 2) + 
@@ -827,31 +919,21 @@ d</code></pre>
 <p><img src="cm026-solutions_files/figure-html/unnamed-chunk-12-2.png" width="2100" /></p>
 <ul style="color:cadetblue">
 <ul>
-<li>How many observations would you expect to have high discrepancy in this sample? You may want to account for how many females versus males you would expect.
-<ul>
+<li>How many observations would you expect to have high discrepancy in this sample? You may want to account for how many females versus males you would expect.</li>
 <li>DISCREPANCY: I expect 5% of observations to have high discrepancy, which is measured by externally studentized residuals, so I would expect generally <span class="math inline">\(.05 \times 529 = 26\)</span> observations to be high on this metric. Given the roughly equal sample sizes, this means I’d expect 13 high values for males and females. Instead, I see 7 females with high leverage, compared to 19 males. This is a pretty big difference, and suggests (as I observed with the unstandardized “raw” residuals), that the model may better explain variability in vitamind d levels for females than for males.</li>
-</ul></li>
-<li>Do you see any observations that have <em>both</em> high leverage and discrepancy?
-<ul>
+<li>Do you see any observations that have <em>both</em> high leverage and discrepancy?</li>
 <li>LEVERAGE: 9 observations with high leverage.</li>
 <li>LEVERAGE + DISCREPANCY: 0 observations. Huzzah.</li>
-</ul></li>
-<li>Do any points that are either high leverage or high discrepancy <strong>also</strong> have high influence on the regression estimates, as measured by Cook’s distance?
-<ul>
+<li>Do any points that are either high leverage or high discrepancy <strong>also</strong> have high influence on the regression estimates, as measured by Cook’s distance?</li>
 <li>Yes! I do see one point with high leverage (<code>.hat</code>) and high cooks d values: 755 (a male)
 <ul>
 <li>Generally I see more green than pink above both cut-offs</li>
 </ul></li>
 <li>Same story comparing high discrepancy and cooks d values: a lot of points here, mainly green. 755 doesn’t show up as an extreme for discrepancy.</li>
-</ul></li>
-<li>Would you exclude any observations from your model? Justify your answer either way.
-<ul>
+<li>Would you exclude any observations from your model? Justify your answer either way.</li>
 <li>There are a lot of “flags” here, but I would not exclude anyone! If I were a vitamin d researcher, I might want to find out what the range of biologically plausible values are for vitamin d levels generally, so that I might have an objective way to identify, for example, where lab testing of vitamin d levels went awry. But as is, I have no way to identify incorrect data from unusual data.</li>
-</ul></li>
-<li>In general, would you say the overall model fit is better for females or males? Why or why not?
-<ul>
+<li>In general, would you say the overall model fit is better for females or males? Why or why not?</li>
 <li>Across most metrics, the pattern suggests that the model explains variability in vitamin d levels better for females compared to males.</li>
-</ul></li>
 </ul>
 </ul>
 </div>
@@ -888,16 +970,13 @@ vitd_ss</code></pre>
             var_est = total_ss / (n()-1),
             vitd_var = var(x25d))
 vitd_ss</code></pre>
-<pre><code># A tibble: 1 x 7
-  total_ss resid_ss model_ss   total   rsq var_est vitd_var
-     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
-1  125063.   95511.   29553. 125063. 0.236    237.     237.</code></pre>
+<pre><code>  total_ss resid_ss model_ss    total       rsq  var_est vitd_var
+1 125063.5 95510.65 29552.81 125063.5 0.2363025 236.8626 236.8626</code></pre>
 <pre class="r"><code>glance(dmod)</code></pre>
-<pre><code># A tibble: 1 x 11
-  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-*     &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.236         0.230  13.5      40.5 1.33e-29     5 -2125. 4262. 4288.
-# ... with 2 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;</code></pre>
+<pre><code>  r.squared adj.r.squared    sigma statistic      p.value df    logLik
+1 0.2363025     0.2304728 13.50082  40.53389 1.330837e-29  5 -2124.962
+       AIC      BIC deviance df.residual
+1 4261.923 4287.549 95510.65         524</code></pre>
 </div>
 </div>
 <div id="the-null-model" class="section level1">

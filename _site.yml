@@ -10,6 +10,9 @@ navbar:
   - text: Due Dates
     href: due.html
     icon: fa-calendar-check
+  - text: Grades
+    href: https://distracted-bhabha-a42d09.netlify.com
+    icon: fa-key
   - text: DataCamp  
     href: https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication
     icon: fa-user-ninja

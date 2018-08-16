@@ -26,9 +26,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
-<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
-<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -162,14 +161,74 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -297,6 +356,13 @@ div.tocify {
   </a>
 </li>
 <li>
+  <a href="https://distracted-bhabha-a42d09.netlify.com">
+    <span class="fa fa-key"></span>
+     
+    Grades
+  </a>
+</li>
+<li>
   <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
     <span class="fa fa-user-ninja"></span>
      
@@ -356,10 +422,8 @@ div.tocify {
 <li>your own words with <code>markdown</code> formatting are your ONLY <em>narrative</em> tool</li>
 <li><code>dplyr</code> should be your <em>data manipulation</em> tool</li>
 <li><code>tidyr</code> should be your <em>data reshaping</em> tool</li>
-<li><code>janitor::tabyl</code> should be your <em>data table-making</em> tool
-<ul>
+<li><code>janitor::tabyl</code> should be your <em>data table-making</em> tool</li>
 <li>you may wish to combine with <code>knitr::kable()</code> for formatting tables</li>
-</ul></li>
 <li><code>ggplot2</code> should be your <em>data visualization</em> tool</li>
 </ul>
 <p>For all things, graphical and tabular, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule). You’ll need this loaded at the top:</p>
@@ -438,7 +502,7 @@ age_marriage &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator age of
 
 age_marriage</code></pre>
 <pre><code># A tibble: 185 x 117
-   X__1  `1616.0` `1666.0` `1685.0` `1710.0` `1716.0` `1735.0` `1760.0`
+   ..1   `1616.0` `1666.0` `1685.0` `1710.0` `1716.0` `1735.0` `1760.0`
    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
  1 Afgh…       NA       NA       NA       NA       NA       NA       NA
  2 Alba…       NA       NA       NA       NA       NA       NA       NA
@@ -502,7 +566,7 @@ alcohol &lt;- read_xlsx(here::here(&quot;data&quot;, &quot;indicator alcohol con
 
 alcohol</code></pre>
 <pre><code># A tibble: 189 x 25
-   X__1  `1985.0` `1986.0` `1987.0` `1988.0` `1989.0` `1990.0` `1991.0`
+   ..1   `1985.0` `1986.0` `1987.0` `1988.0` `1989.0` `1990.0` `1991.0`
    &lt;chr&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
  1 Afgh…       NA       NA       NA       NA       NA       NA       NA
  2 Alba…       NA       NA       NA       NA       NA       NA       NA
