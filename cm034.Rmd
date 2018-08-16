@@ -1,0 +1,163 @@
+---
+title: "CONJ620: CM 3.4"
+subtitle: "Permutation tests"
+author: "Alison Presmanes Hill"
+output:
+  html_document:
+    keep_md: TRUE
+    highlight: pygments
+    theme: flatly
+    smart: false
+    toc: TRUE
+    toc_float: TRUE
+---
+```{r include = FALSE}
+knitr::opts_chunk$set(error = TRUE, comment = NA, warnings = FALSE, messages = FALSE, tidy = FALSE, echo = TRUE, eval = TRUE, include = TRUE)
+options(scipen = 999)
+```
+
+
+```{r load_packages, include = FALSE}
+suppressWarnings(suppressMessages(library(tidyverse)))
+```
+
+# Introduction
+
+If you want to knit this .Rmd file, you'll need to load the `tidyverse` package. I use functions from `dplyr`, `tidyr`, and `ggplot2` specifically.
+
+```{r eval=FALSE}
+library(tidyverse)
+```
+
+
+You have my permission to watch this video, stop it at 4 minutes 5 seconds:
+https://www.youtube.com/watch?v=PdLPe7XjdKc
+
+Let's play with some obviously fictitious data. Our outcome measure is the Sneetch Snootiness Index (SSI), which we measured for both plain-bellied sneetches (`plain`) and those with stars upon thars (`stars`). Here is our data for N = 20 sneetches, where I have SSI scores for m = 8 star-bellied sneetches and n = 12 plain-bellied sneetches.
+
+
+```{r}
+stars <- c(84, 57, 63, 99, 72, 46, 76, 91, rep(NA, 4))
+plain <- c(81, 74, 56, 69, 66, 62, 69, 61, 87, 65, 44, 69)
+sneetches <- data.frame(stars, plain)
+sneetches_tidy <- sneetches %>%
+  gather(group, SSI) %>%
+  filter(!is.na(SSI))
+sneetches_tidy
+```
+
+<img src="https://celebratingdrseuss.files.wordpress.com/2014/02/sneetches_on_beaches.jpg"/>
+
+Let's look at our data for N = 20 sneetches, where I have SSI scores for m = 8 star-bellied sneetches and n = 12 plain-bellied sneetches.
+
+```{r echo = FALSE}
+sneetch_plot <- ggplot(sneetches_tidy, aes(x = group, y = SSI)) + 
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(position = position_jitter(height = 0, width = 0.2), fill = "lightseagreen", colour = "lightseagreen", alpha = 0.75, size = 5, na.rm=TRUE)
+suppressWarnings(print(sneetch_plot))
+```
+
+
+```{r}
+sneetches
+obs_mean_diff <- with(sneetches, mean(stars, na.rm = TRUE) - mean(plain))
+obs_mean_diff
+```
+
+# Reshuffling
+
+The basic idea to a permutation test is that we reshuffle the deck. Here the deck is our observed sample data, and when we reshuffle, we are re-ordering the samples according to the null hypothesis as if the group that each observation came from (`stars` versus `plain`) does not matter. First, imagine that all of our observed SSI scores are stored in one vector (both groups stacked on top of each other), and numbered 1 through 20 (regardless of group).
+
+```{r}
+sneetches_tidy
+```
+
+Next, we shuffle the non-missing observation numbers (rows 1:20), choosing a new `stars` group of size n = 8 from the n = 20 observed data points **without replacement**. Let's do this once, and you can see which 8 observations I select for my first resample:
+
+```{r}
+set.seed(0)
+resample <- sample(20, size = 8, replace = FALSE) # sample of numbers from 1:30
+resample # new stars group
+```
+
+These numbers represent rows in our `sneetches_tidy` dataset. Now, we say that these 8 observations are my new `stars` group- all the other 12 observations will therefore be assigned to my new `plain` group.
+
+```{r}
+sneetches_tidy %>%
+  mutate(shuffled_group = ifelse(rownames(.) %in% resample, "stars", "plain"))
+```
+
+Now we need to create simple vectors with the SSI scores for each group.
+
+```{r}
+sneetch_ssi <- sneetches_tidy %>% 
+  select(SSI)
+sneetch_ssi[resample, ] # SSI scores for new stars group
+sneetch_ssi[-resample, ] # SSI scores for new plain group
+mean(sneetch_ssi[resample, ]) - mean(sneetch_ssi[-resample, ]) # new mean difference
+```
+
+Remember, our observed mean is `r obs_mean_diff`. So, this new resampled mean, calculated as if it didn't matter if the real `stars` were `stars`, is much smaller. Now, this was just one possible resample. How many possible ways are there to choose 8 observations from 20? 
+
+```{r}
+choose(20, 8)
+# choose(20, 12) same thing
+```
+
+That is, there are `r choose(20, 8)` possible permutations:
+$$\binom{m + n}{m} = \binom{8 + 12}{8} = 125970$$
+
+
+This number is not so crazy because we have pretty small sample sizes, but with real data, you'll often find the number of possible permutations is pretty unmanageable. So we make do with an approximation: we will take a large number of resamples, resampling **with replacement from the null distribution** of $\binom{m + n}{m}$ possible resamples. Sampling without replacement would be more accurate, but it would require too much time and memory to check the uniqueness of each resample. Long story short: we don't create **all possible resamples** in a permutation test, which is why this is referred to as a [Monte Carlo permutation test](https://en.wikipedia.org/wiki/Resampling_%28statistics%29#Monte_Carlo_testing).
+
+# Permutation Testing
+
+Let's pull 99,999 resamples, and recalculate the difference between means of a random sample of 8 (my new `stars`) versus 12 observations (my new `plains`) and see how often we observe a mean difference in SSI scores as or more extreme than the one we actually observed in our sample (`r obs_mean_diff`). Why 99,999? Because, as you'll see, we'll add one to both our numerator and denominator to calculate the p-value. Now, why do we that?! Well, you *did* actually collect one for real sample, so there is always at least one resample that is as extreme as your original sample- specifically, your original sample! So this allows us to avoid a potentially embarassing situation of getting a p-value equal to 0.
+
+```{r cache = TRUE}
+set.seed(0)
+B <- 10^5-1  #set number of times to repeat this process
+resampled_mean_diff <- numeric(B) # space to save the random differences
+for(i in 1:B){
+  resample <- sample(20, size = 8, replace = FALSE) # sample of numbers from 1:20
+  resampled_mean_diff[i] <- mean(sneetch_ssi[resample, ]) - mean(sneetch_ssi[-resample, ])
+}
+```
+
+
+
+Let's plot the permutation distribution, which is the distribution of mean differences across all permutation resamples. 
+
+```{r}
+ggplot(data = NULL, aes(x = resampled_mean_diff)) +
+  geom_histogram(binwidth = 1.25) +
+  geom_vline(aes(xintercept = obs_mean_diff), colour = "dodgerblue") +
+  ggtitle("Permuted mean differences in SSI scores")
+```
+
+So here, what you are looking at, is our *new* null distribution- one that is *not* based on any distributional assumptions. Rather, this null distribution (the permutation distribution) is based on our sample data, and we ask "in how many permutation resamples did we get a [insert statistic here] as or more extreme than the one we got with our actual sample data?"
+
+So, how many resampled mean differences are as or more extreme than the one we got?
+
+```{r}
+sum(resampled_mean_diff >= obs_mean_diff) # greater than or equal to
+sum(resampled_mean_diff <= obs_mean_diff) # less than or equal to
+min_sum <- min(sum(resampled_mean_diff >= obs_mean_diff), sum(resampled_mean_diff <= obs_mean_diff))
+min_sum
+```
+
+To calculate p-values, we calculate both one-sided p-values as a proportion with the total number of resamples + 1 in the denominator. For a two-tailed test, we multiple the *smaller* of these two p-values by 2, and if necessary round down to 1.0.
+
+```{r}
+#Compute P-value
+min_p <- sum(min_sum + 1)/(B + 1)
+c(min_p, 2*min_p)
+```
+
+"A difference of 6.6 is not significant at p = 0.05."
+
+# Assumptions & Caveats
+
+Permutation tests cannot solve all problems: they are valid only when the null hypothesis is 'no association'. Pooling the data to do a two-sample permutation test *does* require that the two *populations* (not necessarily samples) have the same distribution when the null hypothesis is true, that is, the mean, spread, and shape are the same. But you should feel fairly confident that, for example, there is not bias present in one sample. Like all methods, it will only work if your samples are representative - always be careful about selection biases! You may also get into dangerous territory if you have sample sizes in your two groups that are pretty uneven (also known as unbalanced), and this is accompanied by group differences in spread. When groups are the same size, the Type I error rate is typically close to the nominal level, otherwise it can be too high or too low.
+
+<img src="https://booksmykidsread.files.wordpress.com/2014/03/sneetches.png"/>

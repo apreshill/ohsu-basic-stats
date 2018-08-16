@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Alison Presmanes Hill" />
+
+
+<title>CONJ620: CM 3.4</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CONJ 620</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="cm.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Class Meetings
+  </a>
+</li>
+<li>
+  <a href="due.html">
+    <span class="fa fa-calendar-check"></span>
+     
+    Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://distracted-bhabha-a42d09.netlify.com">
+    <span class="fa fa-key"></span>
+     
+    Grades
+  </a>
+</li>
+<li>
+  <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
+    <span class="fa fa-user-ninja"></span>
+     
+    DataCamp
+  </a>
+</li>
+<li>
+  <a href="https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18">
+    <span class="fa fa-university"></span>
+     
+    Sakai
+  </a>
+</li>
+<li>
+  <a href="https://gitter.im/conj620/Lobby?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">
+    <span class="fa fa-comments"></span>
+     
+    Gitter Chat
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">
+    <span class="fa fa-cogs"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">CONJ620: CM 3.4</h1>
+<h3 class="subtitle"><em>Permutation tests</em></h3>
+<h4 class="author"><em>Alison Presmanes Hill</em></h4>
+
+</div>
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>If you want to knit this .Rmd file, you'll need to load the <code>tidyverse</code> package. I use functions from <code>dplyr</code>, <code>tidyr</code>, and <code>ggplot2</code> specifically.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
+<p>You have my permission to watch this video, stop it at 4 minutes 5 seconds: <a href="https://www.youtube.com/watch?v=PdLPe7XjdKc" class="uri">https://www.youtube.com/watch?v=PdLPe7XjdKc</a></p>
+<p>Let's play with some obviously fictitious data. Our outcome measure is the Sneetch Snootiness Index (SSI), which we measured for both plain-bellied sneetches (<code>plain</code>) and those with stars upon thars (<code>stars</code>). Here is our data for N = 20 sneetches, where I have SSI scores for m = 8 star-bellied sneetches and n = 12 plain-bellied sneetches.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">84</span>, <span class="dv">57</span>, <span class="dv">63</span>, <span class="dv">99</span>, <span class="dv">72</span>, <span class="dv">46</span>, <span class="dv">76</span>, <span class="dv">91</span>, <span class="kw">rep</span>(<span class="ot">NA</span>, <span class="dv">4</span>))
+plain &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">81</span>, <span class="dv">74</span>, <span class="dv">56</span>, <span class="dv">69</span>, <span class="dv">66</span>, <span class="dv">62</span>, <span class="dv">69</span>, <span class="dv">61</span>, <span class="dv">87</span>, <span class="dv">65</span>, <span class="dv">44</span>, <span class="dv">69</span>)
+sneetches &lt;-<span class="st"> </span><span class="kw">data.frame</span>(stars, plain)
+sneetches_tidy &lt;-<span class="st"> </span>sneetches <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gather</span>(group, SSI) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(SSI))
+sneetches_tidy</code></pre></div>
+<pre><code>   group SSI
+1  stars  84
+2  stars  57
+3  stars  63
+4  stars  99
+5  stars  72
+6  stars  46
+7  stars  76
+8  stars  91
+9  plain  81
+10 plain  74
+11 plain  56
+12 plain  69
+13 plain  66
+14 plain  62
+15 plain  69
+16 plain  61
+17 plain  87
+18 plain  65
+19 plain  44
+20 plain  69</code></pre>
+<p><img src="https://celebratingdrseuss.files.wordpress.com/2014/02/sneetches_on_beaches.jpg"/></p>
+<p>Let's look at our data for N = 20 sneetches, where I have SSI scores for m = 8 star-bellied sneetches and n = 12 plain-bellied sneetches.</p>
+<p><img src="cm034_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetches</code></pre></div>
+<pre><code>   stars plain
+1     84    81
+2     57    74
+3     63    56
+4     99    69
+5     72    66
+6     46    62
+7     76    69
+8     91    61
+9     NA    87
+10    NA    65
+11    NA    44
+12    NA    69</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">obs_mean_diff &lt;-<span class="st"> </span><span class="kw">with</span>(sneetches, <span class="kw">mean</span>(stars, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(plain))
+obs_mean_diff</code></pre></div>
+<pre><code>[1] 6.583333</code></pre>
+</div>
+<div id="reshuffling" class="section level1">
+<h1>Reshuffling</h1>
+<p>The basic idea to a permutation test is that we reshuffle the deck. Here the deck is our observed sample data, and when we reshuffle, we are re-ordering the samples according to the null hypothesis as if the group that each observation came from (<code>stars</code> versus <code>plain</code>) does not matter. First, imagine that all of our observed SSI scores are stored in one vector (both groups stacked on top of each other), and numbered 1 through 20 (regardless of group).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetches_tidy</code></pre></div>
+<pre><code>   group SSI
+1  stars  84
+2  stars  57
+3  stars  63
+4  stars  99
+5  stars  72
+6  stars  46
+7  stars  76
+8  stars  91
+9  plain  81
+10 plain  74
+11 plain  56
+12 plain  69
+13 plain  66
+14 plain  62
+15 plain  69
+16 plain  61
+17 plain  87
+18 plain  65
+19 plain  44
+20 plain  69</code></pre>
+<p>Next, we shuffle the non-missing observation numbers (rows 1:20), choosing a new <code>stars</code> group of size n = 8 from the n = 20 observed data points <strong>without replacement</strong>. Let's do this once, and you can see which 8 observations I select for my first resample:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">0</span>)
+resample &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">20</span>, <span class="dt">size =</span> <span class="dv">8</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>) <span class="co"># sample of numbers from 1:30</span>
+resample <span class="co"># new stars group</span></code></pre></div>
+<pre><code>[1] 18  6  7 10 15  4 13 14</code></pre>
+<p>These numbers represent rows in our <code>sneetches_tidy</code> dataset. Now, we say that these 8 observations are my new <code>stars</code> group- all the other 12 observations will therefore be assigned to my new <code>plain</code> group.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetches_tidy <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">shuffled_group =</span> <span class="kw">ifelse</span>(<span class="kw">rownames</span>(.) <span class="op">%in%</span><span class="st"> </span>resample, <span class="st">&quot;stars&quot;</span>, <span class="st">&quot;plain&quot;</span>))</code></pre></div>
+<pre><code>   group SSI shuffled_group
+1  stars  84          plain
+2  stars  57          plain
+3  stars  63          plain
+4  stars  99          stars
+5  stars  72          plain
+6  stars  46          stars
+7  stars  76          stars
+8  stars  91          plain
+9  plain  81          plain
+10 plain  74          stars
+11 plain  56          plain
+12 plain  69          plain
+13 plain  66          stars
+14 plain  62          stars
+15 plain  69          stars
+16 plain  61          plain
+17 plain  87          plain
+18 plain  65          stars
+19 plain  44          plain
+20 plain  69          plain</code></pre>
+<p>Now we need to create simple vectors with the SSI scores for each group.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetch_ssi &lt;-<span class="st"> </span>sneetches_tidy <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(SSI)
+sneetch_ssi[resample, ] <span class="co"># SSI scores for new stars group</span></code></pre></div>
+<pre><code>[1] 65 46 76 74 69 99 66 62</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetch_ssi[<span class="op">-</span>resample, ] <span class="co"># SSI scores for new plain group</span></code></pre></div>
+<pre><code> [1] 84 57 63 72 91 81 56 69 61 87 44 69</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(sneetch_ssi[resample, ]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(sneetch_ssi[<span class="op">-</span>resample, ]) <span class="co"># new mean difference</span></code></pre></div>
+<pre><code>[1] 0.125</code></pre>
+<p>Remember, our observed mean is 6.5833333. So, this new resampled mean, calculated as if it didn't matter if the real <code>stars</code> were <code>stars</code>, is much smaller. Now, this was just one possible resample. How many possible ways are there to choose 8 observations from 20?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">choose</span>(<span class="dv">20</span>, <span class="dv">8</span>)</code></pre></div>
+<pre><code>[1] 125970</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># choose(20, 12) same thing</span></code></pre></div>
+<p>That is, there are 125970 possible permutations: <span class="math display">\[\binom{m + n}{m} = \binom{8 + 12}{8} = 125970\]</span></p>
+<p>This number is not so crazy because we have pretty small sample sizes, but with real data, you'll often find the number of possible permutations is pretty unmanageable. So we make do with an approximation: we will take a large number of resamples, resampling <strong>with replacement from the null distribution</strong> of <span class="math inline">\(\binom{m + n}{m}\)</span> possible resamples. Sampling without replacement would be more accurate, but it would require too much time and memory to check the uniqueness of each resample. Long story short: we don't create <strong>all possible resamples</strong> in a permutation test, which is why this is referred to as a <a href="https://en.wikipedia.org/wiki/Resampling_%28statistics%29#Monte_Carlo_testing">Monte Carlo permutation test</a>.</p>
+</div>
+<div id="permutation-testing" class="section level1">
+<h1>Permutation Testing</h1>
+<p>Let's pull 99,999 resamples, and recalculate the difference between means of a random sample of 8 (my new <code>stars</code>) versus 12 observations (my new <code>plains</code>) and see how often we observe a mean difference in SSI scores as or more extreme than the one we actually observed in our sample (6.5833333). Why 99,999? Because, as you'll see, we'll add one to both our numerator and denominator to calculate the p-value. Now, why do we that?! Well, you <em>did</em> actually collect one for real sample, so there is always at least one resample that is as extreme as your original sample- specifically, your original sample! So this allows us to avoid a potentially embarassing situation of getting a p-value equal to 0.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">0</span>)
+B &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">5</span><span class="op">-</span><span class="dv">1</span>  <span class="co">#set number of times to repeat this process</span>
+resampled_mean_diff &lt;-<span class="st"> </span><span class="kw">numeric</span>(B) <span class="co"># space to save the random differences</span>
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>B){
+  resample &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">20</span>, <span class="dt">size =</span> <span class="dv">8</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>) <span class="co"># sample of numbers from 1:20</span>
+  resampled_mean_diff[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(sneetch_ssi[resample, ]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(sneetch_ssi[<span class="op">-</span>resample, ])
+}</code></pre></div>
+<p>Let's plot the permutation distribution, which is the distribution of mean differences across all permutation resamples.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="ot">NULL</span>, <span class="kw">aes</span>(<span class="dt">x =</span> resampled_mean_diff)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">1.25</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="kw">aes</span>(<span class="dt">xintercept =</span> obs_mean_diff), <span class="dt">colour =</span> <span class="st">&quot;dodgerblue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Permuted mean differences in SSI scores&quot;</span>)</code></pre></div>
+<p><img src="cm034_files/figure-html/unnamed-chunk-12-1.png" /><!-- --></p>
+<p>So here, what you are looking at, is our <em>new</em> null distribution- one that is <em>not</em> based on any distributional assumptions. Rather, this null distribution (the permutation distribution) is based on our sample data, and we ask &quot;in how many permutation resamples did we get a [insert statistic here] as or more extreme than the one we got with our actual sample data?&quot;</p>
+<p>So, how many resampled mean differences are as or more extreme than the one we got?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(resampled_mean_diff <span class="op">&gt;=</span><span class="st"> </span>obs_mean_diff) <span class="co"># greater than or equal to</span></code></pre></div>
+<pre><code>[1] 16602</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(resampled_mean_diff <span class="op">&lt;=</span><span class="st"> </span>obs_mean_diff) <span class="co"># less than or equal to</span></code></pre></div>
+<pre><code>[1] 84161</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">min_sum &lt;-<span class="st"> </span><span class="kw">min</span>(<span class="kw">sum</span>(resampled_mean_diff <span class="op">&gt;=</span><span class="st"> </span>obs_mean_diff), <span class="kw">sum</span>(resampled_mean_diff <span class="op">&lt;=</span><span class="st"> </span>obs_mean_diff))
+min_sum</code></pre></div>
+<pre><code>[1] 16602</code></pre>
+<p>To calculate p-values, we calculate both one-sided p-values as a proportion with the total number of resamples + 1 in the denominator. For a two-tailed test, we multiple the <em>smaller</em> of these two p-values by 2, and if necessary round down to 1.0.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Compute P-value</span>
+min_p &lt;-<span class="st"> </span><span class="kw">sum</span>(min_sum <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">/</span>(B <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
+<span class="kw">c</span>(min_p, <span class="dv">2</span><span class="op">*</span>min_p)</code></pre></div>
+<pre><code>[1] 0.16603 0.33206</code></pre>
+<p>&quot;A difference of 6.6 is not significant at p = 0.05.&quot;</p>
+</div>
+<div id="assumptions-caveats" class="section level1">
+<h1>Assumptions &amp; Caveats</h1>
+<p>Permutation tests cannot solve all problems: they are valid only when the null hypothesis is 'no association'. Pooling the data to do a two-sample permutation test <em>does</em> require that the two <em>populations</em> (not necessarily samples) have the same distribution when the null hypothesis is true, that is, the mean, spread, and shape are the same. But you should feel fairly confident that, for example, there is not bias present in one sample. Like all methods, it will only work if your samples are representative - always be careful about selection biases! You may also get into dangerous territory if you have sample sizes in your two groups that are pretty uneven (also known as unbalanced), and this is accompanied by group differences in spread. When groups are the same size, the Type I error rate is typically close to the nominal level, otherwise it can be too high or too low.</p>
+<p><img src="https://booksmykidsread.files.wordpress.com/2014/03/sneetches.png"/></p>
+</div>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="by-nc.png" height="400" width="65"/></a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
