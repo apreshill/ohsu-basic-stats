@@ -665,7 +665,7 @@ null_distn &lt;-<span class="st"> </span>sneetches_tidy <span class="op">%&gt;%<
 </div>
 <div id="the-p-value" class="section level1">
 <h1>The p-value</h1>
-<p>Remember that we are interested in seeing where our observed sample mean difference of 6.5833333 falls on this null/randomization distribution. We are interested in simply a difference here so &quot;more extreme&quot; corresponds to values in both tails on the distribution. Let's shade our null distribution to show a visual representation of our <span class="math inline">\(p\)</span>-value:</p>
+<p>Remember that we are interested in seeing where our observed sample mean difference of 6.5833333 falls on this null/randomization distribution. We are interested stars being greater than plain, so &quot;more extreme&quot; corresponds to values in the right tail on the distribution. Let's shade our null distribution to show a visual representation of our <span class="math inline">\(p\)</span>-value:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">null_distn <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> mean_diff, <span class="dt">direction =</span> <span class="st">&quot;greater&quot;</span>)</code></pre></div>
 <p><img src="cm034_files/figure-html/unnamed-chunk-12-1.png" /><!-- --></p>
