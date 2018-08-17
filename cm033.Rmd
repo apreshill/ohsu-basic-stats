@@ -334,6 +334,13 @@ d_hat <- cupid_pres %>%
   specify(height ~ sample) %>% 
   calculate(stat = "diff in means", order = c(1, 2))
 
+cupid_pres %>% 
+  specify(height ~ sample) %>% 
+#  hypothesize(null = "independence") %>% 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "diff in means", order = c(1,2)) %>% 
+  get_ci()
+
 null_distn <- cupid_pres %>% 
   specify(height ~ sample) %>%
   hypothesize(null = "independence") %>%

@@ -436,17 +436,29 @@ div.tocify {
 </div>
 
 
+<div id="logistics" class="section level1">
+<h1>Logistics</h1>
+<ul>
+<li>A complete knitted <code>html</code> file is due on Sakai by Tuesday August 21rd (2:30pm).</li>
+<li>This lab is based on the assigned reading that includes <a href="http://moderndive.netlify.com/10-hypothesis-testing.html#example-comparing-two-means">ModernDive Chapter 10.7</a>. Please open and follow closely!</li>
+<li>Note that in class, several people were getting a mysterious <code>glue</code> error in their console. The solution that seemed to work was to explicitly install the <code>glue</code> package using: <code>install.packages(&quot;glue&quot;)</code>, then restarting RStudio.</li>
+</ul>
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(infer)
+<span class="kw">library</span>(skimr)</code></pre></div>
+</div>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>If you want to knit this .Rmd file, you'll need to load the <code>tidyverse</code> package. I use functions from <code>dplyr</code>, <code>tidyr</code>, and <code>ggplot2</code> specifically.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)</code></pre></div>
 <p>You have my permission to watch this video, stop it at 4 minutes 5 seconds: <a href="https://www.youtube.com/watch?v=PdLPe7XjdKc" class="uri">https://www.youtube.com/watch?v=PdLPe7XjdKc</a></p>
 <p>Let's play with some obviously fictitious data. Our outcome measure is the Sneetch Snootiness Index (SSI), which we measured for both plain-bellied sneetches (<code>plain</code>) and those with stars upon thars (<code>stars</code>). Here is our data for N = 20 sneetches, where I have SSI scores for m = 8 star-bellied sneetches and n = 12 plain-bellied sneetches.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">84</span>, <span class="dv">57</span>, <span class="dv">63</span>, <span class="dv">99</span>, <span class="dv">72</span>, <span class="dv">46</span>, <span class="dv">76</span>, <span class="dv">91</span>, <span class="kw">rep</span>(<span class="ot">NA</span>, <span class="dv">4</span>))
 plain &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">81</span>, <span class="dv">74</span>, <span class="dv">56</span>, <span class="dv">69</span>, <span class="dv">66</span>, <span class="dv">62</span>, <span class="dv">69</span>, <span class="dv">61</span>, <span class="dv">87</span>, <span class="dv">65</span>, <span class="dv">44</span>, <span class="dv">69</span>)
 sneetches &lt;-<span class="st"> </span><span class="kw">data.frame</span>(stars, plain)
 sneetches_tidy &lt;-<span class="st"> </span>sneetches <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">gather</span>(group, SSI) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gather</span>(group, SSI, <span class="dt">factor_key =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(SSI))
 sneetches_tidy</code></pre></div>
 <pre><code>   group SSI
@@ -472,126 +484,243 @@ sneetches_tidy</code></pre></div>
 20 plain  69</code></pre>
 <p><img src="https://celebratingdrseuss.files.wordpress.com/2014/02/sneetches_on_beaches.jpg"/></p>
 <p>Let's look at our data for N = 20 sneetches, where I have SSI scores for m = 8 star-bellied sneetches and n = 12 plain-bellied sneetches.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetch_plot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(sneetches_tidy, <span class="kw">aes</span>(<span class="dt">x =</span> group, 
+                                           <span class="dt">y =</span> SSI)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.shape =</span> <span class="ot">NA</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">position =</span> <span class="kw">position_jitter</span>(<span class="dt">height =</span> <span class="dv">0</span>, <span class="dt">width =</span> <span class="fl">0.2</span>), 
+              <span class="dt">fill =</span> <span class="st">&quot;lightseagreen&quot;</span>, 
+              <span class="dt">colour =</span> <span class="st">&quot;lightseagreen&quot;</span>, 
+              <span class="dt">alpha =</span> <span class="fl">0.75</span>, 
+              <span class="dt">size =</span> <span class="dv">4</span>, 
+              <span class="dt">na.rm=</span><span class="ot">TRUE</span>)
+<span class="kw">suppressWarnings</span>(<span class="kw">print</span>(sneetch_plot))</code></pre></div>
 <p><img src="cm034_files/figure-html/unnamed-chunk-4-1.png" /><!-- --></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetches</code></pre></div>
-<pre><code>   stars plain
-1     84    81
-2     57    74
-3     63    56
-4     99    69
-5     72    66
-6     46    62
-7     76    69
-8     91    61
-9     NA    87
-10    NA    65
-11    NA    44
-12    NA    69</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">obs_mean_diff &lt;-<span class="st"> </span><span class="kw">with</span>(sneetches, <span class="kw">mean</span>(stars, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(plain))
-obs_mean_diff</code></pre></div>
-<pre><code>[1] 6.583333</code></pre>
+</div>
+<div id="model-of-h_0" class="section level1">
+<h1>Model of <span class="math inline">\(H_0\)</span></h1>
+<p>We'll use this data to compare two means using a randomization or permutation test. Our null/alternative hypotheses are:</p>
+<p><span class="math inline">\(H_0: \mu_{stars} \leq \mu_{plain}\)</span>, which can also be written as <span class="math inline">\(H_0: \mu_{stars} - \mu_{plain} \leq 0\)</span>.</p>
+<p>Our alternative hypothesis will be of the form <span class="math inline">\(H_a: \mu_1 \star \mu_2\)</span> (or <span class="math inline">\(H_a: \mu_1 - \mu_2 \, \star \, 0\)</span>) where <span class="math inline">\(\star\)</span> = <span class="math inline">\(&lt;\)</span>, <span class="math inline">\(\ne\)</span>, or <span class="math inline">\(&gt;\)</span>. For this example, we'll use: <span class="math inline">\(H_a: \mu_{stars} &gt; \mu_{plain}\)</span>.</p>
+<p>So to sum up:</p>
+<ul>
+<li><span class="math inline">\(H_0: \mu_{stars} - \mu_{plain} \leq 0\)</span></li>
+<li><span class="math inline">\(H_a: \mu_{stars} - \mu_{plain} &gt; 0\)</span></li>
+</ul>
+<p>Do we have reason to believe, based on the sample distributions of SSIs over the two groups of sneetches, that there is a significant difference between the mean SSI values for star-bellied compared to plain-bellied sneetches? It’s hard to say just based on the plots.</p>
+</div>
+<div id="test-statistic-delta" class="section level1">
+<h1>Test statistic <span class="math inline">\(\delta\)</span></h1>
+<p>We are, therefore, interested in seeing whether the difference in the sample means, <span class="math inline">\(\bar{x}_{stars} - \bar{x}_{plain}\)</span>, is statistically greater than 0. We can now come back to our <code>infer</code> pipeline for computing our observed statistic. Note the <code>order</code> argument that shows the mean value for <code>&quot;plain&quot;</code> being subtracted from the mean value of <code>&quot;stars&quot;</code>.</p>
+</div>
+<div id="observed-effect-delta" class="section level1">
+<h1>Observed effect <span class="math inline">\(\delta^*\)</span></h1>
+<p>Our first step is to calculate the difference between sample means you got!</p>
+<p>Note: in class I used a way harder way- this way is much easier :)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean_diff &lt;-<span class="st"> </span>sneetches_tidy <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(SSI <span class="op">~</span><span class="st"> </span>group) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, 
+            <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;stars&quot;</span>, <span class="st">&quot;plain&quot;</span>)) 
+mean_diff</code></pre></div>
+<pre><code># A tibble: 1 x 1
+   stat
+  &lt;dbl&gt;
+1  6.58</code></pre>
+<p>Our goal next is to figure out a random process with which to simulate the null hypothesis being true. Recall that <span class="math inline">\(H_0: \mu_{stars} - \mu_{plain} \leq 0\)</span> corresponds to us assuming that the population means are the same (or that stars are less than plain). We would like to assume the null is true and perform a random process to <code>generate()</code> data in the model of the null hypothesis.</p>
 </div>
 <div id="reshuffling" class="section level1">
 <h1>Reshuffling</h1>
 <p>The basic idea to a permutation test is that we reshuffle the deck. Here the deck is our observed sample data, and when we reshuffle, we are re-ordering the samples according to the null hypothesis as if the group that each observation came from (<code>stars</code> versus <code>plain</code>) does not matter. First, imagine that all of our observed SSI scores are stored in one vector (both groups stacked on top of each other), and numbered 1 through 20 (regardless of group).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetches_tidy</code></pre></div>
-<pre><code>   group SSI
-1  stars  84
-2  stars  57
-3  stars  63
-4  stars  99
-5  stars  72
-6  stars  46
-7  stars  76
-8  stars  91
-9  plain  81
-10 plain  74
-11 plain  56
-12 plain  69
-13 plain  66
-14 plain  62
-15 plain  69
-16 plain  61
-17 plain  87
-18 plain  65
-19 plain  44
-20 plain  69</code></pre>
-<p>Next, we shuffle the non-missing observation numbers (rows 1:20), choosing a new <code>stars</code> group of size n = 8 from the n = 20 observed data points <strong>without replacement</strong>. Let's do this once, and you can see which 8 observations I select for my first resample:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">0</span>)
-resample &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">20</span>, <span class="dt">size =</span> <span class="dv">8</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>) <span class="co"># sample of numbers from 1:30</span>
-resample <span class="co"># new stars group</span></code></pre></div>
-<pre><code>[1] 18  6  7 10 15  4 13 14</code></pre>
-<p>These numbers represent rows in our <code>sneetches_tidy</code> dataset. Now, we say that these 8 observations are my new <code>stars</code> group- all the other 12 observations will therefore be assigned to my new <code>plain</code> group.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetches_tidy <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">shuffled_group =</span> <span class="kw">ifelse</span>(<span class="kw">rownames</span>(.) <span class="op">%in%</span><span class="st"> </span>resample, <span class="st">&quot;stars&quot;</span>, <span class="st">&quot;plain&quot;</span>))</code></pre></div>
-<pre><code>   group SSI shuffled_group
-1  stars  84          plain
-2  stars  57          plain
-3  stars  63          plain
-4  stars  99          stars
-5  stars  72          plain
-6  stars  46          stars
-7  stars  76          stars
-8  stars  91          plain
-9  plain  81          plain
-10 plain  74          stars
-11 plain  56          plain
-12 plain  69          plain
-13 plain  66          stars
-14 plain  62          stars
-15 plain  69          stars
-16 plain  61          plain
-17 plain  87          plain
-18 plain  65          stars
-19 plain  44          plain
-20 plain  69          plain</code></pre>
-<p>Now we need to create simple vectors with the SSI scores for each group.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetch_ssi &lt;-<span class="st"> </span>sneetches_tidy <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">select</span>(SSI)
-sneetch_ssi[resample, ] <span class="co"># SSI scores for new stars group</span></code></pre></div>
-<pre><code>[1] 65 46 76 74 69 99 66 62</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sneetch_ssi[<span class="op">-</span>resample, ] <span class="co"># SSI scores for new plain group</span></code></pre></div>
-<pre><code> [1] 84 57 63 72 91 81 56 69 61 87 44 69</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(sneetch_ssi[resample, ]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(sneetch_ssi[<span class="op">-</span>resample, ]) <span class="co"># new mean difference</span></code></pre></div>
-<pre><code>[1] 0.125</code></pre>
-<p>Remember, our observed mean is 6.5833333. So, this new resampled mean, calculated as if it didn't matter if the real <code>stars</code> were <code>stars</code>, is much smaller. Now, this was just one possible resample. How many possible ways are there to choose 8 observations from 20?</p>
+<p>Next, we shuffle the non-missing observation numbers (rows 1:20), choosing a new <code>stars</code> group of size n = 8 from the n = 20 observed data points <strong>without replacement</strong>. Let's do this once:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">2018</span>)
+sn1 &lt;-<span class="st"> </span>sneetches_tidy <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(SSI <span class="op">~</span><span class="st"> </span>group) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1</span>, <span class="dt">type =</span> <span class="st">&quot;permute&quot;</span>)
+sn1</code></pre></div>
+<pre><code>Response: SSI (numeric)
+Explanatory: group (factor)
+Null Hypothesis:  independence 
+# A tibble: 20 x 3
+# Groups:   replicate [1]
+     SSI group replicate
+   &lt;dbl&gt; &lt;fct&gt;     &lt;int&gt;
+ 1    76 stars         1
+ 2    81 stars         1
+ 3    57 stars         1
+ 4    99 stars         1
+ 5    91 stars         1
+ 6    72 stars         1
+ 7    44 stars         1
+ 8    65 stars         1
+ 9    69 plain         1
+10    69 plain         1
+11    87 plain         1
+12    46 plain         1
+13    61 plain         1
+14    69 plain         1
+15    56 plain         1
+16    74 plain         1
+17    66 plain         1
+18    62 plain         1
+19    63 plain         1
+20    84 plain         1</code></pre>
+<p>Take a few minutes to confirm for yourself, using <code>skimr</code> for example, that:</p>
+<ul>
+<li>The overall <span class="math inline">\(N\)</span> is the same in this resample as in our original sample (20)</li>
+<li>The per-group <span class="math inline">\(n\)</span>'s are the same in this resample as in our original sample</li>
+<li>The overall mean of <code>SSI</code> is the same as in your original sample data</li>
+<li>The group means of <code>SSI</code> in this resample <em>are</em> different from in your original sample data (this is what will change for each replicate!)</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># original mean</span>
+<span class="kw">skim</span>(sneetches_tidy)</code></pre></div>
+<pre><code>Skim summary statistics
+ n obs: 20 
+ n variables: 2 
+
+Variable type: factor 
+ variable missing complete  n n_unique             top_counts ordered
+    group       0       20 20        2 pla: 12, sta: 8, NA: 0   FALSE
+
+Variable type: numeric 
+ variable missing complete  n  mean    sd p0   p25 p50   p75 p100     hist
+      SSI       0       20 20 69.55 14.13 44 61.75  69 77.25   99 ▃▃▅▇▅▃▃▂</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># original means by group</span>
+sneetches_tidy <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(group) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">skim</span>()</code></pre></div>
+<pre><code>Skim summary statistics
+ n obs: 20 
+ n variables: 2 
+ group variables: group 
+
+Variable type: numeric 
+ group variable missing complete  n  mean    sd p0   p25  p50   p75 p100
+ stars      SSI       0        8  8 73.5  17.78 46 61.5  74   85.75   99
+ plain      SSI       0       12 12 66.92 11.17 44 61.75 67.5 70.25   87
+     hist
+ ▇▇▇▇▇▇▇▇
+ ▂▁▂▆▇▂▂▂</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># resample mean</span>
+<span class="kw">skim</span>(sn1)</code></pre></div>
+<pre><code>Skim summary statistics
+ n obs: 20 
+ n variables: 3 
+ group variables: replicate 
+
+Variable type: factor 
+ replicate variable missing complete  n n_unique             top_counts
+         1    group       0       20 20        2 pla: 12, sta: 8, NA: 0
+ ordered
+   FALSE
+
+Variable type: numeric 
+ replicate variable missing complete  n  mean    sd p0   p25 p50   p75
+         1      SSI       0       20 20 69.55 14.13 44 61.75  69 77.25
+ p100     hist
+   99 ▃▃▅▇▅▃▃▂</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># resampled means by group</span>
+sn1 <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(group) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">skim</span>()</code></pre></div>
+<pre><code>Skim summary statistics
+ n obs: 20 
+ n variables: 3 
+ group variables: group 
+
+Variable type: integer 
+ group  variable missing complete  n mean sd p0 p25 p50 p75 p100     hist
+ stars replicate       0        8  8    1  0  1   1   1   1    1 ▁▁▁▇▁▁▁▁
+ plain replicate       0       12 12    1  0  1   1   1   1    1 ▁▁▁▇▁▁▁▁
+
+Variable type: numeric 
+ group variable missing complete  n  mean    sd p0   p25  p50   p75 p100
+ stars      SSI       0        8  8 73.12 17.87 44 63    74   83.5    99
+ plain      SSI       0       12 12 67.17 11.24 46 61.75 67.5 70.25   87
+     hist
+ ▃▃▁▃▇▃▃▃
+ ▂▂▂▇▇▂▁▅</code></pre>
+<p>Remember, our observed mean is 6.58. So, this new resampled mean difference is 5.96, calculated as if it didn't matter if the real <code>stars</code> were <code>stars</code>, is much smaller. Now, this was just one possible resample. How many possible ways are there to choose 8 observations from 20?</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">choose</span>(<span class="dv">20</span>, <span class="dv">8</span>)</code></pre></div>
 <pre><code>[1] 125970</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># choose(20, 12) same thing</span></code></pre></div>
 <p>That is, there are 125970 possible permutations: <span class="math display">\[\binom{m + n}{m} = \binom{8 + 12}{8} = 125970\]</span></p>
 <p>This number is not so crazy because we have pretty small sample sizes, but with real data, you'll often find the number of possible permutations is pretty unmanageable. So we make do with an approximation: we will take a large number of resamples, resampling <strong>with replacement from the null distribution</strong> of <span class="math inline">\(\binom{m + n}{m}\)</span> possible resamples. Sampling without replacement would be more accurate, but it would require too much time and memory to check the uniqueness of each resample. Long story short: we don't create <strong>all possible resamples</strong> in a permutation test, which is why this is referred to as a <a href="https://en.wikipedia.org/wiki/Resampling_%28statistics%29#Monte_Carlo_testing">Monte Carlo permutation test</a>.</p>
 </div>
-<div id="permutation-testing" class="section level1">
-<h1>Permutation Testing</h1>
-<p>Let's pull 99,999 resamples, and recalculate the difference between means of a random sample of 8 (my new <code>stars</code>) versus 12 observations (my new <code>plains</code>) and see how often we observe a mean difference in SSI scores as or more extreme than the one we actually observed in our sample (6.5833333). Why 99,999? Because, as you'll see, we'll add one to both our numerator and denominator to calculate the p-value. Now, why do we that?! Well, you <em>did</em> actually collect one for real sample, so there is always at least one resample that is as extreme as your original sample- specifically, your original sample! So this allows us to avoid a potentially embarassing situation of getting a p-value equal to 0.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">0</span>)
-B &lt;-<span class="st"> </span><span class="dv">10</span><span class="op">^</span><span class="dv">5</span><span class="op">-</span><span class="dv">1</span>  <span class="co">#set number of times to repeat this process</span>
-resampled_mean_diff &lt;-<span class="st"> </span><span class="kw">numeric</span>(B) <span class="co"># space to save the random differences</span>
-<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>B){
-  resample &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">20</span>, <span class="dt">size =</span> <span class="dv">8</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>) <span class="co"># sample of numbers from 1:20</span>
-  resampled_mean_diff[i] &lt;-<span class="st"> </span><span class="kw">mean</span>(sneetch_ssi[resample, ]) <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(sneetch_ssi[<span class="op">-</span>resample, ])
-}</code></pre></div>
-<p>Let's plot the permutation distribution, which is the distribution of mean differences across all permutation resamples.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> <span class="ot">NULL</span>, <span class="kw">aes</span>(<span class="dt">x =</span> resampled_mean_diff)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">1.25</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="kw">aes</span>(<span class="dt">xintercept =</span> obs_mean_diff), <span class="dt">colour =</span> <span class="st">&quot;dodgerblue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Permuted mean differences in SSI scores&quot;</span>)</code></pre></div>
-<p><img src="cm034_files/figure-html/unnamed-chunk-12-1.png" /><!-- --></p>
+<div id="distribution-of-delta-under-h_0" class="section level1">
+<h1>Distribution of <span class="math inline">\(\delta\)</span> under <span class="math inline">\(H_0\)</span></h1>
+<p>We can now proceed in a similar way to what we have done previously with bootstrapping by repeating this process many times to create simulated samples, assuming the null hypothesis is true.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1980</span>)
+null_distn &lt;-<span class="st"> </span>sneetches_tidy <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(SSI <span class="op">~</span><span class="st"> </span>group) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>, <span class="dt">type =</span> <span class="st">&quot;permute&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, 
+            <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;stars&quot;</span>, <span class="st">&quot;plain&quot;</span>))</code></pre></div>
+<p>A <strong>null distribution</strong> of simulated differences in sample means is created with the specification of <code>stat = &quot;diff in means&quot;</code> for the <code>calculate()</code> step. The <strong>null distribution</strong> is similar to the bootstrap distribution we saw in <a href="http://moderndive.netlify.com/9-confidence-intervals.html">Chapter 9</a>, but remember that it consists of statistics generated assuming the null hypothesis is true. Let's plot the permutation distribution, which is the distribution of mean differences across all permutation resamples:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">null_distn <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">visualize</span>()</code></pre></div>
+<p><img src="cm034_files/figure-html/unnamed-chunk-11-1.png" /><!-- --></p>
 <p>So here, what you are looking at, is our <em>new</em> null distribution- one that is <em>not</em> based on any distributional assumptions. Rather, this null distribution (the permutation distribution) is based on our sample data, and we ask &quot;in how many permutation resamples did we get a [insert statistic here] as or more extreme than the one we got with our actual sample data?&quot;</p>
-<p>So, how many resampled mean differences are as or more extreme than the one we got?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(resampled_mean_diff <span class="op">&gt;=</span><span class="st"> </span>obs_mean_diff) <span class="co"># greater than or equal to</span></code></pre></div>
-<pre><code>[1] 16602</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sum</span>(resampled_mean_diff <span class="op">&lt;=</span><span class="st"> </span>obs_mean_diff) <span class="co"># less than or equal to</span></code></pre></div>
-<pre><code>[1] 84161</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">min_sum &lt;-<span class="st"> </span><span class="kw">min</span>(<span class="kw">sum</span>(resampled_mean_diff <span class="op">&gt;=</span><span class="st"> </span>obs_mean_diff), <span class="kw">sum</span>(resampled_mean_diff <span class="op">&lt;=</span><span class="st"> </span>obs_mean_diff))
-min_sum</code></pre></div>
-<pre><code>[1] 16602</code></pre>
-<p>To calculate p-values, we calculate both one-sided p-values as a proportion with the total number of resamples + 1 in the denominator. For a two-tailed test, we multiple the <em>smaller</em> of these two p-values by 2, and if necessary round down to 1.0.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Compute P-value</span>
-min_p &lt;-<span class="st"> </span><span class="kw">sum</span>(min_sum <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)<span class="op">/</span>(B <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)
-<span class="kw">c</span>(min_p, <span class="dv">2</span><span class="op">*</span>min_p)</code></pre></div>
-<pre><code>[1] 0.16603 0.33206</code></pre>
-<p>&quot;A difference of 6.6 is not significant at p = 0.05.&quot;</p>
+<p>So, how many resampled mean differences are as or more extreme than the one we got? The answer to this question is why we calculate the p-value.</p>
+</div>
+<div id="the-p-value" class="section level1">
+<h1>The p-value</h1>
+<p>Remember that we are interested in seeing where our observed sample mean difference of 6.5833333 falls on this null/randomization distribution. We are interested in simply a difference here so &quot;more extreme&quot; corresponds to values in both tails on the distribution. Let's shade our null distribution to show a visual representation of our <span class="math inline">\(p\)</span>-value:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">null_distn <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> mean_diff, <span class="dt">direction =</span> <span class="st">&quot;greater&quot;</span>)</code></pre></div>
+<p><img src="cm034_files/figure-html/unnamed-chunk-12-1.png" /><!-- --></p>
+<p>Remember that the observed difference in means was 6.5833333. We have shaded red all values at or above that value. By giving <code>obs_stat = mean_diff</code>, a vertical darker line is also shown at 6.5833333.</p>
+<p>At this point, it is important to take a guess as to what the <span class="math inline">\(p\)</span>-value may be. We can see that there are only a few permuted differences as or more large than our observed effect. Lastly, we calculate the <span class="math inline">\(p\)</span>-value directly using <code>infer</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean_diff_number &lt;-<span class="st"> </span>mean_diff <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">pull</span>(<span class="dv">1</span>)
+
+(pvalue &lt;-<span class="st"> </span>null_distn <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> mean_diff, <span class="dt">direction =</span> <span class="st">&quot;greater&quot;</span>))</code></pre></div>
+<pre><code># A tibble: 1 x 1
+  p_value
+    &lt;dbl&gt;
+1   0.159</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># same as...</span>
+null_distn <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">count</span>(<span class="dt">val =</span> stat <span class="op">&gt;=</span><span class="st"> </span>mean_diff_number) </code></pre></div>
+<pre><code># A tibble: 2 x 2
+  val       n
+  &lt;lgl&gt; &lt;int&gt;
+1 FALSE   841
+2 TRUE    159</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">159</span><span class="op">/</span><span class="dv">1000</span></code></pre></div>
+<pre><code>[1] 0.159</code></pre>
+<p>We have around 15.9% of values as or more large than our observed statistic. Assuming we are using a 5% significance level for <span class="math inline">\(\alpha\)</span>, we lack evidence supporting the conclusion that the mean SSI scores are higher in star-bellied compared to plain-bellied sneetches.</p>
+</div>
+<div id="corresponding-confidence-interval" class="section level1">
+<h1>Corresponding confidence interval</h1>
+<p>One of the great things about the <code>infer</code> pipeline is that going between hypothesis tests and confidence intervals is incredibly simple. To create a null distribution, we ran:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">null_distn &lt;-<span class="st"> </span>sneetches_tidy <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(SSI <span class="op">~</span><span class="st"> </span>group) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>, <span class="dt">type =</span> <span class="st">&quot;permute&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, 
+            <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;stars&quot;</span>, <span class="st">&quot;plain&quot;</span>))</code></pre></div>
+<p>To get the corresponding bootstrap distribution with which we can compute a confidence interval, we can just remove or comment out the <code>hypothesize()</code> step since we are no longer assuming the null hypothesis is true when we bootstrap:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">boot_sneetch_ci &lt;-<span class="st"> </span>sneetches_tidy <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(SSI <span class="op">~</span><span class="st"> </span>group) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="co">#hypothesize(null = &quot;independence&quot;) %&gt;% </span>
+<span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>, <span class="dt">type =</span> <span class="st">&quot;bootstrap&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, 
+            <span class="dt">order =</span> <span class="kw">c</span>(<span class="st">&quot;stars&quot;</span>, <span class="st">&quot;plain&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">get_ci</span>()
+
+boot_sneetch_ci</code></pre></div>
+<pre><code># A tibble: 1 x 2
+  `2.5%` `97.5%`
+   &lt;dbl&gt;   &lt;dbl&gt;
+1  -7.54    20.0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#see ci</span>
+null_distn <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">endpoints =</span> boot_sneetch_ci, 
+            <span class="dt">direction =</span> <span class="st">&quot;between&quot;</span>)</code></pre></div>
+<p><img src="cm034_files/figure-html/unnamed-chunk-15-1.png" /><!-- --></p>
+<p>The question to ask yourself when looking at this plot is: is 0 in my 95% confidence interval? If it is, then a difference of 0 is plausible, and I cannot reject the null hypothesis.</p>
 </div>
 <div id="assumptions-caveats" class="section level1">
 <h1>Assumptions &amp; Caveats</h1>
