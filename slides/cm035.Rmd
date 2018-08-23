@@ -1,0 +1,141 @@
+---
+title: "CONJ620: CM 3.2"
+subtitle: "Sampling, Simulation, & Bootstrapping"
+author: "Alison Hill"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300,
+  fig.align = "center", out.width = "65%", cache = FALSE)
+library(tidyverse)
+library(infer)
+library(moderndive)
+```
+
+## Family of *t*-tests
+
+- One-sample *t*-test
+- Independent samples *t*-test
+- Dependent samples *t*-test (also known as paired) 
+
+---
+## What do they all have in common?
+
+We want to compare two things- mean 1 and mean 2!
+
+---
+## Ways to get independent samples
+
+* Random assignment of participants to two different experimental conditions 
+  * Scream versus Scream 2
+  * Classical music versus silence
+* Naturally occurring assignment of participants to two different groups 
+  * Male versus female
+  * Young versus old
+  
+---
+## Formula for the independent groups *t*-test
+
+$$t=\frac{(\bar{y}_1-\bar{y}_2)-(\mu_1-\mu_2)}{SE}$$
+
+Generally, 
+> $H_0: \mu_1-\mu_2=0$ and $H_1: \mu_1-\mu_2\neq0$
+
+So $\mu_1-\mu_2$ is often excluded from the formula. Since we now have two sample means and therefore two sample variances, we need some way to combine these two variances in a logical way. The answer is to __pool__ the variances to estimate the SE of the difference, $(\bar{y}_1-\bar{y}_2)$:
+$$s_{\bar{y}_1-\bar{y}_2}=s_{pooled}\times{\sqrt{\frac{1}{n_1}+\frac{1}{n_2}}}$$
+and $s_{pooled}$ is:
+$$s_{pooled}=\sqrt{\frac{(n_1-1)s_{y_1}^2+(n_2-1)s_{y_2}^2}{n_1+n_2-2}}$$
+---
+## The *t*-test as a general linear model (GLM) 
+
+All statistical procedures are basically the same thing:
+$$outcome_i=(model)+error_i$$
+
+In my simple linear regression from the past few labs, this has been:
+$$prestige_i=(intercept + education_i)+error_i$$
+
+Or more generally:
+$$y_i=(b_0 + b_1x_i)+error_i$$
+
+> __N.B.__ $Error_i$ is an unknowable, incalculable statistic- it is the deviation of the $i^{th}$ value from the (unobservable) true value. You can think of it as measurement error. This is different from the error of the regression formula, which is defined as the *residual* of the $i^{th}$ value and calculated as the difference between the observed $(y_i)$ and predicted scores $(\hat{y_i})$. 
+
+---
+## Sidebar: The GLM in matrix notation
+The GLM we have been dealing with thus far includes just one independent variable and thus just one $b_1$. However, the full GLM is better represented as a matrix
+
+$$\boldsymbol{Y}=\boldsymbol{X}\boldsymbol{\beta}+\boldsymbol{\epsilon}$$
+
+where...
+
+* $\boldsymbol{Y}$ is the *response vector* of length *N*;
+
+* $\boldsymbol{\epsilon}$ is the *error vector* of length *N*;
+
+* $\boldsymbol{\beta}$ is the vector of parameters of length *p*+1 where *p* is the number of IVs and the 1 accounts for the intercept;
+
+* and $\boldsymbol{X}$ is called the *design matrix* consisting of a matrix of *N* rows and *p+1* columns
+
+---
+## Design matrices with one independent variable
+
+.pull-left[
+
+In both simple linear regression and the independent samples *t*-test, $\boldsymbol{X}$ is a matrix of *N* rows and *2* columns. Note that the number of columns in $\boldsymbol{X}$ must always equal the number of rows in $\boldsymbol{\beta}$.
+
+\[ \begin{bmatrix}
+Y_1 \\
+Y_2 \\
+\vdots \\
+Y_n \\
+\end{bmatrix} = \begin{bmatrix}
+1 & X_1 \\
+1 & X_2 \\
+\vdots & \vdots \\
+1 & X_n \\
+\end{bmatrix} \begin{bmatrix}
+\beta_0 \\
+\beta_1 \\
+\end{bmatrix} + \begin{bmatrix}
+\epsilon_1 \\
+\epsilon_2 \\
+\vdots \\
+\epsilon_n \\
+\end{bmatrix} \]
+
+]
+
+.pull-right[
+
+In simple linear regression, the vector *X* can take on any value. In the independent samples *t*-test, this vector simply contains 0's and 1's. Below, *n*=4 with 2 in each group to illustrate.
+
+\[ \begin{bmatrix}
+Y_1 \\
+Y_2 \\
+Y_3 \\
+Y_4 \\
+\end{bmatrix} = \begin{bmatrix}
+1 & 0 \\
+1 & 0 \\
+1 & 1 \\
+1 & 1 \\
+\end{bmatrix} \begin{bmatrix}
+\beta_0 \\
+\beta_1 \\
+\end{bmatrix} + \begin{bmatrix}
+\epsilon_1 \\
+\epsilon_2 \\
+\epsilon_3 \\
+\epsilon_4 \\
+\end{bmatrix} \]
+]
