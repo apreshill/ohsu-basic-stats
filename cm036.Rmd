@@ -514,7 +514,7 @@ Unfortunately, we currently can't get the confidence interval for theoretical me
 $$ ({\bar {x}}_{1}-{\bar {x}}_{2}) \pm (t_{\star} \times SE_{{\bar {x}}_{1}-{\bar {x}}_{2}})$$
 where...
 
-$$SE_{{\bar {x}}_{1}-{\bar {x}}_{2}} = s_{p}\times {\sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}}$$ 
+$$SE_{{\bar {x}}_{1}-{\bar {x}}_{2}} = s_{p} \times \sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}$$ 
 You should already have variables for the mean difference and the $t$-statistic critical value(s) (here, $t_{\star}$) from the top formula. In the bottom formula, that standard error should look familiar- it is the standard error of the difference between means. This was the denominator in your calculated $t$-statistic. 
 
 * Use these values to calculate the 95% confidence interval for the difference in means. Does it match the output from `infer`? Does it contain zero? Will this interval ever *not* contain the observed difference in sample means?
