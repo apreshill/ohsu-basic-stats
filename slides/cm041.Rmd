@@ -1,0 +1,788 @@
+---
+title: "CONJ620: CM 4.1"
+subtitle: "Comparing More Than Two Sample Means"
+author: "Alison Hill"
+output:
+  xaringan::moon_reader:
+    css: ["default", "css/ohsu.css", "css/ohsu-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: atelier-lakeside-light
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include = FALSE}
+options(htmltools.dir.version = FALSE)
+options(knitr.table.format = "html") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, 
+  comment = NA, dpi = 300,
+  fig.align = "center", cache = FALSE)
+library(tidyverse)
+library(infer)
+library(moderndive)
+```
+
+class:center
+## Research questions for an ANOVA
+
+> Was there a difference between the original *Scream* movie and its sequels? (Did you know there were 4???) You could measure heart rates (which indicate anxiety) during each film and compare them.
+
+
+![](https://media.giphy.com/media/KmTnUKop0AfFm/giphy.gif)
+
+---
+class:center
+
+## Research questions for an ANOVA
+
+> Does listening to certain types of music affect your writing? You could get some people to write an essay while listening to nothing, classical music (Beethoven), and classic rock (Rolling Stones), and compare essay quality.
+
+![](https://media.giphy.com/media/pOZhmE42D1WrCWATLK/giphy.gif)
+
+---
+class:center
+
+## Research questions for an ANOVA
+
+> Does where you live in Oregon state affect your Vitamin D levels? You could measure Vitamin D levels in people who live in NW, NE, SW, or SE Oregon.
+
+![](https://media.giphy.com/media/JHCcEc9vLvHZS/giphy.gif)
+
+---
+
+## First, housekeeping
+
+### Data as a __vector__:
+* Data is indicated with a single variable name like: $y_{i}$
+* Observations are of the form $(x_{i}, y_{i})$
+* The subscript refers to the row that the particular value is in; *i* = 1, 2, 3,...,*n*
+
+### Data as a __rectangular array__:  
+
+* Data is indicated with a single variable name like: $y_{ij}$
+* Observations are now of the form $(x_{ij}, y_{ij})$
+* The first subscript refers to the row that the particular value is in; *i* = 1, 2, 3,$\dotsc$,*n*
+* The second subscript refers to the column; *j* = 1, 2, 3, ...,*k*
+
+---
+
+# ANOVA data
+
+| Observation | *j* = 1      | *j* = 2      | *j* = 3      | $\ldots$ |*j* = *k*| |
+| :----------| :---------:| :---------:|:----------:|:----:|:-----:|:-----:|
+| *i* = 1       | $y_{11}$ | $y_{12}$ | $y_{13}$ | $\ldots$ | $y_{1k}$ ||
+| *i* = 2       | $y_{21}$ | $y_{22}$ | $y_{23}$ | $\ldots$ | $y_{2k}$ ||
+| *i* = 3       | $y_{31}$ | $y_{32}$ | $y_{33}$ | $\ldots$ | $y_{3k}$ ||
+| *i* = 4       | $y_{41}$ | $y_{42}$ | $y_{43}$ | $\ldots$ | $y_{4k}$ ||
+| $\vdots$    | $\vdots$ | $\vdots$ | $\vdots$ | $\ddots$ | $\vdots$ ||
+| *i* = *n*     | $y_{n1}$ | $y_{n2}$ | $y_{n3}$ | $\ldots$ | $y_{nk}$ ||
+| Means       | $\bar{y}_{\bullet1}$ | $\bar{y}_{\bullet2}$ | $\bar{y}_{\bullet3}$ | $\ldots$ | $\bar{y}_{\bullet{k}}$ | $\bar{y}_{\bullet\bullet}$ |
+| Variance    | ${s_y}^2_{\bullet1}$ | ${s_y}^2_{\bullet2}$ | ${s_y}^2_{\bullet3}$ | $\ldots$ | ${s_y}^2_{\bullet{k}}$ | ${s_y}^2_{\bullet\bullet}$ |
+
+---
+## Sums of squares in the GLM
+
+| Method | Total Sums of Squares <br> ( $SS_{total}$ )| Model Sums of Squares <br> ( $SS_{model}$ ) | Residual Sums of Squares <br> ( $SS_{residual}$ )  |
+| :----------| :---------:| :---------:|:----------:|
+|OLS regression| $$\sum_{i = 1}^n(y_i-\bar{y})^2$$ | $$\sum_{i = 1}^n(\hat{y_i}-\bar{y})^2$$ | $$\sum_{i = 1}^n(y_i-\hat{y_i})^2$$ |
+|ANOVA| $$\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2$$ | $$n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2$$ | $$\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2$$ |
+
+
+### From regression to ANOVA, what do you change?
+
+> 1. $y_i \longrightarrow y_{ij}$
+> 2. $\bar{y} \longrightarrow \bar{y_{\bullet\bullet}}$
+> 3. $\hat{y_i} \longrightarrow \bar{y_{\bullet{j}}}$
+> 4. $\sum_{i = 1}^n \longrightarrow \sum_{j = 1}^k\sum_{i = 1}^n$
+
+
+---
+## Total Sums of Squares
+
+```{r include = FALSE}
+grp1 <- c(1,2,3,4)  
+grp2 <- c(5,6,7,8)  
+grp3 <- c(9,10,11,12)
+dfwide <- tibble(grp1,grp2,grp3)
+dflong <- gather(dfwide, factor_key = TRUE)
+```
+
+.pull-left[
+
+```{r echo = FALSE}
+#total sums of squares; dashed line is the grand mean
+base <- ggplot(dflong, aes(x = key,
+                           y = value, 
+                           fill = key, 
+                           colour = key)) + 
+  geom_dotplot(binaxis = "y", stackdir = "center", position = "dodge", binwidth = .3) + 
+  theme_minimal() + 
+  theme(legend.position = "none")
+tot <- base + geom_hline(aes(yintercept = mean(value)), lty = "dashed")
+tot
+```
+
+]
+
+.pull-right[
+
+$$SS_{total} = \sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2$$
+
+In words, this means the sum of the squared differences between each observed $y_{ij}$ value and the *grand mean*, $\bar{y_{\bullet\bullet}}$. That is, it is the total deviation of the $y_{ij}$'s from the grand mean. 
+]
+
+---
+## Total Degrees of Freedom
+
+.pull-left[
+
+```{r echo = FALSE}
+#total sums of squares; dashed line is the grand mean
+base <- ggplot(dflong, aes(x = key,
+                           y = value, 
+                           fill = key, 
+                           colour = key)) + 
+  geom_dotplot(binaxis = "y", stackdir = "center", position = "dodge", binwidth = .3) + 
+  theme_minimal() + 
+  theme(legend.position = "none")
+tot <- base + geom_hline(aes(yintercept = mean(value)), lty = "dashed")
+tot
+```
+
+]
+
+.pull-right[
+
+$$SS_{total} = \sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2$$
+
+* Each of my 12 $y_{ij}$ values can take on any value. 
+* Once I add in that I know their grand mean $\bar{y_{\bullet\bullet}}$, they cannot. 
+* Once I know `<X>` $y_{ij}$ values *plus their grand mean*, I know __all__ $y_{ij}$ values.
+* Here: $df_{total} = 12-1 = 11$
+* Generally: $df_{total} = kn-1$
+
+]
+
+---
+
+## Total Mean Squares
+### Estimate of the total variance in *y*
+
+Recall our conceptual formula for estimating the population variance, $\sigma^2$:
+
+$$s^2 = \frac{\sum_{i = 1}^n(y_i-\mu)^2}{N-1}$$
+
+I am going to re-write this using bar/dot notation, and acknowledging that our total $N = k\times{n}$:
+
+$$s^2 = \frac{\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2}{kn-1}$$
+
+The numerator is the total sums of squares, and the denominator is its degrees of freedom!
+
+$$s^2 = \frac{\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2}{kn-1} = \frac{SS_{total}}{df_{total}} = MS_{total}$$
+
+---
+
+## Model Sums of Squares
+
+.pull-left[
+
+```{r echo = FALSE}
+#model sums of squares; dashed line is the grand mean
+mod <- ggplot(dflong, aes(x = key,
+                          y = value, 
+                          fill = key, 
+                          colour = key)) + 
+  geom_dotplot(binaxis = "y", stackdir = "center", position = "dodge", binwidth = .3, alpha = .1) + 
+  theme_minimal() + 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = factor(key[1]))) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = factor(key[5]))) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = factor(key[10])))+ 
+  geom_hline(aes(yintercept = mean(value)), lty = "dashed") + 
+  theme(legend.position = "none")
+mod
+```
+
+]
+
+.pull-right[
+
+$$SS_{model} = n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2$$
+
+In words, this means the sum of the squared differences between each *group* mean, $\bar{y_{\bullet{j}}}$, and the *grand mean*, $\bar{y_{\bullet\bullet}}$. That is, it is the deviation of the group means from the grand mean.
+]
+
+---
+
+## Model Degrees of Freedom
+
+.pull-left[
+
+```{r echo = FALSE}
+#model sums of squares; dashed line is the grand mean
+mod <- ggplot(dflong, aes(x = key,y = value, fill = key, colour = key)) + 
+  geom_dotplot(binaxis = "y", stackdir = "center", position = "dodge", binwidth = .3, alpha = .1) + 
+  theme_bw() + 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = key[1])) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = key[5])) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = key[10]))+ 
+  geom_hline(aes(yintercept = mean(value)), lty = "dashed") + 
+  theme(legend.position = "none")
+mod
+```
+
+]
+
+.pull-right[
+$$SS_{model} = n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2$$
+
+* Each of my 3 $\bar{y_{\bullet{j}}}$ group means can take on any value. 
+* Once I add in that I know their grand mean $\bar{y_{\bullet\bullet}}$, they cannot. 
+* Once I know `<X>` $\bar{y_{\bullet{j}}}$ group means *plus their grand mean*, I know __all__ $\bar{y_{\bullet{j}}}$ group means.
+* Here: $df_{model} = 3-1 = 2$
+* Generally: $df_{model} = k-1$
+]
+
+---
+
+## Model Mean Squares
+### Estimate of the variance between group means
+
+$$MS_{model} = \frac{\sum_{i = 1}^n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2}{k-1}$$
+
+$$MS_{model} = \frac{n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2}{k-1}$$
+
+
+> __N.B.__ Note that in a balanced design, $MS_{model}$ is simply the sample variance of the sample means times *n*.
+
+Also known as: 
+$$MS_{model} = MS_{treatment} = MS_{between} = MS_{method}$$
+
+---
+
+## Residual Sums of Squares
+
+.pull-left[
+
+```{r echo = FALSE}
+#residual sums of squares; dashed line is the grand mean
+res <- base + 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = key[1])) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = key[5])) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = key[10])) + 
+  theme(legend.position = "none")
+res
+```
+
+]
+
+.pull-right[
+
+
+$$SS_{residual} = \sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2$$
+
+In words, this means the sum of the squared differences between each observed $y_{ij}$ value and its group mean $\bar{y_{\bullet{j}}}$. That is, it is the deviation of the $y_{ij}$s from the predicted score based on group.
+]
+
+
+---
+
+## Residual Degrees of Freedom for Group 1
+
+.pull-left[
+
+```{r echo = FALSE}
+#residual sums of squares; dashed line is the grand mean
+res <- base + 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = key[1])) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = key[5])) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = key[10])) + 
+  theme(legend.position = "none")
+res
+```
+]
+
+.pull-right[
+
+$$SS_{residual} = \sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2$$
+
+For Group 1:
+* Each of my 4 $y_{i1}$ values can take on any value. 
+* Once I add in that I know their group mean $\bar{y_{\bullet{1}}}$, they cannot. 
+* Once I know `<X>` $y_{i1}$ values *plus their group mean*, I know __all__ $y_{i1}$ values. 
+* Here: $df_{residuals_{j = 1}} = 4-1 = 3$
+* Generally: $df_{residuals_{j = 1}} = n_{j = 1}-1$
+
+]
+
+---
+
+## Residual Degrees of Freedom for Group 2
+
+.pull-left[
+
+```{r echo = FALSE}
+#residual sums of squares; dashed line is the grand mean
+res <- base + 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = key[1])) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = key[5])) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = key[10])) + 
+  theme(legend.position = "none")
+res
+```
+
+]
+
+.pull-right[
+
+$$SS_{residual} = \sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2$$
+
+For Group 2:
+* Each of my 4 $y_{i2}$ values can take on any value. 
+* Once I add in that I know their group mean $\bar{y_{\bullet{2}}}$, they cannot. 
+* Once I know `<X>` $y_{i2}$ values *plus their group mean*, I know __all__ $y_{i2}$ values. 
+* Here: $df_{residuals_{j = 2}} = 4-1 = 3$
+* Generally: $df_{residuals_{j = 2}} = n_{j = 2}-1$
+]
+
+---
+
+## Residual Degrees of Freedom for Group 3
+
+.pull-left[
+
+```{r echo = FALSE}
+#residual sums of squares; dashed line is the grand mean
+res <- base + 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = key[1])) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = key[5])) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = key[10])) + 
+  theme(legend.position = "none")
+res
+```
+]
+
+.pull-right[
+
+$$SS_{residual} = \sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2$$
+
+For Group 3:
+* Each of my 4 $y_{i3}$ values can take on any value. 
+* Once I add in that I know their group mean $\bar{y_{\bullet{3}}}$, they cannot. 
+* Once I know `<X>` $y_{i3}$ values *plus their group mean*, I know __all__ $y_{i3}$ values. 
+* Here: $df_{residuals_{j = 3}} = 4-1 = 3$
+* Generally: $df_{residuals_{j = 3}} = n_{j = 3}-1$
+
+]
+
+---
+
+## Residual Degrees of Freedom overall
+
+.pull-left[
+
+```{r echo = FALSE}
+#residual sums of squares; dashed line is the grand mean
+res <- base + 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = key[1])) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = key[5])) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = key[10])) + 
+  theme(legend.position = "none")
+res
+```
+]
+
+.pull-right[
+
+$$SS_{residual} = \sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2$$
+
+Overall:
+* $df_{residual} = \sum_{j = 1}^k(n-1) = k(n-1)$
+* Here: 
+$df_{residual} = (n-1)+(n-1)+(n-1)$
+$df_{residual} = 3(n-1) = 3(4-1) = 9$
+]
+
+---
+
+## Residual Mean Squares
+
+Estimate of the total variance in *y* __pooled__ across groups; the variance of the $j^{th}$ group is:
+
+$$s_j^2 = \frac{\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2}{n-1}$$
+
+If we have more than one group, we would pool our estimates across the *j* groups to be a more precise estimate of the population variance, $\sigma^2$:
+
+$$s_{pooled}^2 = \frac{(n-1)s_1^2+\cdots+(n-1)s_k^2}{(n-1)+\cdots+(n-1)}$$
+
+$$s_{pooled}^2 = \frac{\sum_{i = 1}^n{(y_{i1}-y_{\bullet{1}})^2}+\cdots+\sum_{i = 1}^n{(y_{ik}-y_{\bullet{k}})^2}}{k(n-1)}$$
+
+$$s_{pooled}^2 = \frac{\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2}{k(n-1)} = \frac{SS_{residual}}{df_{residual}} = MS_{residual}$$
+
+---
+
+## ANOVA Source Tables
+
+For OLS regression:
+
+|      |Source of Variation| Sums of Squares |df | Mean Square|F|
+| :---| :--- |:------------:| :------------:|:------------:|:------------:|
+| $SS_{total}$ |Total| $\sum_{i = 1}^n(y_i-\bar{y})^2$ |*N*-1| $\frac{SS_{total}}{N-1}$ ||
+| $SS_{model}$ |Model| $\sum_{i = 1}^n(\hat{y_i}-\bar{y})^2$ |*p*| $\frac{SS_{model}}{1}$ | $\frac{MS_{model}}{MS_{residual}}$ |
+| $SS_{residual}$ |Residual| $\sum_{i = 1}^n(y_i-\hat{y_i})^2$ |*N*-*p*-1| $\frac{SS_{residual}}{N-2}$ ||
+
+> where *p* is the number of model parameters excluding the intercept term
+
+---
+
+## ANOVA Source Tables
+
+For ANOVA:
+
+|      |Source of Variation| Sums of Squares |df | Mean Square|F|
+| :---| :--- |:------------:| :------------:|:------------:|:------------:|
+| $SS_{total}$ |Total| $\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2$ | $kn-1$ | $\frac{SS_{total}}{kn-1}$ ||
+| $SS_{model}$ |Model| $n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2$ | $k-1$ | $\frac{SS_{model}}{k-1}$ | $\frac{MS_{model}}{MS_{residual}}$ |
+| $SS_{residual}$ |Residual| $\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2$ | $k(n-1)$ | $\frac{SS_{residual}}{k(n-1)}$ ||
+
+> where *k* is the number of groups and *n* is the sample size per group (balanced design)
+
+---
+
+## Let's try an example
+
+I hypothesize that sleep-deprived students will answer less questions in class than non-sleep-deprived students. I expose *n* = 4 students each to one of three conditions prior to class:
+
+> 1. One less hour of sleep ~ 7 hours of sleep [ONE]
+> 2. Two less hours of sleep ~ 6 hours of sleep [TWO]
+> 3. Three less hours of sleep ~ 5 hours of sleep [THREE]. 
+
+> Then I counted the number of questions they answered in class.
+
+| Observation (*i*) | ONE (*j* = 1) | TWO (*j* = 2)| THREE (*j* = 3) |  |
+| :---| :------------:| :------------:|:------------:| :------------:|
+| 1 | 1 | 6 | 0 |
+| 2 | 2 | 3 | 4 | 
+| 3 | 3 | 2 | 1 | 
+| 4 | 4 | 1 | 3 | 
+|   | $\bar{y}_{\bullet1}$ = 2.5 | $\bar{y}_{\bullet2}$ = 3.0 | $\bar{y}_{\bullet3}$ = 2.0 | $\bar{y}_{\bullet\bullet}$ = 2.5
+
+---
+
+## (Bad) sleep deprivation student study
+
+```{r include = FALSE}
+# data  
+one <- c(1,2,3,4)  
+two <- c(6,3,2,1)  
+three <- c(0,4,1,3)
+means <- c(mean(one),mean(two),mean(three))
+grandmean <- mean(c(one,two,three))
+means
+grandmean
+sleepwide <- tibble(one,two,three)
+sleeplong <- gather(sleepwide, factor_key = TRUE)
+anova(lm(value~key,data = sleeplong))
+```
+
+.pull-left[
+
+```{r echo = FALSE}
+#line is the grand mean
+badsleep <- ggplot(sleeplong, aes(x = key,y = value, fill = key, colour = key)) + 
+  geom_dotplot(binaxis = "y", stackdir = "center", position = "dodge", binwidth = .3) + 
+  theme_minimal() + 
+  geom_hline(aes(yintercept = mean(value)), lty = "dashed")+ 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = key[1])) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = key[5])) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = key[10])) + 
+  theme(legend.position = "none")
+badsleep
+```
+]
+
+
+.pull-right[
+
+__Total Mean Squares__
+* $MS_{total} = \frac{\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2}{kn-1} = \frac{31}{11} = 2.82$
+* This is also the variance of my DV
+
+__Model Mean Squares__
+* $MS_{model} = \frac{n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2}{k-1} = \frac{2}{2} = 1.0$
+
+__Residual Mean Squares__
+* $MS_{residual} = \frac{\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2}{k(n-1)} = \frac{29}{9} = 3.22$
+
+__F-ratio__
+* $MS_{model}/MS_{residual} = \frac{1.0}{3.22} = 0.31$
+* $P(F_{2,9}>0.31) = .741$
+
+]
+
+---
+
+## Let's try another example
+
+Perhaps I decide to try again, and design a better study. I expose *n* = 4 students each to one of three conditions prior to class:
+
+> 1. Minimal to no sleep~< 2 hours [min]. 
+> 2. Half night's sleep~4 hours [half]
+> 3. Full night's sleep~8 hours [full]
+
+> Then I counted the number of questions they answered in class.
+
+| Observation (*i*) | MIN (*j* = 1) | HALF (*j* = 2)| FULL (*j* = 3) |  |
+| :---| :------------:| :------------:|:------------:| :------------:|
+| 1 | 1 | 5 | 9 |
+| 2 | 2 | 6 | 10 | 
+| 3 | 3 | 7 | 11 | 
+| 4 | 4 | 8 | 12 | 
+|   | $\bar{y}_{\bullet1}$ = 2.5 | $\bar{y}_{\bullet2}$ = 6.5 | $\bar{y}_{\bullet3}$ = 10.5 | $\bar{y}_{\bullet\bullet}$ = 6.5
+
+---
+
+## (Better) sleep deprivation student study
+
+.pull-left[
+
+```{r echo = FALSE}
+#line is the grand mean
+bettersleep <- ggplot(dflong, aes(x = key,y = value, fill = key, colour = key)) + 
+  geom_dotplot(binaxis = "y", stackdir = "center", position = "dodge", binwidth = .3) + 
+  theme_minimal() + 
+  geom_hline(aes(yintercept = mean(value)), lty = "dashed")+ 
+  geom_segment(aes(x = .6, y = mean(value[1:4]), xend = 1.4, yend = mean(value[1:4]), colour = key[1])) + 
+  geom_segment(aes(x = 1.6, y = mean(value[5:8]), xend = 2.4, yend = mean(value[5:8]), colour = key[5])) + 
+  geom_segment(aes(x = 2.6, y = mean(value[9:12]), xend = 3.4, yend = mean(value[9:12]), colour = key[10])) + 
+  theme(legend.position = "none")
+bettersleep
+```
+]
+
+.pull-right[
+```{r include = FALSE}
+anova(lm(value~key,data = dflong))
+```
+
+__Total Mean Squares__
+* $MS_{total} = \frac{\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2}{kn-1} = \frac{143}{11} = 13$
+* This is also the variance of my DV
+
+__Model Mean Squares__
+* $MS_{model} = \frac{n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2}{k-1} = \frac{128}{2} = 64$
+
+__Residual Mean Squares__
+* $MS_{residual} = \frac{\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2}{k(n-1)} = \frac{15}{9} = 1.667$
+
+__F-ratio__
+* $MS_{model}/MS_{residual} = \frac{64}{1.667} = 38.4$
+* $P(F_{2,9}>38.4) = .000039$
+
+]
+
+---
+
+## Sidebar: Model Mean Square
+
+> __N.B.__ Note that in a balanced design, $MS_{model}$ is simply the sample variance of the sample means times *n*.
+
+```{r eval = FALSE}
+grp1 <- c(1,2,3,4)  
+grp2 <- c(5,6,7,8)  
+grp3 <- c(9,10,11,12)
+```
+
+```{r comment = NA}
+n <- length(grp1) #this is the same for all 3 groups
+means <- c(mean(grp1),mean(grp2),mean(grp3))
+n*var(means)
+```
+
+$$MS_{model} = \frac{n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2}{k-1} = \frac{128}{2} = 64$$
+
+---
+
+## Sidebar: Residual Mean Square
+
+> __N.B.__ Note that in a balanced design, $MS_{residual}$ is simply the mean of the sample variances; that is, it is the sum of the sample variances divided by *j*.
+
+```{r eval = FALSE}
+grp1 <- c(1,2,3,4)  
+grp2 <- c(5,6,7,8)  
+grp3 <- c(9,10,11,12)
+```
+
+```{r comment = NA}
+j <- 3 #number of groups
+vars <- sum(var(grp1),var(grp2),var(grp3))
+vars/j
+```
+
+$$MS_{residual} = \frac{\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2}{k(n-1)} = \frac{15}{9} = 1.667$$
+
+---
+
+## That pesky *F*-ratio
+
+$$F_{df1,df2} = \frac{MS_{model}}{MS_{residuals}}$$
+
+When the *n*'s are equal, we can rewrite this formula as:
+$$F_{df1,df2} = \frac{MS_{model}}{MS_{residuals}} = \frac{ns^2_{\bar{y_\bullet}}}{\hat{\sigma^2}}$$
+
+As we just showed, in a balanced design,
+
+* The numerator, $MS_{model}$, is simply the sample variance of the sample means times *n*
+* The denominator, $MS_{residual}$, is simply the mean of the sample variances
+
+$$F_{2,9} = \frac{4\times{16}}{1.667} = \frac{64}{1.667} = 38.4$$
+
+---
+
+## A little trick
+
+| Observation (*i*) | MIN (*j* = 1) | HALF (*j* = 2)| FULL (*j* = 3) |
+| :---| :------------:| :------------:|:------------:| 
+| 1 | 1 (1) | 5 (25) | 9 (81) |
+| 2 | 2 (4) | 6 (36) | 10 (100)| 
+| 3 | 3 (9) | 7 (49) | 11 (121)| 
+| 4 | 4 (16) | 8 (64) | 12 (144)| 
+|Mean   | 2.5 | 6.5 | 10.5 |
+|Variance | 1.67 | 1.67 | 1.67|
+|n |4|4|4|
+||||
+||||
+|A|30|174|446|
+|B|10|26|42|
+|C| $\frac{10^2}{4} = 25$ | $\frac{26^2}{4} = 169$ | $\frac{42^2}{4} = 441$ |
+
+```{r include = FALSE}
+means <- c(mean(grp1),mean(grp2),mean(grp3))
+var <- c(var(grp1),var(grp2),var(grp3))
+```
+
+---
+
+## By hand
+| Observation (*i*) | MIN (*j* = 1) | HALF (*j* = 2)| FULL (*j* = 3) |Sum|
+| :---| :------------:| :------------:|:------------:| :-----:|
+|A|30|174|446|650|
+|B|10|26|42|78|
+|C| $\frac{10^2}{4} = 25$ | $\frac{26^2}{4} = 169$ | $\frac{42^2}{4} = 441$ |635|
+
+* A = sum of the squared scores
+* B = sum of the scores
+* C = square the group *sum* of the scores ( $B_j$ ) then divide by the group *n*
+* and D = $\frac{(\sum_{j = 1}^kB_j)^2}{kn}$ (here, D = 507)
+
+Then the ANOVA source table is:
+
+| Source | Sum of Squares | Degrees of freedom| Mean Square |F|
+| :---| :------------:| :------------:|:------------:| :-----:|
+|Total | A-D | kn-1| $\frac{A-D}{kn-1} = \frac{143}{11} = 13$ |
+|Model (Between) | C-D | k-1 | $\frac{C-D}{k-1} = \frac{128}{2} = 64$ | $\frac{64}{1.667}$ = 38.4|
+|Residual (Within) | A-C | k(n-1) | $\frac{A-C}{kn-1} = \frac{15}{9} = 1.667$ |
+
+---
+
+## On your own: ANOVA
+
+> Children reporting to the emergency room at hospitals on Halloween had the severity of their injury (__injury__) assessed on a scale from 0 (no injury) to 100 (death). In addition, a note was taken of which superhero costume they were wearing (__hero__):
+
+1. Spiderman
+2. Superman
+3. Hulk
+4. a Teenage Mutant Ninja Turtle
+
+> Is the severity of the child's injury related to which superhero costumes the child was wearing?
+
+Construct the ANOVA source table by hand, and evaluate the *p*-value of the *F*-ratio.
+
+```{r eval = FALSE}
+superhero <- read.delim(file.choose(), header = T)
+```
+
+---
+
+## On your own: ANOVA
+
+| Observation (*i*) | Spiderman (*j* = 1) | Superman (*j* = 2)| Hulk (*j* = 3) |TMNT (*j* = 4)|Sum|
+| :---| :------------:| :------------:|:------------:| :-----:|:----:|
+|A|10904|23434|6775|5029|46142
+|B|244|362|189|167|962
+|C|9922.667|21840.67|5953.5|4648.167|42365
+
+* A = sum of the squared scores
+* B = sum of the scores
+* C = square the group *sum* of the scores ( $B_j$ ) then divide by the group *n*
+* and D = $\frac{(\sum_{j = 1}^kB_j)^2}{kn} = \frac{962^2}{4\times{6}} = 38560.17$
+
+```{r include = FALSE}
+superhero <- read_csv(here::here("Superhero.csv"))
+superhero$injury_2 <- superhero$injury^2
+A_1 <- sum(superhero$injury_2[1:6])
+A_2 <- sum(superhero$injury_2[7:12])
+A_3 <- sum(superhero$injury_2[13:18])
+A_4 <- sum(superhero$injury_2[19:24])
+cbind(A_1, A_2, A_3, A_4)
+B_1 <- sum(superhero$injury[1:6])
+B_2 <- sum(superhero$injury[7:12])
+B_3 <- sum(superhero$injury[13:18])
+B_4 <- sum(superhero$injury[19:24])
+cbind(B_1, B_2, B_3, B_4)
+A <- sum(superhero$injury_2)
+B <- sum(superhero$injury)
+Acheck <- sum(A_1, A_2, A_3, A_4)
+Bcheck <- sum(B_1, B_2, B_3, B_4)
+C_1 <- (B_1)^2/6
+C_2 <- (B_2)^2/6
+C_3 <- (B_3)^2/6
+C_4 <- (B_4)^2/6
+cbind(C_1, C_2, C_3, C_4)
+C <- sum(C_1,C_2, C_3, C_4)
+D <- B^2/(6*4)
+cbind(A,B,C,D)
+```
+
+---
+
+## On your own: ANOVA Source Table
+
+| Source | Sum of Squares | Degrees of freedom| Mean Square |F|
+| :---| :------------:| :------------:|:------------:| :-----:|
+|Total | A-D | kn-1| $\frac{A-D}{kn-1} = \frac{7581.833}{23} = 329.6449$ |
+|Model (Between) | C-D | k-1 | $\frac{C-D}{k-1} = \frac{3804.833}{3} = 1268.278$ | $\frac{1268.278}{188.85}$ = 6.72|
+|Residual (Within) | A-C | k(n-1) | $\frac{A-C}{kn-1} = \frac{3777}{20} = 188.85$ |
+
+$$P(F_{3,20}>6.72) = .002$$
+
+```{r include = FALSE}
+SS_total <- (A-D)
+MS_total <- (SS_total)/(24-1)
+SS_model <- (C-D)
+MS_model <- SS_model/(4-1)
+SS_residuals <- (A-C)
+MS_residuals <- SS_residuals/(22)
+cbind(SS_total,MS_total)
+cbind(SS_model,MS_model)
+cbind(SS_residuals,MS_residuals)
+```
+
+
+```{r comment = NA, echo = FALSE}
+superhero$hero <- as.factor(superhero$hero)
+anova(lm(injury~hero,data = superhero))
+```
+
+---
+
+## Next class: where does the difference lie?
+
+```{r echo = FALSE}
+library(ggplot2)
+heroplot <- ggplot(data = superhero, aes(factor(hero), injury))+geom_boxplot(aes(fill = factor(hero)))+ theme(axis.title.x = element_blank())+ scale_x_discrete(labels = c("Spiderman", "Superman", "Hulk", "TMNT"))+ theme(legend.position = "none")
+heroplot
+```
+
+
+
