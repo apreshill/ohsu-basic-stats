@@ -170,7 +170,7 @@ The following are excerpts from ModernDive:
 
 > "The most common normalization is known as the $z$-score. The formula for a $z$-score is 
 
-$$Z = \frac {x - \mu} {\sigma}$$ 
+$${\displaystyle Z = \frac{x - \mu}{\sigma}}$$ 
 
 > where $x$ represent the value of a variable, $\mu$ represents the mean of the variable, and $\sigma$ represents the standard deviation of the variable.  Thus, if your variable has 10 elements, each one has a corresponding $z$-score that gives how many standard deviations away that value is from its mean.  $z$-scores are normally distributed with mean 0 and standard deviation 1.  They have the common, bell-shaped pattern seen below."
 
