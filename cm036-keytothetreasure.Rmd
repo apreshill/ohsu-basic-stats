@@ -205,7 +205,7 @@ $${\displaystyle T={\frac {{\bar {x}}_{1}-{\bar {x}}_{2}}{s_{p}\times {\sqrt {{\
 
 where...
 
-$${\displaystyle s_{p}={\sqrt {\frac {\left(n_{1}-1\right)s_{1}^{2}+\left(n_{2}-1\right)s_{2}^{2}}{n_{1}+n_{2}-2}}}}$$
+$${\displaystyle s_{p}={\sqrt {\frac{\left(n_{1}-1\right)s_{1}^{2}+\left(n_{2}-1\right)s_{2}^{2}}{n_{1}+n_{2}-2}}}}$$
 
 where...
 
@@ -277,7 +277,7 @@ mercury %>%
 
 * Now we know the minimum $t$-statistic value we need to beat, what is the minimum absolute value for the mean difference we need to detect significance with $\alpha = .05$ (2-tailed)? (big hint: realize that the rearranged formula below may be helpful!)
 
-$${\displaystyle T \times {s_{p}\times {\sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}$$
+$${\displaystyle T \times {s_{p}\times {\sqrt {{\frac{1}{n_{1}}}+{\frac{1}{n_{2}}}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}}$$
 
 ```{r}
 (meancrits <- tcrits * se_diff)
@@ -569,7 +569,7 @@ Unfortunately, we currently can't get the confidence interval for theoretical me
 $$ ({\bar {x}}_{1}-{\bar {x}}_{2}) \pm (t_{\star} \times SE_{{\bar {x}}_{1}-{\bar {x}}_{2}})$$
 where...
 
-$$SE_{{\bar {x}}_{1}-{\bar {x}}_{2}} = s_{p} \times \sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}$$ 
+$$SE_{{\bar {x}}_{1}-{\bar {x}}_{2}} = s_{p} \times \sqrt {{\frac{1}{n_{1}}}+{\frac{1}{n_{2}}}}$$ 
 You should already have variables for the mean difference and the $t$-statistic critical value(s) (here, $t_{\star}$) from the top formula. In the bottom formula, that standard error should look familiar- it is the standard error of the difference between means. This was the denominator in your calculated $t$-statistic. 
 
 ### Theoretical CI solution

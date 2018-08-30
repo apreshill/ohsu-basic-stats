@@ -588,7 +588,7 @@ Variable type: numeric
 <p>Note that the quantity <span class="math inline">\((\mu_1 - \mu_2)\)</span> is typically 0 under the null hypothesis, so the actual computational formula for the <span class="math inline">\(t\)</span>-statistic is:</p>
 <p><span class="math display">\[{\displaystyle T={\frac {{\bar {x}}_{1}-{\bar {x}}_{2}}{s_{p}\times {\sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}}}}}\]</span></p>
 <p>where...</p>
-<p><span class="math display">\[{\displaystyle s_{p}={\sqrt {\frac {\left(n_{1}-1\right)s_{1}^{2}+\left(n_{2}-1\right)s_{2}^{2}}{n_{1}+n_{2}-2}}}}\]</span></p>
+<p><span class="math display">\[{\displaystyle s_{p}={\sqrt {\frac{\left(n_{1}-1\right)s_{1}^{2}+\left(n_{2}-1\right)s_{2}^{2}}{n_{1}+n_{2}-2}}}}\]</span></p>
 <p>where...</p>
 <ul>
 <li><span class="math inline">\(s_1\)</span> is the sample standard deviation of the response of the first group</li>
@@ -657,7 +657,7 @@ mercury <span class="op">%&gt;%</span><span class="st"> </span>
 <ul>
 <li>Now we know the minimum <span class="math inline">\(t\)</span>-statistic value we need to beat, what is the minimum absolute value for the mean difference we need to detect significance with <span class="math inline">\(\alpha = .05\)</span> (2-tailed)? (big hint: realize that the rearranged formula below may be helpful!)</li>
 </ul>
-<p><span class="math display">\[{\displaystyle T \times {s_{p}\times {\sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}\]</span></p>
+<p><span class="math display">\[{\displaystyle T \times {s_{p}\times {\sqrt {{\frac{1}{n_{1}}}+{\frac{1}{n_{2}}}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}}\]</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(meancrits &lt;-<span class="st"> </span>tcrits <span class="op">*</span><span class="st"> </span>se_diff)</code></pre></div>
 <pre><code>[1] -1.11395  1.11395</code></pre>
 <ul>
@@ -758,7 +758,7 @@ lower &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">-<
 <h2>The theoretical confidence interval</h2>
 <p>Unfortunately, we currently can't get the confidence interval for theoretical methods using <code>infer</code>. But we can use formulas (yay):</p>
 <p><span class="math display">\[ ({\bar {x}}_{1}-{\bar {x}}_{2}) \pm (t_{\star} \times SE_{{\bar {x}}_{1}-{\bar {x}}_{2}})\]</span> where...</p>
-<p><span class="math display">\[SE_{{\bar {x}}_{1}-{\bar {x}}_{2}} = s_{p} \times \sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}\]</span> You should already have variables for the mean difference and the <span class="math inline">\(t\)</span>-statistic critical value(s) (here, <span class="math inline">\(t_{\star}\)</span>) from the top formula. In the bottom formula, that standard error should look familiar- it is the standard error of the difference between means. This was the denominator in your calculated <span class="math inline">\(t\)</span>-statistic.</p>
+<p><span class="math display">\[SE_{{\bar {x}}_{1}-{\bar {x}}_{2}} = s_{p} \times \sqrt {{\frac{1}{n_{1}}}+{\frac{1}{n_{2}}}}\]</span> You should already have variables for the mean difference and the <span class="math inline">\(t\)</span>-statistic critical value(s) (here, <span class="math inline">\(t_{\star}\)</span>) from the top formula. In the bottom formula, that standard error should look familiar- it is the standard error of the difference between means. This was the denominator in your calculated <span class="math inline">\(t\)</span>-statistic.</p>
 <div id="theoretical-ci-solution" class="section level3">
 <h3>Theoretical CI solution</h3>
 <ul style="color:cadetblue">
