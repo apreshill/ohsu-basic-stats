@@ -168,10 +168,7 @@ Write a few sentences to address each of these conditions.
 
 The following are excerpts from ModernDive:
 
-> "The most common normalization is known as the $z$-score. The formula for a $z$-score is 
-
-
-> Thus, if your variable has 10 elements, each one has a corresponding $z$-score that gives how many standard deviations away that value is from its mean.  $z$-scores are normally distributed with mean 0 and standard deviation 1.  They have the common, bell-shaped pattern seen below."
+> "The most common normalization is known as the z-score. The formula for a z-score is ...Thus, if your variable has 10 elements, each one has a corresponding z-score that gives how many standard deviations away that value is from its mean.  z-scores are normally distributed with mean 0 and standard deviation 1.  They have the common, bell-shaped pattern seen below."
 
 ```{r echo=FALSE}
 ggplot(data.frame(x = c(-4, 4)), aes(x)) + stat_function(fun = dnorm)
