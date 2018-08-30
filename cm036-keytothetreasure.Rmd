@@ -163,12 +163,12 @@ Remember that in order to use the short-cut (formula-based, theoretical) approac
 
 Write a few sentences to address each of these conditions.
 
-# $t$-test for two independent samples
+# t-test for two independent samples
 
 
 The following are excerpts from ModernDive:
 
-> "The most common normalization is known as the z-score. The formula for a z-score is ...Thus, if your variable has 10 elements, each one has a corresponding z-score that gives how many standard deviations away that value is from its mean.  z-scores are normally distributed with mean 0 and standard deviation 1.  They have the common, bell-shaped pattern seen below."
+"The most common normalization is known as the z-score. The formula for a z-score is ...Thus, if your variable has 10 elements, each one has a corresponding z-score that gives how many standard deviations away that value is from its mean.  z-scores are normally distributed with mean 0 and standard deviation 1.  They have the common, bell-shaped pattern seen below."
 
 ```{r echo=FALSE}
 ggplot(data.frame(x = c(-4, 4)), aes(x)) + stat_function(fun = dnorm)
@@ -274,7 +274,7 @@ mercury %>%
 
 * Now we know the minimum $t$-statistic value we need to beat, what is the minimum absolute value for the mean difference we need to detect significance with $\alpha = .05$ (2-tailed)? (big hint: realize that the rearranged formula below may be helpful!)
 
-$${\displaystyle T \times {s_{p}\times {\sqrt {{\frac{1}{n_{1}}}+{\frac{1}{n_{2}}}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}}$$
+$${\displaystyle T \times s_p \times {\sqrt {{\frac{1}{n_1}}+{\frac{1}{n_2}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}}$$
 
 ```{r}
 (meancrits <- tcrits * se_diff)

@@ -554,11 +554,9 @@ Variable type: numeric
 <p>Write a few sentences to address each of these conditions.</p>
 </div>
 <div id="t-test-for-two-independent-samples" class="section level1">
-<h1><span class="math inline">\(t\)</span>-test for two independent samples</h1>
+<h1>t-test for two independent samples</h1>
 <p>The following are excerpts from ModernDive:</p>
-<blockquote>
 <p>&quot;The most common normalization is known as the z-score. The formula for a z-score is ...Thus, if your variable has 10 elements, each one has a corresponding z-score that gives how many standard deviations away that value is from its mean. z-scores are normally distributed with mean 0 and standard deviation 1. They have the common, bell-shaped pattern seen below.&quot;</p>
-</blockquote>
 <p><img src="cm036-keytothetreasure_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <blockquote>
 <p>&quot;Recall, that we hardly ever know the mean and standard deviation of the population of interest. This is almost always the case when considering the means of two independent groups. To help account for us not knowing the population parameter values, we can use the sample statistics instead, but this comes with a bit of a price in terms of complexity.&quot;</p>
@@ -654,7 +652,7 @@ mercury <span class="op">%&gt;%</span><span class="st"> </span>
 <ul>
 <li>Now we know the minimum <span class="math inline">\(t\)</span>-statistic value we need to beat, what is the minimum absolute value for the mean difference we need to detect significance with <span class="math inline">\(\alpha = .05\)</span> (2-tailed)? (big hint: realize that the rearranged formula below may be helpful!)</li>
 </ul>
-<p><span class="math display">\[{\displaystyle T \times {s_{p}\times {\sqrt {{\frac{1}{n_{1}}}+{\frac{1}{n_{2}}}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}}\]</span></p>
+<p><span class="math display">\[{\displaystyle T \times s_p \times {\sqrt {{\frac{1}{n_1}}+{\frac{1}{n_2}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}}\]</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(meancrits &lt;-<span class="st"> </span>tcrits <span class="op">*</span><span class="st"> </span>se_diff)</code></pre></div>
 <pre><code>[1] -1.11395  1.11395</code></pre>
 <ul>
