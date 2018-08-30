@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Alison Presmanes Hill" />
+
+
+<title>CONJ620: CM 3.6</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CONJ 620</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="cm.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Class Meetings
+  </a>
+</li>
+<li>
+  <a href="due.html">
+    <span class="fa fa-calendar-check"></span>
+     
+    Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://distracted-bhabha-a42d09.netlify.com">
+    <span class="fa fa-key"></span>
+     
+    Grades
+  </a>
+</li>
+<li>
+  <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
+    <span class="fa fa-user-ninja"></span>
+     
+    DataCamp
+  </a>
+</li>
+<li>
+  <a href="https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18">
+    <span class="fa fa-university"></span>
+     
+    Sakai
+  </a>
+</li>
+<li>
+  <a href="https://gitter.im/conj620/Lobby?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">
+    <span class="fa fa-comments"></span>
+     
+    Gitter Chat
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">
+    <span class="fa fa-cogs"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">CONJ620: CM 3.6</h1>
+<h3 class="subtitle"><em>Integrative Lab- Key</em></h3>
+<h4 class="author"><em>Alison Presmanes Hill</em></h4>
+
+</div>
+
+
+<p><strong>Self-Assessment</strong></p>
+<ul style="color:cadetblue">
+<p>How to:</p>
+<ul>
+<li><p>Start with your initial submission, and save it as a new file. Then add a sub-section to each of the sections with content called &quot;Self-Assessment&quot;.</p></li>
+<li><p>You may want to add color formatting to further highlight the self-assessment section. You can change the color of the font by using <code>&lt;span style=&quot;color:deeppink&quot;&gt;</code> <span style="color:deeppink">span styles like this</span> <code>&lt;/span&gt;</code>.</p></li>
+<li><p>If you want to change the color of a bulleted list, change <code>span</code> to <code>ul</code> and use the same method (pick any <a href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">color</a>).</p></li>
+<li>My code is provided here so that you can problem solve- if you need to copy and paste, do so in your self-assessment section, but you'll need to include narrative including attribution and reflection on <em>what</em> part of that code chunk you struggled with and <em>why</em>.</li>
+</ul>
+</ul>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>The goal of this lab is to carefully, thoroughly, and thoughtfully compare two group means and understand the results. You are also asked to communicate clearly about the steps in your analysis process with others, by sharing your R code, output, and narrative. As such, your code cannot &quot;stand alone&quot;- it is meant to complement / enhance / support your narrative. As with our previous <a href="cm026.html">integrative lab</a>, this lab will be due in two stages:</p>
+<ol style="list-style-type: decimal">
+<li>A complete knitted <code>html</code> file is due on Sakai by Thursday August 30th at 2:30pm.</li>
+<li>After class on August 30th, you'll be provided with a code key. You are asked to review your initial submission, and reflect on your own code/narrative after reviewing the key thoroughly. Your self-assessment is due on Sakai by beginning of class Thursday September 6th (2:30pm).</li>
+</ol>
+<p>Using the key, your self-assessment should include even <strong>more</strong> narrative; where you made mistakes, you must discuss and analyze where you went wrong, and correct them without copying/pasting directly from the key (this typically means that you need to include more narrative than we provide in the key). A good self-assessment will include:</p>
+<ul>
+<li>Assessment of the accuracy and completeness of your &quot;initial solutions&quot;</li>
+<li>Correct worked solutions with some discussion and analysis of why your initial solution was incorrect, and reflection on the source of your confusion (if you got an answer correct, this is not necessary)</li>
+<li>Attributions as appropriate to other students who helped you, or other sources such as lecture notes, readings, online resources, etc. that helped you</li>
+</ul>
+</div>
+<div id="headnotes" class="section level1">
+<h1>Headnotes</h1>
+<ul>
+<li>This lab is based on the assigned reading that includes <a href="http://moderndive.netlify.com/10-hypothesis-testing.html#theory-hypo">ModernDive Chapter 10.8 on t-tests for comparing two independent samples</a>. Please open and follow closely!</li>
+<li>Also see <a href="http://moderndive.netlify.com/b-appendixb">ModernDive Appendix B</a> for examples (search for: <code>B.5.5 Traditional methods</code>)</li>
+<li>Parts of this lab are adapted from Ted Laderas' and Jessica Minnier's <a href="https://www.datacamp.com/courses/rbootcamp">R Bootcamp</a> on DataCamp.com</li>
+</ul>
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<p>Please install a new version of <code>infer</code> first:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">remotes<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;tidymodels/infer&quot;</span>, <span class="dt">ref =</span> <span class="st">&quot;develop&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(infer)
+<span class="kw">library</span>(skimr)
+<span class="kw">library</span>(broom)
+<span class="kw">library</span>(moderndive)</code></pre></div>
+</div>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>We are going to work with a dataset called <a href="https://raw.githubusercontent.com/apreshill/ohsu-basic-stats/master/data/fishermen_mercury.csv"><code>fishermen_mercury.csv</code></a>, which consists of factors related to mercury levels among fishermen and a control group of non-fishermen. The data are published within the paper available <a href="https://www.sciencedirect.com/science/article/pii/S0269749199002614?via%3Dihub#TBL2">online</a>. Here is the citation for the peer-reviewed publication:</p>
+<blockquote>
+<p>N.B. Al-Majed and M.R. Preston (2000). &quot;Factors Influencing the Total Mercury and Methyl Mercury in the Hair of Fishermen in Kuwait,&quot; Environmental Pollution, Vol. 109, pp. 239-250.</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mercury &lt;-<span class="st"> </span><span class="kw">read_csv</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;fishermen_mercury.csv&quot;</span>),
+                    <span class="dt">col_types =</span> <span class="kw">cols</span>(
+                      <span class="dt">fisherman =</span> <span class="kw">col_factor</span>(<span class="dt">levels =</span> <span class="ot">NULL</span>))
+                    )</code></pre></div>
+<p>Variables in this dataset include:</p>
+<ul>
+<li>Fisherman indicator (<code>fisherman</code>)</li>
+<li>Age in years (<code>age</code>)</li>
+<li>Residence Time in years (<code>restime</code>)</li>
+<li>Height in cm (<code>height</code>)</li>
+<li>Weight in kg (<code>weight</code>)</li>
+<li>Fish meals per week (<code>fishmlwk</code>)</li>
+<li>Parts of fish consumed:
+<ul>
+<li>0=none,</li>
+<li>1=muscle tissue only,</li>
+<li>2=mt and sometimes whole fish,</li>
+<li>3=whole fish (fishpart)</li>
+</ul></li>
+<li>Methyl Mercury in mg/g (<code>methyl_mercury</code>)</li>
+<li>Total Mercury in mg/g (<code>total_mercury</code>)</li>
+</ul>
+</div>
+<div id="motivating-research-question" class="section level1">
+<h1>Motivating research question</h1>
+<p>Do fishermen have different levels of total mercury than non-fishermen?</p>
+</div>
+<div id="exploratory-data-analysis" class="section level1">
+<h1>Exploratory data analysis</h1>
+<p>Explore the <code>fisherman</code> and <code>total_mercury</code> variables. Recall that a <a href="http://moderndive.netlify.com/6-regression.html#model1EDA">new exploratory data analysis</a> involves three things:</p>
+<ul>
+<li>Looking at the raw values.</li>
+<li>Computing summary statistics of the variables of interest.</li>
+<li>Creating informative visualizations.</li>
+</ul>
+<p>General functions that we have used at this stage:</p>
+<ul>
+<li><code>dplyr::glimpse()</code></li>
+<li><code>skimr::skim()</code>
+<ul>
+<li>Given the two-group design, you may wish to do a <code>dplyr::group_by()</code> first here</li>
+</ul></li>
+<li><code>ggplot2::ggplot()</code>
+<ul>
+<li><code>geom_histogram()</code> or <code>geom_density()</code> or <code>geom_boxplot()</code> for numeric continuous variables
+<ul>
+<li>Given the two-group design, you may wish to combine these with <code>facet_wrap()</code></li>
+</ul></li>
+<li><code>geom_bar()</code> or <code>geom_col()</code> for categorical variables</li>
+</ul></li>
+</ul>
+<p>You may also find your want to use <code>filter</code>, <code>mutate</code>, <code>arrange</code>, <code>select</code>, or <code>count</code>. Let your questions lead you!</p>
+<div id="eda-solutions" class="section level2">
+<h2>EDA Solutions</h2>
+<p><span style="color:cadetblue"> I'll leave this mainly to you, just a few commands here:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(mercury)</code></pre></div>
+<pre><code>Observations: 135
+Variables: 9
+$ fisherman      &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+$ age            &lt;dbl&gt; 45, 38, 24, 41, 43, 58, 45, 46, 46, 46, 35, 25,...
+$ restime        &lt;dbl&gt; 6, 13, 2, 2, 11, 2, 6, 0, 14, 5, 2, 2, 0, 12, 1...
+$ height         &lt;dbl&gt; 175, 173, 168, 183, 175, 176, 184, 170, 175, 17...
+$ weight         &lt;dbl&gt; 70, 73, 66, 80, 78, 75, 85, 68, 80, 75, 76, 66,...
+$ fishmlwk       &lt;dbl&gt; 14, 7, 7, 7, 21, 21, 21, 7, 21, 7, 21, 21, 21, ...
+$ fishpart       &lt;dbl&gt; 2, 1, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2,...
+$ methyl_mercury &lt;dbl&gt; 4.011, 4.026, 3.578, 10.988, 10.520, 6.169, 17....
+$ total_mercury  &lt;dbl&gt; 4.484, 4.789, 3.856, 11.435, 10.849, 6.457, 17....</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(fisherman) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">skim</span>()</code></pre></div>
+<pre><code>Skim summary statistics
+ n obs: 135 
+ n variables: 9 
+ group variables: fisherman 
+
+Variable type: numeric 
+ fisherman       variable missing complete   n   mean   sd      p0    p25
+         1            age       0      100 100  34.92 8.92  16      28   
+         1       fishmlwk       0      100 100   8.45 4.85   3       7   
+         1       fishpart       0      100 100   1.9  0.52   1       2   
+         1         height       0      100 100 174.16 7.64 154     170   
+         1 methyl_mercury       0      100 100   4.02 3.13   0.019   2.09
+         1        restime       0      100 100   5.36 5.8    0       1   
+         1  total_mercury       0      100 100   4.18 3.22   0.025   2.24
+         1         weight       0      100 100  72.8  7.01  59      68   
+         0            age       0       35  35  30.43 2.6   26      28   
+         0       fishmlwk       0       35  35   1.03 0.79   0       0   
+         0       fishpart       0       35  35   1.17 0.86   0       0   
+         0         height       0       35  35 175.14 3.57 170     174   
+         0 methyl_mercury       0       35  35   2.56 1.39   0.73    1.06
+         0        restime       0       35  35   2.4  0.55   1       2   
+         0  total_mercury       0       35  35   2.62 1.4    0.74    1.13
+         0         weight       0       35  35  74.17 5.57  61      70   
+    p50    p75   p100     hist
+  33     42     58    ▁▆▇▇▃▅▂▁
+   7      7     21    ▂▇▁▁▁▁▁▁
+   2      2      3    ▂▁▁▇▁▁▁▁
+ 173.5  180    195    ▁▂▁▇▅▅▂▁
+   3.46   4.97  17.21 ▅▇▅▁▁▁▁▁
+   3     11     25    ▇▂▁▁▂▁▁▁
+   3.73   5.13  17.79 ▅▇▅▁▁▁▁▁
+  72.5   76     92    ▃▆▇▇▅▂▂▁
+  30     32     35    ▃▇▆▆▂▆▂▇
+   1      2      2    ▆▁▁▇▁▁▁▆
+   1      2      2    ▅▁▁▅▁▁▁▇
+ 175    178.5  180    ▃▁▁▇▁▁▁▅
+   2.37   3.59   5.11 ▇▁▆▃▃▂▂▃
+   2      3      3    ▁▁▁▇▁▁▁▆
+   2.48   3.65   5.21 ▇▁▃▆▂▂▂▃
+  74     78     84    ▁▂▃▇▇▆▂▅</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggbeeswarm)
+<span class="kw">ggplot</span>(mercury, <span class="kw">aes</span>(<span class="dt">x =</span> fisherman, <span class="dt">y =</span> total_mercury)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">outlier.shape =</span> <span class="ot">NA</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_quasirandom</span>(<span class="dt">fill =</span> <span class="st">&quot;lightseagreen&quot;</span>, 
+               <span class="dt">colour =</span> <span class="st">&quot;lightseagreen&quot;</span>) </code></pre></div>
+<p><img src="cm036-keytothetreasure_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p></span></p>
+</div>
+</div>
+<div id="check-conditions" class="section level1">
+<h1>Check conditions</h1>
+<p>Remember that in order to use the short-cut (formula-based, theoretical) approach, we need to check that some conditions are met. The <code>infer</code> package does not automatically check conditions for the theoretical methods to work. In order for the results of the <span class="math inline">\(t\)</span>-test to be valid, three conditions must be met:</p>
+<ol style="list-style-type: decimal">
+<li>Independent observations in both samples</li>
+<li>Nearly normal populations OR large sample sizes (<span class="math inline">\(n \ge 30\)</span>)</li>
+<li>Independently selected samples</li>
+<li>For this lab, we'll also assume that the variance in the response/outcome variable is <em>the same</em> for both groups</li>
+</ol>
+<p>Write a few sentences to address each of these conditions.</p>
+</div>
+<div id="t-test-for-two-independent-samples" class="section level1">
+<h1><span class="math inline">\(t\)</span>-test for two independent samples</h1>
+<p>The following are excerpts from ModernDive:</p>
+<blockquote>
+<p>&quot;The most common normalization is known as the <span class="math inline">\(z\)</span>-score. The formula for a <span class="math inline">\(z\)</span>-score is <span class="math display">\[Z = \frac{x - \mu}{\sigma},\]</span> where <span class="math inline">\(x\)</span> represent the value of a variable, <span class="math inline">\(\mu\)</span> represents the mean of the variable, and <span class="math inline">\(\sigma\)</span> represents the standard deviation of the variable. Thus, if your variable has 10 elements, each one has a corresponding <span class="math inline">\(z\)</span>-score that gives how many standard deviations away that value is from its mean. <span class="math inline">\(z\)</span>-scores are normally distributed with mean 0 and standard deviation 1. They have the common, bell-shaped pattern seen below.&quot;</p>
+</blockquote>
+<p><img src="cm036-keytothetreasure_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<blockquote>
+<p>&quot;Recall, that we hardly ever know the mean and standard deviation of the population of interest. This is almost always the case when considering the means of two independent groups. To help account for us not knowing the population parameter values, we can use the sample statistics instead, but this comes with a bit of a price in terms of complexity.&quot;</p>
+</blockquote>
+<div id="test-statistic-delta" class="section level2">
+<h2>Test statistic <span class="math inline">\(\delta\)</span></h2>
+<blockquote>
+<p>&quot;Another form of normalization occurs when we need to use the sample standard deviations as estimates for the unknown population standard deviations. This normalization is often called the <span class="math inline">\(t\)</span>-score.&quot;</p>
+</blockquote>
+<p>For the two independent samples case like what we have for comparing fishermen to non-fishermen, the formula is <span class="math display">\[{\displaystyle T={\frac {({\bar {x}}_{1}-{\bar {x}}_{2})- (\mu_1-\mu_2)}{s_{p}\times {\sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}}}}}\]</span></p>
+<p>where...</p>
+<ul>
+<li><span class="math inline">\(\bar{x}_1\)</span> is the sample mean response of the first group</li>
+<li><span class="math inline">\(\bar{x}_2\)</span> is the sample mean response of the second group</li>
+<li><span class="math inline">\(\mu_1\)</span> is the population mean response of the first group</li>
+<li><span class="math inline">\(\mu_2\)</span> is the population mean response of the second group</li>
+<li><span class="math inline">\(s_p\)</span> is the pooled standard deviation of the two samples</li>
+<li>The overall denominator is called the standard error of the difference between means.</li>
+</ul>
+<p>From the <a href="http://blog.minitab.com/blog/adventures-in-statistics-2/understanding-t-tests-t-values-and-t-distributions">Minitab blog</a>:</p>
+<blockquote>
+<p>&quot;A t-value of 0 indicates that the sample results exactly equal the null hypothesis. As the difference between the sample data and the null hypothesis increases, the absolute value of the t-value increases.&quot;</p>
+</blockquote>
+<p>Note that the quantity <span class="math inline">\((\mu_1 - \mu_2)\)</span> is typically 0 under the null hypothesis, so the actual computational formula for the <span class="math inline">\(t\)</span>-statistic is:</p>
+<p><span class="math display">\[{\displaystyle T={\frac {{\bar {x}}_{1}-{\bar {x}}_{2}}{s_{p}\times {\sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}}}}}\]</span></p>
+<p>where...</p>
+<p><span class="math display">\[{\displaystyle s_{p}={\sqrt {\frac {\left(n_{1}-1\right)s_{1}^{2}+\left(n_{2}-1\right)s_{2}^{2}}{n_{1}+n_{2}-2}}}}\]</span></p>
+<p>where...</p>
+<ul>
+<li><span class="math inline">\(s_1\)</span> is the sample standard deviation of the response of the first group</li>
+<li><span class="math inline">\(s_2\)</span> is the sample standard deviation of the response of the second group</li>
+<li><span class="math inline">\(n_1\)</span> is the sample size of the first group</li>
+<li><span class="math inline">\(n_2\)</span> is the sample size of the second group</li>
+</ul>
+<p>The <span class="math inline">\(s_p\)</span> here is called the &quot;pooled standard deviation.&quot; Now that we have two samples (in our case, fishermen and non-fishermen), we have two standard deviations. Recall that in order to calculate the standard error of one mean we divided the sample standard deviation by the square root of <span class="math inline">\(N\)</span>. The pooled standard error is the same idea, but after combining the standard deviations from two samples. The calculation is important, as it assumes that <em>there is not a difference</em> in the standard deviations between the two groups, and hence they can be pooled. Remember that <span class="math inline">\(s^2\)</span> is the squared standard deviation, which we know is the variance (i.e., <code>var(x1)</code> = <code>(sd(x1))^2</code> and <code>sd(x1)</code> = <code>sqrt(var(x1))</code>).</p>
+</div>
+<div id="test-statistic-solutions" class="section level2">
+<h2>Test statistic solutions</h2>
+<p>Given the above formulas, answer the following questions using R code plus narrative:</p>
+<ul style="color:cadetblue">
+<ul>
+<li>What is the pooled standard error for the <code>total_mercury</code> variable? (try to make all quantities here defined variables using <code>dplyr::group_by() %&gt;% summarize() %&gt;% filter() %&gt;% pull()</code>)</li>
+</ul>
+<blockquote>
+<p>In my answer, I calculated the &quot;pooled standard deviation&quot; as <code>sd_pooled</code>, and the standard error of the difference in means as <code>se_diff</code>.</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(mercury_stats &lt;-<span class="st"> </span>mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(fisherman) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">avg_mercury =</span> <span class="kw">mean</span>(total_mercury, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
+            <span class="dt">var_mercury =</span> <span class="kw">var</span>(total_mercury, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
+            <span class="dt">n_groups =</span> <span class="kw">n</span>()))</code></pre></div>
+<pre><code># A tibble: 2 x 4
+  fisherman avg_mercury var_mercury n_groups
+  &lt;fct&gt;           &lt;dbl&gt;       &lt;dbl&gt;    &lt;int&gt;
+1 1                4.18       10.4       100
+2 0                2.62        1.97       35</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n_f &lt;-<span class="st"> </span>mercury_stats <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(fisherman <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="dv">4</span>) <span class="co"># fishermen</span>
+n_nf &lt;-<span class="st"> </span>mercury_stats <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(fisherman <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="dv">4</span>) <span class="co"># non fishermen</span>
+var_f &lt;-<span class="st"> </span>mercury_stats <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(fisherman <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="dv">3</span>) <span class="co"># var fishermen</span>
+var_nf &lt;-<span class="st"> </span>mercury_stats <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(fisherman <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(<span class="dv">3</span>) <span class="co"># var non fishermen</span>
+num_sp &lt;-<span class="st"> </span>((n_f <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)<span class="op">*</span><span class="st"> </span>var_f) <span class="op">+</span><span class="st"> </span>((n_nf <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)<span class="op">*</span><span class="st"> </span>var_nf)
+denom_sp &lt;-<span class="st"> </span>n_f <span class="op">+</span><span class="st"> </span>n_nf <span class="op">-</span><span class="st"> </span><span class="dv">2</span>
+(sd_pooled &lt;-<span class="st"> </span><span class="kw">sqrt</span>(num_sp <span class="op">/</span><span class="st"> </span>denom_sp))</code></pre></div>
+<pre><code>[1] 2.867578</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(se_diff &lt;-<span class="st"> </span>sd_pooled <span class="op">*</span><span class="st"> </span><span class="kw">sqrt</span>((<span class="dv">1</span><span class="op">/</span>n_f) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">/</span>n_nf)))</code></pre></div>
+<pre><code>[1] 0.5631811</code></pre>
+<ul>
+<li>What are the minimum <span class="math inline">\(t\)</span>-statistic values we need to conclude that there is a significant difference at <span class="math inline">\(\alpha = .05\)</span> (2-tailed)? (hint: degrees of freedom for a two-sample t-test are <span class="math inline">\(N\)</span> - 2)</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nsamp &lt;-<span class="st"> </span><span class="dv">135</span>
+(tcrits &lt;-<span class="st"> </span><span class="kw">qt</span>(<span class="kw">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>), <span class="dt">df =</span> nsamp <span class="op">-</span><span class="st"> </span><span class="dv">2</span>))</code></pre></div>
+<pre><code>[1] -1.977961  1.977961</code></pre>
+<ul>
+<li>Use the following code to plot these critical t-values.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">upper_tcrit &lt;-<span class="st"> </span><span class="co"># fill in here</span>
+mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;t&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">method =</span> <span class="st">&quot;theoretical&quot;</span>, 
+            <span class="dt">obs_stat =</span> upper_tcrit, 
+            <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>) <span class="co"># gives us shading</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">upper_tcrit &lt;-<span class="st"> </span>tcrits[<span class="dv">2</span>] <span class="co"># fill in here</span>
+mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;t&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">method =</span> <span class="st">&quot;theoretical&quot;</span>, 
+            <span class="dt">obs_stat =</span> upper_tcrit, 
+            <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>)</code></pre></div>
+<p><img src="cm036-keytothetreasure_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<ul>
+<li>Now we know the minimum <span class="math inline">\(t\)</span>-statistic value we need to beat, what is the minimum absolute value for the mean difference we need to detect significance with <span class="math inline">\(\alpha = .05\)</span> (2-tailed)? (big hint: realize that the rearranged formula below may be helpful!)</li>
+</ul>
+<p><span class="math display">\[{\displaystyle T \times {s_{p}\times {\sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}}}}={{\bar {x}}_{1}-{\bar {x}}_{2}}\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(meancrits &lt;-<span class="st"> </span>tcrits <span class="op">*</span><span class="st"> </span>se_diff)</code></pre></div>
+<pre><code>[1] -1.11395  1.11395</code></pre>
+<ul>
+<li>Complete this sentence filling in numbers from your above calculations:</li>
+</ul>
+<blockquote>
+<p>With <span class="math inline">\(n_1\)</span> fisherman and <span class="math inline">\(n_2\)</span> non-fishermen, given the variability in total mercury present in this sample, we will reject the null hypothesis that there is no difference in total mercury levels between the two groups if we obtain a <span class="math inline">\(t\)</span>-statistic greater than X (absolute value, <span class="math inline">\(\alpha\)</span> = .05, 2-tailed). This is equivalent to saying we will reject the null hypothesis if we obtain a mean difference greater than X (absolute value, <span class="math inline">\(\alpha\)</span> = .05, 2-tailed).</p>
+</blockquote>
+<blockquote>
+<p>With 100 fisherman and 35 non-fishermen, given the variability in total mercury present in this sample, we will reject the null hypothesis that there is no difference in total mercury levels between the two groups if we obtain a <span class="math inline">\(t\)</span>-statistic greater than 1.977961 (absolute value, <span class="math inline">\(\alpha\)</span> = .05, 2-tailed). This is equivalent to saying we will reject the null hypothesis if we obtain a mean difference greater than 1.11395 (absolute value, <span class="math inline">\(\alpha\)</span> = .05, 2-tailed).</p>
+</blockquote>
+</ul>
+</div>
+<div id="observed-effect-delta" class="section level2">
+<h2>Observed effect <span class="math inline">\(\delta^*\)</span></h2>
+<p>Answer the following questions using R code and narrative:</p>
+<div id="observed-effect-solutions" class="section level3">
+<h3>Observed effect solutions</h3>
+<ul style="color:cadetblue">
+<ul>
+<li>What mean difference (raw) did we observe? Is it greater than the minimum mean difference we need to beat? (hint: try <code>infer::specify</code> then <code>calculate</code> with <code>stat = &quot;diff in means&quot;</code>).</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean_diff &lt;-<span class="st"> </span>mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, 
+            <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>)) 
+mean_diff</code></pre></div>
+<pre><code># A tibble: 1 x 1
+   stat
+  &lt;dbl&gt;
+1  1.56</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mean_diff <span class="op">&gt;</span><span class="st"> </span>meancrits</code></pre></div>
+<pre><code>     stat
+[1,] TRUE</code></pre>
+<ul>
+<li>Calculate the <span class="math inline">\(t\)</span>-statistic &quot;by hand&quot; using R. Is it greater than the minimum <span class="math inline">\(t\)</span>-statistic we need to beat? (here is the formula again):</li>
+</ul>
+<p><span class="math display">\[{\displaystyle T={\frac {{\bar {x}}_{1}-{\bar {x}}_{2}}{s_{p}\times {\sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}}}}}\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(calc_t &lt;-<span class="st"> </span>mean_diff <span class="op">/</span><span class="st"> </span>se_diff)</code></pre></div>
+<pre><code>      stat
+1 2.777389</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">calc_t <span class="op">&gt;</span><span class="st"> </span>tcrits</code></pre></div>
+<pre><code>     stat
+[1,] TRUE</code></pre>
+<ul>
+<li>Do a classical 2-sample t-test (assuming equal variances, more on this later) in R using <code>infer</code>, do the results match your calculations?:</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">t_test</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>  statistic t_df     p_value alternative  lower_ci upper_ci
+1  2.777389  133 0.006271902   two.sided 0.4502225 2.678123</code></pre>
+<ul>
+<li>Interpret this output. What is the statistic? What is the meaning/interpretation of the confidence interval here? (hint: Does it include zero? What does it mean if it does or does not? What value is in the center of the interval?)</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">obs_t &lt;-<span class="st"> </span>mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">t_test</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="dt">var.equal =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">pull</span>(<span class="dv">1</span>)</code></pre></div>
+<ul>
+<li>Use the code below to compare the normal distribution to the <span class="math inline">\(t\)</span>-distribution, which has only one parameter: degrees of freedom (<code>df</code>). You can use the <code>dt</code> and <code>dnorm</code> with the <code>stat_function</code> layer in <code>ggplot</code> to plot the <em>densities</em> for each distribution. Change the <code>df</code> argument here a few times to view its effect: what do you see? (you don't need to print any of these plots to your final file- I want you to reflect on how the two distributions differ).</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="dv">10</span>
+<span class="kw">ggplot</span>(<span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">4</span>, <span class="dv">4</span>)), <span class="kw">aes</span>(x)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dt, <span class="dt">args =</span> <span class="kw">list</span>(<span class="dt">df =</span> df)) <span class="op">+</span><span class="st"> </span><span class="co"># t dist</span>
+<span class="st">  </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="co"># normal dist in red</span></code></pre></div>
+<p><img src="cm036-keytothetreasure_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<ul>
+<li>Save your observed <span class="math inline">\(t\)</span>-statistic, and use <code>infer</code> to make a plot of the null t-distribution with a red line for your <code>obs_stat</code>, shading in both directions. Try adding <code>geom_vline()</code> to this object so you can add vertical lines where your two &quot;critical t-values&quot; are.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;t&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">0</span>), <span class="dt">var.equal =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">method =</span> <span class="st">&quot;theoretical&quot;</span>, 
+            <span class="dt">obs_stat =</span> obs_t, 
+            <span class="dt">direction =</span> <span class="st">&quot;both&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="kw">aes</span>(<span class="dt">xintercept =</span> tcrits), <span class="dt">color =</span> <span class="st">&quot;dodgerblue&quot;</span>)</code></pre></div>
+<p><img src="cm036-keytothetreasure_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+</ul>
+</div>
+</div>
+<div id="the-theoretical-p-value" class="section level2">
+<h2>The theoretical p-value</h2>
+<p>But, how can we calculate the p-value from this? Well the easy way is with your <code>infer</code> output :) But! Remember that your observed <span class="math inline">\(t\)</span>-statistic is a <em>quantile</em> value for a statistic that we <em>assume</em> follows a <span class="math inline">\(t\)</span>-distribution. How do we calculate the probability of getting a <span class="math inline">\(t\)</span>-statistic as or more extreme than the one we got? We use <code>pt()</code>!</p>
+<div id="theoretical-p-value-solution" class="section level3">
+<h3>Theoretical p-value solution</h3>
+<ul style="color:cadetblue">
+<ul>
+<li>Use <code>pt()</code> to calculate the 2-sided p-value in R. Does it match the output from <code>infer</code>?</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">upper &lt;-<span class="st"> </span><span class="kw">pt</span>(obs_t, <span class="dt">df =</span> nsamp <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)
+lower &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">-</span><span class="kw">pt</span>(obs_t, <span class="dt">df =</span> nsamp <span class="op">-</span><span class="st"> </span><span class="dv">2</span>)
+<span class="dv">2</span><span class="op">*</span><span class="kw">min</span>(upper,lower)</code></pre></div>
+<pre><code>[1] 0.006271902</code></pre>
+</ul>
+</div>
+</div>
+<div id="the-theoretical-confidence-interval" class="section level2">
+<h2>The theoretical confidence interval</h2>
+<p>Unfortunately, we currently can't get the confidence interval for theoretical methods using <code>infer</code>. But we can use formulas (yay):</p>
+<p><span class="math display">\[ ({\bar {x}}_{1}-{\bar {x}}_{2}) \pm (t_{\star} \times SE_{{\bar {x}}_{1}-{\bar {x}}_{2}})\]</span> where...</p>
+<p><span class="math display">\[SE_{{\bar {x}}_{1}-{\bar {x}}_{2}} = s_{p} \times \sqrt {{\frac {1}{n_{1}}}+{\frac {1}{n_{2}}}}\]</span> You should already have variables for the mean difference and the <span class="math inline">\(t\)</span>-statistic critical value(s) (here, <span class="math inline">\(t_{\star}\)</span>) from the top formula. In the bottom formula, that standard error should look familiar- it is the standard error of the difference between means. This was the denominator in your calculated <span class="math inline">\(t\)</span>-statistic.</p>
+<div id="theoretical-ci-solution" class="section level3">
+<h3>Theoretical CI solution</h3>
+<ul style="color:cadetblue">
+<ul>
+<li>Use these values to calculate the 95% confidence interval for the difference in means. Does it match the output from <code>infer</code>? Does it contain zero? Will this interval ever <em>not</em> contain the observed difference in sample means?</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ll &lt;-<span class="st"> </span>mean_diff <span class="op">-</span><span class="st"> </span>(tcrits[<span class="dv">2</span>]<span class="op">*</span>se_diff)
+ul &lt;-<span class="st"> </span>mean_diff <span class="op">+</span><span class="st"> </span>(tcrits[<span class="dv">2</span>]<span class="op">*</span>se_diff)
+<span class="kw">c</span>(ll, ul)</code></pre></div>
+<pre><code>$stat
+[1] 0.4502225
+
+$stat
+[1] 2.678123</code></pre>
+</ul>
+</div>
+</div>
+</div>
+<div id="compare-t-test-results-to-permutation-test" class="section level1">
+<h1>Compare t-test results to permutation test</h1>
+<p>Using <a href="http://moderndive.netlify.com/10-hypothesis-testing.html#example-comparing-two-means">ModernDive 10.7</a> as an example, as well as our previous <a href="https://apreshill.github.io/ohsu-basic-stats/cm034.html">resampling lab</a>, conduct a permutation test to evaluate whether there is a mean difference in total mercury between fishermen and non-fishermen. What do you conclude, and how do these results compare to those based on the classical hypothesis test? What, if any, assumptions of each method are comfortable or uncomfortable with?</p>
+<div id="permutation-test-solution" class="section level2">
+<h2>Permutation test solution</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">0</span>)
+mercury_diff &lt;-<span class="st"> </span>mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman) <span class="op">%&gt;%</span><span class="st">  </span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))
+
+null_fish &lt;-<span class="st"> </span>mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>, <span class="dt">type =</span> <span class="st">&quot;permute&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;diff in means&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))
+
+null_fish <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> mercury_diff, <span class="dt">direction =</span> <span class="st">&quot;two_sided&quot;</span>)</code></pre></div>
+<p><img src="cm036-keytothetreasure_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(pdiff &lt;-<span class="st"> </span>null_fish <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> mercury_diff, <span class="dt">direction =</span> <span class="st">&quot;two_sided&quot;</span>))</code></pre></div>
+<pre><code># A tibble: 1 x 1
+  p_value
+    &lt;dbl&gt;
+1   0.007</code></pre>
+<p><span style="color:cadetblue"></p>
+<p>The permutation test of the difference in means compares my observed difference in means, 1.56, to the permuted null distribution of the differences in means based on 1000 replicates (sampling without replacement; i.e., shuffling the 0/1 values in the <code>fisherman</code> variable). The permutation p-value is 0.01, indicating that- given the random variation present in <code>total_mercury</code> values- a difference in means as or more extreme than 1.56 would only be expected with 0.7% probability.</p>
+<p>I could also permute a t-statistic, and interpret the p-value based on the permutation null distribution, instead of using the theoretical t-distribution to calculate the formula p-value.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">null_fish_t &lt;-<span class="st"> </span>mercury <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">specify</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">hypothesize</span>(<span class="dt">null =</span> <span class="st">&quot;independence&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">generate</span>(<span class="dt">reps =</span> <span class="dv">1000</span>, <span class="dt">type =</span> <span class="st">&quot;permute&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">calculate</span>(<span class="dt">stat =</span> <span class="st">&quot;t&quot;</span>, <span class="dt">order =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>), <span class="dt">var.equal =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># note the method here to overlay theoretical t dist</span>
+<span class="co"># changing the colors so it is clear</span>
+null_fish_t <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">visualize</span>(<span class="dt">obs_stat =</span> obs_t, <span class="dt">direction =</span> <span class="st">&quot;two_sided&quot;</span>, <span class="dt">method =</span> <span class="st">&quot;both&quot;</span>, 
+            <span class="dt">obs_stat_color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">pvalue_fill =</span> <span class="st">&quot;dodgerblue&quot;</span>)</code></pre></div>
+<p><img src="cm036-keytothetreasure_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(tdiff &lt;-<span class="st"> </span>null_fish_t <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">get_pvalue</span>(<span class="dt">obs_stat =</span> obs_t, <span class="dt">direction =</span> <span class="st">&quot;two_sided&quot;</span>))</code></pre></div>
+<pre><code># A tibble: 1 x 1
+  p_value
+    &lt;dbl&gt;
+1   0.009</code></pre>
+<p>The permutation test of the t-statistic compares my observed t-statistic, 2.78, to the permuted null distribution of the t-statistic based on 1000 replicates (sampling without replacement; i.e., shuffling the 0/1 values in the <code>fisherman</code> variable). The permutation p-value is 0.01, indicating that- given the random variation present in <code>total_mercury</code> values- a t-statistic as or more extreme than 2.78 would only be expected with 0.9% probability. This lines up pretty well with my results based on the theoretical t-distribution, which gave a p-value of 0.006.</p>
+<p></span></p>
+</div>
+</div>
+<div id="compare-t-test-results-to-linear-regression" class="section level1">
+<h1>Compare t-test results to linear regression</h1>
+<p>Use a simple linear regression to analyze <code>total_mercury ~ fisherman</code>. Look carefully at the output, and compare to the output of the classical t-test. What do you notice is the same?</p>
+<div id="lm-solution" class="section level2">
+<h2>LM Solution</h2>
+<ul style="color:cadetblue">
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fit the univariate model</span>
+mercury_mod &lt;-<span class="st"> </span><span class="kw">lm</span>(total_mercury <span class="op">~</span><span class="st"> </span>fisherman, 
+                  <span class="dt">data =</span> mercury)
+<span class="kw">get_regression_table</span>(mercury_mod)</code></pre></div>
+<pre><code># A tibble: 2 x 7
+  term       estimate std_error statistic p_value lower_ci upper_ci
+  &lt;chr&gt;         &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1 intercept      4.18     0.287     14.6    0         3.61     4.75
+2 fisherman0    -1.56     0.563     -2.78   0.006    -2.68    -0.45</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">get_regression_summaries</span>(mercury_mod)</code></pre></div>
+<pre><code># A tibble: 1 x 8
+  r_squared adj_r_squared   mse  rmse sigma statistic p_value    df
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1     0.055         0.048  8.10  2.85  2.87      7.71   0.006     2</code></pre>
+<ul>
+<li>The intercept is the mean <code>total_mercury</code> for the fisherman == 1 group</li>
+<li>The estimate for <code>fisherman0</code> is the difference in mean <code>total_mercury</code> for the fisherman == 0 group relative to the mean for the fisherman == 1 group</li>
+<li>The p-value for <code>fisherman0</code> is the same is the same as the overall p-value for the <code>lm</code> model</li>
+<li>The absolute value of the t-statistic for <code>fisherman0</code> is equal to the observed t-statistic for the 2-sample test with variances equal</li>
+</ul>
+</ul>
+</div>
+</div>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="by-nc.png" height="400" width="65"/></a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
