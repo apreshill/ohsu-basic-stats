@@ -1,0 +1,285 @@
+---
+title: "CONJ620: CM 4.2"
+subtitle: "Sampling Distributions"
+author: "Alison Presmanes Hill"
+output:
+  html_document:
+    highlight: pygments
+    theme: flatly
+    smart: false
+    toc: TRUE
+    toc_float: TRUE
+---
+```{r include = FALSE}
+knitr::opts_chunk$set(error = TRUE, comment = NA, warning = FALSE, message = FALSE, tidy = FALSE)
+options(scipen = 999)
+library(tidyverse)
+theme_set(theme_minimal())
+```
+
+
+
+```{r load_packages}
+library(tidyverse)
+```
+
+```{r sample_size_1, include = FALSE}
+x <- 1:6
+omega_n1 <- tibble(x = x)
+x_probs_n1 <- omega_n1 %>% 
+  group_by(x) %>%
+  summarise(count = n(), p_i = count/6) 
+x_probs_n1
+```
+
+```{r sample_size_2, include = FALSE}
+omega_n2 <- crossing(roll1 = x, roll2 = x) %>%
+  mutate(xbar_i = (roll1 + roll2)/2)
+```
+
+
+```{r sample_size_3, include = FALSE}
+# creating sample space, omega, and general formatting with names/df/etc.
+# calculate xbars
+omega_n3 <- crossing(roll1 = x, roll2 = x, roll3 = x) %>%
+  mutate(xbar_i = (roll1 + roll2 + roll3)/3)
+
+# calculate probabilities for each value to xbar; there are 6x6x6 = 216 possibilities
+xbar_probs_n3 <- omega_n3 %>% 
+  group_by(xbar_i) %>% 
+  summarise(count = n(), p_i = count/216) %>%
+  arrange(xbar_i)
+
+# sanity check that all probabilities sum to 1
+xbar_probs_n3 %>% 
+  summarise(sum_of_ps = sum(p_i))
+
+# calculate expectation
+xbar_samp_n3 <- xbar_probs_n3 %>%
+  mutate(e_x_i = xbar_i * p_i)
+xbar_samp_n3
+xbar_samp_n3 %>%
+  summarise(e_xbar = sum(e_x_i))
+```
+
+
+
+```{r sample_size_4, include = FALSE}
+# creating sample space, omega, and general formatting with names/df/etc.
+# calculate xbars
+omega_n4 <- crossing(roll1 = x, roll2 = x, roll3 = x, roll4 = x) %>%
+  mutate(xbar_i = (roll1 + roll2 + roll3 + roll4)/4)
+
+# calculate probabilities for each value to xbar; there are 6x6x6x6 = 1296 possibilities
+xbar_probs_n4 <- omega_n4 %>% 
+  group_by(xbar_i) %>% 
+  summarise(count = n(), p_i = count/1296) %>%
+  arrange(xbar_i)
+
+# sanity check that all probabilities sum to 1
+xbar_probs_n4 %>% 
+  summarise(sum_of_ps = sum(p_i))
+
+# calculate expectation
+xbar_samp_n4 <- xbar_probs_n4 %>%
+  mutate(e_x_i = xbar_i * p_i)
+xbar_samp_n4
+xbar_samp_n4 %>%
+  summarise(e_xbar = sum(e_x_i))
+```
+
+
+
+# Introduction
+
+If you want to knit this .Rmd file, you'll need to load the `tidyverse` package. 
+
+
+Let’s perform the following random experiment:
+
+* Toss a fair 6-sided die $N$ times; 
+* The population of interest is the set of all rolls. Since there is no limit to
+the number of times you can roll a die, $N$ is potentially infinite;
+* A sample is a set of $n$ rolls;
+* For every roll in each sample, observe the number of dots (“pips”) showing as $x_i$; 
+* For each sample, calculate the mean number of dots observed across the $n$ rolls:
+
+$$ \bar{x} = \sum_{i=1}^n \frac{x_i}{n}$$
+
+Let's start with 1 roll..
+
+# The Population Distribution
+
+...where the number of rolls n = 1
+
+First, let's create a data frame that defines our sample space. Remember, our sample space is about what is *possible*, not *probable*. The variables here are:
+
+* x = number of pips on our n = 1 die
+
+
+```{r sample_space_n1}
+(omega_n1 <- tibble(x = 1:6))
+```
+
+There are 6 possible discrete outcomes {1,2,3,4,5,6}. Now, let's move on to thinking about what is *probable*, given that we have defined what is *possible*. The `group_by` here is not totally necessary, as each value of `x` only occurs once, but this syntax will be useful in the future to you... 
+
+```{r all_xs_n1}
+x_probs_n1 <- omega_n1 %>% 
+  group_by(x) %>%
+  summarise(count = n(), 
+            p_i = count/6) # equally probable, right?
+x_probs_n1
+```
+
+Sanity check: do all the probabilities sum to 1?
+
+```{r check1_sum_to_1}
+x_probs_n1 %>%
+  summarise(sum_of_ps = sum(p_i))
+```
+
+That's it! This is the population distribution, which is the same as the sampling distribution of sample means ($\bar{x}$) for one dice roll. What does it look like? Let's plot it.
+
+```{r n1_plot}
+n1_plot <- ggplot(x_probs_n1, aes(x = x, y = p_i)) +
+  geom_point() +
+  geom_segment(aes(x = x, xend = x, y = p_i, yend = 0)) +
+  coord_cartesian(ylim = c(0, .25)) +
+  scale_y_continuous(name = "probability") +
+  scale_x_continuous(name = "x") +
+  ggtitle("Population distribution\nn number of samples = 1") +
+  geom_vline(xintercept = 3.5, col = "dodgerblue", lwd = 1, lty = "dashed")
+n1_plot
+```
+
+I've also added a blue line here to denote the population mean. There are 6 possible discrete outcomes {1,2,3,4,5,6}, each of which is equally likely, therefore the mean population outcome is $\mu$ = 3.5. Formally, the formula for the population mean is:
+
+$${\displaystyle \mu =\sum _{i=0}^{n}x_{i}p_{i}}$$
+
+```{r}
+x_probs_n1 %>%
+  summarize(e_xbar = sum(x * p_i))
+```
+
+
+
+# Our First Sampling Distribution: 2 rolls
+
+...where the number of rolls n = 2 
+
+First, let's create a data frame that defines our sample space. Remember, our sample space is about what is *possible*, not *probable*. The variables here are:
+
+* x = number of pips on our n = 2 die rolls
+
+```{r sample_space_n2}
+(omega_n2 <- crossing(roll1 = x, roll2 = x))
+```
+
+How many different possible combinations of pips from die1 and die2 are possible? 
+
+```{r}
+omega_n2 %>% 
+  tally()
+```
+
+
+Given that we know our random variable is a statistic- the mean number of pips across roll1 and roll2- what are the sample means of all possible samples in sample space? To answer, we can use the `dplyr` function `mutate` to create a new variable that is the mean number of pips for all possible combinations.
+
+```{r xbars_n2}
+omega_n2 <- omega_n2 %>%
+  mutate(xbar_i = (roll1 + roll2)/2)
+omega_n2
+```
+
+_Question 3:_ How many unique sample means are possible? To answer, we can use `dplyr::distinct`.
+
+```{r distinct_xbars_n2}
+omega_n2 %>% 
+  select(xbar_i) %>%
+  distinct()
+```
+
+Now, we are ready to consider probabilities, and we want the probabilities for each distinct sample mean.
+
+```{r assign_probabilities_n2}
+xbar_probs_n2 <- omega_n2 %>% 
+  group_by(xbar_i) %>% 
+  summarise(count = n(), # number of rows
+            p_i = count/36) %>% # again, equally probable, right??
+  arrange(xbar_i)
+xbar_probs_n2
+```
+
+Sanity check: do all the probabilities sum to 1?
+
+```{r check_sum_to_1}
+xbar_probs_n2 %>%
+  summarise(sum_of_ps = sum(p_i))
+```
+
+Finally, let's calculate the expected value of the sample mean! That is, 
+
+$E(\bar{x}) = \sum{\bar{x_i}p_i}$
+
+```{r add_expectation}
+xbar_samp_n2 <- xbar_probs_n2 %>%
+  mutate(e_x_i = xbar_i * p_i)
+xbar_samp_n2
+xbar_samp_n2 %>%
+  summarise(e_xbar = sum(e_x_i))
+```
+
+We can plot the sampling distribution of the sample means for $n$ = 2 rolls, with the population mean:
+
+```{r n2_plot}
+n2_plot <- ggplot(xbar_probs_n2, aes(x = xbar_i, y = p_i)) +
+  geom_point() +
+  geom_segment(aes(x = xbar_i, xend = xbar_i, y = p_i, yend = 0)) +
+  coord_cartesian(ylim = c(0, .25)) +
+  scale_y_continuous(name = "probability") +
+  scale_x_continuous(name = "xbar_i") +
+  ggtitle("Sampling distribution\nn number of rolls = 2") + 
+  geom_vline(xintercept = 3.5, col = "dodgerblue", lwd = 1, lty = "dashed") 
+n2_plot
+```
+
+
+
+# Our Second Sampling Distribution: 3 rolls
+
+1. Make a data frame that defines your sample space using `purrr::crossing()` (this package is loaded with the `tidyverse`). Using `dplyr`, how many different possible combinations of pips from roll1, roll2, and roll3 are possible? 
+2. Calculate the mean number of pips for each possible combination. These are your $\bar{x_i}$ values. How many unique values of $\bar{x_i}$ are possible? 
+3. Calculate the probabilities for each distinct sample mean, so your $p_i$ values.
+4. Calculate the expected value of the sample mean! That is, the value of $E(\bar{x}) = \sum{\bar{x_i}p_i}$.
+5. Care to hazard a guess as to the expected value of the sample mean for 4 die?
+6. It turns out that the distribution of one die roll follows a uniform distribution, which is obviously quite different looking from a "normal" bell-shaped distribution. The question is: what is the sampling distribution of the sample mean for a uniformly distributed variable? Use the following code to simulate 10 experiments where a die is rolled 10 times and we take the mean pips for each experiment. 
+
+
+```{r}
+set.seed(12345)
+unif_means_ten <- numeric(10) # space for big results (vector of Os)
+for (i in 1:10){
+  x <- runif(10, min = 1, max = 6) # draw random sample with 3 observations each
+  unif_means_ten[i] <- mean(x) # compute mean for each ith sample
+}
+my_sim <- unif_means_ten %>% tibble(sample_mean = .)
+```
+
+
+What is the mean of the sample means? What is the standard error of the mean? (it is just the `sd()` of the sampling distribution of the sample means)
+
+```{r}
+mm <- mean(unif_means_ten) # mean of the sampling distribution of means
+sem <- sd(unif_means_ten) # sem
+```
+
+7. Use the code above to run this simulation for 100,000 experiments, and make a plot of the sampling distribution of the sample means. What do you see?
+
+
+```{r eval = FALSE}
+ggplot(my_sim, aes(x = sample_mean)) +
+  geom_density(color = "dodgerblue") +
+  stat_function(fun = dnorm, args = list(mean = mm, sd = sem), color = "red") 
+```
+
+
