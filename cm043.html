@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Alison Presmanes Hill" />
+
+
+<title>CONJ620: CM 4.3</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/htmlwidgets-0.9/htmlwidgets.js"></script>
+<script src="site_libs/datatables-binding-0.2/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CONJ 620</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="cm.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Class Meetings
+  </a>
+</li>
+<li>
+  <a href="due.html">
+    <span class="fa fa-calendar-check"></span>
+     
+    Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://distracted-bhabha-a42d09.netlify.com">
+    <span class="fa fa-key"></span>
+     
+    Grades
+  </a>
+</li>
+<li>
+  <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
+    <span class="fa fa-user-ninja"></span>
+     
+    DataCamp
+  </a>
+</li>
+<li>
+  <a href="https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18">
+    <span class="fa fa-university"></span>
+     
+    Sakai
+  </a>
+</li>
+<li>
+  <a href="https://gitter.im/conj620/Lobby?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">
+    <span class="fa fa-comments"></span>
+     
+    Gitter Chat
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">
+    <span class="fa fa-cogs"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">CONJ620: CM 4.3</h1>
+<h3 class="subtitle"><em>ANOVA</em></h3>
+<h4 class="author"><em>Alison Presmanes Hill</em></h4>
+
+</div>
+
+
+<div id="logistics" class="section level1">
+<h1>Logistics</h1>
+<ul>
+<li>A complete knitted <code>html</code> file is due on Sakai by Thursday September 6 (2:30pm).</li>
+<li>This lab is based on the assigned reading that includes <a href="https://www.nature.com/articles/nmeth.3005">this article on ANOVA in Nature Points of Significance</a>.</li>
+<li>Also, this <a href="http://blog.minitab.com/blog/adventures-in-statistics-2/understanding-analysis-of-variance-anova-and-the-f-test">blog post</a> is very well-written and helpful.</li>
+</ul>
+</div>
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>So far we have learned that when we want to compare means we can use a two-sample <span class="math inline">\(t\)</span>-test or a two-sample permutation test. These tests have limitations though:</p>
+<ul>
+<li>You can compare only 2 means: often we would like to compare means from 3 or more groups.</li>
+<li>It can be used only with one Predictor/Independent Variable.</li>
+</ul>
+<p>Enter ANOVA:</p>
+<ul>
+<li>Compares several means.</li>
+<li>Can be used when you have manipulated more than one Independent Variables.</li>
+<li>It is an extension of regression (the General Linear Model)</li>
+</ul>
+<p>From <a href="https://www.nature.com/articles/nmeth.3005">Nature Points of Significance</a>:</p>
+<blockquote>
+<p>&quot;The ANOVA null hypothesis is that all samples are from the same distribution and have equal means. Under this null, between-group variation of sample means and within-group variation of sample values are predictably related. Their ratio can be used as a test statistic, F, which will be larger than expected in the presence of treatment effects. Although it appears that we are testing equality of variances, we are actually testing whether all the treatment effects are zero.&quot;</p>
+</blockquote>
+<p>In fact, we are actually testing whether the variability <em>between the sample means</em> (i.e., based on groups) is &quot;extreme&quot; or &quot;surprising&quot;, given the random variation present within the samples (i.e., the groups). This <a href="http://blog.minitab.com/blog/adventures-in-statistics-2/understanding-analysis-of-variance-anova-and-the-f-test">blog post</a> explains this very well!</p>
+</div>
+<div id="packages" class="section level1">
+<h1>Packages</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(janitor)
+<span class="kw">library</span>(moderndive)
+<span class="kw">library</span>(broom)</code></pre></div>
+</div>
+<div id="get-the-data" class="section level1">
+<h1>Get the data</h1>
+<blockquote>
+<p>&quot;A univariate [read: one response/outcome variable] ANOVA was conducted investigating the impact of the between-subjects factors [read: all levels of factors are measured from independent samples] of age (4: 3–4 years, 5–6 years, 7–8 years, 9–11 years), number of resources (2: 12 or 30 stickers), number of recipients (2: 1 or 2 anonymous recipients), and gender (2: female, male) on the proportion of resources shared.&quot;</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create variable to store url</span>
+link &lt;-<span class="st"> &quot;https://dataverse.harvard.edu/api/access/datafile/2712105&quot;</span>
+
+<span class="co"># read in column names only</span>
+sticker_names &lt;-<span class="st"> </span>link <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">read_tsv</span>(<span class="dt">n_max =</span> <span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># default: col_names = TRUE</span>
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">stickersgiven =</span> <span class="st">&#39;absolutenumberofstickersgiven(Conditions1or3:Outof12;Conditions2or4:Outof30)&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">names</span>()
+
+<span class="co"># read in data, set column names</span>
+stickers &lt;-<span class="st"> </span>link <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">read_tsv</span>(<span class="dt">skip =</span> <span class="dv">2</span>, <span class="dt">col_names =</span> sticker_names) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">clean_names</span>()
+
+<span class="co"># clean it up a bit</span>
+stickers_clean &lt;-<span class="st"> </span>stickers <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">num_stickers =</span> <span class="kw">case_when</span>(
+    number_stickers <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> </span><span class="dv">12</span>,
+    number_stickers <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">~</span><span class="st"> </span><span class="dv">30</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">condition =</span> <span class="kw">if_else</span>(subject_number <span class="op">==</span><span class="st"> </span><span class="dv">263</span>, <span class="dv">3</span>, condition)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">num_stickers =</span> <span class="kw">if_else</span>(subject_number <span class="op">==</span><span class="st"> </span><span class="dv">263</span>, <span class="dv">30</span>, num_stickers)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop_given =</span> <span class="kw">round</span>(stickersgiven <span class="op">/</span><span class="st"> </span>num_stickers, <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>percent_given_outof100percent, <span class="op">-</span>number_stickers) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">giveornot =</span> <span class="kw">case_when</span>(
+    prop_given <span class="op">==</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,
+    prop_given <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) </code></pre></div>
+</div>
+<div id="do-an-anova-by-hand" class="section level1">
+<h1>Do an ANOVA by hand</h1>
+<p>You may use R as a calculator to get you through this section, but you may also choose to do this by hand or in Excel, or using whatever tool you feel comfortable with. We'll focus on doing a one-way univariate ANOVA by hand.</p>
+<ul>
+<li>One-way means there is only one independent or predictor variable. We'll use age group as the predictor.</li>
+<li>Univariate means we are predicting a single response or outcome variable: the proportion of stickers given (<code>prop_given</code>).</li>
+</ul>
+<p>Use the following code to create a mini version of the <code>stickers_clean</code> data with only 5 observations in each age group to create a balanced design, and decrease the math!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1990</span>)
+givers &lt;-<span class="st"> </span>stickers_clean <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(giveornot <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_groups =</span> <span class="kw">as.factor</span>(agegroups))
+mini_givers &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(age_groups) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(subject_number, prop_given, age_groups) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
+<p>I'll lay the data out in a table you can view with rows as observations and a column for each of the <em>k</em> age groups:</p>
+<div id="htmlwidget-3da675630ae23e041232" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3da675630ae23e041232">{"x":{"filter":"none","data":[["1","2","3","4","5"],[0.33,0.3,0.17,0.08,0.57],[0.5,0.53,0.5,0.03,0.42],[1,0.73,0.5,0.25,0.77],[0.5,0.33,0.58,1,0.5]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>age_groups1<\/th>\n      <th>age_groups2<\/th>\n      <th>age_groups3<\/th>\n      <th>age_groups4<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>Lay out an ANOVA source table on paper, fill it in, take a picture with your phone, and include the image in your knit file.</p>
+<p><img src="slides/images/anova-by-hand.JPG" width="2016" /></p>
+<p>Here are the main formulas you need:</p>
+<table style="width:97%;">
+<colgroup>
+<col width="6%" />
+<col width="6%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+<col width="20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">Source of Variation</th>
+<th align="center">Sums of Squares</th>
+<th align="center">df</th>
+<th align="center">Mean Square</th>
+<th align="center">F</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(SS_{total}\)</span></td>
+<td align="left">Total</td>
+<td align="center"><span class="math inline">\(\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2\)</span></td>
+<td align="center"><span class="math inline">\(kn-1\)</span></td>
+<td align="center"><span class="math inline">\(\frac{SS_{total}}{kn-1}\)</span></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(SS_{model}\)</span></td>
+<td align="left">Model</td>
+<td align="center"><span class="math inline">\(n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2\)</span></td>
+<td align="center"><span class="math inline">\(k-1\)</span></td>
+<td align="center"><span class="math inline">\(\frac{SS_{model}}{k-1}\)</span></td>
+<td align="center"><span class="math inline">\(\frac{MS_{model}}{MS_{residual}}\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(SS_{residual}\)</span></td>
+<td align="left">Residual</td>
+<td align="center"><span class="math inline">\(\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2\)</span></td>
+<td align="center"><span class="math inline">\(k(n-1)\)</span></td>
+<td align="center"><span class="math inline">\(\frac{SS_{residual}}{k(n-1)}\)</span></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>where <em>k</em> is the number of groups and <em>n</em> is the sample size per group in a balanced design.</p>
+</blockquote>
+</div>
+<div id="do-a-linear-regression-in-r" class="section level1">
+<h1>Do a linear regression in R</h1>
+<p>Use <code>givers</code> to do a linear regression predicting <code>prop_given</code> from <code>age_groups</code>.</p>
+<p>Look at the output here, and interpret the results of the linear regression in light of these means:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(means &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(age_groups) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">cell_means =</span> <span class="kw">mean</span>(prop_given)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tx_effects =</span> cell_means <span class="op">-</span><span class="st"> </span>cell_means[<span class="dv">1</span>]))</code></pre></div>
+<pre><code># A tibble: 4 x 3
+  age_groups cell_means tx_effects
+  &lt;fct&gt;           &lt;dbl&gt;      &lt;dbl&gt;
+1 1               0.400     0     
+2 2               0.425     0.0249
+3 3               0.514     0.115 
+4 4               0.572     0.172 </code></pre>
+</div>
+<div id="do-an-anova-in-r" class="section level1">
+<h1>Do an ANOVA in R</h1>
+<p>Now instead, use the <code>anova</code> function on the model object you created with <code>lm</code>.</p>
+<p>Note: aov versus anova in R • ?aov: “aov is designed for balanced designs, and the results can be hard to interpret without balance: beware that missing valuesintheresponse(s)willlikelylosethebalance.” • Useanova(lm())ifyoudon’thaveabalanceddesign • But really, only use anova(lm())if you: • Haveanunbalanceddesign(butnothorriblyso-generallybadidea) • Arecertainyouwishtoassumeequalvariancesacrossgroups • Foreshadowing: Behrens-Fisher problem revisited • Onlyhaveonepredictor(i.e.,one-wayANOVA) • Foreshadowing:typesofsumsofsquares</p>
+<p>What are the ANOVA assumptions:</p>
+<p>• The k samples are randomly selected from the k populations of interest • Each of the k populations have a normal distribution • All k populations have the same variance • Why does this matter? • Our observed F-statistic is based on the assumption that when H0 is true, our F-statistic will have an F-distribution We assume: • Whichgroupanobservationfallsintoisfixed,notrandom • Residualsareallindependent • Residuals are normally distributed • Residualshaveconstantvariance</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">oneway.test</span>(prop_given <span class="op">~</span><span class="st"> </span>age_group, <span class="dt">data =</span> givers)</code></pre></div>
+<pre><code>Error in oneway.test(prop_given ~ age_group, data = givers): a two-sided formula is required</code></pre>
+</div>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="by-nc.png" height="400" width="65"/></a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
