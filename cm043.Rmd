@@ -206,7 +206,7 @@ sticker_lm <- lm(prop_given ~ age_groups, data = givers)
 get_regression_table(sticker_lm)
 ```
 
-Look at the output here, and interpret the results of the linear regression in light of these means:
+Look at the output here, and interpret the results of the linear regression in light of these means/treatment effects:
 
 ```{r}
 (means <- givers %>%
@@ -218,38 +218,47 @@ Look at the output here, and interpret the results of the linear regression in l
 
 # Do an ANOVA in R
 
-Now instead, use the `anova` function on the model object you created with `lm`.
+Now instead, use the `anova` function on the model object you created with `lm`. Interpret the output compared to the linear regression output and cell means/treatment effects output from the above section.
 
-```{r include = FALSE}
+```{r eval = FALSE}
 anova(sticker_lm)
 ```
 
 
 Note: aov versus anova in R
-• ?aov:
-“aov is designed for balanced designs, and the results can
-be hard to interpret without balance: beware that missing valuesintheresponse(s)willlikelylosethebalance.”
-• Useanova(lm())ifyoudon’thaveabalanceddesign
-• But really, only use anova(lm())if you:
-• Haveanunbalanceddesign(butnothorriblyso-generallybadidea) • Arecertainyouwishtoassumeequalvariancesacrossgroups
-• Foreshadowing: Behrens-Fisher problem revisited
-• Onlyhaveonepredictor(i.e.,one-wayANOVA) • Foreshadowing:typesofsumsofsquares
+
+`?aov`:
+
+> "aov is designed for balanced designs, and the results can
+be hard to interpret without balance: beware that missing values in the response(s) will likely lose the balance."
+
+* Use `anova(lm())`if you don’t have a balanced design
+
+But really, only use `anova(lm())` if you:
+
+* Have an unbalanced design (but not horribly so-generally bad idea) 
+* Are certain you wish to assume equal variances across groups
+* Only have one predictor (i.e., one-way ANOVA)
+    * Foreshadowing: types of sums of squares
 
 What are the ANOVA assumptions:
 
-• The k samples are randomly selected from the k populations of interest
-• Each of the k populations have a normal distribution
-• All k populations have the same variance
-• Why does this matter?
-• Our observed F-statistic is based on the assumption that when H0 is true, our F-statistic will have an F-distribution
-We assume:
-• Whichgroupanobservationfallsintoisfixed,notrandom
-• Residualsareallindependent
-• Residuals are normally distributed • Residualshaveconstantvariance
+* The k samples are randomly selected from the k populations of interest
+* Each of the k populations have a normal distribution
+* All k populations have the same variance
 
-```{r}
-oneway.test(prop_given ~ age_group, data = givers)
-```
+Why does this matter?
+
+* Our observed F-statistic is based on the assumption that when $H_0$ is true, our F-statistic will have an F-distribution
+
+We assume:
+
+* Which group an observation falls into is fixed, not random
+* Residuals are all independent
+* Residuals are normally distributed 
+* Residuals have constant variance
+
+
 
 
 

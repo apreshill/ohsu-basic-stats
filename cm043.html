@@ -523,7 +523,7 @@ mini_givers &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span><
 <div id="do-a-linear-regression-in-r" class="section level1">
 <h1>Do a linear regression in R</h1>
 <p>Use <code>givers</code> to do a linear regression predicting <code>prop_given</code> from <code>age_groups</code>.</p>
-<p>Look at the output here, and interpret the results of the linear regression in light of these means:</p>
+<p>Look at the output here, and interpret the results of the linear regression in light of these means/treatment effects:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(means &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(age_groups) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">cell_means =</span> <span class="kw">mean</span>(prop_given)) <span class="op">%&gt;%</span>
@@ -538,12 +538,42 @@ mini_givers &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span><
 </div>
 <div id="do-an-anova-in-r" class="section level1">
 <h1>Do an ANOVA in R</h1>
-<p>Now instead, use the <code>anova</code> function on the model object you created with <code>lm</code>.</p>
-<p>Note: aov versus anova in R • ?aov: “aov is designed for balanced designs, and the results can be hard to interpret without balance: beware that missing valuesintheresponse(s)willlikelylosethebalance.” • Useanova(lm())ifyoudon’thaveabalanceddesign • But really, only use anova(lm())if you: • Haveanunbalanceddesign(butnothorriblyso-generallybadidea) • Arecertainyouwishtoassumeequalvariancesacrossgroups • Foreshadowing: Behrens-Fisher problem revisited • Onlyhaveonepredictor(i.e.,one-wayANOVA) • Foreshadowing:typesofsumsofsquares</p>
+<p>Now instead, use the <code>anova</code> function on the model object you created with <code>lm</code>. Interpret the output compared to the linear regression output and cell means/treatment effects output from the above section.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(sticker_lm)</code></pre></div>
+<p>Note: aov versus anova in R</p>
+<p><code>?aov</code>:</p>
+<blockquote>
+<p>&quot;aov is designed for balanced designs, and the results can be hard to interpret without balance: beware that missing values in the response(s) will likely lose the balance.&quot;</p>
+</blockquote>
+<ul>
+<li>Use <code>anova(lm())</code>if you don’t have a balanced design</li>
+</ul>
+<p>But really, only use <code>anova(lm())</code> if you:</p>
+<ul>
+<li>Have an unbalanced design (but not horribly so-generally bad idea)</li>
+<li>Are certain you wish to assume equal variances across groups</li>
+<li>Only have one predictor (i.e., one-way ANOVA)
+<ul>
+<li>Foreshadowing: types of sums of squares</li>
+</ul></li>
+</ul>
 <p>What are the ANOVA assumptions:</p>
-<p>• The k samples are randomly selected from the k populations of interest • Each of the k populations have a normal distribution • All k populations have the same variance • Why does this matter? • Our observed F-statistic is based on the assumption that when H0 is true, our F-statistic will have an F-distribution We assume: • Whichgroupanobservationfallsintoisfixed,notrandom • Residualsareallindependent • Residuals are normally distributed • Residualshaveconstantvariance</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">oneway.test</span>(prop_given <span class="op">~</span><span class="st"> </span>age_group, <span class="dt">data =</span> givers)</code></pre></div>
-<pre><code>Error in oneway.test(prop_given ~ age_group, data = givers): a two-sided formula is required</code></pre>
+<ul>
+<li>The k samples are randomly selected from the k populations of interest</li>
+<li>Each of the k populations have a normal distribution</li>
+<li>All k populations have the same variance</li>
+</ul>
+<p>Why does this matter?</p>
+<ul>
+<li>Our observed F-statistic is based on the assumption that when <span class="math inline">\(H_0\)</span> is true, our F-statistic will have an F-distribution</li>
+</ul>
+<p>We assume:</p>
+<ul>
+<li>Which group an observation falls into is fixed, not random</li>
+<li>Residuals are all independent</li>
+<li>Residuals are normally distributed</li>
+<li>Residuals have constant variance</li>
+</ul>
 </div>
 
 <p>
