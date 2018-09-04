@@ -77,8 +77,9 @@ stickers_clean <- stickers %>%
   mutate(num_stickers = case_when(
     number_stickers == 1 ~ 12,
     number_stickers == 2 ~ 30)) %>% 
-  mutate(condition = if_else(subject_number == 263, 3, condition)) %>% 
-  mutate(num_stickers = if_else(subject_number == 263, 30, num_stickers)) %>% 
+  filter(!(subject_number == 263)) %>% 
+  #mutate(condition = if_else(subject_number == 263, 3L, condition)) %>% 
+  #mutate(num_stickers = if_else(subject_number == 263, 30L, num_stickers)) %>% 
   mutate(prop_given = round(stickersgiven / num_stickers, 2)) %>% 
   select(-percent_given_outof100percent, -number_stickers) %>% 
   mutate(giveornot = case_when(
