@@ -434,6 +434,7 @@ stickers &lt;-<span class="st"> </span>link <span class="op">%&gt;%</span><span 
 <span class="st">  </span><span class="kw">clean_names</span>()
 
 <span class="co"># clean it up a bit</span>
+<span class="co"># in class we got errors, so we commented out two lines</span>
 stickers_clean &lt;-<span class="st"> </span>stickers <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">num_stickers =</span> <span class="kw">case_when</span>(
     number_stickers <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> </span><span class="dv">12</span>,
@@ -467,6 +468,7 @@ mini_givers &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span><
 <p>I'll lay the data out in a table you can view with rows as observations and a column for each of the <em>k</em> age groups:</p>
 <div id="htmlwidget-3da675630ae23e041232" style="width:100%;height:auto;" class="datatables html-widget"></div>
 <script type="application/json" data-for="htmlwidget-3da675630ae23e041232">{"x":{"filter":"none","data":[["1","2","3","4","5"],[0.33,0.3,0.17,0.08,0.57],[0.5,0.53,0.5,0.03,0.42],[1,0.42,0.5,0.25,0.5],[0.5,0.33,0.58,1,0.5]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>age_groups1<\/th>\n      <th>age_groups2<\/th>\n      <th>age_groups3<\/th>\n      <th>age_groups4<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>Note! Do not copy/paste this data from the table into Excel- folks who did this in class had very bizarre values imported into Excel in this way. If you want to access this table for excel, you can export a .csv using <code>write_csv(mini_givers, here::here(&quot;mygivers.csv&quot;))</code>.</p>
 <p>Lay out an ANOVA source table on paper, fill it in, take a picture with your phone, and include the image in your knit file.</p>
 <p><img src="slides/images/anova-by-hand.JPG" width="2016" /></p>
 <p>Here are the main formulas you need:</p>
@@ -519,6 +521,7 @@ mini_givers &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span><
 <blockquote>
 <p>where <em>k</em> is the number of groups and <em>n</em> is the sample size per group in a balanced design.</p>
 </blockquote>
+<p>Don't forget to calculate the F-statistic, and use R functions to find the p-value for that F-statistic (don't try to do that one by hand!).</p>
 </div>
 <div id="do-a-linear-regression-in-r" class="section level1">
 <h1>Do a linear regression in R</h1>

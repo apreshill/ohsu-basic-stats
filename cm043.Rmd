@@ -73,6 +73,7 @@ stickers <- link %>%
   clean_names()
 
 # clean it up a bit
+# in class we got errors, so we commented out two lines
 stickers_clean <- stickers %>% 
   mutate(num_stickers = case_when(
     number_stickers == 1 ~ 12,
@@ -120,7 +121,7 @@ mini_givers_table <- mini_givers %>%
 datatable(mini_givers_table)
 ```
 
-
+Note! Do not copy/paste this data from the table into Excel- folks who did this in class had very bizarre values imported into Excel in this way. If you want to access this table for excel, you can export a .csv using `write_csv(mini_givers, here::here("mygivers.csv"))`.
 
 ```{r echo = FALSE, include = FALSE}
 mini_lm <- lm(prop_given ~ age_groups, data = mini_givers)
@@ -146,6 +147,8 @@ Here are the main formulas you need:
 | $SS_{residual}$ |Residual| $\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2$ | $k(n-1)$ | $\frac{SS_{residual}}{k(n-1)}$ ||
 
 > where *k* is the number of groups and *n* is the sample size per group in a balanced design.
+
+Don't forget to calculate the F-statistic, and use R functions to find the p-value for that F-statistic (don't try to do that one by hand!).
 
 ```{r echo = FALSE, include = FALSE}
 givers_ans <- augment(mini_lm)
@@ -189,6 +192,12 @@ givers_f <- givers_ss %>%
 
 # 2 sided p value
 pf(givers_f, 
+   df1 = givers_ss %>% pull(df_mod),
+   df2 = givers_ss %>% pull(df_res),
+   lower.tail = FALSE)
+
+# critical f stat would have been...
+qf(.05, 
    df1 = givers_ss %>% pull(df_mod),
    df2 = givers_ss %>% pull(df_res),
    lower.tail = FALSE)
