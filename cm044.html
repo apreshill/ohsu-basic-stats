@@ -428,6 +428,7 @@ stickers_clean &lt;-<span class="st"> </span>stickers <span class="op">%&gt;%</s
     number_stickers <span class="op">==</span><span class="st"> </span><span class="dv">1</span> <span class="op">~</span><span class="st"> </span><span class="dv">12</span>,
     number_stickers <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">~</span><span class="st"> </span><span class="dv">30</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span>(subject_number <span class="op">==</span><span class="st"> </span><span class="dv">263</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(gender <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="co">#mutate(condition = if_else(subject_number == 263, 3L, condition)) %&gt;% </span>
 <span class="st">  </span><span class="co">#mutate(num_stickers = if_else(subject_number == 263, 30L, num_stickers)) %&gt;% </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">prop_given =</span> <span class="kw">round</span>(stickersgiven <span class="op">/</span><span class="st"> </span>num_stickers, <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -438,21 +439,26 @@ stickers_clean &lt;-<span class="st"> </span>stickers <span class="op">%&gt;%</s
 
 givers &lt;-<span class="st"> </span>stickers_clean <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(giveornot <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_groups =</span> <span class="kw">as.factor</span>(agegroups))</code></pre></div>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_groups =</span> <span class="kw">as.factor</span>(agegroups),
+         <span class="dt">gender =</span> <span class="kw">as.factor</span>(gender))</code></pre></div>
 </div>
 <div id="plot-the-group-means" class="section level1">
 <h1>Plot the group means</h1>
 <p>Use <code>ggplot2</code> to make a plot that allows you to visualize the mean proportion of stickers given by age group for the givers, and allows you to see the spread as well. Think about whether you can also include the actual observed data points as recommended by <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128">Tracy Weissberger</a>.</p>
+<p><img src="cm044_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><img src="cm044_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Also make a plot of the means with standard error bars colored by gender, following help <a href="http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/">here</a> (no bar graphs/dynamite plots)!</p>
+<p><img src="cm044_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="post-hoc-testing" class="section level1">
 <h1>Post-hoc testing</h1>
 <p>If you feel happy to assume that the variances of the response/outcome/dependent variable are equal across groups, you can use a method for comparing the individual groups called Tukey's Honestly Significant Difference. The way to do this contrast procedure is to use a package called <code>multcomp</code>. Let's start with the <code>lm</code> object.</p>
 <p>You can also plot these with base R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(sticker_mcp)</code></pre></div>
-<p><img src="cm044_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="cm044_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 <p>For which age groups is the difference in mean <code>prop_given</code> significantly different from zero?</p>
 <p>Alternatively, you can do post-hoc pairwise t-tests. These are not the same as normal t-tests!</p>
+<p><span class="math display">\[t = \frac{\bar{x}_i - \bar{x}_j}{\sqrt{MS_{residual} (\frac{1}{n_i} + \frac{1}{n_j})}}\]</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">with</span>(givers, <span class="kw">pairwise.t.test</span>(prop_given, age_groups,
                              <span class="dt">paired =</span> <span class="ot">FALSE</span>))</code></pre></div>
 <pre><code>
@@ -461,11 +467,34 @@ givers &lt;-<span class="st"> </span>stickers_clean <span class="op">%&gt;%</spa
 data:  prop_given and age_groups 
 
   1         2         3     
-2 0.4287    -         -     
-3 0.0014    0.0117    -     
-4 0.0000043 0.0000598 0.1408
+2 0.4286    -         -     
+3 0.0012    0.0098    -     
+4 0.0000028 0.0000396 0.1284
 
 P value adjustment method: holm </code></pre>
+</div>
+<div id="adjust-p-values" class="section level1">
+<h1>Adjust p-values</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(sticker_mcp, <span class="dt">test =</span> <span class="kw">adjusted</span>(<span class="st">&quot;bonferroni&quot;</span>)) <span class="co">#p value adjustment</span></code></pre></div>
+<pre><code>
+     Simultaneous Tests for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = prop_given ~ age_groups, data = givers)
+
+Linear Hypotheses:
+           Estimate Std. Error t value   Pr(&gt;|t|)    
+2 - 1 == 0  0.02487    0.03137   0.793    1.00000    
+3 - 1 == 0  0.11434    0.03121   3.663    0.00174 ** 
+4 - 1 == 0  0.17579    0.03418   5.143 0.00000281 ***
+3 - 2 == 0  0.08947    0.03018   2.964    0.01954 *  
+4 - 2 == 0  0.15092    0.03324   4.540 0.00004754 ***
+4 - 3 == 0  0.06145    0.03309   1.857    0.38526    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+(Adjusted p values reported -- bonferroni method)</code></pre>
 </div>
 
 <p>

@@ -72,6 +72,7 @@ stickers_clean <- stickers %>%
     number_stickers == 1 ~ 12,
     number_stickers == 2 ~ 30)) %>% 
   filter(!(subject_number == 263)) %>% 
+  filter(gender %in% c(1, 2)) %>% 
   #mutate(condition = if_else(subject_number == 263, 3L, condition)) %>% 
   #mutate(num_stickers = if_else(subject_number == 263, 30L, num_stickers)) %>% 
   mutate(prop_given = round(stickersgiven / num_stickers, 2)) %>% 
@@ -82,7 +83,8 @@ stickers_clean <- stickers %>%
 
 givers <- stickers_clean %>% 
   filter(giveornot == 1) %>% 
-  mutate(age_groups = as.factor(agegroups))
+  mutate(age_groups = as.factor(agegroups),
+         gender = as.factor(gender))
 ```
 
 
@@ -90,35 +92,43 @@ givers <- stickers_clean %>%
 
 Use `ggplot2` to make a plot that allows you to visualize the mean proportion of stickers given by age group for the givers, and allows you to see the spread as well. Think about whether you can also include the actual observed data points as recommended by [Tracy Weissberger](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128). 
 
-```{r eval = FALSE, include = FALSE}
-ggplot(givers, aes(x = factor(number_envelopes), y = prop_given, 
+```{r echo = FALSE}
+ggplot(givers, aes(x = age_groups, y = prop_given, 
                    fill = age_groups, colour = age_groups)) + 
   geom_dotplot(stackdir = "center", binaxis = "y", 
-    binwidth = .01, binpositions = "all", stackratio = 1, dotsize = 3, alpha = .5) + 
+    binwidth = .01, binpositions = "all", stackratio = .8, dotsize = 2, alpha = .5) + 
   stat_summary(fun.y = mean, fun.ymin = mean, 
     fun.ymax = mean, geom = "crossbar", width = 0.75, lwd = .75) + 
   scale_x_discrete(name = "age group") + 
   scale_y_continuous(name = "proportion of stickers given") +
-  geom_hline(yintercept = mean(givers$prop_given), lty = "dashed") +
-  theme_bw() +
-  theme(legend.position = "none") +
-  facet_wrap(~ age_groups)
+  geom_hline(aes(yintercept = mean(prop_given)), lty = "dashed") +
+  theme(legend.position = "none") 
+```
+
+```{r echo = FALSE}
+library(ggbeeswarm)
+ggplot(givers, aes(x = age_groups, y = prop_given, 
+                   fill = age_groups, colour = age_groups)) + 
+  geom_beeswarm(alpha = .5) +
+  geom_boxplot(fill = NA) +
+  scale_x_discrete(name = "age group") + 
+  scale_y_continuous(name = "proportion of stickers given") +
+  geom_hline(aes(yintercept = mean(prop_given)), lty = "dashed") +
+  theme(legend.position = "none") 
 ```
 
 
 Also make a plot of the means with standard error bars colored by gender, following help [here](http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/) (no bar graphs/dynamite plots)!
 
-```{r include = FALSE, eval = FALSE}
-ggplot(givers, aes(x = age_groups, y = prop_given, colour = factor(number_envelopes))) +
+```{r echo = FALSE}
+ggplot(givers, aes(x = age_groups, y = prop_given, colour = gender)) +
   stat_summary(fun.y = mean, geom = "point") + 
-  stat_summary(fun.y = mean, geom = "line", aes(group = number_envelopes)) +
+  stat_summary(fun.y = mean, geom = "line", aes(group = gender)) +
   stat_summary(fun.data = mean_cl_boot, geom = "errorbar", width = 0.2) + 
   labs(x = "age_group", 
        y = "proportion of stickers given",
-       colour = "number of recipients") +
-  theme_bw() +
+       colour = "gender") +
   coord_cartesian(ylim = c(0, 1))
-
 ```
 
 
@@ -142,14 +152,20 @@ plot(sticker_mcp)
 
 For which age groups is the difference in mean `prop_given` significantly different from zero?
 
-Alternatively, you can do post-hoc pairwise t-tests. These are not the same as normal t-tests! 
+Alternatively, you can do post-hoc pairwise t-tests. These are not the same as normal t-tests!
+
+$$t = \frac{\bar{x}_i - \bar{x}_j}{\sqrt{MS_{residual} (\frac{1}{n_i} + \frac{1}{n_j})}}$$
 
 ```{r}
 with(givers, pairwise.t.test(prop_given, age_groups,
                              paired = FALSE))
 ```
 
+# Adjust p-values
 
 
 
+```{r}
+summary(sticker_mcp, test = adjusted("bonferroni")) #p value adjustment
+```
 
