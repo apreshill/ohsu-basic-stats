@@ -138,7 +138,7 @@ ggplot(givers, aes(x = age_groups, y = prop_given, colour = gender)) +
 
 If you feel happy to assume that the variances of the response/outcome/dependent variable are equal across groups, you can use a method for comparing the individual groups called Tukey's Honestly Significant Difference. The way to do this contrast procedure is to use a package called `multcomp`. Let's start with the `lm` object.
 
-```{r echo = FALSE, include = FALSE}
+```{r}
 sticker_lm <- lm(prop_given ~ age_groups, data = givers)
 anova(sticker_lm)
 sticker_mcp <- glht(sticker_lm, mcp(age_groups = "Tukey"))

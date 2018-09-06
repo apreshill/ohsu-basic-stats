@@ -454,6 +454,58 @@ givers &lt;-<span class="st"> </span>stickers_clean <span class="op">%&gt;%</spa
 <div id="post-hoc-testing" class="section level1">
 <h1>Post-hoc testing</h1>
 <p>If you feel happy to assume that the variances of the response/outcome/dependent variable are equal across groups, you can use a method for comparing the individual groups called Tukey's Honestly Significant Difference. The way to do this contrast procedure is to use a package called <code>multcomp</code>. Let's start with the <code>lm</code> object.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sticker_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(prop_given <span class="op">~</span><span class="st"> </span>age_groups, <span class="dt">data =</span> givers)
+<span class="kw">anova</span>(sticker_lm)</code></pre></div>
+<pre><code>Analysis of Variance Table
+
+Response: prop_given
+            Df  Sum Sq Mean Sq F value      Pr(&gt;F)    
+age_groups   3  1.4825 0.49418  11.795 0.000000236 ***
+Residuals  325 13.6163 0.04190                        
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sticker_mcp &lt;-<span class="st"> </span><span class="kw">glht</span>(sticker_lm, <span class="kw">mcp</span>(<span class="dt">age_groups =</span> <span class="st">&quot;Tukey&quot;</span>))
+<span class="kw">confint</span>(sticker_mcp)</code></pre></div>
+<pre><code>
+     Simultaneous Confidence Intervals
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = prop_given ~ age_groups, data = givers)
+
+Quantile = 2.5819
+95% family-wise confidence level
+ 
+
+Linear Hypotheses:
+           Estimate lwr      upr     
+2 - 1 == 0  0.02487 -0.05613  0.10586
+3 - 1 == 0  0.11434  0.03375  0.19492
+4 - 1 == 0  0.17579  0.08754  0.26404
+3 - 2 == 0  0.08947  0.01154  0.16740
+4 - 2 == 0  0.15092  0.06510  0.23675
+4 - 3 == 0  0.06145 -0.02399  0.14689</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(sticker_mcp, <span class="dt">test =</span> <span class="kw">univariate</span>()) <span class="co">#unadjusted p values</span></code></pre></div>
+<pre><code>
+     Simultaneous Tests for General Linear Hypotheses
+
+Multiple Comparisons of Means: Tukey Contrasts
+
+
+Fit: lm(formula = prop_given ~ age_groups, data = givers)
+
+Linear Hypotheses:
+           Estimate Std. Error t value    Pr(&gt;|t|)    
+2 - 1 == 0  0.02487    0.03137   0.793    0.428567    
+3 - 1 == 0  0.11434    0.03121   3.663    0.000291 ***
+4 - 1 == 0  0.17579    0.03418   5.143 0.000000468 ***
+3 - 2 == 0  0.08947    0.03018   2.964    0.003256 ** 
+4 - 2 == 0  0.15092    0.03324   4.540 0.000007924 ***
+4 - 3 == 0  0.06145    0.03309   1.857    0.064210 .  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+(Univariate p values reported)</code></pre>
 <p>You can also plot these with base R.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(sticker_mcp)</code></pre></div>
 <p><img src="cm044_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
