@@ -120,6 +120,8 @@ ggplot(givers, aes(x = age_groups, y = prop_given,
 
 Also make a plot of the means with standard error bars colored by gender, following help [here](http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/) (no bar graphs/dynamite plots)!
 
+Also see this [link](https://apreshill.github.io/data-vis-labs-2018/04-distributions.html#14_plotting_summary_statistics).
+
 ```{r echo = FALSE}
 ggplot(givers, aes(x = age_groups, y = prop_given, colour = gender)) +
   stat_summary(fun.y = mean, geom = "point") + 
