@@ -1,6 +1,6 @@
 ---
 title: "CONJ620: CM 4.3"
-subtitle: "ANOVA"
+subtitle: "One-way ANOVA"
 author: "Alison Presmanes Hill"
 output:
   html_document:

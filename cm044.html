@@ -12,9 +12,9 @@
 <meta name="author" content="Alison Presmanes Hill" />
 
 
-<title>CONJ620: CM 4.3</title>
+<title>CONJ620: CM 4.4</title>
 
-<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -24,11 +24,6 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/htmlwidgets-0.9/htmlwidgets.js"></script>
-<script src="site_libs/datatables-binding-0.2/datatables.js"></script>
-<link href="site_libs/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
-<link href="site_libs/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
-<script src="site_libs/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
 <link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
 <script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
 <script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
@@ -373,8 +368,8 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">CONJ620: CM 4.3</h1>
-<h3 class="subtitle"><em>One-way ANOVA</em></h3>
+<h1 class="title toc-ignore">CONJ620: CM 4.4</h1>
+<h3 class="subtitle"><em>Post-hoc tests &amp; two-way ANOVA</em></h3>
 <h4 class="author"><em>Alison Presmanes Hill</em></h4>
 
 </div>
@@ -383,39 +378,32 @@ div.tocify {
 <div id="logistics" class="section level1">
 <h1>Logistics</h1>
 <ul>
-<li>A complete knitted <code>html</code> file is due on Sakai by Thursday September 6 (2:30pm).</li>
+<li>A complete knitted <code>html</code> file is due on Sakai by Tuesday September 11 (2:30pm).</li>
 <li>This lab is based on the assigned reading that includes <a href="https://www.nature.com/articles/nmeth.3005">this article on ANOVA in Nature Points of Significance</a>.</li>
 <li>Also, this <a href="http://blog.minitab.com/blog/adventures-in-statistics-2/understanding-analysis-of-variance-anova-and-the-f-test">blog post</a> is very well-written and helpful.</li>
 </ul>
 </div>
 <div id="overview" class="section level1">
 <h1>Overview</h1>
-<p>So far we have learned that when we want to compare means we can use a two-sample <span class="math inline">\(t\)</span>-test or a two-sample permutation test. These tests have limitations though:</p>
-<ul>
-<li>You can compare only 2 means: often we would like to compare means from 3 or more groups.</li>
-<li>It can be used only with one Predictor/Independent Variable.</li>
-</ul>
-<p>Enter ANOVA:</p>
-<ul>
-<li>Compares several means.</li>
-<li>Can be used when you have manipulated more than one Independent Variables.</li>
-<li>It is an extension of regression (the General Linear Model)</li>
-</ul>
-<p>From <a href="https://www.nature.com/articles/nmeth.3005">Nature Points of Significance</a>:</p>
-<blockquote>
-<p>&quot;The ANOVA null hypothesis is that all samples are from the same distribution and have equal means. Under this null, between-group variation of sample means and within-group variation of sample values are predictably related. Their ratio can be used as a test statistic, F, which will be larger than expected in the presence of treatment effects. Although it appears that we are testing equality of variances, we are actually testing whether all the treatment effects are zero.&quot;</p>
-</blockquote>
-<p>In fact, we are actually testing whether the variability <em>between the sample means</em> (i.e., based on groups) is &quot;extreme&quot; or &quot;surprising&quot;, given the random variation present within the samples (i.e., the groups). This <a href="http://blog.minitab.com/blog/adventures-in-statistics-2/understanding-analysis-of-variance-anova-and-the-f-test">blog post</a> explains this very well!</p>
+<p>In the last <a href="cm043.html">lab</a>, we did an ANOVA by hand, then you did a linear regression using <code>lm</code> and (hopefully) saw that a one-way ANOVA and a simple linear regression <em>are equivalent</em>. Both are based on the general linear model, and rely on calculating statistics based on sums of squares.</p>
+<div class="figure">
+<img src="slides/images/anova-by-hand-board.JPG" />
+
+</div>
+<p>In this lab, we'll start with post-hoc tests and p-value corrections, leading up to a two-way ANOVA where we include <em>two</em> predictor or independent variables. Get excited!</p>
 </div>
 <div id="packages" class="section level1">
 <h1>Packages</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
 <span class="kw">library</span>(janitor)
 <span class="kw">library</span>(moderndive)
-<span class="kw">library</span>(broom)</code></pre></div>
+<span class="kw">library</span>(broom)
+<span class="kw">library</span>(multcomp)
+select &lt;-<span class="st"> </span>dplyr<span class="op">::</span>select <span class="co"># deals with the namespace conflict</span></code></pre></div>
 </div>
 <div id="get-the-data" class="section level1">
 <h1>Get the data</h1>
+<p>This is all the same as in the previous <a href="cm043.html">lab</a>.</p>
 <blockquote>
 <p>&quot;A univariate [read: one response/outcome variable] ANOVA was conducted investigating the impact of the between-subjects factors [read: all levels of factors are measured from independent samples] of age (4: 3–4 years, 5–6 years, 7–8 years, 9–11 years), number of resources (2: 12 or 30 stickers), number of recipients (2: 1 or 2 anonymous recipients), and gender (2: female, male) on the proportion of resources shared.&quot;</p>
 </blockquote>
@@ -446,137 +434,38 @@ stickers_clean &lt;-<span class="st"> </span>stickers <span class="op">%&gt;%</s
 <span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>percent_given_outof100percent, <span class="op">-</span>number_stickers) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">giveornot =</span> <span class="kw">case_when</span>(
     prop_given <span class="op">==</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,
-    prop_given <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) </code></pre></div>
-</div>
-<div id="do-an-anova-by-hand" class="section level1">
-<h1>Do an ANOVA by hand</h1>
-<p>You may use R as a calculator to get you through this section, but you may also choose to do this by hand or in Excel, or using whatever tool you feel comfortable with. We'll focus on doing a one-way univariate ANOVA by hand.</p>
-<ul>
-<li>One-way means there is only one independent or predictor variable. We'll use age group as the predictor.</li>
-<li>Univariate means we are predicting a single response or outcome variable: the proportion of stickers given (<code>prop_given</code>).</li>
-</ul>
-<p>Use the following code to create a mini version of the <code>stickers_clean</code> data with only 5 observations in each age group to create a balanced design, and decrease the math!</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1990</span>)
+    prop_given <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) 
+
 givers &lt;-<span class="st"> </span>stickers_clean <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">filter</span>(giveornot <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_groups =</span> <span class="kw">as.factor</span>(agegroups))
-mini_givers &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">group_by</span>(age_groups) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">select</span>(subject_number, prop_given, age_groups) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ungroup</span>()</code></pre></div>
-<p>I'll lay the data out in a table you can view with rows as observations and a column for each of the <em>k</em> age groups:</p>
-<div id="htmlwidget-3da675630ae23e041232" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-3da675630ae23e041232">{"x":{"filter":"none","data":[["1","2","3","4","5"],[0.33,0.3,0.17,0.08,0.57],[0.5,0.53,0.5,0.03,0.42],[1,0.42,0.5,0.25,0.5],[0.5,0.33,0.58,1,0.5]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>age_groups1<\/th>\n      <th>age_groups2<\/th>\n      <th>age_groups3<\/th>\n      <th>age_groups4<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":[1,2,3,4]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
-<p>Note! Do not copy/paste this data from the table into Excel- folks who did this in class had very bizarre values imported into Excel in this way. If you want to access this table for excel, you can export a .csv using <code>write_csv(mini_givers, here::here(&quot;mygivers.csv&quot;))</code>.</p>
-<p>Lay out an ANOVA source table on paper, fill it in, take a picture with your phone, and include the image in your knit file.</p>
-<p><img src="slides/images/anova-by-hand.JPG" width="2016" /></p>
-<p>Here are the main formulas you need:</p>
-<table style="width:97%;">
-<colgroup>
-<col width="6%" />
-<col width="6%" />
-<col width="20%" />
-<col width="20%" />
-<col width="20%" />
-<col width="20%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left"></th>
-<th align="left">Source of Variation</th>
-<th align="center">Sums of Squares</th>
-<th align="center">df</th>
-<th align="center">Mean Square</th>
-<th align="center">F</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><span class="math inline">\(SS_{total}\)</span></td>
-<td align="left">Total</td>
-<td align="center"><span class="math inline">\(\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet\bullet}})^2\)</span></td>
-<td align="center"><span class="math inline">\(kn-1\)</span></td>
-<td align="center"><span class="math inline">\(\frac{SS_{total}}{kn-1}\)</span></td>
-<td align="center"></td>
-</tr>
-<tr class="even">
-<td align="left"><span class="math inline">\(SS_{model}\)</span></td>
-<td align="left">Model</td>
-<td align="center"><span class="math inline">\(n\sum_{j = 1}^k(\bar{y_{\bullet{j}}}-\bar{y_{\bullet\bullet}})^2\)</span></td>
-<td align="center"><span class="math inline">\(k-1\)</span></td>
-<td align="center"><span class="math inline">\(\frac{SS_{model}}{k-1}\)</span></td>
-<td align="center"><span class="math inline">\(\frac{MS_{model}}{MS_{residual}}\)</span></td>
-</tr>
-<tr class="odd">
-<td align="left"><span class="math inline">\(SS_{residual}\)</span></td>
-<td align="left">Residual</td>
-<td align="center"><span class="math inline">\(\sum_{j = 1}^k\sum_{i = 1}^n(y_{ij}-\bar{y_{\bullet{j}}})^2\)</span></td>
-<td align="center"><span class="math inline">\(k(n-1)\)</span></td>
-<td align="center"><span class="math inline">\(\frac{SS_{residual}}{k(n-1)}\)</span></td>
-<td align="center"></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>where <em>k</em> is the number of groups and <em>n</em> is the sample size per group in a balanced design.</p>
-</blockquote>
-<p>Don't forget to calculate the F-statistic, and use R functions to find the p-value for that F-statistic (don't try to do that one by hand!).</p>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_groups =</span> <span class="kw">as.factor</span>(agegroups))</code></pre></div>
 </div>
-<div id="do-a-linear-regression-in-r" class="section level1">
-<h1>Do a linear regression in R</h1>
-<p>Use <code>givers</code> to do a linear regression predicting <code>prop_given</code> from <code>age_groups</code>.</p>
-<p>Look at the output here, and interpret the results of the linear regression in light of these means/treatment effects:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(means &lt;-<span class="st"> </span>givers <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(age_groups) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">cell_means =</span> <span class="kw">mean</span>(prop_given)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">tx_effects =</span> cell_means <span class="op">-</span><span class="st"> </span>cell_means[<span class="dv">1</span>]))</code></pre></div>
-<pre><code># A tibble: 4 x 3
-  age_groups cell_means tx_effects
-  &lt;fct&gt;           &lt;dbl&gt;      &lt;dbl&gt;
-1 1               0.400     0     
-2 2               0.425     0.0249
-3 3               0.512     0.112 
-4 4               0.572     0.172 </code></pre>
+<div id="plot-the-group-means" class="section level1">
+<h1>Plot the group means</h1>
+<p>Use <code>ggplot2</code> to make a plot that allows you to visualize the mean proportion of stickers given by age group for the givers, and allows you to see the spread as well. Think about whether you can also include the actual observed data points as recommended by <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128">Tracy Weissberger</a>.</p>
+<p>Also make a plot of the means with standard error bars colored by gender, following help <a href="http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/">here</a> (no bar graphs/dynamite plots)!</p>
 </div>
-<div id="do-an-anova-in-r" class="section level1">
-<h1>Do an ANOVA in R</h1>
-<p>Now instead, use the <code>anova</code> function on the model object you created with <code>lm</code>. Interpret the output compared to the linear regression output and cell means/treatment effects output from the above section.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(sticker_lm)</code></pre></div>
-<p>Note: aov versus anova in R</p>
-<p><code>?aov</code>:</p>
-<blockquote>
-<p>&quot;aov is designed for balanced designs, and the results can be hard to interpret without balance: beware that missing values in the response(s) will likely lose the balance.&quot;</p>
-</blockquote>
-<ul>
-<li>Use <code>anova(lm())</code>if you don’t have a balanced design</li>
-</ul>
-<p>But really, only use <code>anova(lm())</code> if you:</p>
-<ul>
-<li>Have an unbalanced design (but not horribly so-generally bad idea)</li>
-<li>Are certain you wish to assume equal variances across groups</li>
-<li>Only have one predictor (i.e., one-way ANOVA)
-<ul>
-<li>Foreshadowing: types of sums of squares</li>
-</ul></li>
-</ul>
-<p>What are the ANOVA assumptions:</p>
-<ul>
-<li>The k samples are randomly selected from the k populations of interest</li>
-<li>Each of the k populations have a normal distribution</li>
-<li>All k populations have the same variance</li>
-</ul>
-<p>Why does this matter?</p>
-<ul>
-<li>Our observed F-statistic is based on the assumption that when <span class="math inline">\(H_0\)</span> is true, our F-statistic will have an F-distribution</li>
-</ul>
-<p>We assume:</p>
-<ul>
-<li>Which group an observation falls into is fixed, not random</li>
-<li>Residuals are all independent</li>
-<li>Residuals are normally distributed</li>
-<li>Residuals have constant variance</li>
-</ul>
+<div id="post-hoc-testing" class="section level1">
+<h1>Post-hoc testing</h1>
+<p>If you feel happy to assume that the variances of the response/outcome/dependent variable are equal across groups, you can use a method for comparing the individual groups called Tukey's Honestly Significant Difference. The way to do this contrast procedure is to use a package called <code>multcomp</code>. Let's start with the <code>lm</code> object.</p>
+<p>You can also plot these with base R.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(sticker_mcp)</code></pre></div>
+<p><img src="cm044_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>For which age groups is the difference in mean <code>prop_given</code> significantly different from zero?</p>
+<p>Alternatively, you can do post-hoc pairwise t-tests. These are not the same as normal t-tests!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">with</span>(givers, <span class="kw">pairwise.t.test</span>(prop_given, age_groups,
+                             <span class="dt">paired =</span> <span class="ot">FALSE</span>))</code></pre></div>
+<pre><code>
+    Pairwise comparisons using t tests with pooled SD 
+
+data:  prop_given and age_groups 
+
+  1         2         3     
+2 0.4287    -         -     
+3 0.0014    0.0117    -     
+4 0.0000043 0.0000598 0.1408
+
+P value adjustment method: holm </code></pre>
 </div>
 
 <p>
