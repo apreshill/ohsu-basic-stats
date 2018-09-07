@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Alison Presmanes Hill" />
+
+
+<title>CONJ620: CM 4.5</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-5.0.13/css/fa-svg-with-js.css" rel="stylesheet" />
+<script src="site_libs/font-awesome-5.0.13/js/fontawesome-all.min.js"></script>
+<script src="site_libs/font-awesome-5.0.13/js/fa-v4-shims.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">CONJ 620</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="cm.html">
+    <span class="fa fa-chalkboard-teacher"></span>
+     
+    Class Meetings
+  </a>
+</li>
+<li>
+  <a href="due.html">
+    <span class="fa fa-calendar-check"></span>
+     
+    Due Dates
+  </a>
+</li>
+<li>
+  <a href="https://distracted-bhabha-a42d09.netlify.com">
+    <span class="fa fa-key"></span>
+     
+    Grades
+  </a>
+</li>
+<li>
+  <a href="https://www.datacamp.com/enterprise/conj-620-introduction-to-biostatistics-for-the-basic-sciences-data-wrangling-analysis-communication">
+    <span class="fa fa-user-ninja"></span>
+     
+    DataCamp
+  </a>
+</li>
+<li>
+  <a href="https://sakai.ohsu.edu/portal/site/CONJ-620-1-2040-Su18">
+    <span class="fa fa-university"></span>
+     
+    Sakai
+  </a>
+</li>
+<li>
+  <a href="https://gitter.im/conj620/Lobby?utm_source=share-link&amp;utm_medium=link&amp;utm_campaign=share-link">
+    <span class="fa fa-comments"></span>
+     
+    Gitter Chat
+  </a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">
+    <span class="fa fa-cogs"></span>
+     
+    About
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">CONJ620: CM 4.5</h1>
+<h3 class="subtitle"><em>Integrative Lab</em></h3>
+<h4 class="author"><em>Alison Presmanes Hill</em></h4>
+
+</div>
+
+
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>The goal of this lab is to carefully, thoroughly, and thoughtfully conduct an analysis of variance (ANOVA). You are also asked to communicate clearly about the steps in your analysis process with others, by sharing your R code, output, and narrative. As such, your code cannot &quot;stand alone&quot;- it is meant to complement / enhance / support your narrative. As with our previous <a href="cm026.html">integrative lab</a>, this lab will be due in two stages:</p>
+<ol style="list-style-type: decimal">
+<li>A complete knitted <code>html</code> file is due on Sakai by Thursday September 13 at 2:30pm.</li>
+<li>At that time, you'll be provided with a code key. You are asked to review your initial submission, and reflect on your own code/narrative after reviewing the key thoroughly. Your self-assessment is due on Sakai by Monday September 17th at 2:30pm.</li>
+</ol>
+<p>Using the key, your self-assessment should include even <strong>more</strong> narrative; where you made mistakes, you must discuss and analyze where you went wrong, and correct them without copying/pasting directly from the key (this typically means that you need to include more narrative than we provide in the key). A good self-assessment will include:</p>
+<ul>
+<li>Assessment of the accuracy and completeness of your &quot;initial solutions&quot;</li>
+<li>Correct worked solutions with some discussion and analysis of why your initial solution was incorrect, and reflection on the source of your confusion (if you got an answer correct, this is not necessary)</li>
+<li>Attributions as appropriate to other students who helped you, or other sources such as lecture notes, readings, online resources, etc. that helped you</li>
+</ul>
+</div>
+<div id="logistics" class="section level1">
+<h1>Logistics</h1>
+<p>You will use R Markdown to construct your analysis report. You'll submit your work as an html file knit from your <code>.Rmd</code> file (please leave the default code chunk options for <code>eval = TRUE</code> and <code>echo = TRUE</code>). Your lab should serve as your own personal cheatsheet in the future for ANOVAs. Give yourself the cheatsheet you deserve!</p>
+<p>For all things, code and narrative, if you’re dissatisfied with a result, discuss the problem, what you’ve tried and move on (remember my 30-minute rule). You'll need this loaded at the top:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(moderndive)
+<span class="kw">library</span>(broom)
+<span class="kw">library</span>(infer)
+<span class="kw">library</span>(multcomp) <span class="co"># for post-hoc tests</span>
+<span class="kw">library</span>(ggbeeswarm)
+<span class="kw">library</span>(car) <span class="co"># for Anova </span>
+<span class="kw">library</span>(phia) <span class="co"># for post-hoc tests</span>
+select &lt;-<span class="st"> </span>dplyr<span class="op">::</span>select <span class="co"># deals with the namespace conflict</span></code></pre></div>
+</div>
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>This data is associated with this <a href="https://www.sciencedirect.com/science/article/pii/S0271531715002870?via%3Dihub">publication</a>:</p>
+<p>Here is the paper abstract:</p>
+<blockquote>
+<p>&quot;A higher incidence of osteopenia is observed among children with inherited metabolic disorders (inborn errors of metabolism, or IEMs) who consume medical food–based diets that restrict natural vitamin D–containing food sources. We evaluated the vitamin D status of children with IEMs who live in the Pacific Northwest with limited sun exposure and determined whether bone mineral density (BMD) in children with phenylketonuria (PKU), the most common IEM, correlated with diet or biochemical markers of bone metabolism. We hypothesized that children with IEMs would have lower serum vitamin D concentrations than controls and that some children with PKU would have reduced bone mineralization. A retrospective record review of 88 patients with IEMs, and 445 children on unrestricted diets (controls) found the 25-hydroxyvitamin D concentrations were normal and not significantly different between groups (IEM patients, 27.1 ± 10.9; controls, 27.6 ± 11.2). Normal BMD at the hip or spine (−2 &lt; z score &lt; 2) was measured in 20 patients with PKU. There was a correlation between lumbar spine BMD and dietary calcium intake. We saw no evidence of low serum vitamin D in our population of children with IEMs compared with control children. We also found no evidence for reduced BMD in children with PKU on specialized diets, but BMD was associated with calcium intake. Dietary intake of essential nutrients in medical food–based diets supports normal 25-hydroxyvitamin D levels and BMD in children with IEMs, including PKU. The risk of vitamin D deficiency among patients consuming a medical food–based diet is similar to the general population.&quot;</p>
+</blockquote>
+<p>Use this code to read in the data:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">or_vitd &lt;-<span class="st"> </span><span class="kw">read_csv</span>(here<span class="op">::</span><span class="kw">here</span>(<span class="st">&quot;data&quot;</span>, <span class="st">&quot;or_vitd.csv&quot;</span>),
+                    <span class="dt">col_types =</span> <span class="kw">cols</span>(
+                      <span class="dt">season =</span> <span class="kw">col_factor</span>(<span class="dt">levels =</span> <span class="ot">NULL</span>),
+                      <span class="dt">patient_type =</span> <span class="kw">col_factor</span>(<span class="dt">levels =</span> <span class="ot">NULL</span>),
+                      <span class="dt">region =</span> <span class="kw">col_factor</span>(<span class="dt">levels =</span> <span class="ot">NULL</span>)))</code></pre></div>
+</div>
+<div id="eda" class="section level1">
+<h1>EDA</h1>
+<p>Explore the <code>patient_type</code>, <code>season</code>, and <code>vitamin_d</code> variables. Recall that a <a href="http://moderndive.netlify.com/6-regression.html#model1EDA">new exploratory data analysis</a> involves three things:</p>
+<ul>
+<li>Looking at the raw values.</li>
+<li>Computing summary statistics of the variables of interest.
+<ul>
+<li>In this case, you should be able to verify this sentence: &quot;A retrospective record review of 88 patients with IEMs, and 445 children on unrestricted diets (controls) found the 25-hydroxyvitamin D concentrations were normal and not significantly different between groups (IEM patients, 27.1 ± 10.9; controls, 27.6 ± 11.2).&quot;</li>
+</ul></li>
+<li>Creating informative visualizations.</li>
+</ul>
+<p>General functions that we have used at this stage:</p>
+<ul>
+<li><code>dplyr::glimpse()</code></li>
+<li><code>skimr::skim()</code>
+<ul>
+<li>Given the grouped design, you may wish to do a <code>dplyr::group_by()</code> first here</li>
+</ul></li>
+<li><code>ggplot2::ggplot()</code>
+<ul>
+<li><code>geom_histogram()</code> or <code>geom_density()</code> or <code>geom_boxplot()</code> for numeric continuous variables
+<ul>
+<li>You may wish to combine these with <code>facet_wrap()</code></li>
+</ul></li>
+<li><code>geom_bar()</code> or <code>geom_col()</code> for categorical variables</li>
+</ul></li>
+</ul>
+<p>You may also find your want to use <code>filter</code>, <code>mutate</code>, <code>arrange</code>, <code>select</code>, or <code>count</code>. Let your questions lead you!</p>
+</div>
+<div id="comparing-many-means" class="section level1">
+<h1>Comparing many means</h1>
+<ul>
+<li><p>Create a plot of the mean vitamin d levels (use <code>stat_summary</code> with <code>fun.data = mean_cl_boot</code>- this gives you the mean standard error from 1000 bootstrapped replicates) across season, colored by patient type.</p></li>
+<li>State the null and alternative hypotheses for the omnibus ANOVA.</li>
+<li><p>Hazard a guess as to (a) whether there are any main effects of season or patient type, and (b) whether you think there is a significant interaction between the two variables (that is, does the effect of one variable seem to depend on the level of the other variable)? Some examples are if you think patient type matters but only in the summer, or if season matters more for cases than controls.</p></li>
+</ul>
+</div>
+<div id="two-way-ancova" class="section level1">
+<h1>Two-way ANCOVA</h1>
+<p>Let's start with two predictors in our ANOVA model, using addition first (i.e., <code>+</code>). Variables as covariates are typically added (<code>+</code>), and their effects are assumed to be additive, so this is called an analysis of covariance (ANCOVA). No interaction term is estimated, meaning we are not allowing for estimated non-parallel lines.</p>
+<p>Our two predictors will be:</p>
+<ul>
+<li><code>patient_type</code>: 2 levels (case vs. control)</li>
+<li><code>season</code>: 2 levels (winter vs. summer)</li>
+</ul>
+<p>When we include another variable in our model, like <code>season</code>, then our estimate of the effect of <code>patient_type</code> is interpreted holding the value of the covariate fixed, just like in multiple regression.</p>
+<ul>
+<li><p>First, predict <code>vitamin_d</code> with <code>patient_type</code>; <code>season</code> should be the second predictor in your <code>lm</code>. Run <code>anova</code> on the <code>lm</code> object.</p></li>
+<li><p>Next, try switching the order of the two predictors (so, <code>season</code> should now be the first predictor in your <code>lm</code> model), then run <code>anova</code> on the new <code>lm</code> object. What do you notice?</p></li>
+<li><p>At this point, you may wish to examine each <code>lm</code> object using <code>moderndive::get_regression_table()</code>. Do the regression coefficients change depending on the order of the predictors?</p></li>
+<li><p>Remember, the <code>anova()</code> command as we have used it before was used to compare two nested models. The null hypothesis was that the more complicated model was not better than the less complicated model. Use the code below to compare each of your above models to a model with only the first predictor. Write a few sentences describing the output of this code, and how it helps you understand the null/alternative hypotheses being tested when <code>vitamin_d ~ patient_type + season</code> versus <code>vitamin_d ~ season + patient_type</code> (and how they are different).</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># patient only</span>
+vitd_patient &lt;-<span class="st"> </span><span class="kw">lm</span>(vitamin_d <span class="op">~</span><span class="st"> </span>patient_type, <span class="dt">data =</span> or_vitd)
+<span class="kw">anova</span>(vitd_patient, vitd_plusseason)
+
+<span class="co"># season only</span>
+vitd_season &lt;-<span class="st"> </span><span class="kw">lm</span>(vitamin_d <span class="op">~</span><span class="st"> </span>season, <span class="dt">data =</span> or_vitd)
+<span class="kw">anova</span>(vitd_season, vitd_pluspatient)</code></pre></div>
+<ul>
+<li>Variability partitioning- how much is due to between regional groups variability? How much within groups? How much of the total variablility is due to variability between the regions? How much of the total variability is left over? What percentage of variability in vitamind D levels is accounted for by region?</li>
+<li>Use the code below to plot the appropriate F-distribution</li>
+</ul>
+</div>
+<div id="types-of-sums-of-squares" class="section level1">
+<h1>Types of sums of squares</h1>
+<p>The majority of the time, if you are interested in doing an ANOVA, it is unlikely that you want output where the order of the predictors in your model formula matters. This type of output is called sequential sums of squares, also known as a Type I ANOVA. Here is <a href="https://mcfromnz.wordpress.com/2011/03/02/anova-type-iiiiii-ss-explained/">more information</a> on the 3 types of sums of squares in the context of an ANOVA:</p>
+<ul>
+<li>Type I: sequential (order matters)
+<ul>
+<li>This is the default in R when you use <code>anova</code>.</li>
+<li>This is rarely what you will be interested in if you are not doing a nested models comparison intentionally.</li>
+</ul></li>
+<li>Type II:
+<ul>
+<li>This type tests for each main effect after the other main effect. Note that no significant interaction is assumed (in other words, you should test for interaction first) and only if AB is not significant, continue with the analysis for main effects).</li>
+</ul></li>
+<li>Type III:
+<ul>
+<li>This type tests for the presence of a main effect after the other main effect and interaction. However, it is often not interesting to interpret a main effect if interactions are present (generally speaking, if a significant interaction is present, the main effects should not be further analysed). If the interactions are not significant, type II gives a more powerful test.</li>
+</ul></li>
+</ul>
+<p>In this ANOVA predicting <code>vitamind_d</code>, the separate partial effects, or main effects, of <code>patient_type</code> and <code>season</code> would be marginal to the <code>patient_type:season</code> interaction. In general, we neither test nor interpret main effects of explanatory variables that interact. If we can rule out interaction either on theoretical or empirical grounds, then we can proceed to test, estimate, and interpret main effects. It does not generally make sense to specify and fit models that include interaction regressors but that delete main effects that are marginal to them. Such models — which violate the principle of marginality — are interpretable, but they are not broadly applicable.</p>
+<p>The bottom line is that for anything beyond a one-way ANOVA (so anything with more than 1 predictor or independent variable), I recommend using <code>car::Anova</code> (capital &quot;A&quot; Anova, not lower case &quot;a&quot; anova) setting the <code>type</code> argument explicitly; from <code>?Anova</code>:</p>
+<blockquote>
+<p>“Type-II tests are calculated according to the principle of marginality, testing each term after all others, except ignoring the term's higher-order relatives; so-called type-III tests violate marginality, testing each term in the model after all of the others.”</p>
+</blockquote>
+<p>More <a href="https://stats.stackexchange.com/questions/60362/choice-between-type-i-type-ii-or-type-iii-anova">reading on this topic here</a>.</p>
+</div>
+<div id="two-way-ancova-with-type-ii-ss" class="section level1">
+<h1>Two-way ANCOVA with Type II SS</h1>
+<p>Now, we'll perform an ANOVA using the Type II SS. The way to do this is with the <code>car</code> package, using the <code>Anova</code> function with the <code>type = 2</code> argument. Try using this code:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vitd_add &lt;-<span class="st"> </span><span class="kw">lm</span>(vitamin_d <span class="op">~</span><span class="st"> </span>season <span class="op">+</span><span class="st"> </span>patient_type, <span class="dt">data =</span> or_vitd)
+<span class="kw">Anova</span>(vitd_add, <span class="dt">type =</span> <span class="dv">2</span>)</code></pre></div>
+<ul>
+<li><p>Try switching the order of the predictors again to confirm for yourself that they are in fact the same!</p></li>
+<li><p>Interpret the output here. Keep in mind that any F value where the factor has only two levels can actually be interpreted without doing post-hoc testing.</p></li>
+<li><p>Often with ANOVA, you want to plot the <em>adjusted means</em>, which are the fitted/predicted values from the ANOVA model (just as were created with linear regression models we have worked with before). Use this code to use the <code>phia</code> package to calculate the fitted group means and plot them. Read the <a href="https://cran.r-project.org/web/packages/phia/vignettes/phia.pdf">vignette</a>. Write a few sentences here about the model output and this figure, making sure to note <em>why</em> the plots that contain two colors show lines that are parallel (<a href="https://moderndive.com/7-multiple-regression.html#model4table">hint</a>).</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vitd_add_means &lt;-<span class="st"> </span><span class="kw">interactionMeans</span>(vitd_add)
+<span class="kw">plot</span>(vitd_add_means)</code></pre></div>
+</div>
+<div id="two-way-anova-with-type-ii-ss" class="section level1">
+<h1>Two-way ANOVA with Type II SS</h1>
+<p>Now run the same ANOVA analysis, this time allowing your two predictors to interact.</p>
+<ul>
+<li><p>Is the interaction significant? If it is not, then the Type II sums of squares analysis is valid. What do you say?</p></li>
+<li><p>Use the <code>phia</code> package to plot the fitted means from this model. What do you see? What is different now? (<a href="http://moderndive.netlify.com/7-multiple-regression.html#model4interactiontable">hint</a>).</p></li>
+</ul>
+<p>The following two questions are demos- in this actual context you would not need post-hoc testing.</p>
+<ul>
+<li><p>Attempt to conduct post-hoc comparisons between seasons using Tukey's Honestly Significant Difference method (through the <code>multcomp</code> package). What does the error tell you?</p></li>
+<li><p>Now try to use the <code>phia</code> package to do post-hoc tests; use the Bonferroni method for adjusting the p-values.</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">testInteractions</span>(lm_model, <span class="dt">pairwise =</span> <span class="st">&quot;variable_name&quot;</span>, <span class="dt">adjustment =</span> <span class="st">&quot;p.adjust.method&quot;</span>)</code></pre></div>
+</div>
+<div id="final-two-way-anova" class="section level1">
+<h1>Final two-way ANOVA</h1>
+<p>Try a two-way ANOVA with Type II SS to predict vitamin D from season and region, allowing the two predictors to interact.</p>
+<ul>
+<li><p>Interpret the output here. Is the interaction significant? If it is not, then the Type II sums of squares analysis is valid. What do you say?</p></li>
+<li><p>Use the <code>phia</code> package to plot the fitted means from this model. What do you see?</p></li>
+<li><p>Imagine we had gotten a significant effect of region. Use <code>phia::testInteractions</code> to test all pairwise differences between regions using Bonferroni p-value adjustment. Any differences stand out?</p></li>
+<li><p>Use the same function, adding the <code>fixed = &quot;season&quot;</code> argument to compare all pairwise differences between regions separately for each season, again using Bonferroni p-value adjustment. Do you feel confident there is no effect of region, and no interaction between region and season?</p></li>
+</ul>
+</div>
+
+<p>
+<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">
+<img alt="Creative Commons License" style="border-width:0" src="by-nc.png" height="400" width="65"/></a>
+</p>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

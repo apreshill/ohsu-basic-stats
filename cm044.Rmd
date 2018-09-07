@@ -92,7 +92,7 @@ givers <- stickers_clean %>%
 
 Use `ggplot2` to make a plot that allows you to visualize the mean proportion of stickers given by age group for the givers, and allows you to see the spread as well. Think about whether you can also include the actual observed data points as recommended by [Tracy Weissberger](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128). 
 
-```{r echo = FALSE}
+```{r}
 ggplot(givers, aes(x = age_groups, y = prop_given, 
                    fill = age_groups, colour = age_groups)) + 
   geom_dotplot(stackdir = "center", binaxis = "y", 
@@ -105,7 +105,7 @@ ggplot(givers, aes(x = age_groups, y = prop_given,
   theme(legend.position = "none") 
 ```
 
-```{r echo = FALSE}
+```{r}
 library(ggbeeswarm)
 ggplot(givers, aes(x = age_groups, y = prop_given, 
                    fill = age_groups, colour = age_groups)) + 
@@ -122,7 +122,7 @@ Also make a plot of the means with standard error bars colored by gender, follow
 
 Also see this [link](https://apreshill.github.io/data-vis-labs-2018/04-distributions.html#14_plotting_summary_statistics).
 
-```{r echo = FALSE}
+```{r}
 ggplot(givers, aes(x = age_groups, y = prop_given, colour = gender)) +
   stat_summary(fun.y = mean, geom = "point") + 
   stat_summary(fun.y = mean, geom = "line", aes(group = gender)) +
@@ -169,5 +169,8 @@ with(givers, pairwise.t.test(prop_given, age_groups,
 
 ```{r}
 summary(sticker_mcp, test = adjusted("bonferroni")) #p value adjustment
+
+p.adjust(c(.05, .049, .01), method = "bonferroni")
+p.adjust(c(.05, .049, .01), method = "holm")
 ```
 

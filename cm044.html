@@ -445,10 +445,37 @@ givers &lt;-<span class="st"> </span>stickers_clean <span class="op">%&gt;%</spa
 <div id="plot-the-group-means" class="section level1">
 <h1>Plot the group means</h1>
 <p>Use <code>ggplot2</code> to make a plot that allows you to visualize the mean proportion of stickers given by age group for the givers, and allows you to see the spread as well. Think about whether you can also include the actual observed data points as recommended by <a href="https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.1002128">Tracy Weissberger</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(givers, <span class="kw">aes</span>(<span class="dt">x =</span> age_groups, <span class="dt">y =</span> prop_given, 
+                   <span class="dt">fill =</span> age_groups, <span class="dt">colour =</span> age_groups)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_dotplot</span>(<span class="dt">stackdir =</span> <span class="st">&quot;center&quot;</span>, <span class="dt">binaxis =</span> <span class="st">&quot;y&quot;</span>, 
+    <span class="dt">binwidth =</span> .<span class="dv">01</span>, <span class="dt">binpositions =</span> <span class="st">&quot;all&quot;</span>, <span class="dt">stackratio =</span> .<span class="dv">8</span>, <span class="dt">dotsize =</span> <span class="dv">2</span>, <span class="dt">alpha =</span> .<span class="dv">5</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, <span class="dt">fun.ymin =</span> mean, 
+    <span class="dt">fun.ymax =</span> mean, <span class="dt">geom =</span> <span class="st">&quot;crossbar&quot;</span>, <span class="dt">width =</span> <span class="fl">0.75</span>, <span class="dt">lwd =</span> .<span class="dv">75</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">name =</span> <span class="st">&quot;age group&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">name =</span> <span class="st">&quot;proportion of stickers given&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="kw">mean</span>(prop_given)), <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) </code></pre></div>
 <p><img src="cm044_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggbeeswarm)
+<span class="kw">ggplot</span>(givers, <span class="kw">aes</span>(<span class="dt">x =</span> age_groups, <span class="dt">y =</span> prop_given, 
+                   <span class="dt">fill =</span> age_groups, <span class="dt">colour =</span> age_groups)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_beeswarm</span>(<span class="dt">alpha =</span> .<span class="dv">5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">name =</span> <span class="st">&quot;age group&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">name =</span> <span class="st">&quot;proportion of stickers given&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="kw">mean</span>(prop_given)), <span class="dt">lty =</span> <span class="st">&quot;dashed&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) </code></pre></div>
 <p><img src="cm044_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>Also make a plot of the means with standard error bars colored by gender, following help <a href="http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/">here</a> (no bar graphs/dynamite plots)!</p>
 <p>Also see this <a href="https://apreshill.github.io/data-vis-labs-2018/04-distributions.html#14_plotting_summary_statistics">link</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(givers, <span class="kw">aes</span>(<span class="dt">x =</span> age_groups, <span class="dt">y =</span> prop_given, <span class="dt">colour =</span> gender)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, <span class="dt">geom =</span> <span class="st">&quot;point&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> mean, <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>, <span class="kw">aes</span>(<span class="dt">group =</span> gender)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> mean_cl_boot, <span class="dt">geom =</span> <span class="st">&quot;errorbar&quot;</span>, <span class="dt">width =</span> <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;age_group&quot;</span>, 
+       <span class="dt">y =</span> <span class="st">&quot;proportion of stickers given&quot;</span>,
+       <span class="dt">colour =</span> <span class="st">&quot;gender&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</code></pre></div>
 <p><img src="cm044_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 </div>
 <div id="post-hoc-testing" class="section level1">
@@ -474,18 +501,18 @@ Multiple Comparisons of Means: Tukey Contrasts
 
 Fit: lm(formula = prop_given ~ age_groups, data = givers)
 
-Quantile = 2.5819
+Quantile = 2.5842
 95% family-wise confidence level
  
 
 Linear Hypotheses:
            Estimate lwr      upr     
-2 - 1 == 0  0.02487 -0.05613  0.10586
-3 - 1 == 0  0.11434  0.03375  0.19492
-4 - 1 == 0  0.17579  0.08754  0.26404
-3 - 2 == 0  0.08947  0.01154  0.16740
-4 - 2 == 0  0.15092  0.06510  0.23675
-4 - 3 == 0  0.06145 -0.02399  0.14689</code></pre>
+2 - 1 == 0  0.02487 -0.05620  0.10593
+3 - 1 == 0  0.11434  0.03368  0.19499
+4 - 1 == 0  0.17579  0.08746  0.26411
+3 - 2 == 0  0.08947  0.01148  0.16746
+4 - 2 == 0  0.15092  0.06502  0.23682
+4 - 3 == 0  0.06145 -0.02406  0.14697</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(sticker_mcp, <span class="dt">test =</span> <span class="kw">univariate</span>()) <span class="co">#unadjusted p values</span></code></pre></div>
 <pre><code>
      Simultaneous Tests for General Linear Hypotheses
@@ -548,6 +575,10 @@ Linear Hypotheses:
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 (Adjusted p values reported -- bonferroni method)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">p.adjust</span>(<span class="kw">c</span>(.<span class="dv">05</span>, .<span class="dv">049</span>, .<span class="dv">01</span>), <span class="dt">method =</span> <span class="st">&quot;bonferroni&quot;</span>)</code></pre></div>
+<pre><code>[1] 0.150 0.147 0.030</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">p.adjust</span>(<span class="kw">c</span>(.<span class="dv">05</span>, .<span class="dv">049</span>, .<span class="dv">01</span>), <span class="dt">method =</span> <span class="st">&quot;holm&quot;</span>)</code></pre></div>
+<pre><code>[1] 0.098 0.098 0.030</code></pre>
 </div>
 
 <p>
