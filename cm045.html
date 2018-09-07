@@ -539,6 +539,9 @@ vitd_season &lt;-<span class="st"> </span><span class="kw">lm</span>(vitamin_d <
 <ul>
 <li><p>Interpret the output here. Is the interaction significant? If it is not, then the Type II sums of squares analysis is valid. What do you say?</p></li>
 <li><p>Use the <code>phia</code> package to plot the fitted means from this model. What do you see?</p></li>
+</ul>
+<p>The following two questions are demos- in this actual context you would certainly be <a href="https://projects.fivethirtyeight.com/p-hacking/">p-hacking your way to glory</a> if you ran all these comparisons, even with p-value adjustment!</p>
+<ul>
 <li><p>Imagine we had gotten a significant effect of region. Use <code>phia::testInteractions</code> to test all pairwise differences between regions using Bonferroni p-value adjustment. Any differences stand out?</p></li>
 <li><p>Use the same function, adding the <code>fixed = &quot;season&quot;</code> argument to compare all pairwise differences between regions separately for each season, again using Bonferroni p-value adjustment. Do you feel confident there is no effect of region, and no interaction between region and season?</p></li>
 </ul>

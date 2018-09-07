@@ -298,6 +298,8 @@ vitd_means <- interactionMeans(vitd_region)
 plot(vitd_means)
 ```
 
+The following two questions are demos- in this actual context you would certainly be [p-hacking your way to glory](https://projects.fivethirtyeight.com/p-hacking/) if you ran all these comparisons, even with p-value adjustment!
+
 * Imagine we had gotten a significant effect of region. Use `phia::testInteractions` to test all pairwise differences between regions using Bonferroni p-value adjustment. Any differences stand out?
 
 * Use the same function, adding the `fixed = "season"` argument to compare all pairwise differences between regions separately for each season, again using Bonferroni p-value adjustment. Do you feel confident there is no effect of region, and no interaction between region and season?
