@@ -33,6 +33,12 @@ Using the key, your self-assessment should include even **more** narrative; wher
 - Correct worked solutions with some discussion and analysis of why your initial solution was incorrect, and reflection on the source of your confusion (if you got an answer correct, this is not necessary)
 - Attributions as appropriate to other students who helped you, or other sources such as lecture notes, readings, online resources, etc. that helped you 
 
+# Headnotes
+
+- This slide deck on [post-hoc tests and p-value adjustment ](slides/cm045.html) may be helpful.
+- Also this slide deck on [comparing multiple sample means](slides/cm041.html).
+- Also this slide deck on [the general linear model](slides/cm035.html).
+
 
 # Logistics
 
@@ -201,8 +207,7 @@ vitd_season <- lm(vitamin_d ~ season, data = or_vitd)
 anova(vitd_season, vitd_pluspatient)
 ```
 
-- Variability partitioning- how much is due to between regional groups variability? How much within groups? How much of the total variablility is due to variability between the regions? How much of the total variability is left over? What percentage of variability in vitamind D levels is accounted for by region?
-- Use the code below to plot the appropriate F-distribution
+
 
 # Types of sums of squares
 

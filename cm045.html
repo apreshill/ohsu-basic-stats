@@ -389,6 +389,14 @@ div.tocify {
 <li>Attributions as appropriate to other students who helped you, or other sources such as lecture notes, readings, online resources, etc. that helped you</li>
 </ul>
 </div>
+<div id="headnotes" class="section level1">
+<h1>Headnotes</h1>
+<ul>
+<li>This slide deck on <a href="slides/cm045.html">post-hoc tests and p-value adjustment</a> may be helpful.</li>
+<li>Also this slide deck on <a href="slides/cm041.html">comparing multiple sample means</a>.</li>
+<li>Also this slide deck on <a href="slides/cm035.html">the general linear model</a>.</li>
+</ul>
+</div>
 <div id="logistics" class="section level1">
 <h1>Logistics</h1>
 <p>You will use R Markdown to construct your analysis report. You'll submit your work as an html file knit from your <code>.Rmd</code> file (please leave the default code chunk options for <code>eval = TRUE</code> and <code>echo = TRUE</code>). Your lab should serve as your own personal cheatsheet in the future for ANOVAs. Give yourself the cheatsheet you deserve!</p>
@@ -476,10 +484,6 @@ vitd_patient &lt;-<span class="st"> </span><span class="kw">lm</span>(vitamin_d 
 <span class="co"># season only</span>
 vitd_season &lt;-<span class="st"> </span><span class="kw">lm</span>(vitamin_d <span class="op">~</span><span class="st"> </span>season, <span class="dt">data =</span> or_vitd)
 <span class="kw">anova</span>(vitd_season, vitd_pluspatient)</code></pre></div>
-<ul>
-<li>Variability partitioning- how much is due to between regional groups variability? How much within groups? How much of the total variablility is due to variability between the regions? How much of the total variability is left over? What percentage of variability in vitamind D levels is accounted for by region?</li>
-<li>Use the code below to plot the appropriate F-distribution</li>
-</ul>
 </div>
 <div id="types-of-sums-of-squares" class="section level1">
 <h1>Types of sums of squares</h1>
