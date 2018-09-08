@@ -63,7 +63,7 @@ Here is the paper abstract:
 Use this code to read in the data:
 
 ```{r include = TRUE}
-or_vitd <- read_csv(here::here("data", "or_vitd.csv"),
+or_vitd <- read_csv("http://bit.ly/conj620-orvitdcsv",
                     col_types = cols(
                       season = col_factor(levels = NULL),
                       patient_type = col_factor(levels = NULL),
