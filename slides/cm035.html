@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>CONJ620: CM 3.2</title>
+    <title>CONJ620: CM 4.2</title>
     <meta charset="utf-8">
     <meta name="author" content="Alison Hill" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
@@ -12,8 +12,8 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# CONJ620: CM 3.2
-## Sampling, Simulation, &amp; Bootstrapping
+# CONJ620: CM 4.2
+## The General Linear Model
 ### Alison Hill
 
 ---
@@ -85,58 +85,507 @@ where...
 * and `\(\boldsymbol{X}\)` is called the *design matrix* consisting of a matrix of *N* rows and *p+1* columns
 
 ---
-## Design matrices with one independent variable
+
+# Design matrices with one independent variable
+
+.pull-left[
+In both simple linear regression and the independent samples *t*-test, `\(\boldsymbol{X}\)` is a matrix of *N* rows and *2* columns. Note that the number of columns in `\(\boldsymbol{X}\)` must always equal the number of rows in `\(\boldsymbol{\beta}\)`.
+
+![here](latex-image-2.pdf)
+]
+
+
+.pull-right[
+In simple linear regression, the vector *X* can take on any value. In the independent samples *t*-test, this vector simply contains 0's and 1's. Below, *n*=4 with 2 in each group to illustrate.
+
+![here](latex-image-1.pdf)
+]
+
+
+---
+
+## Dummy variables
 
 .pull-left[
 
-In both simple linear regression and the independent samples *t*-test, `\(\boldsymbol{X}\)` is a matrix of *N* rows and *2* columns. Note that the number of columns in `\(\boldsymbol{X}\)` must always equal the number of rows in `\(\boldsymbol{\beta}\)`.
+Now, let's switch IVs in our example from education (a continuous variable) to a group variable:
+`$$prestige_i=(intercept + group_i)+error_i$$`
 
-\[ \begin{bmatrix}
-Y_1 \\
-Y_2 \\
-\vdots \\
-Y_n \\
-\end{bmatrix} = \begin{bmatrix}
-1 &amp; X_1 \\
-1 &amp; X_2 \\
-\vdots &amp; \vdots \\
-1 &amp; X_n \\
-\end{bmatrix} \begin{bmatrix}
-\beta_0 \\
-\beta_1 \\
-\end{bmatrix} + \begin{bmatrix}
-\epsilon_1 \\
-\epsilon_2 \\
-\vdots \\
-\epsilon_n \\
-\end{bmatrix} \]
+where group is a dummy or indicator variable that can only take two values: 0 or 1. 
+
+This is easy to do in R. Remember in my Prestige dataset, I have a categorical variable called "type." Let's let the variable Group denote:
+
+&gt; 0 for blue collar (type="bc") and
+
+&gt; 1 for white collar (type="wc")
+]
+
+.pull-right[
+
+&lt;div style="position: relative; left: 0; top: 0;"&gt;
+  &lt;img height="250" width="250" src="http://ecx.images-amazon.com/images/I/41H0VBC6NML.jpg" style="position: relative; top: 0; left: 0;"/&gt;
+  &lt;img height="250" width="250" src="http://stargate-sg1-solutions.com/blog/wp-content/uploads/2011/07/White-Collar-poster-215x300.jpg" style="position: absolute; top: 150px; left: 250px;"/&gt;
+&lt;/div&gt;
+]
+
+---
+
+# Creating a dummy variable in R
+
+
+
+```r
+library(car)
+table(Prestige$type)
+```
+
+```
+
+  bc prof   wc 
+  44   31   23 
+```
+
+
+
+
+```r
+Prestige$group &lt;- ifelse(Prestige$type=="bc",0, ifelse(Prestige$type=="wc",1,NA))
+table(Prestige$type, Prestige$group)
+```
+
+```
+      
+        0  1
+  bc   44  0
+  prof  0  0
+  wc    0 23
+```
+
+
+
+---
+
+# Cleaning up the new dataset
+
+
+```r
+Prestige.2 &lt;- subset(Prestige, group %in% c(0,1))
+Prestige.2$type &lt;- droplevels(Prestige.2$type) #get rid of type=prof
+```
+
+---
+
+# OK, we are all set now with two groups
+
+
+```r
+table(Prestige.2$type, Prestige.2$group)
+```
+
+```
+    
+      0  1
+  bc 44  0
+  wc  0 23
+```
+
+
+
+
+```r
+head(Prestige.2)
+```
+
+```
+                    education income women prestige census type group
+nursing.aides            9.45   3485 76.14     34.9   3135   bc     0
+medical.technicians     12.79   5180 76.04     67.5   3156   wc     1
+radio.tv.announcers     12.71   7562 11.15     57.6   3337   wc     1
+secretaries             11.59   4036 97.51     46.0   4111   wc     1
+typists                 11.49   3148 95.97     41.9   4113   wc     1
+bookkeepers             11.32   4348 68.24     49.4   4131   wc     1
+```
+
+
+
+---
+
+# Plotting data for two groups
+
+Not surprisingly, mean prestige ratings appear to be higher among white collar workers than blue collar workers.
+
+&lt;img src="cm035_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# But are the two groups different?
+
+Let's do an independent samples *t*-test to find the answer:
+
+
+
+```r
+t.test(prestige~group,data=Prestige.2, var.equal=T)
+```
+
+```
+
+	Two Sample t-test
+
+data:  prestige by group
+t = -2.6487, df = 65, p-value = 0.01013
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -11.780279  -1.652132
+sample estimates:
+mean in group 0 mean in group 1 
+       35.52727        42.24348 
+```
+
+
+
+---
+
+# What happens if I now run a linear regression?
+
+&lt;div style='text-align: center;'&gt;
+    &lt;img height='560' src='http://images.huffingtonpost.com/2009-03-29-rebeccabird3.jpg' /&gt;
+&lt;/div&gt;
+
+---
+
+# Kidding. Here's is the linear regression summary... 
+
+
+```r
+fit &lt;- lm(formula = prestige ~ group, data = Prestige.2)
+summary(fit)
+```
+
+```
+
+Call:
+lm(formula = prestige ~ group, data = Prestige.2)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-18.2273  -7.0273  -0.2273   6.8227  25.2565 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   35.527      1.486  23.914   &lt;2e-16 ***
+group          6.716      2.536   2.649   0.0101 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 9.855 on 65 degrees of freedom
+Multiple R-squared:  0.09742,	Adjusted R-squared:  0.08353 
+F-statistic: 7.016 on 1 and 65 DF,  p-value: 0.01013
+```
+
+
+
+
+---
+
+# But what does it MEAN?
+
+Let's do a quick review of the linear regression formula:
+`$$y_i=(b_0 + b_1x_i)+error_i$$`
+
+Solving for the intercept term, for example, we need to apply some summation algebra:
+`$$\frac{1}{n}\sum_i^n{y_i}=\frac{1}{n}\sum_i^n{b_0} + \frac{1}{n}\sum_i^n{b_1x_i}+\frac{1}{n}\sum_i^n{error_i}$$`
+
+A few reminders about summation algebra in this context:
+- The mean is defined as: `\(\frac{1}{n}\sum_i^n{y_i}\)`
+- The sum of a constant is just *n* times the constant: `\(\sum_i^n{b_0}=n\times{b_0}\)`
+- The sum of a constant times a random variable is the constant times the sum of the variable: `\(\sum_i^n{b_1x_i}=b_1\sum_i^n{x_i}\)`
+- By definition, in GLM, we assume the mean of the error is 0: `\(\frac{1}{n}\sum_i^n{error_i}=0\)`
+
+---
+
+# Solving for the regression coefficients
+
+Applying the summation algebra from the previous slide, we get:
+`$$\frac{1}{n}\sum_i^n{y_i}=\frac{1}{n}nb_0 + \frac{1}{n}b_1\sum_i^n{x_i}$$`
+`$$\bar{y}=b_0 + b_1\bar{x}$$`
+
+This should look familiar! The formula for the regression intercept term, `\(b_0\)`, is:
+`$$b_0=\bar{y}-b_1\bar{x}$$`
+
+But look again: we also have the formula for `\(\bar{y}\)`. The intercept term in linear regression is the expected mean value of `\(y\)` when `\(x_i\)`=0.
+
+---
+
+# Solving for `\(\bar{x}\)`
+
+.pull-left[
+
+`$$\bar{y}=b_0 + b_1\bar{x}$$`
+
+But, you protest, how do we calculate `\(\bar{x}\)`? Is it the mean of the 0/1 values in *x*? What is happening?
 
 ]
 
 .pull-right[
 
-In simple linear regression, the vector *X* can take on any value. In the independent samples *t*-test, this vector simply contains 0's and 1's. Below, *n*=4 with 2 in each group to illustrate.
-
-\[ \begin{bmatrix}
-Y_1 \\
-Y_2 \\
-Y_3 \\
-Y_4 \\
-\end{bmatrix} = \begin{bmatrix}
-1 &amp; 0 \\
-1 &amp; 0 \\
-1 &amp; 1 \\
-1 &amp; 1 \\
-\end{bmatrix} \begin{bmatrix}
-\beta_0 \\
-\beta_1 \\
-\end{bmatrix} + \begin{bmatrix}
-\epsilon_1 \\
-\epsilon_2 \\
-\epsilon_3 \\
-\epsilon_4 \\
-\end{bmatrix} \]
+&lt;div style='text-align: right;'&gt;
+    &lt;img height='560' src='http://4.bp.blogspot.com/_D_Z-D2tzi14/TJAGr3y2spI/AAAAAAAADzg/-9K3i4ih4Hg/s1600/anesthesia30.png' /&gt;
+&lt;/div&gt;
 ]
+
+--- 
+
+# Solving for `\(\bar{x}\)`
+
+.pull-left[
+`$$t=\frac{(\bar{y}_1-\bar{y}_2)-(\mu_1-\mu_2)}{SE}$$`
+Remember the original formula I gave you for the *t* statistic. There is no *x*! But implicitly, this formula is actually:
+`$$t=\frac{(\bar{y}_{x=1}-\bar{y}_{x=2})-(\mu_{x=1}-\mu_{x=2})}{SE}$$`
+
+So what we are actually interested in the mean of *y* when *x* takes on one value versus another (in my current example, *x*=0 or 1). 
+]
+
+.pull-right[
+
+&lt;div style='text-align: right;'&gt;
+    &lt;img height='560' src='http://1.bp.blogspot.com/_D_Z-D2tzi14/TJAHB22PzNI/AAAAAAAADzw/AiLPtefqhx4/s1600/anesthesia.png' /&gt;
+&lt;/div&gt;
+]
+
+---
+
+# The intercept
+
+For the *t*-test, we can solve for the intercept just as we can for the simple linear regression. Remember our formula for `\(\bar{y}\)`:
+`$$\bar{y}=b_0 + b_1\bar{x}$$`
+
+Let's re-write it two ways:
+`$$\bar{y}_{x=0}=b_0 + b_1\bar{x_0}$$`
+`$$\bar{y}_{x=1}=b_0 + b_1\bar{x_1}$$`
+
+Start with the top formula: What is `\(\bar{x_0}\)`? This is simple to think about in matrix notation- the mean of a vector of 0's is 0. So, when the group variable is equal to zero (blue collar)...
+ 
+`$$\bar{y}_{bc}=(b_0 + b_1\times0)=b_0$$`
+
+Therefore, `\(b_0\)` (the intercept term) is equal to the mean prestige score of the blue collar group (the one coded as 0).
+
+---
+
+# The slope
+
+Now, let's tackle the second formula:
+`$$\bar{y}_{x=1}=b_0 + b_1\bar{x_1}$$`
+
+When the group variable is equal to 1 (white collar), `\(\bar{x_1}=1\)` because the mean of a vector of 1's is 1.
+`$$\bar{y}_{wc}=(b_0 + b_1\times1)$$`
+`$$\bar{y}_{wc}=b_0+ b_1$$`
+`$$\bar{y}_{wc}=\bar{y}_{bc}+ b_1$$`
+
+Solving for `\(b_1\)`:
+`$$b_1=\bar{y}_{wc}-\bar{y}_{bc}$$`
+
+Therefore, `\(b_1\)` (the slope) is equal to the difference between group means in prestige scores. 
+
+---
+
+# What does this mean?
+
+We could represent a two-group experiment as a regression equation in which the regression coefficient `\(b_1\)` is equal to the difference between group means and the intercept term `\(b_0\)` is the mean of the group coded as 0.
+
+Our independent samples *t*-test would take the form:
+`$$y_i=\bar{y}_{bc} + (\bar{y}_{wc}-\bar{y}_{bc})x_i+error_i$$`
+
+Think of it this way: the regression line must pass through these two points:
+- (0, `\(\bar{y}_{bc}\)`)
+- (1, `\(\bar{y}_{wc}\)`)
+
+---
+
+# Trust but verify
+
+
+
+```r
+y_bc &lt;- mean(Prestige.2$prestige[Prestige.2$group==0])
+y_wc &lt;- mean(Prestige.2$prestige[Prestige.2$group==1])
+diff &lt;- y_wc-y_bc
+cbind(y_bc,y_wc, diff)
+```
+
+```
+         y_bc     y_wc     diff
+[1,] 35.52727 42.24348 6.716206
+```
+
+
+So, y_bc is `\(b_0\)` and diff is `\(b_1\)`...right?
+
+
+
+```r
+coef(fit)
+```
+
+```
+(Intercept)       group 
+  35.527273    6.716206 
+```
+
+
+
+---
+
+# The General Linear Model
+
+A number of different statistical models are extensions of this same idea of a GLM:
+
+- Ordinary least squares (OLS) linear regression (simple and multiple): 1+ predictors may be continuous or factors
+- *t*-test: a *t*-test is basically a regression model where the 1 predictor is a factor with exactly 2 levels
+- Analysis of Variance/Covariance (ANOVA/ANCOVA): an ANOVA is basically a regression model where the 1+ predictors are factors
+- Multivariate Analysis of Variance/Covariance (MANOVA/MANCOVA): a MANOVA is basically a regression model with 2+ DVs where the 1+ predictors are factors
+
+---
+
+# Further food for thought...
+
+The independent samples *t*-test is a special case of an ANOVA. Specifically, a one-way ANOVA (definition: 1 IV that is a factor and 1 DV that is continuous) in which the IV factor has *exactly* two levels.
+
+Again, trust but verify!
+
+
+```r
+anova(lm(prestige~group,data=Prestige.2)) #doing an ANOVA in R
+```
+
+```
+Analysis of Variance Table
+
+Response: prestige
+          Df Sum Sq Mean Sq F value  Pr(&gt;F)  
+group      1  681.3  681.32  7.0156 0.01013 *
+Residuals 65 6312.5   97.12                  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+```
+
+
+
+(hint: square the *t*-statistic to get the *F*-statistic equivalent)
+
+---
+
+# The non-centrality parameter of the *t* distribution
+
+In an earlier class, I alluded to the fact that the *t*-distribution has an another parameter in addition to the degrees of freedom- a non-centrality parameter, `\(\delta\)`. 
+
+&gt; When `\(H_0\)` is true, `\(\delta=0\)`.
+
+&gt; When `\(H_0\)` is false, `\(\delta\neq0\)`.
+
+Why is this? Let's look at the formula:
+
+`$$\delta=\sqrt{\frac{n_1n_2}{n_1+n_2}}(\frac{\mu_1-\mu_2}{SE})$$`
+
+As you can see, if `\(\mu_1-\mu_2\)`=0 then `\(\delta\)`=0.
+
+---
+
+
+# The *t*-distribution... 
+
+.pull-left[
+
+&gt; When the null is true
+
+&lt;img src="cm035_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+&gt; When the null is false
+
+&lt;img src="cm035_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Non-central *t*-distributions... 
+
+.pull-left[
+
+&gt; Degrees of freedom=9
+
+&lt;img src="cm035_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+&gt; `\(\delta\)`=5
+
+&lt;img src="cm035_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+
+# Using non-central *t*-distributions... 
+
+
+```r
+help(TDist)
+pt(-1, 20, 0)
+```
+
+```
+[1] 0.1646283
+```
+
+```r
+pt(-1, 20, 5)
+```
+
+```
+[1] 1.624699e-09
+```
+
+Recommended:
+
+```r
+power.t.test()
+```
+
+
+---
+
+# Welch's *t*-test: Dealing with unequal variances
+
+Recall the formula for the independent groups *t*-test:
+
+`$$t=\frac{(\bar{x}_1-\bar{x}_2)-(\mu_1-\mu_2)}{SE}$$`
+
+In Welch's formula, we calculate the SE differently:
+`$$SE'=\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}$$`
+
+So the formula for Welch's `\(t'\)`: 
+`$$t'=\frac{(\bar{x}_1-\bar{x}_2)-(\mu_1-\mu_2)}{\sqrt{\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2}}}$$`
+
+---
+
+# Welch's *t*-test: Modified degrees of freedom
+
+Recall the degrees of freedom for the independent groups *t*-test:
+
+`$$\nu=n_1+n_2-1$$`
+
+The degrees of freedom are modified for Welch's `\(t'\)`: 
+
+`$$\nu'=\frac{(\frac{s_1^2}{n_1}+\frac{s_2^2}{n_2})^2}{\frac{s_1^4}{n_1^2(n_1-1)}+\frac{s_2^4}{n_2^2(n_2-1)}}$$`
+
+---
+
+# George E. P. Box
+
+&gt; "Equally, the statistician knows, for example, that in nature there never was a normal distribution. There never was a straight line, yet with normal and linear assumptions, known to be false, he can often derive results which match, to a useful approximation, those found in the real world." -*Journal of the American Statistical Association, 71*(356), pp. 791-799.
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
