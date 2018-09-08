@@ -15,11 +15,11 @@ Tues,August,7,3.1: Inference,Sampling,,,-
 Thurs,August,9,3.2,<a href='slides/cm032.html'>Confidence Intervals</a>,12,Bootstrapping,cm032.html
 Tues,August,14,3.3,Hypothesis Testing<br><a href='https://github.com/Lakens/perfect-t-test/blob/master/perfect_independent_t-test.Rmd'>- Perfect 2-sample t-test</a>,13,Hypothesis Testing,cm033.html
 Thurs,August,16,3.4,Hypothesis Testing<br><a href='https://github.com/Lakens/perfect-t-test/blob/master/Perfect_dependent_t-test.Rmd'>- Perfect paired t-test</a>,14,Permutation Tests,cm034.html
-Tues,August,21,3.5,Hypothesis Testing,,,-
+Tues,August,21,3.5,<a href = 'slides/cm035.html'>Hypothesis Testing</a>,,,-
 Thurs,August,23,3.6,Concept integration,15,Inference: integrate + iterate,cm036.html
 Tues,August,28,4.1: Many means,<a href= 'slides/cm041.html'>ANOVA</a>,,,
 Thurs,August,30,4.2,On your own: <a href='cm042.html'>lab due Tuesday</a>,16,Sampling distributions,cm042.html
 Tues,September,4,4.3,,17,ANOVA,cm043.html
 Thurs,September,6,5.1: Wrap-up,<a href='cm044.html'>Concept integration</a>,18,Integrate + iterate,cm044.html
-Tues,September,11,5.2: Final presentations,,,,-
-Thurs,September,13,5.3: Final presentations,,,,-
+Tues,September,11,Work day- final lab,,,,-
+Thurs,September,13,Work day-final lab,,,,-
